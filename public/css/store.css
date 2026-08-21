@@ -272,4 +272,31 @@ img{max-width:100%;display:block}
   .st-rating-avg{font-size:2.6rem}
 }
 
+/* ===== PREMIUM FASHION - Editorial 2col ===== */
+.fashion-hero{background:linear-gradient(135deg,#191a1b 0%,#2a2a2c 100%);color:#fff;border-bottom:none}
+.fashion-hero .st-head-inner{max-width:1200px}
+.fashion-hero h1{color:#fff !important;-webkit-text-fill-color:#fff !important;font-weight:300;letter-spacing:.03em}
+.fashion-hero p{color:#a3a4a5 !important}
+.fashion-badge{display:inline-block;margin-top:.6rem;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:.3rem .8rem;border-radius:99px;font-size:.75rem;letter-spacing:.04em}
+.fashion-visual{font-size:2.5rem;opacity:.15;margin-inline-start:auto}
+.fashion-grid{grid-template-columns:repeat(2,1fr) !important;gap:18px !important}
+.fashion-grid .st-card{border:1px solid #e4e5e7;border-radius:4px;overflow:hidden}
+.fashion-grid .st-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(25,26,27,.15)}
+@media(max-width:768px){.fashion-grid{grid-template-columns:repeat(2,1fr) !important;gap:10px !important} .fashion-hero .st-head-inner{flex-direction:column;text-align:center}}
+@media(max-width:360px){.fashion-grid{grid-template-columns:1fr !important}}
+
+/* ===== PREMIUM OUTDOOR - Utility dense ===== */
+.outdoor-hero{background:linear-gradient(135deg,#fa4616 0%,#003da5 100%);color:#fff}
+.outdoor-hero h1{color:#fff !important;-webkit-text-fill-color:#fff !important}
+.outdoor-hero p{color:rgba(255,255,255,.85) !important}
+.outdoor-filters{display:flex;gap:.5rem;max-width:1120px;margin:1rem auto 0;padding:0 1.2rem;flex-wrap:wrap}
+.outdoor-filters span{background:rgba(255,255,255,.18);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.25);color:#fff;padding:.45rem 1rem;border-radius:99px;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s}
+.outdoor-filters span:hover{background:#fff;color:#fa4616}
+.outdoor-grid{grid-template-columns:repeat(4,1fr) !important;gap:12px !important}
+.outdoor-grid .st-card{border:1.5px solid #e8e8e8;border-radius:10px}
+.outdoor-grid .st-price b{color:#fa4616}
+@media(max-width:900px){.outdoor-grid{grid-template-columns:repeat(3,1fr) !important}}
+@media(max-width:768px){.outdoor-grid{grid-template-columns:repeat(2,1fr) !important;gap:10px !important}}
+@media(max-width:360px){.outdoor-grid{grid-template-columns:1fr !important}}
+
 /* FIX removed - existing 800/480/360 breakpoints handle mobile cleanly */

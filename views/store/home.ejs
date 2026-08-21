@@ -10,6 +10,31 @@
   <%- include('../partials/market-nav') %>
   <%- include('../partials/market-hero') %>
   <%- include('../partials/market-feats') %>
+<% } else if (store.template === 'prem-fashion') { %>
+  <header class="st-head fashion-hero">
+    <div class="st-head-inner fashion-inner">
+      <% if (store.logo_path) { %><img src="<%= store.logo_path %>" class="st-logo" alt=""><% } %>
+      <div>
+        <h1><%= store.name %></h1>
+        <p><%= store.description %> — تشكيلة تحريرية فاخرة</p>
+        <span class="fashion-badge">Lookbook • Editorial</span>
+      </div>
+      <div class="fashion-visual">✦</div>
+    </div>
+  </header>
+<% } else if (store.template === 'prem-outdoor') { %>
+  <header class="st-head outdoor-hero">
+    <div class="st-head-inner">
+      <% if (store.logo_path) { %><img src="<%= store.logo_path %>" class="st-logo" alt=""><% } %>
+      <div>
+        <h1><%= store.name %></h1>
+        <p><%= store.description %> — اختر حسب مغامرتك</p>
+      </div>
+    </div>
+    <div class="outdoor-filters">
+      <span>🏔️ Hiking</span><span>⛺ Camping</span><span>🧳 Travel</span><span>🧗 Climbing</span>
+    </div>
+  </header>
 <% } else { %>
   <header class="st-head">
     <div class="st-head-inner">
@@ -29,8 +54,8 @@
     <a href="<%= store.base %>/?cat=<%= c.id %>" class="<%= cat === c.id ? 'on' : '' %>"><%= c.name %></a>
   <% }) %>
 </nav>
-<main class="st-main">
-  <div class="st-grid">
+<main class="st-main <%= store.template === 'prem-fashion' ? 'fashion-main' : store.template === 'prem-outdoor' ? 'outdoor-main' : '' %>">
+  <div class="st-grid <%= store.template === 'prem-fashion' ? 'fashion-grid' : store.template === 'prem-outdoor' ? 'outdoor-grid' : '' %>">
     <% rows.forEach(p => { %>
       <%- include('../partials/store-card', { p, store }) %>
     <% }) %>

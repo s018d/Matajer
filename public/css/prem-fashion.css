@@ -97,9 +97,10 @@ body.store-body.prem-fashion * { box-sizing: border-box; }
   box-shadow: none;
 }
 
-/* ===== GRID ===== */
+/* ===== GRID - Editorial 2col distinct ===== */
 .prem-fashion .st-main { max-width: 1200px; }
-.prem-fashion .st-grid { gap: 2px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.prem-fashion .st-grid { gap: 18px; grid-template-columns: repeat(2, 1fr); }
+.prem-fashion .fashion-grid { gap: 18px; grid-template-columns: repeat(2, 1fr); }
 
 /* ===== CARD ===== */
 .prem-fashion .st-card {

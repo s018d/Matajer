@@ -9,10 +9,10 @@ const FREE = {
 };
 
 const PREMIUM = [
-  { id: 'prem-fashion', name: 'الأتيلييه', palette: { primary: '#191a1b', accent: '#cacbcc', bg: '#f2f3f5', ink: '#191a1b', soft: '#e9eaeb' }, desc: 'فخامة دور الأزياء العالمية (Moda Operandi): أحادي اللون، خط تحريري أنيق، زوايا شبه حادة — لعلامات الأزياء الفاخرة' },
-  { id: 'prem-classic', name: 'الجراند', palette: { primary: '#008827', accent: '#00a1e0', bg: '#ffffff', ink: '#212529', soft: '#f8f9fa' }, desc: 'متاجر الأقسام العالمية (Saks Fifth Avenue): أبيض مرتب وأخضر علامة بارز وزوايا شبه مربعة — كلاسيكي يبعث الثقة' },
-  { id: 'prem-natural', name: 'الطبيعي', palette: { primary: '#3e6f5e', accent: '#b85c38', bg: '#faf9f6', ink: '#2d2a26', soft: '#f0ece3' }, desc: 'الاستدامة العصرية (Allbirds): ألوان أرضية دافئة وخط هندسي نظيف ومساحات واسعة — للمنتجات الطبيعية والعضوية' },
-  { id: 'prem-outdoor', name: 'المغامر', palette: { primary: '#fa4616', accent: '#003da5', bg: '#f5f5f5', ink: '#1a1a1a', soft: '#e8e8e8' }, desc: 'أسلوب علامات الرحلات العالمية (Patagonia): برتقالي جريء وحواف حادة وبنية صلبة — للمعدات والملابس الرياضية' }
+  { id: 'prem-fashion', name: 'الأتيلييه', palette: { primary: '#191a1b', accent: '#cacbcc', bg: '#f2f3f5', ink: '#191a1b', soft: '#e9eaeb' }, desc: 'Editorial فاخر: هيرو صورة كبيرة + Grid عمودين + hover صورة ثانية + Lookbook — للأزياء التي تبيع بالصور', layout: 'editorial', hero: 'fashion', grid: '2col', feature: 'lookbook' },
+  { id: 'prem-classic', name: 'الجراند', palette: { primary: '#008827', accent: '#00a1e0', bg: '#ffffff', ink: '#212529', soft: '#f8f9fa' }, desc: 'Conversion كثيف: Grid 4 أعمدة + Flash deals + countdown — كلاسيكي يبيع بالثقة', layout: 'dense', hero: 'deal', grid: '4col', feature: 'flash' },
+  { id: 'prem-natural', name: 'الطبيعي', palette: { primary: '#3e6f5e', accent: '#b85c38', bg: '#faf9f6', ink: '#2d2a26', soft: '#f0ece3' }, desc: 'Storytelling هادئ: Masonry غير منتظم + قصة المنتج والمواد + Brand Story — للمنتجات الطبيعية', layout: 'masonry', hero: 'story', grid: 'masonry', feature: 'story' },
+  { id: 'prem-outdoor', name: 'المغامر', palette: { primary: '#fa4616', accent: '#003da5', bg: '#f5f5f5', ink: '#1a1a1a', soft: '#e8e8e8' }, desc: 'Utility عملي: هيرو بحث حسب الاستخدام (Hiking/Camping/Travel) + Filters ثابتة + مقارنة مواصفات — للمعدات', layout: 'utility', hero: 'utility', grid: 'dense', feature: 'compare' }
 ];
 
 const PREMIUM_MAP = new Map(PREMIUM.map(p => [p.id, p]));

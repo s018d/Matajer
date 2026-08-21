@@ -123,8 +123,7 @@ textarea{resize:vertical}
 .info-table td{padding:.6rem .9rem;font-size:.87rem}
 .info-table tr:not(:last-child) td{border-bottom:1px solid var(--line)}
 .info-table td:first-child{background:var(--soft);font-weight:700;color:var(--muted);width:38%}
-/* التمرير الأفقي للجداول على الشاشات الضيقة — يغطي كل الجداول بلا تعديل القوالب */
-.table,table:not(.mini){display:block;overflow-x:auto;width:100%;max-width:100%;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+/* الجداول: استخدم .table-wrap حول الجدول بدل display:block الذي يكسر semantics */
 
 /* ===== ALERTS ===== */
 .alert{padding:.8rem 1.1rem;border-radius:var(--radius);font-size:.9rem;display:flex;align-items:center;gap:.5rem;animation:fadeInUp .3s}
@@ -312,122 +311,6 @@ textarea{resize:vertical}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(11,18,32,.5);z-index:99;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .sidebar-overlay.show{display:block}
 
-/* ============================================================
-   🔥 FIX: الجوال — إصلاحات قوية لكل شاشة تحت 768px
-   ============================================================ */
-
-* { box-sizing: border-box; }
-
-@media (max-width: 768px) {
-  .topbar {
-    flex-wrap: wrap !important;
-    padding: 8px 12px !important;
-    gap: 6px !important;
-  }
-  .topbar h1 {
-    font-size: 1rem !important;
-    min-width: 0 !important;
-    flex: 1 1 auto !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-  .topbar .tb-actions {
-    flex-wrap: wrap !important;
-    gap: 4px !important;
-    justify-content: flex-end !important;
-  }
-  .topbar .tb-actions .btn {
-    font-size: 0.7rem !important;
-    padding: 4px 10px !important;
-    min-width: unset !important;
-  }
-  .sidebar {
-    position: fixed !important;
-    top: 0 !important;
-    right: auto !important;
-    left: 0 !important;
-    width: 260px !important;
-    max-width: 75% !important;
-    height: 100vh !important;
-    transform: translateX(-100%) !important;
-    transition: transform 0.25s ease !important;
-    z-index: 1000 !important;
-    overflow-y: auto !important;
-    padding: 16px 12px !important;
-  }
-  .sidebar.open {
-    transform: translateX(0) !important;
-  }
-  .sidebar .nav-item {
-    font-size: 0.85rem !important;
-    padding: 10px 14px !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-  .sidebar .nav-item .icon {
-    font-size: 1.1rem !important;
-    min-width: 28px !important;
-  }
-  .main-content {
-    padding: 12px !important;
-    margin-left: 0 !important;
-    width: 100% !important;
-  }
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
-  }
-  .stat-card {
-    padding: 14px !important;
-  }
-  .stat-card .num {
-    font-size: 1.5rem !important;
-  }
-  .table-wrap {
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    margin: 0 -4px !important;
-    padding: 0 4px !important;
-  }
-  .table-wrap table {
-    min-width: 600px !important;
-    font-size: 0.8rem !important;
-  }
-  .table-wrap table td,
-  .table-wrap table th {
-    padding: 8px 10px !important;
-    white-space: nowrap !important;
-  }
-  .table-wrap table td:last-child,
-  .table-wrap table th:last-child {
-    white-space: normal !important;
-  }
-  .table-wrap .btn-sm {
-    font-size: 0.65rem !important;
-    padding: 3px 8px !important;
-    display: inline-block !important;
-    margin: 2px !important;
-  }
-  .form-group {
-    margin-bottom: 12px !important;
-  }
-  .form-control {
-    font-size: 0.9rem !important;
-    padding: 10px 12px !important;
-  }
-  .form-row {
-    flex-direction: column !important;
-    gap: 8px !important;
-  }
-  .form-row .col {
-    flex: 1 1 100% !important;
-    min-width: 0 !important;
-  }
-  .modal-content {
-    margin: 10px !important;
-    max-height: 90vh !important;
-    overflow-y: auto !important;
-  }
-}
+/* ===== CLEAN MOBILE ===== */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.table-wrap table{min-width:600px;width:100%}

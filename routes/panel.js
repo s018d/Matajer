@@ -444,40 +444,9 @@ router.get('/domain', (req, res) => {
 });
 
 router.post('/domain', (req, res) => {
-  const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/domain?err=' + encodeURIComponent('الدومين المخصص متاح للباقة الاحترافية فقط'));
-  
-  const { custom_domain, action } = req.body;
-  
-  if (action === 'remove') {
-    db.prepare('UPDATE stores SET custom_domain=? WHERE id=?').run('', store.id);
-    logActivity(req.user.id, req.user.username, 'إزالة دومين', 'أزال الدومين المخصص');
-    return res.redirect('/panel/domain?ok=' + encodeURIComponent('تم إزالة الدومين المخصص'));
-  }
-  
-  const domain = String(custom_domain || '').trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/.*$/, '');
-  
-  if (!domain) {
-    return res.redirect('/panel/domain?err=' + encodeURIComponent('أدخل اسم الدومين'));
-  }
-  
-  const domainRegex = /^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)+$/;
-  if (!domainRegex.test(domain)) {
-    return res.redirect('/panel/domain?err=' + encodeURIComponent('صيغة الدومين غير صحيحة'));
-  }
-  
-  if (domain.endsWith('.local') || /^(\d+\.){3}\d+$/.test(domain) || domain === 'localhost') {
-    return res.redirect('/panel/domain?err=' + encodeURIComponent('الدومين غير مسموح'));
-  }
-  
-  const existing = db.prepare('SELECT id FROM stores WHERE lower(custom_domain)=? AND id!=?').get(domain, store.id);
-  if (existing) {
-    return res.redirect('/panel/domain?err=' + encodeURIComponent('هذا الدومين مستخدم من متجر آخر'));
-  }
-  
-  db.prepare('UPDATE stores SET custom_domain=? WHERE id=?').run(domain, store.id);
-  logActivity(req.user.id, req.user.username, 'إضافة دومين', `أضاف الدومين المخصص: ${domain}`);
-  
+  // التاجر لا يعدل الدومين يدوياً — الطلب عبر /panel/domain/buy والربط من لوحة الأدمن
+  return res.redirect('/panel/domain');
+});
   res.redirect('/panel/domain?ok=' + encodeURIComponent('تم حفظ الدومين — تأكد من إضافة سجل CNAME يشير إلى نطاق المنصة'));
 });
 

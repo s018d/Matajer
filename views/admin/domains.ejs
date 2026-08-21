@@ -43,6 +43,12 @@
                   </select>
                   <button class="btn btn-sm btn-primary">حفظ</button>
                 </form>
+                <!-- أدمن فقط: ربط الدومين بمتجر التاجر مباشرة -->
+                <form method="post" action="/admin/domains/<%= r.id %>/link?_csrf=<%= csrf %>" style="display:flex;gap:.3rem;margin-top:.4rem;flex-wrap:wrap">
+                  <input type="hidden" name="_csrf" value="<%= csrf %>">
+                  <input type="text" name="linked_domain" dir="ltr" value="<%= r.domain %>" style="width:150px;font-size:.8rem" title="الدومين المراد ربطه بالمتجر">
+                  <button class="btn btn-sm btn-ok">🔗 اربط بالمتجر</button>
+                </form>
               </td>
             </tr>
           <% }) %>

@@ -83,6 +83,22 @@ router.post('/domains/:id/status', (req, res) => {
   res.redirect('/admin/domains?ok=' + encodeURIComponent('تم تحديث حالة الطلب'));
 });
 
+// أدمن فقط: ربط الدومين بمتجر التاجر مباشرة
+router.post('/domains/:id/link', (req, res) => {
+  const domain = String(req.body.linked_domain || '').trim().toLowerCase().replace(/^https?:\/\//,'').replace(/\/.*$/,'');
+  if (!/^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)+$/.test(domain))
+    return res.redirect('/admin/domains?err=' + encodeURIComponent('صيغة الدومين غير صحيحة'));
+  const r = db.prepare(`SELECT dr.*, s.name store_name FROM domain_requests dr JOIN stores s ON s.id=dr.store_id WHERE dr.id=?`).get(req.params.id);
+  if (!r) return res.redirect('/admin/domains?err=' + encodeURIComponent('الطلب غير موجود'));
+  const clash = db.prepare('SELECT id FROM stores WHERE lower(custom_domain)=? AND id!=?').get(domain, r.store_id);
+  if (clash) return res.redirect('/admin/domains?err=' + encodeURIComponent('هذا الدومين مربوط بمتجر آخر'));
+  db.prepare(`UPDATE stores SET custom_domain=? WHERE id=?`).run(domain, r.store_id);
+  db.prepare(`UPDATE domain_requests SET status='done', note=? WHERE id=?`).run(`مرتبط: ${domain}`, r.id);
+  appendLog(`المدير ربط دومين «${domain}» بمتجر «${r.store_name}»`);
+  logActivity(req.user.id, req.user.username, 'ربط دومين', `${domain} -> ${r.store_name}`);
+  res.redirect('/admin/domains?ok=' + encodeURIComponent(`تم ربط ${domain} بمتجر ${r.store_name}`));
+});
+
 router.post('/stores', (req, res) => {
   const { name, username, owner_name, phone, password, description } = req.body;
   if (!name || !username) return res.redirect('/admin/stores?err=' + encodeURIComponent('اسم المتجر واسم المستخدم مطلوبان'));

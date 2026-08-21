@@ -218,11 +218,19 @@ body.store-body.prem-classic * { box-sizing: border-box; }
 .prem-classic .st-rating-avg { color: #008827; }
 .prem-classic .st-rating-summary { border-radius: 3px; border-color: #e9ecef; }
 
+/* ===== CLASSIC FLASH HERO ===== */
+.prem-classic .classic-hero{display:grid;grid-template-columns:1fr 1fr;min-height:340px;background:#008827;color:#fff;align-items:center}
+.prem-classic .classic-hero .st-head-inner{max-width:none;padding:2rem 1.5rem}
+.prem-classic .classic-hero h1{color:#fff !important;-webkit-text-fill-color:#fff !important}
+.prem-classic .classic-hero p{color:rgba(255,255,255,.9) !important}
+.prem-classic .classic-hero .classic-badge{background:#fff;color:#008827}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 480px) {
   .prem-classic .st-head-inner { padding: .9rem 1rem; }
   .prem-classic .st-head h1 { font-size: 1.15rem; }
   .prem-classic .st-grid { grid-template-columns: repeat(2, 1fr); gap: .7rem; }
+  .prem-classic .classic-hero{grid-template-columns:1fr;min-height:260px}
 }
 @media (max-width: 360px) {
   .prem-classic .st-grid { grid-template-columns: 1fr; }

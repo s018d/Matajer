@@ -6,72 +6,53 @@
   <div class="content">
     <%- include('../partials/alerts') %>
     
-    <div class="card-head-row" style="flex-wrap:wrap; gap:.5rem">
-      <h2>إدارة التوصيل</h2>
-      <a class="btn btn-primary" href="/panel/shipping/companies">إدارة الشركات</a>
-      <a class="btn btn-primary" href="/panel/shipments">جميع الشحنات</a>
+    <!-- رسوم التوصيل اليدوية (تعمل الآن) -->
+    <div class="card">
+      <h2>🚚 رسوم التوصيل — تعمل الآن</h2>
+      <p class="muted" style="margin-bottom:1rem">حدد رسوم التوصيل وتوصيل مجاني فوق مبلغ معين — الزبون يراها بوضوح عند الطلب. التعديل من <a href="/panel/settings">⚙️ إعدادات المتجر</a>.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem">
+        <div class="stat"><span>رسوم التوصيل الحالية</span><b><%= money(store.delivery_fee || 0) %></b></div>
+        <div class="stat"><span>توصيل مجاني من</span><b><%= store.free_delivery_min ? money(store.free_delivery_min) : 'معطل' %></b></div>
+      </div>
     </div>
 
-    <div class="two-col" style="margin-top:1rem">
-      <div class="card">
-        <h3>شركات التوصيل المفعلة (<%= companies.length %>)</h3>
-        <% if (companies.length === 0) { %>
-          <p class="muted">لا توجد شركات توصيل مفعلة. <a href="/panel/shipping/companies">أضف شركة توصيل</a></p>
-        <% } else { %>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1rem; margin-top:1rem">
-            <% companies.forEach(c => { %>
-              <div class="card" style="padding:1rem; border:2px solid <%= c.is_enabled ? 'var(--primary)' : 'var(--line)' %>">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.5rem">
-                  <b><%= c.name %></b>
-                  <span class="badge <%= c.is_enabled ? 'badge-ok' : 'badge-warn' %>"><%= c.is_enabled ? 'مفعل' : 'معطل' %></span>
-                </div>
-                <div class="muted" style="font-size:.8rem; margin-bottom:.5rem">
-                  العمولة: <%= money(c.cod_fee || 0) %> | شحن مجاني من <%= money(c.free_shipping_min || 0) %>
-                </div>
-                <a class="btn btn-sm btn-ghost" href="/panel/shipping/companies" style="width:100%">إعدادات</a>
-              </div>
-            <% }) %>
-          </div>
-        <% } %>
+    <!-- شركات الشحن API - قادم قريباً -->
+    <div class="card" style="border:2px dashed var(--line);background:linear-gradient(135deg,var(--soft),var(--card))">
+      <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap">
+        <span style="font-size:2rem">🔒</span>
+        <div style="flex:1;min-width:220px">
+          <h2 style="margin:0">تكامل شركات الشحن (برق، صقر، DHL...) — قادم قريباً 🚀</h2>
+          <p class="muted" style="margin:.4rem 0 0">ربط مباشر مع شركات التوصيل: إنشاء شحنة تلقائي + تتبع لحظي + بوليصة PDF. الميزة تحت التطوير وستنزل كتحديث مجاني خلال الأيام القادمة لكل المشتركين.</p>
+        </div>
+        <span class="badge badge-warn" style="font-size:.85rem;padding:.5rem 1rem">قيد التطوير</span>
       </div>
-      
-      <div class="card">
-        <h3>أحدث الشحنات (<%= shipments.length %>)</h3>
-        <% if (shipments.length === 0) { %>
-          <p class="muted">لا توجد شحنات بعد</p>
-        <% } else { %>
-          <div style="max-height:400px; overflow-y:auto">
-            <table style="width:100%; font-size:.85rem">
-              <tr><th>الطلب</th><th>الشركة</th><th>الحالة</th><th>الزبون</th><th>التاريخ</th><th>إجراء</th></tr>
-              <% shipments.forEach(s => { 
-                const statusBadge = s.status==='delivered'?'badge-ok':(s.status==='failed'?'badge-err':(s.status==='returned'?'badge-warn':''));
-                const statusText = s.status==='pending'?'قيد الانتظار':
-                    s.status==='pickup_scheduled'?'تم جدولة الاستلام':
-                    s.status==='picked_up'?'تم الاستلام':
-                    s.status==='in_transit'?'في الطريق':
-                    s.status==='out_for_delivery'?'للترسل':
-                    s.status==='delivered'?'تم التسليم':
-                    s.status==='failed'?'فشل التسليم':
-                    s.status==='returned'?'مرتجع':
-                    s.status==='cancelled'?'ملغي':s.status; 
-              %>
-                <tr>
-                  <td><a href="/panel/shipments/<%= s.id %>">#<%= s.order_id %></a></td>
-                  <td><%= s.company_name %></td>
-                  <td><span class="badge <%= statusBadge %>"><%= statusText %></span></td>
-                  <td><%= s.customer_name %></td>
-                  <td><%= s.created_at.slice(0,16) %></td>
-                  <td><a class="btn btn-sm btn-ghost" href="/panel/shipments/<%= s.id %>">تفاصيل</a></td>
-                </tr>
-              <% }) %>
-            </table>
-          </div>
-          <a class="btn btn-sm btn-ghost" href="/panel/shipments" style="margin-top:1rem; display:inline-block">عرض جميع الشحنات</a>
-        <% } %>
-      </div>
+      <details style="margin-top:.8rem">
+        <summary style="cursor:pointer;color:var(--brand);font-weight:700">شو راح تقدر تسوي لما تنزل؟</summary>
+        <ul style="margin:.6rem 0 0;padding-inline-start:1.3rem;color:var(--muted);line-height:1.9;font-size:.88rem">
+          <li>تفعيل الشركات التي تستخدمها وإضافة API Keys لكل شركة بأمان</li>
+          <li>إنشاء شحنة بضغطة من صفحة الطلب — بدون إدخال يدوي</li>
+          <li>تتبع حالة الشحنة لحظياً (استلم → بالطريق → وصل)</li>
+          <li>طباعة بوليصة الشحن تلقائياً</li>
+          <li>حساب COD والمندوبين تلقائياً</li>
+        </ul>
+      </details>
     </div>
+
+    <!-- سجل الشحنات القديمة (إذا موجودة) -->
+    <% if (shipments && shipments.length > 0) { %>
+      <div class="card">
+        <h3>الشحنات السابقة (<%= shipments.length %>)</h3>
+        <div class="table-wrap">
+          <table class="table">
+            <tr><th>الطلب</th><th>الشركة</th><th>الحالة</th><th>الزبون</th></tr>
+            <% shipments.slice(0,10).forEach(s => { %>
+              <tr><td>#<%= s.order_id %></td><td><%= s.company_name %></td><td><%= s.status %></td><td><%= s.customer_name || '' %></td></tr>
+            <% }) %>
+          </table>
+        </div>
+      </div>
+    <% } %>
   </div>
 </main>
-<script src="/js/notify.js"></script>
 </body>
 </html>

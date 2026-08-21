@@ -681,62 +681,7 @@ router.post('/settings/logo', upLogo().single('logo'), asyncHandler(async (req, 
   res.redirect('/panel/settings?err=' + encodeURIComponent(err.message || 'فشل رفع الشعار'));
 });
 
-/* ====== العروض المجمعة (Bundles) ====== */
-router.get('/bundles', (req, res) => {
-  const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('العروض المجمعة متاحة للباقة الاحترافية فقط'));
-  const bundles = db.prepare('SELECT b.*, (SELECT COUNT(*) FROM bundle_products WHERE bundle_id=b.id) as product_count FROM bundles b WHERE b.store_id=? ORDER BY b.id DESC').all(store.id);
-  res.render('panel/bundles', { store, bundles, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
-});
-
-router.post('/bundles', (req, res) => {
-  const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/bundles?err=' + encodeURIComponent('العروض المجمعة متاحة للباقة الاحترافية فقط'));
-  const { name, description, discount_type, discount_value, min_products } = req.body;
-  if (!name || !name.trim()) return res.redirect('/panel/bundles?err=' + encodeURIComponent('اسم العرض مطلوب'));
-  const dt = discount_type === 'amount' ? 'amount' : 'percent';
-  const dv = Number(discount_value);
-  if (isNaN(dv) || dv <= 0 || (dt === 'percent' && dv > 100)) return res.redirect('/panel/bundles?err=' + encodeURIComponent('قيمة الخصم غير صحيحة'));
-  const mp = Math.max(2, Math.floor(Number(min_products) || 2));
-  const info = db.prepare('INSERT INTO bundles (store_id, name, description, discount_type, discount_value, min_products) VALUES (?,?,?,?,?,?)')
-    .run(store.id, name.trim(), description?.trim() || '', dt, dv, mp);
-  logActivity(req.user.id, req.user.username, 'إضافة عرض مجمّع', `أنشأ عرض «${name}»`);
-  res.redirect('/panel/bundles/' + info.lastInsertRowid + '/products?ok=' + encodeURIComponent('تم إنشاء العرض — الآن أضف المنتجات'));
-});
-
-router.get('/bundles/:id/products', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const bundle = db.prepare('SELECT * FROM bundles WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (!bundle) return res.redirect('/panel/bundles?err=' + encodeURIComponent('العرض غير موجود'));
-  const products = db.prepare('SELECT p.*, CASE WHEN bp.product_id IS NOT NULL THEN 1 ELSE 0 END as in_bundle FROM products p LEFT JOIN bundle_products bp ON bp.product_id=p.id AND bp.bundle_id=? WHERE p.store_id=? AND p.active=1 ORDER BY p.name').all(bundle.id, store.id);
-  res.render('panel/bundle-products', { store, bundle, products, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
-});
-
-router.post('/bundles/:id/products', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const bundle = db.prepare('SELECT * FROM bundles WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (!bundle) return res.redirect('/panel/bundles?err=' + encodeURIComponent('العرض غير موجود'));
-  const productIds = Array.isArray(req.body.products) ? req.body.products : (req.body.products ? [req.body.products] : []);
-  db.prepare('DELETE FROM bundle_products WHERE bundle_id=?').run(bundle.id);
-  for (const pid of productIds) {
-    db.prepare('INSERT INTO bundle_products (bundle_id, product_id) VALUES (?,?)').run(bundle.id, pid);
-  }
-  res.redirect('/panel/bundles/' + bundle.id + '/products?ok=' + encodeURIComponent('تم تحديث منتجات العرض'));
-});
-
-router.post('/bundles/:id/toggle', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const b = db.prepare('SELECT * FROM bundles WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (b) db.prepare('UPDATE bundles SET active=? WHERE id=?').run(b.active ? 0 : 1, b.id);
-  res.redirect('/panel/bundles?ok=' + encodeURIComponent('تم التحديث'));
-});
-
-router.post('/bundles/:id/delete', (req, res) => {
-  const store = getStore(req.user.store_id);
-  db.prepare('DELETE FROM bundle_products WHERE bundle_id=?').run(req.params.id);
-  db.prepare('DELETE FROM bundles WHERE id=? AND store_id=?').run(req.params.id, store.id);
-  res.redirect('/panel/bundles?ok=' + encodeURIComponent('تم حذف العرض'));
-});
+/* ====== العروض المجمعة (Bundles) - محذوفة بطلب سجاد ====== */
 
 /* ====== أكواد الخصم ====== */
 router.get('/coupons', (req, res) => {

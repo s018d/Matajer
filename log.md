@@ -1311,3 +1311,81 @@ Or, if you meant to create an async function, pass `async: true` as an option.
 - **[٢١‏/٨‏/٢٠٢٦، ٣:٥٢:٤٤ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
 - **[٢١‏/٨‏/٢٠٢٦، ٣:٥٤:٥٨ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
 - **[٢١‏/٨‏/٢٠٢٦، ٤:٠٤:٤٣ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٤:١٤:١٠ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٤:١٤:١٠ م
+- **[٢١‏/٨‏/٢٠٢٦، ٤:١٤:١٠ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٤:١٦:٢٣ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٤:١٦:٢٣ م
+- **[٢١‏/٨‏/٢٠٢٦، ٤:١٦:٢٣ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٤:١٦:٢٤ م]** **خطأ في الخادم:** Error: no such column: bg_overlay
+    at A:\05-الملفاتPersonal\سطح المكتب\Matajer\routes\panel.js:542:8
+    at Layer.handle [as handle_request] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\layer.js:95:5)
+    at next (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\route.js:149:13)
+    at done (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\lib\make-middleware.js:59:7)
+    at indicateDone (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\lib\make-middleware.js:63:68)
+    at Multipart.<anonymous> (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\lib\make-middleware.js:180:7)
+    at Multipart.emit (node:events:509:28)
+    at emitCloseNT (node:internal/streams/destroy:148:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+- **[٢١‏/٨‏/٢٠٢٦، ٤:١٦:٢٩ م]** **خطأ في الخادم:** Error: no such column: bg_overlay
+    at A:\05-الملفاتPersonal\سطح المكتب\Matajer\routes\panel.js:542:8
+    at Layer.handle [as handle_request] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\layer.js:95:5)
+    at next (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\route.js:149:13)
+    at done (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\lib\make-middleware.js:59:7)
+    at indicateDone (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\lib\make-middleware.js:63:68)
+    at A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\lib\make-middleware.js:169:11
+    at WriteStream.<anonymous> (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\storage\disk.js:43:9)
+    at WriteStream.emit (node:events:521:24)
+    at finish (node:internal/streams/writable:953:10)
+    at node:internal/streams/writable:934:13
+- **[٢١‏/٨‏/٢٠٢٦، ٤:١٦:٣٣ م]** **خطأ في الخادم:** Error: no such column: bg_overlay
+    at A:\05-الملفاتPersonal\سطح المكتب\Matajer\routes\panel.js:542:8
+    at Layer.handle [as handle_request] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\layer.js:95:5)
+    at next (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\route.js:149:13)
+    at done (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\lib\make-middleware.js:59:7)
+    at indicateDone (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\lib\make-middleware.js:63:68)
+    at A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\lib\make-middleware.js:169:11
+    at WriteStream.<anonymous> (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\storage\disk.js:43:9)
+    at WriteStream.emit (node:events:521:24)
+    at finish (node:internal/streams/writable:953:10)
+    at node:internal/streams/writable:934:13
+- **[٢١‏/٨‏/٢٠٢٦، ٤:١٦:٣٦ م]** **خطأ في الخادم:** Error: no such column: bg_overlay
+    at A:\05-الملفاتPersonal\سطح المكتب\Matajer\routes\panel.js:542:8
+    at Layer.handle [as handle_request] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\layer.js:95:5)
+    at next (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\route.js:149:13)
+    at done (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\lib\make-middleware.js:59:7)
+    at indicateDone (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\lib\make-middleware.js:63:68)
+    at A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\lib\make-middleware.js:169:11
+    at WriteStream.<anonymous> (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\storage\disk.js:43:9)
+    at WriteStream.emit (node:events:521:24)
+    at finish (node:internal/streams/writable:953:10)
+    at node:internal/streams/writable:934:13
+- **[٢١‏/٨‏/٢٠٢٦، ٤:١٨:٥٤ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٤:١٩:٤٢ م]** متجر «مريم» طلب شراء دومين am.com (عادي 20000 د.ع)
+- **[٢١‏/٨‏/٢٠٢٦، ٤:١٩:٥٦ م]** دخول ناجح للمستخدم «admin» بتصريح مدير عام
+- **[٢١‏/٨‏/٢٠٢٦، ٤:٢٠:٠٠ م]** المدير ربط دومين «am.com» بمتجر «مريم»
+- **[٢١‏/٨‏/٢٠٢٦، ٤:٢٠:١٦ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٤:٢٠:٣٨ م]** مستخدم «s018d» اعتمد قالب المتجر «prem-classic» لمتجر «مريم»
+- **[٢١‏/٨‏/٢٠٢٦، ٤:٢٦:٤٢ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٤:٢٦:٤٢ م
+- **[٢١‏/٨‏/٢٠٢٦، ٤:٢٦:٤٢ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٨:٢٢:٣٣ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٨:٢٢:٣٣ م
+- **[٢١‏/٨‏/٢٠٢٦، ٨:٢٢:٣٣ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٨:٢٣:٠٨ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٨:٢٣:١٢ م]** **خطأ في الخادم:** Error: no such column: bg_overlay
+    at A:\05-الملفاتPersonal\سطح المكتب\Matajer\routes\panel.js:542:8
+    at Layer.handle [as handle_request] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\layer.js:95:5)
+    at next (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\route.js:149:13)
+    at done (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\lib\make-middleware.js:59:7)
+    at indicateDone (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\lib\make-middleware.js:63:68)
+    at A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\lib\make-middleware.js:169:11
+    at WriteStream.<anonymous> (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\multer\storage\disk.js:43:9)
+    at WriteStream.emit (node:events:521:24)
+    at finish (node:internal/streams/writable:953:10)
+    at node:internal/streams/writable:934:13
+- **[٢١‏/٨‏/٢٠٢٦، ٨:٢٨:٥٩ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٨:٢٨:٥٩ م
+- **[٢١‏/٨‏/٢٠٢٦، ٨:٢٨:٥٩ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٨:٢٩:١٤ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٨:٣٠:٠٧ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٨:٣٠:٥٥ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٨:٣٠:٥٥ م
+- **[٢١‏/٨‏/٢٠٢٦، ٨:٣٠:٥٥ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٨:٣١:٠٤ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٨:٣١:١٩ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٨:٣١:٤٨ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر

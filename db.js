@@ -145,6 +145,8 @@ try { db.exec("ALTER TABLE stores ADD COLUMN custom_domain TEXT DEFAULT ''"); } 
 try { db.exec("ALTER TABLE stores ADD COLUMN delivery_fee REAL DEFAULT 0"); } catch (e) {}
 try { db.exec("ALTER TABLE stores ADD COLUMN free_delivery_min REAL DEFAULT 0"); } catch (e) {}
 try { db.exec("ALTER TABLE stores ADD COLUMN meta_desc TEXT DEFAULT ''"); } catch (e) {}
+try { db.exec("ALTER TABLE stores ADD COLUMN store_bg_video TEXT DEFAULT ''"); } catch (e) {}
+try { db.exec("ALTER TABLE stores ADD COLUMN bg_overlay INTEGER DEFAULT 0"); } catch (e) {}
 try { db.exec("ALTER TABLE products ADD COLUMN stock INTEGER"); } catch (e) {}
 try { db.exec("ALTER TABLE products ADD COLUMN options TEXT DEFAULT ''"); } catch (e) {}
 try { db.exec("ALTER TABLE products ADD COLUMN addons TEXT DEFAULT ''"); } catch (e) {}

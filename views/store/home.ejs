@@ -3,7 +3,10 @@
 /* ===== محرك التخطيط الديناميكي — ترتيب الأقسام من layout_json ===== */
 let L = {};
 try { L = JSON.parse(store.layout_json || '{}'); } catch(e) {}
-const order = Array.isArray(L.order) && L.order.length ? L.order : ['hero','search','cats','grid','brand'];
+const order = Array.isArray(L.order) && L.order.length ? L.order : ['hero','search','cats','announce','grid','brand'];
+// دمج الأقسام الجديدة (announce) في الترتيب القديم المحفوظ
+const DEF_ORDER = ['hero','search','cats','announce','grid','brand'];
+if (!order.includes('announce')) order.splice(order.indexOf('grid') >= 0 ? order.indexOf('grid') : order.length, 0, 'announce');
 const vis = L.visibility || {};
 const show = k => vis[k] !== false && order.includes(k);
 const heroCfg = L.hero || {};
@@ -77,7 +80,14 @@ const heroSub = heroCfg.sub || store.description;
 
 <% function renderBrand(){ %><%- include('../partials/store-brand') %><% } %>
 
-<% const renderers = { hero: renderHero, search: renderSearch, cats: renderCats, grid: renderGrid, brand: renderBrand }; %>
+<% function renderAnnounce(){ if (!show('announce')) return; const a = L.announce || {}; if (!a.text) return; const bg = a.bg || '#fff3cd'; const color = a.color || '#856404'; const icon = a.icon || '📢'; const link = a.link || ''; const txt = a.text || ''; const linkAttr = link ? `href="${link}" target="_blank"` : ''; %>
+  <div class="announce-bar" style="background:<%=bg%>;color:<%=color%>;padding:.6rem 1rem;text-align:center;font-size:.9rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:.5rem;<%= a.link ? 'cursor:pointer' : '' %>" <%= linkAttr %>>
+    <span><%= icon %></span>
+    <span><%= txt %></span>
+    <% if (a.link) { %><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg><% } %>
+  </div>
+<% } %>
+<% const renderers = { hero: renderHero, search: renderSearch, cats: renderCats, grid: renderGrid, announce: renderAnnounce, brand: renderBrand }; %>
 
 <% if (store.template === 'market') { %>
   <%- include('../partials/market-marquee') %>

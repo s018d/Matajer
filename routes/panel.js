@@ -496,7 +496,54 @@ const upReceipt = () => {
     }
   });
 };
-
+ 
+// ===== رفع خلفية المتجر =====
+const upStoreBg = () => {
+  const disk = multer.diskStorage({
+    destination: (req, file, cb) => {
+      const dir = path.join(__dirname, '..', 'uploads', 'store_' + req.user.store_id);
+      fs.mkdirSync(dir, { recursive: true });
+      cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname).toLowerCase();
+      cb(null, `bg_${Date.now()}_${Math.round(Math.random() * 1e9)}${ext}`);
+    }
+  });
+  return multer({
+    storage: disk,
+    limits: { fileSize: 20 * 1024 * 1024 }, // 20MB للفيديو
+    fileFilter: (req, file, cb) => {
+      const ok = ['.jpg', '.jpeg', '.png', '.webp', '.mp4', '.webm'].includes(path.extname(file.originalname).toLowerCase());
+      cb(ok ? null : new Error('نوع الملف غير مقبول - صور/فيديو فقط'), ok);
+    }
+  });
+};
+ 
+router.post('/templates/store-bg', upStoreBg().fields([{name:'store_bg_image', maxCount:1}, {name:'store_bg_video', maxCount:1}]), (req, res) => {
+  const store = getStore(req.user.store_id);
+  const files = req.files || {};
+  const updates = [];
+  const params = [];
+  if (req.files.store_bg_image) {
+    updates.push('store_bg_image = ?');
+    params.push('/uploads/store_' + store.id + '/' + req.files.store_bg_image[0].filename);
+  }
+  if (req.files.store_bg_video) {
+    updates.push('store_bg_video = ?');
+    params.push('/uploads/store_' + store.id + '/' + req.files.store_bg_video[0].filename);
+  }
+  if (req.body.bg_overlay) {
+    updates.push('bg_overlay = ?');
+    params.push(Number(req.body.bg_overlay) || 0);
+  }
+  if (updates.length) {
+    params.push(store.id);
+    db.prepare(`UPDATE stores SET ${updates.join(', ')} WHERE id=?`).run(...params);
+  }
+  res.redirect('/panel/templates/customize?ok=' + encodeURIComponent('تم حفظ خلفية المتجر'));
+});
+ 
 router.post('/billing/request', upReceipt().single('receipt'), (req, res) => {
   const store = getStore(req.user.store_id);
   const cfg = siteSettings();
@@ -576,15 +623,20 @@ router.get('/templates/customize', (req, res) => {
   
   // الأقسام حسب ترتيب التخزين أو الافتراضي
   const defs = [
-    { key:'hero',   icon:'🖼️', name:'الهيرو (الواجهة)', desc:'العنوان الرئيسي + صورة/فيديو خلفية' },
-    { key:'search', icon:'🔍', name:'البحث', desc:'شريط البحث عن المنتجات' },
-    { key:'cats',   icon:'🗂️', name:'الأقسام', desc:'أزرار تصنيفات المنتجات' },
-    { key:'grid',   icon:'🛍️', name:'شبكة المنتجات', desc:'بطاقات المنتجات' },
-    { key:'brand',  icon:'🏷️', name:'توقيع المنصة', desc:'«صُنع بواسطة دُكّان» (مجاني فقط)' }
+    { key:'hero',    icon:'🖼️', name:'الهيرو (الواجهة)', desc:'العنوان الرئيسي + صورة/فيديو خلفية' },
+    { key:'search',  icon:'🔍', name:'البحث', desc:'شريط البحث عن المنتجات' },
+    { key:'cats',    icon:'🗂️', name:'الأقسام', desc:'أزرار تصنيفات المنتجات' },
+    { key:'announce',icon:'📢', name:'شريط الإعلانات', desc:'شريط إعلانات علوي قابل للتخصيص' },
+    { key:'grid',    icon:'🛍️', name:'شبكة المنتجات', desc:'بطاقات المنتجات' },
+    { key:'brand',   icon:'🏷️', name:'توقيع المنصة', desc:'«صُنع بواسطة دُكّان» (مجاني فقط)' }
   ];
-  const order = Array.isArray(layout.order) && layout.order.length ? layout.order : ['hero','search','cats','grid','brand'];
+  const order = Array.isArray(layout.order) && layout.order.length ? layout.order : ['hero','search','cats','announce','grid','brand'];
+  // دمج الأقسام الجديدة غير الموجودة في الترتيب المحفوظ (مثل announce للمتاجر القديمة)
+  const DEFAULT_ORDER = ['hero','search','cats','announce','grid','brand'];
+  const merged = [...order];
+  for (const k of DEFAULT_ORDER) if (!merged.includes(k)) merged.splice(merged.indexOf('grid') >= 0 ? Math.max(merged.indexOf('grid'), 0) : merged.length, 0, k);
   const vis = layout.visibility || {};
-  const sections = order.filter(k=>defs.find(d=>d.key===k)).map(k=>({
+  const sections = merged.filter(k=>defs.find(d=>d.key===k)).map(k=>({
     ...defs.find(d=>d.key===k),
     visible: vis[k] !== false
   }));

@@ -51,6 +51,22 @@
                       <span id="ovVal"><%= (layout.hero||{}).overlay != null ? layout.hero.overlay : 40 %>%</span>
                     </label>
                   </div>
+                <% } else if (s.key === 'announce') { %>
+                  <label style="font-size:.8rem">نص الإعلان
+                    <input type="text" name="announce" value="<%= layout.announce || '' %>" placeholder="مثال: شحن مجاني للطلبات فوق 50,000 د.ع — استخدم الكود: FREE50" onchange="markDirty()" style="padding:.4rem .6rem;font-size:.85rem;width:100%">
+                  </label>
+                  <label style="font-size:.8rem;margin-top:.4rem">لون الخلفية
+                    <input type="color" name="announceBg" value="<%= (layout.announceBg||'#fff3cd') %>" onchange="markDirty()" style="height:34px">
+                  </label>
+                  <label style="font-size:.8rem;margin-top:.4rem">لون النص
+                    <input type="color" name="announceColor" value="<%= (layout.announceColor||'#856404') %>" onchange="markDirty()" style="height:34px">
+                  </label>
+                  <label style="font-size:.8rem;margin-top:.4rem">أيقونة
+                    <input type="text" name="announceIcon" value="<%= (layout.announceIcon||'📢') %>" placeholder="📢 أو 🎁 أو 🔥" style="padding:.4rem .6rem;font-size:.85rem">
+                  </label>
+                  <label style="font-size:.8rem;margin-top:.4rem">رابط (اختياري)
+                    <input type="url" name="announceLink" value="<%= (layout.announceLink||'') %>" placeholder="https://..." dir="ltr" onchange="markDirty()" style="padding:.4rem .6rem;font-size:.85rem">
+                  </label>
                 <% } else if (s.key === 'grid') { %>
                   <label style="font-size:.8rem">عدد الأعمدة
                     <select name="gridCols" onchange="markDirty()" style="width:100%;padding:.4rem">
@@ -91,9 +107,31 @@
         <div style="display:flex;justify-content:center;background:#f0f2f7;border-radius:12px;padding:.8rem">
           <iframe id="pv" src="/s/<%= store.slug %>?live=1" style="width:100%;height:600px;border:none;border-radius:8px;background:#fff;transition:width .3s"></iframe>
         </div>
+</div>
+    </div>
+ 
+    <!-- خلفية المتجر العامة -->
+    <div class="card" style="margin-top:1.2rem">
+      <h2>🖼️ خلفية المتجر العامة</h2>
+      <p class="muted" style="margin-bottom:1rem">صورة أو فيديو يغطي المتجر بالكامل. يعمل مع جميع القوالب.</p>
+      <form id="bgForm" enctype="multipart/form-data" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;align-items:end">
+        <label style="font-size:.8rem">صورة خلفية
+          <input type="file" name="store_bg_image" accept="image/*" onchange="previewStoreBg(this)" style="font-size:.78rem;padding:.3rem;width:100%">
+        </label>
+        <label style="font-size:.8rem">فيديو خلفية (mp4/webm)
+          <input type="file" name="store_bg_video" accept="video/*" style="font-size:.78rem;padding:.3rem;width:100%">
+        </label>
+        <label style="font-size:.8rem">طبقة تعتيم
+          <input type="range" name="bg_overlay" min="0" max="80" value="<%= (typeof store !== 'undefined' && store.bg_overlay != null ? store.bg_overlay : 0) %>" oninput="document.getElementById('bgOvVal').textContent=this.value+'%';markDirty()" style="width:100%">
+          <span id="bgOvVal"><%= (typeof store !== 'undefined' && store.bg_overlay != null ? store.bg_overlay : 0) %>%</span>
+        </label>
+        <button type="button" class="btn btn-primary" onclick="uploadStoreBg()">💾 رفع وحفظ الخلفية</button>
+      </form>
+      <div id="bgPreview" style="margin-top:.8rem;max-height:120px;overflow:hidden;border-radius:8px;border:1px solid var(--line)">
+        <% if (typeof store !== 'undefined' && store.store_bg_image) { %><img src="<%= store.store_bg_image %>" style="width:100%;height:auto;border-radius:6px"><% } else if (typeof store !== 'undefined' && store.store_bg_video) { %><video controls style="width:100%"><source src="<%= store.store_bg_video %>" type="video/mp4"></video><% } %>
       </div>
     </div>
-
+ 
     <!-- ألوان المتجر العامة -->
     <div class="card" style="margin-top:1.2rem">
       <h2>🎨 ألوان وخطوط المتجر (العامة)</h2>
@@ -226,11 +264,71 @@ async function saveLayout(){
   else alert('❌ فشل الحفظ');
 }
 
-function resetLayout(){ if(confirm('استعادة التصميم الافتراضي؟')){ location.href='/panel/templates/customize?reset=1'; } }
-
-function setW(w){ document.getElementById('pv').style.width = w; }
-function refreshPreview(){ document.getElementById('pv').src = '/s/<%= store.slug %>?t='+Date.now(); }
-window.addEventListener('beforeunload', e=>{ if(dirty){ e.preventDefault(); e.returnValue=''; } });
+// ===== رفع خلفية المتجر =====
+async function uploadStoreBg(){
+  const fileInput = document.querySelector('input[name="store_bg_image"]');
+  const videoInput = document.querySelector('input[name="store_bg_video"]');
+  const overlay = document.querySelector('input[name="bg_overlay"]').value;
+  const form = new FormData();
+  form.append('_csrf', '<%= csrf %>');
+  if (fileInput.files[0]) form.append('store_bg_image', fileInput.files[0]);
+  if (videoInput.files[0]) form.append('store_bg_video', videoInput.files[0]);
+  form.append('bg_overlay', document.querySelector('input[name="bg_overlay"]').value);
+  form.append('_csrf', '<%= csrf %>');
+  const res = await fetch('/panel/templates/store-bg', { method:'POST', headers:{'x-csrf-token':'<%= csrf %>'}, body:new FormData(document.getElementById('bgForm')) });
+  if (res.ok){ alert('✅ تم حفظ خلفية المتجر'); refreshPreview(); }
+  else alert('❌ فشل الحفظ');
+}
+function previewStoreBg(input){
+  const preview = document.getElementById('bgPreview');
+  if (input.files[0]){
+    const url = URL.createObjectURL(input.files[0]);
+    preview.innerHTML = '<img src="'+url+'" style="width:100%;height:auto;border-radius:6px">';
+  }
+}
+// ===== Undo/Redo =====
+const history = [];
+let historyIndex = -1;
+function saveHistory(){
+  const state = { layout: JSON.parse(JSON.stringify(layout)), customCss: document.querySelector('style[data-custom]')?.textContent || '' };
+  history.splice(historyIndex+1);
+  history.push(state);
+  historyIndex = history.length-1;
+  if (history.length > 50) { history.shift(); historyIndex = history.length-1; }
+}
+document.addEventListener('keydown', e=>{
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z'){
+    if (e.shiftKey) redo(); else undo();
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'y') redo();
+});
+function undo(){
+  if (historyIndex > 0){
+    historyIndex--;
+    restoreState(history[historyIndex]);
+  }
+}
+function redo(){
+  if (historyIndex < history.length-1){
+    historyIndex++;
+    restoreState(history[historyIndex]);
+  }
+}
+function restoreState(state){
+  layout = state.layout;
+  document.querySelectorAll('.sec-item').forEach(el=>{
+    const key = el.dataset.sec;
+    const btn = el.querySelector('[onclick*="toggleSec"]');
+    const vis = state.layout.visibility?.[el.dataset.sec] !== false;
+    const btnEl = el.querySelector('[onclick*="toggleSec"]');
+    if (btnEl){
+      btnEl.textContent = vis ? '👁️' : '🚫';
+      el.style.borderColor = vis ? 'var(--line)' : '#ef4444';
+    }
+  });
+  layout = state.layout;
+  refreshPreview();
+}
 </script>
 </body>
 </html>

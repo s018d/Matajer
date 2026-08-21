@@ -1,0 +1,78 @@
+<%- include('../partials/head', { title: 'أكواد الخصم — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'coupons', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'أكواد الخصم' }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <% if (!pro) { %>
+      <div class="alert" style="background:#fffbeb;border:1px solid #fde68a;color:#92400e">
+        باقتك المجانية تسمح بـ 5 أكواد نشطة فقط — <a href="/panel/billing">رقِّ باقتك</a> لأكواد بلا حدود وبدون رسوم تأكيد.
+      </div>
+    <% } %>
+    <div class="two-col">
+      <div class="card">
+        <h2>إنشاء كود جديد</h2>
+        <form method="post" action="/panel/coupons" class="stack">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <label>الكود *
+            <input type="text" name="code" dir="ltr" required placeholder="مثال: RAMADAN10" pattern="[A-Za-z0-9_-]{3,20}" title="3-20 حرفاً لاتينياً وأرقاماً و _ و -">
+          </label>
+          <label>نوع الخصم
+            <select name="type">
+              <option value="percent">نسبة مئوية (مثال: 10%)</option>
+              <option value="amount">مبلغ ثابت (د.ع)</option>
+            </select>
+          </label>
+          <label>القيمة
+            <input type="number" name="value" min="0.01" step="any" required placeholder="مثال: 10">
+          </label>
+          <div class="grid-2">
+            <label>حد أدنى للطلب (د.ع، 0 = بدون حد)
+              <input type="number" name="min_total" min="0" step="500" value="0">
+            </label>
+            <label>حد الاستخدامات (0 = بلا حدود)
+              <input type="number" name="max_uses" min="0" step="1" value="0">
+            </label>
+          </div>
+          <label>ينتهي في (اختياري)
+            <input type="date" name="expires">
+          </label>
+          <button type="submit" class="btn btn-primary">إنشاء الكود</button>
+        </form>
+      </div>
+      <div class="card">
+        <h2>الأكواد (<%= rows.length %>)</h2>
+        <% if (rows.length === 0) { %>
+          <p class="muted">لا أكواد بعد — أنشئ أول كود في العمود المجاور وشاركه على واتسابك أو إنستغرامك.</p>
+        <% } else { %>
+          <table class="table">
+            <tr><th>الكود</th><th>الخصم</th><th>الحد الأدنى</th><th>استُخدم</th><th>ينتهي</th><th>الحالة</th><th></th></tr>
+            <% rows.forEach(c => { %>
+              <tr>
+                <td><b dir="ltr"><%= c.code %></b></td>
+                <td><%= c.type === 'percent' ? c.value + '%' : money(c.value) %></td>
+                <td><%= c.min_total ? money(c.min_total) : '—' %></td>
+                <td><%= c.used %><%= c.max_uses ? ' / ' + c.max_uses : '' %></td>
+                <td><%= c.expires || '—' %></td>
+                <td><span class="badge <%= c.active ? 'badge-ok' : 'badge-err' %>"><%= c.active ? 'نشط' : 'موقوف' %></span></td>
+                <td>
+                  <form method="post" action="/panel/coupons/<%= c.id %>/toggle" class="inline">
+                    <input type="hidden" name="_csrf" value="<%= csrf %>">
+                    <button class="btn btn-sm"><%= c.active ? 'إيقاف' : 'تشغيل' %></button>
+                  </form>
+                  <form method="post" action="/panel/coupons/<%= c.id %>/delete" class="inline" onsubmit="return confirm('حذف الكود نهائياً؟')">
+                    <input type="hidden" name="_csrf" value="<%= csrf %>">
+                    <button class="btn btn-sm btn-danger">حذف</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </table>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<%- include('../partials/head', { title: 'المنتجات — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'products', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'المنتجات' }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <div class="card-head-row">
+      <h2>منتجاتي (<%= rows.length %>)</h2>
+      <a class="btn btn-primary" href="/panel/products/new">+ منتج جديد</a>
+    </div>
+    <form class="search-form" method="get" style="margin-bottom:1rem">
+      <input type="search" name="q" placeholder="ابحث بالاسم أو الوصف…" value="<%= typeof searchQ !== 'undefined' ? searchQ : '' %>">
+      <button class="btn btn-sm" type="submit">🔍 بحث</button>
+      <% if (searchQ) { %><a class="btn btn-sm btn-ghost" href="/panel/products">إلغاء</a><% } %>
+    </form>
+    <table>
+      <tr><th>الصورة</th><th>المنتج</th><th>القسم</th><th>السعر</th><th>المشاهدات</th><th>الصور</th><th>الحالة</th><th>إجراءات</th></tr>
+      <% rows.forEach(p => { %>
+        <tr>
+          <td>
+            <% if (p.img) { %><img src="<%= p.img %>" class="thumb" alt=""><% } else { %><span class="thumb thumb-empty">—</span><% } %>
+          </td>
+          <td><a href="/panel/products/<%= p.id %>/edit"><%= p.name %></a></td>
+          <td><%= p.cat || '—' %></td>
+          <td><%= money(p.price) %><% if (p.old_price) { %> <del><%= money(p.old_price) %></del><% } %></td>
+          <td><%= p.views %></td>
+          <td><%= p.img_count %></td>
+          <td><span class="badge <%= p.active ? 'badge-ok' : 'badge-warn' %>"><%= p.active ? 'ظاهر' : 'مخفي' %></span></td>
+          <td class="row-actions">
+            <a class="btn btn-sm" href="/panel/products/<%= p.id %>/edit">تعديل</a>
+            <form method="post" action="/panel/products/<%= p.id %>/toggle" class="inline">
+              <input type="hidden" name="_csrf" value="<%= csrf %>">
+              <button class="btn btn-sm btn-ghost"><%= p.active ? 'إخفاء' : 'إظهار' %></button>
+            </form>
+            <form method="post" action="/panel/products/<%= p.id %>/delete" class="inline" onsubmit="return confirm('حذف المنتج نهائياً؟')">
+              <input type="hidden" name="_csrf" value="<%= csrf %>">
+              <button class="btn btn-sm btn-danger">حذف</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </table>
+    <% if (rows.length === 0) { %><p class="empty-note">لا توجد منتجات بعد — ابدأ بإضافة منتجك الأول</p><% } %>
+  </div>
+</main>
+</body>
+</html>

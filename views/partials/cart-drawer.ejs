@@ -1,0 +1,16 @@
+<% if (typeof store === 'undefined' || store.template !== 'market') { %>
+<div class="cart-fab" id="cartFab" onclick="openCart()" style="display:none">
+  <span class="cart-count" id="cartCount">0</span>
+  <button style="pointer-events:none">السلة</button>
+</div>
+<% } %>
+<div class="drawer-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="drawer-head"><h3>سلة الشراء</h3><button class="btn-ghost-x" onclick="closeCart()">×</button></div>
+  <div id="cartItems"></div>
+  <div class="drawer-foot">
+    <div class="drawer-total">الإجمالي: <b id="cartTotal">0</b></div>
+    <a class="btn btn-block" id="cartCheckout" href="#">إتمام الطلب</a>
+  </div>
+</div>
+<script src="/js/cart.js?v=5"></script>

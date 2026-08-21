@@ -1,0 +1,105 @@
+<%
+  const isNew = !product;
+  const pid = product ? product.id : 0;
+  const optsVal = product ? (product.options || '') : '';
+  const addonsVal = product ? (product.addons || '') : '';
+%>
+<%- include('../partials/head', { title: (isNew ? 'منتج جديد' : 'تعديل: ' + product.name) + ' — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'products', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: isNew ? 'منتج جديد' : 'تعديل المنتج' }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <div class="two-col">
+      <div class="card">
+        <form method="post" action="<%= isNew ? '/panel/products' : '/panel/products/' + pid %>" class="stack">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <label>اسم المنتج *
+            <input type="text" name="name" value="<%= product ? product.name : '' %>" required>
+          </label>
+          <label>القسم
+            <select name="category_id">
+              <option value="">بدون قسم</option>
+              <% cats.forEach(c => { %>
+                <option value="<%= c.id %>" <%= product && product.category_id === c.id ? 'selected' : '' %>><%= c.name %></option>
+              <% }) %>
+            </select>
+          </label>
+          <div class="grid-2">
+            <label>السعر (د.ع) *
+              <input type="number" step="0.01" name="price" value="<%= product ? product.price : '' %>" required>
+            </label>
+            <label>السعر قبل التخفيض (اختياري)
+              <input type="number" step="0.01" name="old_price" value="<%= product && product.old_price != null ? product.old_price : '' %>">
+            </label>
+          </div>
+          <label>الكمية بالمخزون (اتركها فارغة = بلا حدود — تنقص تلقائياً مع كل طلب)
+            <input type="number" name="stock" min="0" value="<%= product && product.stock != null ? product.stock : '' %>" placeholder="مثال: 50">
+          </label>
+          <details class="adv-box" <%= !product || (product.options || product.addons) ? 'open' : '' %>>
+            <summary>خيارات وإضافات متقدمة (اختياري)</summary>
+            <label>خيارات المنتج — JSON (الاسم مقابل قيم مفصولة بفواصل)
+              <textarea name="options" rows="3" dir="ltr" placeholder='مثال: {"المقاس":"XL,L,M","اللون":"أسود,أبيض"}'><%- optsVal %></textarea>
+            </label>
+            <small class="muted">يظهر للزبون قوائم اختيار قبل الإضافة للسلة.</small>
+            <label style="margin-top:.8rem">إضافات بسعر — JSON
+              <textarea name="addons" rows="3" dir="ltr" placeholder='مثال: [{"name":"تغليف هدية","price":2000}]'><%- addonsVal %></textarea>
+            </label>
+            <small class="muted">السعر يُضاف للوحدة عند اختيار الزبون لها.</small>
+          </details>
+          <label>الوصف
+            <textarea name="description" rows="4"><%= product ? product.description : '' %></textarea>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" name="active" <%= !product || product.active ? 'checked' : '' %>>
+            <span>المنتج ظاهر للزوار</span>
+          </label>
+          <button type="submit" class="btn btn-primary"><%= isNew ? 'حفظ المنتج' : 'حفظ التعديلات' %></button>
+        </form>
+      </div>
+
+      <div class="card">
+        <% if (isNew) { %>
+          <h2>الصور</h2>
+          <p>احفظ المنتج أولاً ثم ارفع صوره هنا.</p>
+        <% } else { %>
+          <h2>صور المنتج (<%= images.length %>)</h2>
+          <div class="img-grid">
+            <% images.forEach(im => { %>
+              <div class="img-cell">
+                <img src="<%= im.path %>" alt="">
+                <div class="img-cell-actions">
+                  <% if (im.position !== 0) { %>
+                    <form method="post" action="/panel/products/<%= pid %>/images/<%= im.id %>/setmain">
+                      <input type="hidden" name="_csrf" value="<%= csrf %>">
+                      <button class="btn btn-sm" title="اجعلها الرئيسية">الأساسية</button>
+                    </form>
+                  <% } else { %>
+                    <span class="badge badge-ok">الصورة الرئيسية</span>
+                  <% } %>
+                  <form method="post" action="/panel/products/<%= pid %>/images/<%= im.id %>/delete" onsubmit="return confirm('حذف الصورة؟')">
+                    <input type="hidden" name="_csrf" value="<%= csrf %>">
+                    <button class="btn btn-sm btn-danger">حذف</button>
+                  </form>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+          <% if (images.length === 0) { %>
+            <div class="img-grid"><div class="img-cell empty"><span>لا صور بعد — ارفع صوراً أدناه</span></div></div>
+          <% } %>
+          <form method="post" action="/panel/products/<%= pid %>/images?_csrf=<%= csrf %>" enctype="multipart/form-data" class="stack upload-box">
+            <input type="hidden" name="_csrf" value="<%= csrf %>">
+            <h3>إضافة صور (حتى 20 دفعة)</h3>
+            <input type="file" name="images" accept="image/jpeg,image/png,image/gif,image/webp" multiple>
+            <button type="submit" class="btn btn-primary">رفع الصور</button>
+            <small>JPG / PNG / GIF / WEBP — حتى 12MB للصورة الواحدة، بدون حد لعدد الصور</small>
+          </form>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

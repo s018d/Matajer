@@ -1,0 +1,43 @@
+<%- include('../partials/head', { title: 'المستودعات — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'warehouses', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'إدارة المستودعات' }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <div class="card-head-row">
+      <h2>المستودعات (<%= warehouses.length %>)</h2>
+      <a class="btn btn-primary" href="/panel/warehouses/new">+ مستودع جديد</a>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1.5rem">
+      <% warehouses.forEach(w => { %>
+        <div class="card" style="border:2px solid <%= w.is_default ? 'var(--primary)' : 'var(--line)' %>; position:relative">
+          <% if (w.is_default) { %><span class="badge badge-ok" style="position:absolute; top:-.5rem; right:-.5rem; font-size:.7rem">افتراضي</span><% } %>
+          <h3><%= w.name %></h3>
+          <div class="muted" style="font-size:.85rem; margin:.5rem 0"><strong>الكود:</strong> <%= w.code %></div>
+          <div class="muted" style="font-size:.85rem; margin:.3rem 0"><%= w.address || '—' %><% if (w.city) { %>، <%= w.city %><% } %></div>
+          <div class="muted" style="font-size:.8rem; margin:.3rem 0"><strong>المدير:</strong> <%= w.manager_name || '—' %> | <strong>الهاتف:</strong> <%= w.manager_phone || '—' %></div>
+          <div style="margin-top:1rem; display:flex; gap:.5rem; flex-wrap:wrap">
+            <a class="btn btn-sm btn-primary" href="/panel/warehouses/<%= w.id %>/stock">📦 المخزون</a>
+            <% if (!w.is_default) { %>
+              <form method="post" action="/panel/warehouses/<%= w.id %>/toggle" class="inline" style="display:inline">
+                <input type="hidden" name="_csrf" value="<%= csrf %>">
+                <button class="btn btn-sm btn-primary" style="padding:.4rem .8rem">⭐ تعيين افتراضي</button>
+              </form>
+            <% } %>
+            <form method="post" action="/panel/warehouses/<%= w.id %>/delete" class="inline" onsubmit="return confirm('حذف المستودع نهائياً؟')">
+              <input type="hidden" name="_csrf" value="<%= csrf %>">
+              <button class="btn btn-sm btn-danger" style="<%= w.is_default ? 'display:none' : '' %>">🗑 حذف</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+    <% if (warehouses.length === 0) { %><p class="empty-note" style="text-align:center; margin:2rem 0">لا توجد مستودعات — <a href="/panel/warehouses/new">أنشئ أول مستودع</a></p><% } %>
+    <div style="margin-top:1rem; text-align:center">
+      <a class="btn btn-primary" href="/panel/warehouses/new">+ إضافة مستودع</a>
+    </div>
+  </div>
+</main>
+</body>
+</html>

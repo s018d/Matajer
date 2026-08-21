@@ -1,0 +1,18 @@
+{
+  "name": "matajer",
+  "version": "1.0.0",
+  "description": "منصّة متاجر متعددة المستخدمين — قاعدة بيانات المواقع مع لوحات تحكم لكل متجر",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.8.1",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "multer": "^2.0.0",
+    "sharp": "^0.35.3"
+  }
+}

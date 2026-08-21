@@ -1,0 +1,49 @@
+<%- include('../partials/head', { title: store.name, desc: store.meta_desc || store.description, ogType: 'website', css: '/css/store.css', pwa: store.slug, themeColor: store.color }) %>
+<% if (store.template === 'market') { %><link rel="stylesheet" href="/css/store-market.css"><% } %>
+<% if (store.template === 'neo') { %><link rel="stylesheet" href="/css/store-neo.css"><% } %>
+<% if (store.template === 'gen') { %><link rel="stylesheet" href="/css/store-gen.css"><% } %>
+<% if (tpl && tpl.css) { %><link rel="stylesheet" href="<%= tpl.css %>"><% } %>
+<% if (tpl) { %><style><%= tpl.style %></style><% } else { %><style>:root{--primary:<%= store.color %>}</style><% } %>
+<body data-template="<%= store.template %>" data-slug="<%= store.slug %>" data-base="<%= store.base %>" class="store-body<%= tpl ? ' ' + tpl.classes : '' %>">
+<% if (store.template === 'market') { %>
+  <%- include('../partials/market-marquee') %>
+  <%- include('../partials/market-nav') %>
+  <%- include('../partials/market-hero') %>
+  <%- include('../partials/market-feats') %>
+<% } else { %>
+  <header class="st-head">
+    <div class="st-head-inner">
+      <% if (store.logo_path) { %><img src="<%= store.logo_path %>" class="st-logo" alt=""><% } %>
+      <div>
+        <h1><%= store.name %></h1>
+        <p><%= store.description %></p>
+      </div>
+    </div>
+    <% if (store.template === 'neo') { %><span class="neo-sticker">أحدث العروض</span><% } %>
+  </header>
+<% } %>
+<%- include('../partials/store-search') %>
+<nav class="st-nav" id="mkCats">
+  <a href="<%= store.base %>/" class="<%= cat === 0 ? 'on' : '' %>">الكل</a>
+  <% cats.forEach(c => { %>
+    <a href="<%= store.base %>/?cat=<%= c.id %>" class="<%= cat === c.id ? 'on' : '' %>"><%= c.name %></a>
+  <% }) %>
+</nav>
+<main class="st-main">
+  <div class="st-grid">
+    <% rows.forEach(p => { %>
+      <%- include('../partials/store-card', { p, store }) %>
+    <% }) %>
+  </div>
+  <% if (rows.length === 0) { %>
+    <div class="st-empty"><%= q ? 'لا توجد نتائج للبحث عن «' + q + '»' : 'لا توجد منتجات في هذا القسم حالياً' %></div>
+  <% } %>
+</main>
+<%- include('../partials/store-float') %>
+<% if (store.template === 'market' || store.template === 'neo') { %>
+  <%- include('../partials/market-footer') %>
+<% } %>
+<%- include('../partials/store-brand') %>
+<%- include('../partials/cart-drawer') %>
+</body>
+</html>

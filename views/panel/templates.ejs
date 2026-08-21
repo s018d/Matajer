@@ -1,0 +1,145 @@
+<%- include('../partials/head', { title: 'معرض القوالب — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'templates', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'معرض القوالب (6 تصاميم)' }) %>
+  <div class="content">
+    <%- include('../partials/alerts', { ok: typeof ok !== 'undefined' ? ok : '', err: typeof err !== 'undefined' ? err : '' }) %>
+    <div class="tpl-toolbar">
+      <input type="text" id="tplSearch" placeholder="ابحث: اسم القالب، اللون، الشكل، الخط…" autocomplete="off">
+      <button class="btn btn-ghost" id="tplRandom" title="اختر قالباً عشوائياً">قالب عشوائي</button>
+      <a class="btn btn-primary" href="/s/<%= store.slug %>" target="_blank">زيارة متجري</a>
+    </div>
+    <p class="tpl-hint">مرّر الماوس فوق أي قالب لمشاهدته فوراً دون اختياره، وانقر عليه لفتح المعاينة الكبيرة ثم اعتمده. تصميم «الكلاسيكي النظيف» ونمط «الماركت» مجانيان، و<strong>4 تصاميم عالمية الشهرة</strong> (أتيلييه، جراند، طبيعي، مغامر) من الباقة الاحترافية — اعتمد منها ما شئت عندما ترفع باقتك.</p>
+
+    <div class="tpl-grid" id="tplGrid">
+      <% list.forEach(t => { %>
+      <div class="tpl-card<%= t.id === current ? ' on' : '' %>" data-id="<%= t.id %>" data-premium="<%= t.premium ? 1 : 0 %>" data-search="<%= (t.name + ' ' + t.desc).toLowerCase() %>">
+        <div class="tpl-thumb" style="--pk:<%= t.palette.primary %>;--ac:<%= t.palette.accent %>;--bgc:<%= t.palette.bg %>;--sk:<%= t.palette.soft %>">
+          <div class="tpl-th-head"></div>
+          <div class="tpl-th-body">
+            <div class="tpl-th-card"></div>
+            <div class="tpl-th-card"></div>
+            <div class="tpl-th-card"></div>
+          </div>
+        </div>
+        <div class="tpl-info">
+          <b><%= t.id %> · <%= t.name %><% if (t.premium) { %> <span class="tpl-prem-badge">احترافي</span><% } %><% if (t.legacy) { %> <span class="tpl-prem-badge" style="background:linear-gradient(90deg,#16a34a,#15803d)">مجاني</span><% } %></b>
+          <span><%= t.desc %></span>
+        </div>
+        <% if (t.id === current) { %><span class="tpl-current">المعتمد حالياً</span><% } %>
+      </div>
+      <% }) %>
+    </div>
+
+    <div class="tpl-hover" id="tplHover">
+      <div class="tpl-hover-head"><b id="tplHoverName"></b><span class="badge">معاينة حية</span></div>
+      <iframe id="tplHoverFrame" src="about:blank" loading="lazy"></iframe>
+    </div>
+
+    <div class="modal-overlay" id="tplModal" style="display:none">
+      <div class="modal-card tpl-modal">
+        <div class="modal-head">
+          <h3 id="tplModalName"></h3>
+          <button class="btn-ghost-x" onclick="tplModalClose()">×</button>
+        </div>
+        <iframe id="tplModalFrame" src="about:blank"></iframe>
+        <form method="post" action="/panel/templates/apply" class="modal-foot">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <input type="hidden" name="template" id="tplModalId">
+          <button type="submit" class="btn btn-primary" id="tplApplyBtn">اعتماد هذا القالب</button>
+          <a class="btn btn-primary" id="tplUpgradeLink" href="/panel/billing" style="display:none">🔒 تصميم احترافي — رقِّ باقتك</a>
+          <button type="button" class="btn btn-ghost" onclick="tplModalClose()">إغلاق</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+<style>
+.tpl-toolbar { display: flex; gap: .6rem; align-items: center; margin-bottom: .5rem; flex-wrap: wrap; }
+.tpl-toolbar input { flex: 1; min-width: 200px; padding: .55rem .8rem; border: 1.5px solid var(--line, #e2e8f0); border-radius: 10px; font-family: inherit; font-size: .92rem; }
+.tpl-toolbar input:focus { outline: 2px solid var(--primary, #0ea5e9); border-color: transparent; }
+.tpl-hint { color: var(--muted, #64748b); font-size: .85rem; margin-bottom: 1rem; }
+.tpl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .9rem; }
+.tpl-card { background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; overflow: hidden; cursor: pointer; position: relative; transition: transform .15s, box-shadow .15s, border-color .15s; }
+.tpl-card:hover { transform: translateY(-3px); box-shadow: 0 14px 30px -14px rgba(15,23,42,.25); border-color: var(--primary, #0ea5e9); }
+.tpl-card.on { border-color: #16a34a; box-shadow: 0 0 0 3px rgba(22,163,74,.18); }
+.tpl-thumb { height: 128px; background: var(--bgc); padding: 8px; }
+.tpl-th-head { height: 26px; border-radius: 8px 8px 0 0; background: var(--pk); }
+.tpl-th-body { display: flex; gap: 6px; padding-top: 6px; }
+.tpl-th-card { flex: 1; height: 76px; background: #fff; border-radius: 6px; border: 1px solid var(--sk); }
+.tpl-info { padding: .6rem .7rem .7rem; display: flex; flex-direction: column; gap: .2rem; }
+.tpl-info b { font-size: .85rem; color: var(--ink, #0f172a); }
+.tpl-info span { font-size: .72rem; color: var(--muted, #64748b); }
+.tpl-current { position: absolute; top: 8px; left: 8px; background: #16a34a; color: #fff; font-size: .68rem; font-weight: 700; padding: .15rem .5rem; border-radius: 99px; }
+.tpl-prem-badge { background: linear-gradient(90deg, #f59e0b, #d97706); color: #fff; font-size: .62rem; font-weight: 800; padding: .1rem .45rem; border-radius: 99px; vertical-align: middle; }
+.tpl-hover { position: fixed; left: 14px; bottom: 14px; z-index: 120; width: min(400px, 92vw); height: 62vh; background: #fff; border-radius: 14px; box-shadow: 0 24px 60px -18px rgba(0,0,0,.45); overflow: hidden; display: none; border: 1px solid #e2e8f0; }
+.tpl-hover-head { display: flex; align-items: center; justify-content: space-between; padding: .5rem .8rem; background: var(--ink, #0f172a); color: #fff; }
+.tpl-hover-head b { font-size: .85rem; }
+.tpl-hover iframe, .tpl-modal iframe { width: 100%; height: 100%; border: none; }
+.tpl-hover iframe { height: calc(100% - 40px); }
+.modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,.6); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.modal-card { background: #fff; border-radius: 16px; overflow: hidden; width: min(980px, 96vw); height: 92vh; display: flex; flex-direction: column; }
+.modal-head { display: flex; align-items: center; justify-content: space-between; padding: .8rem 1rem; border-bottom: 1px solid #e2e8f0; }
+.modal-head h3 { margin: 0; font-size: 1rem; }
+.modal-foot { display: flex; gap: .6rem; padding: .8rem 1rem; border-top: 1px solid #e2e8f0; }
+.tpl-modal iframe { flex: 1; }
+</style>
+<script>
+(function () {
+  var list = Array.prototype.slice.call(document.querySelectorAll('.tpl-card'));
+  var search = document.getElementById('tplSearch');
+  var hover = document.getElementById('tplHover');
+  var hoverFrame = document.getElementById('tplHoverFrame');
+  var hoverName = document.getElementById('tplHoverName');
+  var hoverT = null, hideT = null;
+
+  function showHover(card) {
+    clearTimeout(hideT);
+    hoverT = setTimeout(function () {
+      hoverName.textContent = card.dataset.id + ' — ' + card.querySelector('.tpl-info b').textContent.replace(/^t\d+ · /, '');
+      hoverFrame.src = '/panel/preview/' + card.dataset.id;
+      hover.style.display = 'block';
+    }, 260);
+  }
+  function hideHover() {
+    clearTimeout(hoverT);
+    hideT = setTimeout(function () {
+      hover.style.display = 'none';
+      hoverFrame.src = 'about:blank';
+    }, 320);
+  }
+  list.forEach(function (card) {
+    card.addEventListener('mouseenter', function () { showHover(card); });
+    card.addEventListener('mouseleave', hideHover);
+    card.addEventListener('click', function () {
+      clearTimeout(hoverT); clearTimeout(hideT);
+      hover.style.display = 'none'; hoverFrame.src = 'about:blank';
+      document.getElementById('tplModalName').textContent = card.dataset.id + ' · ' + card.querySelector('.tpl-info b').textContent.replace(/^t\d+ · /, '');
+      document.getElementById('tplModalId').value = card.dataset.id;
+      var locked = card.dataset.premium === '1' && <%= pro ? 'false' : 'true' %>;
+      document.getElementById('tplApplyBtn').style.display = locked ? 'none' : '';
+      document.getElementById('tplUpgradeLink').style.display = locked ? '' : 'none';
+      document.getElementById('tplModalFrame').src = '/panel/preview/' + card.dataset.id;
+      document.getElementById('tplModal').style.display = 'flex';
+    });
+  });
+  hover.addEventListener('mouseenter', function () { clearTimeout(hideT); });
+  hover.addEventListener('mouseleave', hideHover);
+  search.addEventListener('input', function () {
+    var q = search.value.trim().toLowerCase();
+    list.forEach(function (c) { c.style.display = (!q || c.dataset.search.indexOf(q) !== -1) ? '' : 'none'; });
+  });
+  document.getElementById('tplRandom').addEventListener('click', function () {
+    var visible = list.filter(function (c) { return c.style.display !== 'none'; });
+    var pick = visible[Math.floor(Math.random() * visible.length)];
+    if (pick) pick.click();
+  });
+  window.tplModalClose = function () {
+    document.getElementById('tplModal').style.display = 'none';
+    document.getElementById('tplModalFrame').src = 'about:blank';
+  };
+})();
+</script>
+</body>
+</html>

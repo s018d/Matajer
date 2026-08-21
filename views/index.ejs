@@ -1,0 +1,31 @@
+<%- include('partials/head', { title: 'ماتجر — كل المتاجر', css: '/css/app.css' }) %>
+<body class="app">
+<main class="bare">
+  <header class="bare-head">
+    <div class="brand big">Dukkan.<span>دُكّان</span></div>
+    <div class="tb-actions">
+      <a href="/login" class="btn btn-sm">دخول لوحة التحكم</a>
+    </div>
+  </header>
+  <section class="bare-hero">
+    <h1>منصة المتاجر</h1>
+    <p>اختر متجرك وتصفح منتجاته واطلب مباشرة</p>
+  </section>
+  <section class="grid-3 wrap">
+    <% if (stores.length === 0) { %>
+      <div class="card"><p>لا توجد متاجر نشطة حالياً</p></div>
+    <% } %>
+    <% stores.forEach(s => { %>
+      <div class="card store-card" style="--card-color:<%= s.color %>">
+        <div class="store-card-top">
+          <% if (s.logo_path) { %><img src="<%= s.logo_path %>" alt=""><% } else { %><div class="store-initial"><%= s.name[0] %></div><% } %>
+        </div>
+        <h3><%= s.name %></h3>
+        <p><%= s.description %></p>
+        <a class="btn btn-block" href="/s/<%= s.slug %>">زيارة المتجر</a>
+      </div>
+    <% }) %>
+  </section>
+</main>
+</body>
+</html>

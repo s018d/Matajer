@@ -1,0 +1,17 @@
+<%- include('../partials/head', { title: 'المتجر غير موجود — دُكّان', css: '/css/store.css' }) %>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<body class="store-body" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#0f172a,#0c4a6e)">
+  <div style="text-align:center;color:#fff;padding:2rem;max-width:400px;animation:fadeInUp .6s">
+    <div style="font-size:4rem;margin-bottom:1rem;animation:float 3s ease-in-out infinite">🏪</div>
+    <h1 style="font-size:1.8rem;font-weight:900;margin-bottom:.5rem;font-family:'Noto Kufi Arabic',sans-serif">المتجر غير موجود</h1>
+    <p style="color:rgba(255,255,255,.7);font-size:1rem;line-height:1.7;margin-bottom:2rem;font-family:'Noto Kufi Arabic',sans-serif">يبدو أن هذا المتجر لم يعد متاحاً أو تم إيقافه</p>
+    <a href="/" style="display:inline-flex;align-items:center;gap:.5rem;background:#fff;color:#0f172a;padding:.85rem 2rem;border-radius:14px;font-weight:800;font-size:1rem;text-decoration:none;box-shadow:0 10px 30px rgba(0,0,0,.3);transition:all .25s;font-family:'Noto Kufi Arabic',sans-serif">🏠 العودة للرئيسية</a>
+  </div>
+</body>
+<style>
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+</style>
+</html>

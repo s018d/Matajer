@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= title %> — <%= cfg.site_name %></title>
+<meta name="description" content="<%- typeof desc !== 'undefined' ? desc : title %>">
+<link rel="icon" href="/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/site.css">
+</head>
+<body class="site">
+<header class="site-nav">
+  <div class="site-nav-inner">
+    <a class="brand" href="/"><img src="/img/logo.svg" alt="شعار دُكّان" class="brand-logo"><b><%= cfg.site_name %></b><span>متاجر</span></a>
+    <nav>
+      <a href="/#features">المميزات</a>
+      <a href="/#designs">التصاميم</a>
+      <a href="/#showcase">متاجر حية</a>
+      <a href="/#pricing">الباقات</a>
+      <a href="/#faq">أسئلة شائعة</a>
+    </nav>
+    <div class="site-cta">
+      <a class="btn-ghost" href="/login">دخول</a>
+      <a class="btn-main" href="/signup">أنشئ متجرك مجاناً</a>
+    </div>
+  </div>
+</header>
+<div class="page-hero"><div class="section-inner"><h1><%= heading %></h1></div></div>
+<div class="page-body">
+  <%- body %>
+  <p style="margin-top:2rem;text-align:center">
+    <a class="btn-main" href="/signup">ابدأ متجرك مجاناً الآن</a>
+  </p>
+</div>
+<footer class="site-foot">
+  <div class="section-inner">
+    <b><%= cfg.site_name %> — منصة المتاجر الإلكترونية الجاهزة</b>
+    <div class="foot-links">
+      <a href="/signup">إنشاء متجر</a>
+      <a href="/login">دخول</a>
+      <a href="/faq">أسئلة شائعة</a>
+      <a href="/privacy">سياسة الخصوصية</a>
+      <a href="/terms">الشروط والأحكام</a>
+      <% if (cfg.site_whatsapp) { %><a href="https://wa.me/<%= cfg.site_whatsapp.replace(/\D/g,'') %>" target="_blank">واتساب الدعم</a><% } %>
+    </div>
+    <p class="fine">صُنع بحب في العراق 🇮🇶</p>
+  </div>
+</footer>
+</body>
+</html>

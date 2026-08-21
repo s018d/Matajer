@@ -1,0 +1,65 @@
+<%- include('../partials/head', { title: 'الدومين المخصص — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'settings', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'الدومين المخصص' }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    
+    <div class="card">
+      <h2>ربط دومين خاص</h2>
+      <p class="muted" style="margin-bottom:1rem">استخدم دومينك الخاص (مثل <code>shop.mystore.com</code>) بدلاً من رابط المنصة الافتراضي. متاح للباقة الاحترافية فقط.</p>
+      
+      <% if (store.custom_domain) { %>
+        <div class="current-domain" style="background:var(--soft); padding:1rem; border-radius:10px; margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem">
+          <div>
+            <strong>الدومين الحالي:</strong> <code dir="ltr"><%= store.custom_domain %></code>
+            <span class="badge badge-ok" style="margin-right:.5rem">مفعل</span>
+          </div>
+          <form method="post" action="/panel/domain" class="inline" onsubmit="return confirm('إزالة الدومين المخصص؟')">
+            <input type="hidden" name="_csrf" value="<%= csrf %>">
+            <input type="hidden" name="action" value="remove">
+            <button class="btn btn-sm btn-danger">إزالة الدومين</button>
+          </form>
+        </div>
+      <% } %>
+      
+      <form method="post" action="/panel/domain" class="stack">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <label>اسم الدومين (مثال: shop.mystore.com)
+          <input type="text" name="custom_domain" placeholder="shop.mystore.com" dir="ltr" value="<%= store.custom_domain || '' %>">
+        </label>
+        <div class="muted" style="font-size:.8rem; margin:.5rem 0 1rem">
+          <strong>تعليمات الإعداد:</strong>
+          <ol style="margin:.5rem 0; padding-right:1.5rem">
+            <li>في لوحة تحكم DNS لمزود الدومين (GoDaddy, Cloudflare, Namecheap، إلخ)، أضف سجل <strong>CNAME</strong>:</li>
+            <ul style="margin:.3rem 0; padding-right:1.5rem">
+              <li><strong>النوع:</strong> CNAME</li>
+              <li><strong>الاسم/المضيف:</strong> <code>shop</code> (أو الفرعي الذي تريد، مثل <code>store</code>، <code>app</code>)</li>
+              <li><strong>القيمة/الهدف:</strong> <code><%= host %></code> (نطاق المنصة)</li>
+              <li><strong>TTL:</strong> تلقائي أو 3600</li>
+            </ul>
+            <li>انتظر انتشار DNS (قد يستغرق بضع دقائق إلى 24 ساعة)</li>
+            <li>اضغط "حفظ الدومين" أدناه — سيتحقق النظام تلقائياً من صحة الربط</li>
+            <li>سيتم إصدار شهادة SSL تلقائياً عبر Let's Encrypt خلال دقائق</li>
+          </ol>
+        </div>
+        <button type="submit" class="btn btn-primary">💾 حفظ الدومين</button>
+      </form>
+    </div>
+    
+    <div class="card" style="margin-top:1rem">
+      <h2>نصائح مهمة</h2>
+      <ul style="margin:.5rem 0; padding-right:1.5rem; line-height:1.8">
+        <li>استخدم <strong>CNAME</strong> وليس <strong>A Record</strong> — يضمن توجيه تلقائي عند تغيير IP المنصة</li>
+        <li>لا تستخدم <strong>A Record</strong> يشير لـ IP — قد ينكسر عند تغيير السيرفر</li>
+        <li>الدومين الفرعي (<code>shop.domain.com</code>) أفضل من الدومين الجذري (<code>domain.com</code>) لتجنب تعارض مع البريد الإلكتروني والخدمات الأخرى</li>
+        <li>شهادة SSL تُصدر تلقائياً عبر Let's Encrypt بعد تحقق DNS — لا تحتاج إعداد يدوي</li>
+        <li>إذا غيرت مزود الاستضافة، غيّر CNAME فقط — لا تحتاج لتعديل إعدادات المتجر</li>
+      </ul>
+    </div>
+  </div>
+</main>
+<script src="/js/notify.js"></script>
+</body>
+</html>

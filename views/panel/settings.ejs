@@ -1,0 +1,91 @@
+<%- include('../partials/head', { title: 'إعدادات المتجر' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'settings', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'إعدادات المتجر' }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <div class="two-col">
+      <div class="card">
+        <h2>بيانات المتجر</h2>
+        <form method="post" action="/panel/settings" class="stack">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <label>اسم المتجر
+            <input type="text" name="name" value="<%= store.name %>" required>
+          </label>
+          <label>وصف المتجر (يظهر في صفحة المتجر ومحركات البحث)
+            <textarea name="description" rows="3"><%= store.description %></textarea>
+          </label>
+          <label>وصف محركات البحث (اختياري — حتى 200 حرف)
+            <input type="text" name="meta_desc" value="<%= store.meta_desc || '' %>" maxlength="200">
+          </label>
+          <label>اسمك
+            <input type="text" name="owner_name" value="<%= store.owner_name %>">
+          </label>
+          <label>رقم الهاتف
+            <input type="text" name="phone" value="<%= store.phone %>" dir="ltr">
+          </label>
+          <label>رقم الواتساب (يظهر زر اتصال أخضر في متجرك)
+            <input type="text" name="whatsapp" value="<%= store.whatsapp %>" dir="ltr" placeholder="مثال: 9647701234567">
+          </label>
+          <label>قالب التصميم
+            <select name="template">
+              <option value="classic" <%= store.template==='classic' ? 'selected' : '' %>>الكلاسيكي النظيف</option>
+              <option value="market" <%= store.template==='market' ? 'selected' : '' %>>الماركت</option>
+              <% if (store.template.match(/^t\d+$/)) { %><option value="<%= store.template %>" selected>مولّد (<%= store.template %>)</option><% } %>
+              <% premiumTpls.forEach(pt => { %>
+                <option value="<%= pt.id %>" <%= store.template===pt.id ? 'selected' : '' %> <%= !store.ispro ? 'disabled' : '' %>><%= pt.name %> — احترافي <%= !store.ispro ? '(مقفل)' : '' %></option>
+              <% }) %>
+            </select>
+            <small class="field-hint"><a href="/panel/templates">افتح معرض القوالب</a> للمعاينة الحية والاعتماد<% if (!store.ispro) { %> — التصاميم الاحترافية الأربعة للباقة المدفوعة<% } %></small>
+          </label>
+          <label>اللون الأساسي
+            <input type="color" name="color" value="<%= store.color %>" class="color-input">
+          </label>
+          <details class="adv-box">
+            <summary>إعدادات التوصيل (يظهر للزبون في صفحة إتمام الطلب)</summary>
+            <div class="grid-2">
+              <label>رسوم التوصيل (د.ع)
+                <input type="number" name="delivery_fee" min="0" step="500" value="<%= store.delivery_fee || 0 %>">
+              </label>
+              <label>توصيل مجاني فوق هذا المبلغ (0 = لا يوجد)
+                <input type="number" name="free_delivery_min" min="0" step="500" value="<%= store.free_delivery_min || 0 %>" placeholder="مثال: 50000">
+              </label>
+            </div>
+            <small class="muted">مثال: رسوم 3000 وتوصيل مجاني للطلبات فوق 50000 — سيرى الزبون «التوصيل مجاني» مع المبالغة تدريجياً أثناء إتمام الطلب.</small>
+          </details>
+          <label>دومينك الخاص (للباقة الاحترافية)
+            <input type="text" name="custom_domain" value="<%= store.custom_domain || '' %>" dir="ltr" placeholder="مثال: shop.mybrand.com" <%= store.ispro ? '' : 'disabled' %>>
+            <% if (store.ispro) { %><small class="field-hint">أشر إلى دومينك بهذه المنصة (CNAME أو A) وسيفتح متجرك عليه مباشرة — اتركه فارغاً لإلغائه.</small><% } else { %><small class="field-hint">ميزة حصرية للباقة الاحترافية — <a href="/panel/billing">رقِّ بضغطة واحدة</a></small><% } %>
+          </label>
+          <button type="submit" class="btn btn-primary">حفظ</button>
+        </form>
+      </div>
+      <div class="card">
+        <h2>الشعار</h2>
+        <% if (store.logo_path) { %>
+          <img src="<%= store.logo_path %>" class="logo-preview" alt="">
+        <% } %>
+        <form method="post" action="/panel/settings/logo?_csrf=<%= csrf %>" enctype="multipart/form-data" class="stack upload-box">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <input type="file" name="logo" accept="image/*" required>
+          <button type="submit" class="btn btn-primary">تحديث الشعار</button>
+          <small>الصورة المرفوعة تحل محل الشعار الحالي</small>
+        </form>
+        <h2 style="margin-top:2rem">كلمة المرور</h2>
+        <form method="post" action="/panel/password" class="stack">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <label>الحالية
+            <input type="password" name="oldpass" required>
+          </label>
+          <label>الجديدة
+            <input type="password" name="newpass" required>
+          </label>
+          <button type="submit" class="btn btn-warn">تغيير كلمة المرور</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

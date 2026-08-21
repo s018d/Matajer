@@ -1,0 +1,1379 @@
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const multer = require('multer');
+const { db, logActivity, UPLOADS_DIR, siteSettings, setSetting, isPro } = require('../db');
+const { requireOwner, hashPassword, checkPassword, appendLog, money, thumb, asyncHandler } = require('../util');
+const TPL = require('../templates');
+const { tplFor } = require('./store');
+const router = express.Router();
+
+function getStore(id) {
+  const s = db.prepare('SELECT * FROM stores WHERE id=?').get(id);
+  if (s) s.ispro = isPro(s) ? 1 : 0;
+  return s;
+}
+
+function uploader(folderName) {
+  const disk = multer.diskStorage({
+    destination: (req, file, cb) => {
+      const dir = path.join(UPLOADS_DIR, `store_${req.user.store_id}`, folderName(req));
+      fs.mkdirSync(dir, { recursive: true });
+      cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname).toLowerCase();
+      cb(null, `${Date.now()}_${Math.round(Math.random() * 1e9)}${ext}`);
+    }
+  });
+  return multer({
+    storage: disk,
+    limits: { fileSize: 12 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+      const ok = ['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(path.extname(file.originalname).toLowerCase());
+      cb(ok ? null : new Error('نوع الملف غير مقبول'), ok);
+    }
+  });
+}
+
+/* التحقق من الهيكلية الحقيقية للملف عبر Magic Bytes بدلاً من الاعتماد على الامتداد فقط */
+function isRealImage(filePath) {
+  try {
+    const fd = fs.openSync(filePath, 'r');
+    const buf = Buffer.alloc(12);
+    fs.readSync(fd, buf, 0, 12, 0);
+    fs.closeSync(fd);
+    // JPEG
+    if (buf[0] === 0xFF && buf[1] === 0xD8 && buf[2] === 0xFF) return true;
+    // PNG
+    if (buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4E && buf[3] === 0x47) return true;
+    // GIF
+    if (buf[0] === 0x47 && buf[1] === 0x49 && buf[2] === 0x46 && buf[3] === 0x38) return true;
+    // WEBP
+    if (buf[0] === 0x52 && buf[1] === 0x49 && buf[2] === 0x46 && buf[3] === 0x46 &&
+        buf[8] === 0x57 && buf[9] === 0x45 && buf[10] === 0x42 && buf[11] === 0x50) return true;
+    return false;
+  } catch (e) {
+    return false;
+  }
+}
+
+/* ضغط الصور تلقائياً: تصغير للعرض الأقصى + مصغرة للمعاينة السريعة */
+async function processImage(filePath) {
+  if (!isRealImage(filePath)) {
+    try { if (fs.existsSync(filePath)) fs.unlinkSync(filePath); } catch (e) {}
+    throw new Error('الملف المرفوع ليس صورة صالحة');
+  }
+  try {
+    const sharp = require('sharp');
+    const ext = path.extname(filePath).toLowerCase();
+    const thumbPath = filePath.replace(/(\.[^.]+)$/, '_t$1');
+    const fmt = ext === '.png' ? 'png' : ext === '.webp' ? 'webp' : ext === '.gif' ? 'gif' : 'jpeg';
+    const opts = fmt === 'jpeg' ? { quality: 82 } : fmt === 'webp' ? { quality: 82 } : {};
+    const img = sharp(filePath, { failOn: 'none', animated: fmt === 'gif' });
+    const meta = await img.metadata();
+    if (!meta.width) return;
+    if (meta.width > 1200) await img.clone().resize({ width: 1200, withoutEnlargement: true }).toFormat(fmt, opts).toFile(filePath);
+    await sharp(filePath, { failOn: 'none' }).resize({ width: 400, withoutEnlargement: true }).toFormat(fmt, opts).toFile(thumbPath);
+  } catch (e) { /* نُبقي الصورة الأصلية عند أي خطأ */ }
+}
+
+router.use(requireOwner);
+
+router.get('/', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const stats = {
+    products: db.prepare('SELECT COUNT(*) c FROM products WHERE store_id=?').get(store.id).c,
+    orders: db.prepare('SELECT COUNT(*) c FROM orders WHERE store_id=?').get(store.id).c,
+    newOrders: db.prepare("SELECT COUNT(*) c FROM orders WHERE store_id=? AND status='new'").get(store.id).c,
+    revenue: db.prepare("SELECT COALESCE(SUM(total),0) s FROM orders WHERE store_id=? AND status != 'cancelled'").get(store.id).s,
+    views: db.prepare('SELECT COALESCE(SUM(views),0) s FROM products WHERE store_id=?').get(store.id).s
+  };
+  // Smart stats
+  const avgOrder = stats.orders > 0 ? Math.round(stats.revenue / stats.orders) : 0;
+  const conversionRate = stats.views > 0 ? Math.round((stats.orders / stats.views) * 10000) / 100 : 0;
+  
+  // Top 5 selling products
+  const topProducts = db.prepare(`
+    SELECT COALESCE(p.name, oi.product_name) as name, SUM(oi.qty) as total_qty, SUM(oi.qty * oi.product_price) as total_revenue
+    FROM order_items oi
+    LEFT JOIN products p ON p.id = oi.product_id AND p.store_id = ?
+    JOIN orders o ON o.id = oi.order_id AND o.store_id = ? AND o.status != 'cancelled'
+    GROUP BY COALESCE(p.name, oi.product_name)
+    ORDER BY total_qty DESC
+    LIMIT 5
+  `).all(store.id, store.id);
+  
+  // Peak hours (last 30 days)
+  const peakHours = db.prepare(`
+    SELECT CAST(strftime('%H', created_at) AS INTEGER) as hour, COUNT(*) as cnt
+    FROM orders WHERE store_id=? AND status != 'cancelled' AND date(created_at) >= date('now', '-30 days')
+    GROUP BY hour ORDER BY cnt DESC LIMIT 6
+  `).all(store.id);
+  
+  // Peak days (last 30 days)
+  const peakDays = db.prepare(`
+    SELECT strftime('%w', created_at) as dow, COUNT(*) as cnt
+    FROM orders WHERE store_id=? AND status != 'cancelled' AND date(created_at) >= date('now', '-30 days')
+    GROUP BY dow ORDER BY cnt DESC LIMIT 7
+  `).all(store.id);
+  
+  const dowNames = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  
+  const recent = db.prepare('SELECT * FROM orders WHERE store_id=? ORDER BY id DESC LIMIT 6').all(store.id);
+  const chart = [];
+  for (let i = 6; i >= 0; i--) {
+    const day = new Date();
+    day.setDate(day.getDate() - i);
+    const d = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`;
+    const r = db.prepare("SELECT COALESCE(SUM(total),0) s, COUNT(*) c FROM orders WHERE store_id=? AND status != 'cancelled' AND date(created_at)=?").get(store.id, d);
+    chart.push({ d: d.slice(5), s: Number(r.s), c: Number(r.c) });
+  }
+  const chartMax = Math.max(1, ...chart.map(x => x.s));
+  res.render('panel/dashboard', { store, stats, recent, chart, chartMax, money, user: req.user, 
+    avgOrder, conversionRate, topProducts, peakHours, peakDays, dowNames });
+});
+
+router.get('/products', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const q = String(req.query.q || '').trim();
+  let where = 'p.store_id=?';
+  const params = [store.id];
+  if (q) {
+    where += ' AND (p.name LIKE ? OR p.description LIKE ?)';
+    params.push(`%${q}%`, `%${q}%`);
+  }
+  const rows = db.prepare(`
+    SELECT p.*, c.name cat, (SELECT path FROM product_images i WHERE i.product_id=p.id ORDER BY position, id LIMIT 1) img,
+      (SELECT COUNT(*) FROM product_images i WHERE i.product_id=p.id) img_count
+    FROM products p LEFT JOIN categories c ON c.id=p.category_id WHERE ${where} ORDER BY p.id DESC`).all(...params);
+  rows.forEach(r => { r.img = thumb(r.img); });
+  res.render('panel/products', { store, rows, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user, searchQ: q });
+});
+
+function productForm(store, pid) {
+  const cats = db.prepare('SELECT * FROM categories WHERE store_id=? ORDER BY position, id').all(store.id);
+  if (!pid) return { product: null, cats, images: [] };
+  const product = db.prepare('SELECT * FROM products WHERE id=? AND store_id=?').get(pid, store.id);
+  if (!product) return null;
+  const images = db.prepare('SELECT * FROM product_images WHERE product_id=? ORDER BY position, id').all(pid);
+  return { product, cats, images };
+}
+
+function sanitizeOptions(options) {
+  try {
+    const o = JSON.parse(options || '{}');
+    const out = {};
+    for (const [k, v] of Object.entries(o)) {
+      const label = String(k).trim().slice(0, 30);
+      const vals = String(v).split(',').map(x => x.trim()).filter(Boolean).slice(0, 20);
+      if (label && vals.length) out[label] = vals.join(',');
+    }
+    return Object.keys(out).length ? JSON.stringify(out) : '';
+  } catch (e) { return ''; }
+}
+
+function sanitizeAddons(addons) {
+  try {
+    const a = JSON.parse(addons || '[]');
+    if (!Array.isArray(a)) return '';
+    const out = [];
+    for (const x of a) {
+      const nm = String(x.name || '').trim().slice(0, 40);
+      const pr = Number(x.price);
+      if (nm && !isNaN(pr) && pr >= 0) out.push({ name: nm, price: pr });
+    }
+    return out.length ? JSON.stringify(out.slice(0, 20)) : '';
+  } catch (e) { return ''; }
+}
+
+router.get('/products/new', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const f = productForm(store, null);
+  res.render('panel/product-form', { store, ...f, err: req.query.err || '', user: req.user });
+});
+
+router.post('/products', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const { name, category_id, price, old_price, description, active, stock, options, addons } = req.body;
+  if (!name || isNaN(Number(price))) return res.redirect('/panel/products/new?err=' + encodeURIComponent('اسم المنتج وسعره مطلوبان'));
+  if (!isPro(store)) {
+    const maxP = Number(siteSettings().free_products || 10);
+    const cnt = db.prepare('SELECT COUNT(*) c FROM products WHERE store_id=?').get(store.id).c;
+    if (cnt >= maxP)
+      return res.redirect('/panel/products/new?err=' + encodeURIComponent(`باقتك المجانية تسمح بـ ${maxP} منتج فقط — رقِّ باقتك من صفحة «الباقات» لإضافة المزيد`));
+  }
+  const stockVal = stock === '' || stock == null ? null : Math.max(0, Math.floor(Number(stock) || 0));
+  const optsJson = sanitizeOptions(options);
+  const addonsJson = sanitizeAddons(addons);
+  const info = db.prepare('INSERT INTO products (store_id, category_id, name, description, price, old_price, active, stock, options, addons) VALUES (?,?,?,?,?,?,?,?,?,?)')
+    .run(store.id, category_id ? Number(category_id) : null, String(name), String(description || ''), Number(price), old_price && !isNaN(Number(old_price)) ? Number(old_price) : null, active === 'on' ? 1 : 0, stockVal, optsJson, addonsJson);
+  logActivity(req.user.id, req.user.username, 'إضافة منتج', `أضاف منتج «${name}»`);
+  appendLog(`مستخدم «${req.user.username}» أضاف منتج «${name}» في متجر «${store.name}»`);
+  res.redirect('/panel/products/' + info.lastInsertRowid + '/edit?ok=' + encodeURIComponent('تم إضافة المنتج — الآن ارفع صوره'));
+});
+
+router.get('/products/:id/edit', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const f = productForm(store, req.params.id);
+  if (!f) return res.redirect('/panel/products');
+  res.render('panel/product-form', { store, ...f, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/products/:id', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const { name, category_id, price, old_price, description, active, stock, options, addons } = req.body;
+  const p = db.prepare('SELECT * FROM products WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!p) return res.redirect('/panel/products');
+  const stockVal = stock === '' || stock == null ? null : Math.max(0, Math.floor(Number(stock) || 0));
+  db.prepare('UPDATE products SET name=?, category_id=?, description=?, price=?, old_price=?, active=?, stock=?, options=?, addons=? WHERE id=?')
+    .run(String(name || p.name), category_id ? Number(category_id) : null, String(description ?? ''), Number(price), old_price && !isNaN(Number(old_price)) ? Number(old_price) : null, active === 'on' ? 1 : 0, stockVal, sanitizeOptions(options), sanitizeAddons(addons), p.id);
+  logActivity(req.user.id, req.user.username, 'تعديل منتج', `عدّل منتج «${name}»`);
+  res.redirect('/panel/products/' + p.id + '/edit?ok=' + encodeURIComponent('تم حفظ التعديلات'));
+});
+
+const upPics = () => uploader(req => `product_${req.params.id}`);
+
+router.post('/products/:id/images', upPics().array('images', 20), asyncHandler(async (req, res) => {
+  const p = db.prepare('SELECT * FROM products WHERE id=? AND store_id=?').get(req.params.id, req.user.store_id);
+  if (!p) return res.redirect('/panel/products');
+  if (req.files && req.files.length) {
+    const maxPos = db.prepare('SELECT COALESCE(MAX(position),-1) m FROM product_images WHERE product_id=?').get(p.id).m;
+    let pos = maxPos + 1;
+    for (const f of req.files) {
+      await processImage(f.path);
+      db.prepare('INSERT INTO product_images (product_id, path, position) VALUES (?,?,?)').run(p.id, '/uploads/store_' + req.user.store_id + `/product_${p.id}/` + f.filename, pos++);
+    }
+    logActivity(req.user.id, req.user.username, 'رفع صور', `رفع ${req.files.length} صورة لمنتج «${p.name}»`);
+    appendLog(`مستخدم «${req.user.username}» رفع ${req.files.length} صورة لمنتج «${p.name}»`);
+    return res.redirect('/panel/products/' + p.id + '/edit?ok=' + encodeURIComponent(`تم رفع ${req.files.length} صورة`));
+  }
+  res.redirect('/panel/products/' + p.id + '/edit?err=' + encodeURIComponent('لم يتم اختيار أي صورة'));
+}), (err, req, res, next) => {
+  res.redirect('/panel/products/' + req.params.id + '/edit?err=' + encodeURIComponent(err.message || 'فشل رفع الصور'));
+});
+
+router.post('/products/:id/images/:imgid/setmain', (req, res) => {
+  const img = db.prepare('SELECT * FROM product_images WHERE id=?').get(req.params.imgid);
+  const p = img && db.prepare('SELECT * FROM products WHERE id=? AND store_id=?').get(img.product_id, req.user.store_id);
+  if (!img || !p) return res.redirect('/panel/products');
+  db.prepare('UPDATE product_images SET position = 999999 WHERE product_id=?').run(p.id);
+  db.prepare('UPDATE product_images SET position = 0 WHERE id=?').run(img.id);
+  res.redirect('/panel/products/' + p.id + '/edit?ok=تم تعيين الصورة الرئيسية');
+});
+
+router.post('/products/:id/images/:imgid/delete', (req, res) => {
+  const img = db.prepare('SELECT * FROM product_images WHERE id=?').get(req.params.imgid);
+  const p = img && db.prepare('SELECT * FROM products WHERE id=? AND store_id=?').get(img.product_id, req.user.store_id);
+  if (!img || !p) return res.redirect('/panel/products');
+  const abs = path.join(__dirname, '..', img.path);
+  if (fs.existsSync(abs)) fs.unlinkSync(abs);
+  const thumbAbs = abs.replace(/(\.[^.]+)$/, '_t$1');
+  if (fs.existsSync(thumbAbs)) fs.unlinkSync(thumbAbs);
+  db.prepare('DELETE FROM product_images WHERE id=?').run(img.id);
+  res.redirect('/panel/products/' + p.id + '/edit?ok=تم حذف الصورة');
+});
+
+router.post('/products/:id/toggle', (req, res) => {
+  const p = db.prepare('SELECT * FROM products WHERE id=? AND store_id=?').get(req.params.id, req.user.store_id);
+  if (!p) return res.redirect('/panel/products');
+  db.prepare('UPDATE products SET active = ? WHERE id=?').run(p.active ? 0 : 1, p.id);
+  res.redirect('/panel/products?ok=' + encodeURIComponent(p.active ? 'تم إخفاء المنتج' : 'تم إظهار المنتج'));
+});
+
+router.post('/products/:id/delete', (req, res) => {
+  const p = db.prepare('SELECT * FROM products WHERE id=? AND store_id=?').get(req.params.id, req.user.store_id);
+  if (!p) return res.redirect('/panel/products');
+  const imgs = db.prepare('SELECT * FROM product_images WHERE product_id=?').all(p.id);
+  for (const im of imgs) {
+    const abs = path.join(__dirname, '..', im.path);
+    if (fs.existsSync(abs)) fs.unlinkSync(abs);
+    const thumbAbs = abs.replace(/(\.[^.]+)$/, '_t$1');
+    if (fs.existsSync(thumbAbs)) fs.unlinkSync(thumbAbs);
+  }
+  db.prepare('DELETE FROM product_images WHERE product_id=?').run(p.id);
+  db.prepare('DELETE FROM products WHERE id=?').run(p.id);
+  const dir = path.join(UPLOADS_DIR, `store_${req.user.store_id}`, `product_${p.id}`);
+  if (fs.existsSync(dir)) fs.rmSync(dir, { recursive: true, force: true });
+  logActivity(req.user.id, req.user.username, 'حذف منتج', `حذف منتج «${p.name}»`);
+  res.redirect('/panel/products?ok=' + encodeURIComponent('تم حذف المنتج'));
+});
+
+router.get('/categories', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const cats = db.prepare('SELECT c.*, (SELECT COUNT(*) FROM products p WHERE p.category_id=c.id) cnt FROM categories c WHERE c.store_id=? ORDER BY c.position, c.id').all(store.id);
+  res.render('panel/categories', { store, cats, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/categories', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const { name } = req.body;
+  if (!String(name || '').trim()) return res.redirect('/panel/categories?err=' + encodeURIComponent('اكتب اسم القسم'));
+  const maxPos = db.prepare('SELECT COALESCE(MAX(position),0) m FROM categories WHERE store_id=?').get(store.id).m;
+  db.prepare('INSERT INTO categories (store_id, name, position) VALUES (?,?,?)').run(store.id, String(name).trim(), maxPos + 1);
+  res.redirect('/panel/categories?ok=' + encodeURIComponent('تمت إضافة القسم'));
+});
+
+router.post('/categories/:id/delete', (req, res) => {
+  db.prepare('DELETE FROM categories WHERE id=? AND store_id=?').run(req.params.id, req.user.store_id);
+  res.redirect('/panel/categories?ok=' + encodeURIComponent('تم حذف القسم'));
+});
+
+router.get('/orders', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const filter = req.query.status || 'all';
+  const q = String(req.query.q || '').trim();
+  const perPage = 50;
+  const page = Math.max(1, Number(req.query.page) || 1);
+  let where = filter === 'all' ? 'store_id=?' : 'store_id=? AND status=?';
+  const params = filter === 'all' ? [store.id] : [store.id, filter];
+  if (q) {
+    where += ' AND (customer_name LIKE ? OR customer_phone LIKE ? OR id LIKE ?)';
+    params.push(`%${q}%`, `%${q}%`, `%${q}%`);
+  }
+  const total = db.prepare(`SELECT COUNT(*) c FROM orders WHERE ${where}`).get(...params).c;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  const rows = db.prepare(`
+    SELECT o.*, (SELECT GROUP_CONCAT(oi.product_name || ' ×' || oi.qty || ' — ' || oi.product_price || ' د.ع', ' ⏺ ') FROM order_items oi WHERE oi.order_id=o.id) items_txt
+    FROM orders o WHERE ${where} ORDER BY o.id DESC LIMIT ? OFFSET ?`).all(...params, perPage, (page - 1) * perPage);
+  const withItems = rows.map(o => {
+    const items = db.prepare('SELECT * FROM order_items WHERE order_id=?').all(o.id);
+    return Object.assign({}, o, { items });
+  });
+  res.render('panel/orders', { store, rows: withItems, filter, page, totalPages, total, money, user: req.user, searchQ: q });
+});
+
+router.post('/orders/:id/status', (req, res) => {
+  const statuses = ['new', 'confirmed', 'completed', 'cancelled'];
+  const status = statuses.includes(req.body.status) ? req.body.status : 'new';
+  db.prepare('UPDATE orders SET status=? WHERE id=? AND store_id=?').run(status, req.params.id, req.user.store_id);
+  res.redirect('/panel/orders?status=' + (req.query.back || 'all'));
+});
+
+router.get('/orders/export', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const filter = req.query.status || 'all';
+  const q = String(req.query.q || '').trim();
+  let where = filter === 'all' ? 'store_id=?' : 'store_id=? AND status=?';
+  const params = filter === 'all' ? [store.id] : [store.id, filter];
+  if (q) {
+    where += ' AND (customer_name LIKE ? OR customer_phone LIKE ? OR id LIKE ?)';
+    params.push(`%${q}%`, `%${q}%`, `%${q}%`);
+  }
+  const orders = db.prepare(`
+    SELECT o.*, (SELECT GROUP_CONCAT(oi.product_name || ' x' || oi.qty || ' - ' || oi.product_price || ' IQD', ' | ') FROM order_items oi WHERE oi.order_id=o.id) items_txt
+    FROM orders o WHERE ${where} ORDER BY o.id DESC`).all(...params);
+
+  const csvHeader = 'رقم الطلب,الحالة,العميل,الهاتف,العنوان,ملاحظة,المنتجات,المجموع الفرعي,الخصم,كود الكوبون,التوصيل,الإجمالي,التاريخ\n';
+  const csvRows = orders.map(o => {
+    const escape = (val) => '"' + String(val || '').replace(/"/g, '""') + '"';
+    const items = escape(o.items_txt || '');
+    const statusMap = { new: 'جديد', confirmed: 'مؤكد', completed: 'مكتمل', cancelled: 'ملغي' };
+    return [
+      escape(o.id),
+      escape(statusMap[o.status] || o.status),
+      escape(o.customer_name),
+      escape(o.customer_phone),
+      escape(o.customer_address),
+      escape(o.note),
+      items,
+      escape(o.subtotal),
+      escape(o.discount),
+      escape(o.coupon_code),
+      escape(o.delivery_fee),
+      escape(o.total),
+      escape(o.created_at)
+    ].join(',');
+  }).join('\n');
+
+  const csv = csvHeader + csvRows;
+  const filename = `orders_${store.slug}_${new Date().toISOString().slice(0,10)}.csv`;
+  
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.send('\uFEFF' + csv);
+});
+
+router.get('/abandoned-carts', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const carts = db.prepare('SELECT * FROM abandoned_carts WHERE store_id=? ORDER BY created_at DESC').all(store.id);
+  res.render('panel/abandoned-carts', { store, carts, money, user: req.user });
+});
+
+router.post('/abandoned-carts/:id/remind', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const cart = db.prepare('SELECT * FROM abandoned_carts WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!cart) return res.redirect('/panel/abandoned-carts?err=' + encodeURIComponent('السلة غير موجودة'));
+  if (!cart.customer_phone) return res.redirect('/panel/abandoned-carts?err=' + encodeURIComponent('لا يوجد رقم هاتف للزبون'));
+  
+  const cartData = JSON.parse(cart.cart_data);
+  const items = cartData.map(item => `${item.name} x${item.qty}`).join('، ');
+  const waPhone = cart.customer_phone.replace(/^0/, '964');
+  const msg = `مرحباً ${cart.customer_name || 'زبوننا الكريم'}، لاحظنا أن لديك سلة معلقه في ${store.name}:\n${items}\nالمجموع: ${money(cart.subtotal)}\n\nأكمل طلبك الآن: ${cart.store_base || '/s/' + store.slug}/checkout`;
+  const waUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(msg)}`;
+  
+  db.prepare("UPDATE abandoned_carts SET reminded_at=datetime(\'now\',\'localtime\') WHERE id=?").run(cart.id);
+  res.redirect(`/panel/abandoned-carts?ok=` + encodeURIComponent('تم إرسال تذكير واتساب'));
+});
+
+router.get('/domain', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('الدومين المخصص متاح للباقة الاحترافية فقط'));
+  res.render('panel/domain', { store, host: req.headers.host, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/domain', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/domain?err=' + encodeURIComponent('الدومين المخصص متاح للباقة الاحترافية فقط'));
+  
+  const { custom_domain, action } = req.body;
+  
+  if (action === 'remove') {
+    db.prepare('UPDATE stores SET custom_domain=? WHERE id=?').run('', store.id);
+    logActivity(req.user.id, req.user.username, 'إزالة دومين', 'أزال الدومين المخصص');
+    return res.redirect('/panel/domain?ok=' + encodeURIComponent('تم إزالة الدومين المخصص'));
+  }
+  
+  const domain = String(custom_domain || '').trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+  
+  if (!domain) {
+    return res.redirect('/panel/domain?err=' + encodeURIComponent('أدخل اسم الدومين'));
+  }
+  
+  const domainRegex = /^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)+$/;
+  if (!domainRegex.test(domain)) {
+    return res.redirect('/panel/domain?err=' + encodeURIComponent('صيغة الدومين غير صحيحة'));
+  }
+  
+  if (domain.endsWith('.local') || /^(\d+\.){3}\d+$/.test(domain) || domain === 'localhost') {
+    return res.redirect('/panel/domain?err=' + encodeURIComponent('الدومين غير مسموح'));
+  }
+  
+  const existing = db.prepare('SELECT id FROM stores WHERE lower(custom_domain)=? AND id!=?').get(domain, store.id);
+  if (existing) {
+    return res.redirect('/panel/domain?err=' + encodeURIComponent('هذا الدومين مستخدم من متجر آخر'));
+  }
+  
+  db.prepare('UPDATE stores SET custom_domain=? WHERE id=?').run(domain, store.id);
+  logActivity(req.user.id, req.user.username, 'إضافة دومين', `أضاف الدومين المخصص: ${domain}`);
+  
+  res.redirect('/panel/domain?ok=' + encodeURIComponent('تم حفظ الدومين — تأكد من إضافة سجل CNAME يشير إلى نطاق المنصة'));
+});
+
+router.get('/settings', (req, res) => {
+  const store = getStore(req.user.store_id);
+  res.render('panel/settings', { store, premiumTpls: TPL.PREMIUM, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.get('/billing', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const cfg = siteSettings();
+  const payments = db.prepare('SELECT * FROM payments WHERE store_id=? ORDER BY id DESC').all(store.id);
+  const referrals = db.prepare('SELECT COUNT(*) c FROM referrals WHERE referrer_store_id=?').get(store.id).c;
+  const rewarded = db.prepare("SELECT COUNT(*) c FROM referrals WHERE referrer_store_id=? AND status='done'").get(store.id).c;
+  res.render('panel/billing', { store, cfg, payments, referrals, rewarded, pro: isPro(store), money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.get('/api/neworders', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const since = req.query.since ? String(req.query.since) : '';
+  let count = 0;
+  if (since && /^\d{4}-\d{2}-\d{2}/.test(since)) {
+    count = db.prepare('SELECT COUNT(*) c FROM orders WHERE store_id=? AND status=? AND created_at>?' ).get(store.id, 'new', since).c;
+  } else {
+    count = db.prepare("SELECT COUNT(*) c FROM orders WHERE store_id=? AND status='new'").get(store.id).c;
+  }
+  res.json({ count });
+});
+
+/* إثباتات الدفع تُحفظ خارج uploads العام في مجلد خاص — لا تُخدَّم إلا عبر route محمي */
+const upReceipt = () => {
+  const disk = multer.diskStorage({
+    destination: (req, file, cb) => {
+      const dir = path.join(__dirname, '..', 'private-receipts', 'store_' + req.user.store_id);
+      fs.mkdirSync(dir, { recursive: true });
+      cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname).toLowerCase();
+      cb(null, `${Date.now()}_${Math.round(Math.random() * 1e9)}${ext}`);
+    }
+  });
+  return multer({
+    storage: disk,
+    limits: { fileSize: 12 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+      const ok = ['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(path.extname(file.originalname).toLowerCase());
+      cb(ok ? null : new Error('نوع الملف غير مقبول'), ok);
+    }
+  });
+};
+
+router.post('/billing/request', upReceipt().single('receipt'), (req, res) => {
+  const store = getStore(req.user.store_id);
+  const cfg = siteSettings();
+  if (isPro(store)) return res.redirect('/panel/billing?err=' + encodeURIComponent('متجرك احترافي بالفعل'));
+  const months = [1, 3, 12].includes(Number(req.body.months)) ? Number(req.body.months) : 1;
+  const priceMap = { 1: Number(cfg.pro_price || 12000), 3: Number(cfg.pro_price_3 || 30000), 12: Number(cfg.pro_price_12 || 72000) };
+  const amount = priceMap[months];
+  const ref = 'DKR-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+  const receiptPath = req.file ? '/private-receipts/store_' + store.id + '/' + req.file.filename : '';
+  const transferRef = String(req.body.transfer_ref || '').trim().slice(0, 80);
+  db.prepare('INSERT INTO payments (store_id, plan, amount, status, months, ref, receipt_path, note) VALUES (?,?,?,?,?,?,?,?)')
+    .run(store.id, 'pro', amount, receiptPath ? 'reported' : 'pending', months, ref, receiptPath, transferRef);
+  logActivity(req.user.id, req.user.username, 'طلب ترقية', `طلب باقة احترافية (${months} شهراً) — مرجع ${ref}`);
+  appendLog(`**طلب ترقية جديد** — مستخدم «${req.user.username}» طلب الباقة الاحترافية لمتجر «${store.name}» (${months} شهراً — المبلغ ${money(amount)})${receiptPath ? ' — مرفق إثبات الدفع' : ''} — المرجع ${ref}`);
+  res.redirect('/panel/billing?ok=' + encodeURIComponent('تم إرسال طلب الترقية' + (receiptPath ? ' مع إثبات الدفع' : '') + ' — مرجعك: ' + ref + ' — سنفعّل باقتك فور تأكيدنا'));
+}, (err, req, res, next) => {
+  res.redirect('/panel/billing?err=' + encodeURIComponent(err.message || 'فشل رفع الإثبات'));
+});
+
+/* عرض إثبات الدفع — لصاحب المتجر فقط، ومن متجره فقط */
+router.get('/billing/receipt/:paymentId', (req, res) => {
+  const p = db.prepare('SELECT * FROM payments WHERE id=? AND store_id=?').get(req.params.paymentId, req.user.store_id);
+  if (!p || !p.receipt_path) return res.redirect('/panel/billing?err=' + encodeURIComponent('الإثبات غير موجود'));
+  const abs = path.join(__dirname, '..', p.receipt_path);
+  if (!fs.existsSync(abs)) return res.redirect('/panel/billing?err=' + encodeURIComponent('ملف الإثبات غير موجود'));
+  res.sendFile(abs);
+});
+
+router.get('/templates', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const list = [
+    ...TPL.LIST.map(t => ({ id: t.id, name: t.name, desc: TPL.describe(t), classes: t.classes, palette: t.palette })),
+    ...TPL.PREMIUM.map(t => ({ id: t.id, name: t.name, desc: t.desc, classes: 'prem-' + t.id.slice(5), palette: t.palette, premium: true })),
+    ...TPL.LEGACY.map(id => ({ id, name: 'الماركت', desc: 'نمط المتاجر السوقية: شريط عروض متحرك وهيرو ضخم وبطاقات عرض كبيرة — مثالي للمنتجات كثيرة العرض', classes: 'tpl-c', palette: { primary: '#e11d48', accent: '#f59e0b', bg: '#fff7ed', ink: '#3f2d16', soft: '#ffe4e6' }, legacy: true }))
+  ];
+  res.render('panel/templates', { store, list, count: list.length, current: store.template, pro: isPro(store), ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.get('/preview/:id', (req, res) => {
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  const t = TPL.get(req.params.id);
+  if (!t) return res.status(404).render('store/notfound', {});
+  const store = {
+    id: 0, name: 'متجر تجريبي', slug: 'preview', base: '/s/preview', description: 'هكذا سيظهر متجرك عند الزائر — معاينة حية للقالب',
+    logo_path: '', template: t.id, color: '#0ea5e9', whatsapp: '', plan: 'pro', plan_expires: '2099-12-31'
+  };
+  const cats = [];
+  const sample = [
+    { id: 101, name: 'ساعة ذكية برو', description: 'شاشة أموليد — جودة عالية', price: 55000, old_price: 75000, img: '/img/placeholder.svg' },
+    { id: 102, name: 'سماعة لاسلكية', description: 'صوت نقي مع علبة شحن', price: 28000, old_price: 35000, img: '/img/placeholder.svg' },
+    { id: 103, name: 'حقيبة جلدية فاخرة', description: 'خامة طبيعية متينة', price: 42000, old_price: 0, img: '/img/placeholder.svg' },
+    { id: 104, name: 'نظارة شمسية رياضية', description: 'حماية UV400 كاملة', price: 15000, old_price: 0, img: '/img/placeholder.svg' },
+    { id: 105, name: 'شاحن سريع 65 واط', description: 'شحن سريع لأجهزتك كلها', price: 19000, old_price: 24000, img: '/img/placeholder.svg' },
+    { id: 106, name: 'مصباح مكتبي LED', description: 'إضاءة مريحة للعين', price: 12500, old_price: 0, img: '/img/placeholder.svg' }
+  ];
+  res.render('store/home', { store, cats, cat: 0, q: '', rows: sample, tpl: tplFor(store) });
+});
+
+router.post('/templates/apply', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const tpl = TPL.valid(req.body.template) ? req.body.template : store.template;
+  if (TPL.isPremium(tpl) && !isPro(store)) {
+    return res.redirect('/panel/templates?err=' + encodeURIComponent('هذا التصميم احترافي — فعّل باقتك أولاً من صفحة الباقات'));
+  }
+  db.prepare('UPDATE stores SET template=? WHERE id=?').run(tpl, store.id);
+  logActivity(req.user.id, req.user.username, 'تغيير القالب', `اعتمد القالب «${tpl}»`);
+  appendLog(`مستخدم «${req.user.username}» اعتمد قالب المتجر «${tpl}» لمتجر «${store.name}»`);
+  res.redirect('/panel/templates?ok=' + encodeURIComponent('تم اعتماد القالب — اسمه: ' + tpl));
+});
+
+router.post('/settings', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const { name, description, owner_name, phone, whatsapp, template, color, custom_domain, delivery_fee, free_delivery_min, meta_desc } = req.body;
+  let domain = String(store.custom_domain || '').toLowerCase();
+  if (isPro(store)) {
+    const d = String(custom_domain || '').trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+    if (d) {
+      if (/^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)+$/.test(d) && !d.endsWith('.local') && !/^(\d+\.){3}\d+$/.test(d) && d !== 'localhost') {
+        const clash = db.prepare('SELECT id FROM stores WHERE lower(custom_domain)=? AND id!=?').get(d, store.id);
+        if (clash) return res.redirect('/panel/settings?err=' + encodeURIComponent('هذا الدومين مربوط بمتجر آخر'));
+        domain = d;
+      } else return res.redirect('/panel/settings?err=' + encodeURIComponent('صيغة الدومين غير صحيحة — مثال: my-shop.example.com'));
+    } else domain = '';
+  }
+  let tpl = TPL.valid(template) ? template : store.template;
+  if (TPL.isPremium(tpl) && !isPro(store)) tpl = store.template;
+  db.prepare('UPDATE stores SET name=?, description=?, owner_name=?, phone=?, whatsapp=?, template=?, color=?, custom_domain=?, delivery_fee=?, free_delivery_min=?, meta_desc=? WHERE id=?')
+    .run(String(name || store.name), String(description || ''), String(owner_name || ''), String(phone || ''), String(whatsapp || ''), tpl, /^#[0-9a-fA-F]{6}$/.test(color || '') ? color : store.color, domain,
+      Math.max(0, Number(delivery_fee) || 0), Math.max(0, Number(free_delivery_min) || 0), String(meta_desc || '').slice(0, 200), store.id);
+  logActivity(req.user.id, req.user.username, 'إعدادات المتجر', 'عدّل إعدادات متجره' + (domain ? ' — الدومين: ' + domain : ''));
+  res.redirect('/panel/settings?ok=' + encodeURIComponent('تم حفظ الإعدادات'));
+});
+
+const upLogo = () => uploader(() => '.');
+
+router.post('/settings/logo', upLogo().single('logo'), asyncHandler(async (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!req.file) return res.redirect('/panel/settings?err=' + encodeURIComponent('لم يتم اختيار صورة'));
+  if (store.logo_path) {
+    const oldAbs = path.join(__dirname, '..', store.logo_path);
+    if (fs.existsSync(oldAbs)) fs.unlinkSync(oldAbs);
+    const oldThumb = oldAbs.replace(/(\.[^.]+)$/, '_t$1');
+    if (fs.existsSync(oldThumb)) fs.unlinkSync(oldThumb);
+  }
+  const newPath = `/uploads/store_${store.id}/logo${path.extname(req.file.filename)}`;
+  await processImage(req.file.path);
+  fs.renameSync(req.file.path, path.join(__dirname, '..', newPath));
+  db.prepare('UPDATE stores SET logo_path=? WHERE id=?').run(newPath, store.id);
+  appendLog(`مستخدم «${req.user.username}» غيّر شعار متجر «${store.name}»`);
+  res.redirect('/panel/settings?ok=' + encodeURIComponent('تم تحديث الشعار'));
+}), (err, req, res, next) => {
+  res.redirect('/panel/settings?err=' + encodeURIComponent(err.message || 'فشل رفع الشعار'));
+});
+
+/* ====== العروض المجمعة (Bundles) ====== */
+router.get('/bundles', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('العروض المجمعة متاحة للباقة الاحترافية فقط'));
+  const bundles = db.prepare('SELECT b.*, (SELECT COUNT(*) FROM bundle_products WHERE bundle_id=b.id) as product_count FROM bundles b WHERE b.store_id=? ORDER BY b.id DESC').all(store.id);
+  res.render('panel/bundles', { store, bundles, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/bundles', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/bundles?err=' + encodeURIComponent('العروض المجمعة متاحة للباقة الاحترافية فقط'));
+  const { name, description, discount_type, discount_value, min_products } = req.body;
+  if (!name || !name.trim()) return res.redirect('/panel/bundles?err=' + encodeURIComponent('اسم العرض مطلوب'));
+  const dt = discount_type === 'amount' ? 'amount' : 'percent';
+  const dv = Number(discount_value);
+  if (isNaN(dv) || dv <= 0 || (dt === 'percent' && dv > 100)) return res.redirect('/panel/bundles?err=' + encodeURIComponent('قيمة الخصم غير صحيحة'));
+  const mp = Math.max(2, Math.floor(Number(min_products) || 2));
+  const info = db.prepare('INSERT INTO bundles (store_id, name, description, discount_type, discount_value, min_products) VALUES (?,?,?,?,?,?)')
+    .run(store.id, name.trim(), description?.trim() || '', dt, dv, mp);
+  logActivity(req.user.id, req.user.username, 'إضافة عرض مجمّع', `أنشأ عرض «${name}»`);
+  res.redirect('/panel/bundles/' + info.lastInsertRowid + '/products?ok=' + encodeURIComponent('تم إنشاء العرض — الآن أضف المنتجات'));
+});
+
+router.get('/bundles/:id/products', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const bundle = db.prepare('SELECT * FROM bundles WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!bundle) return res.redirect('/panel/bundles?err=' + encodeURIComponent('العرض غير موجود'));
+  const products = db.prepare('SELECT p.*, CASE WHEN bp.product_id IS NOT NULL THEN 1 ELSE 0 END as in_bundle FROM products p LEFT JOIN bundle_products bp ON bp.product_id=p.id AND bp.bundle_id=? WHERE p.store_id=? AND p.active=1 ORDER BY p.name').all(bundle.id, store.id);
+  res.render('panel/bundle-products', { store, bundle, products, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/bundles/:id/products', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const bundle = db.prepare('SELECT * FROM bundles WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!bundle) return res.redirect('/panel/bundles?err=' + encodeURIComponent('العرض غير موجود'));
+  const productIds = Array.isArray(req.body.products) ? req.body.products : (req.body.products ? [req.body.products] : []);
+  db.prepare('DELETE FROM bundle_products WHERE bundle_id=?').run(bundle.id);
+  for (const pid of productIds) {
+    db.prepare('INSERT INTO bundle_products (bundle_id, product_id) VALUES (?,?)').run(bundle.id, pid);
+  }
+  res.redirect('/panel/bundles/' + bundle.id + '/products?ok=' + encodeURIComponent('تم تحديث منتجات العرض'));
+});
+
+router.post('/bundles/:id/toggle', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const b = db.prepare('SELECT * FROM bundles WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (b) db.prepare('UPDATE bundles SET active=? WHERE id=?').run(b.active ? 0 : 1, b.id);
+  res.redirect('/panel/bundles?ok=' + encodeURIComponent('تم التحديث'));
+});
+
+router.post('/bundles/:id/delete', (req, res) => {
+  const store = getStore(req.user.store_id);
+  db.prepare('DELETE FROM bundle_products WHERE bundle_id=?').run(req.params.id);
+  db.prepare('DELETE FROM bundles WHERE id=? AND store_id=?').run(req.params.id, store.id);
+  res.redirect('/panel/bundles?ok=' + encodeURIComponent('تم حذف العرض'));
+});
+
+/* ====== أكواد الخصم ====== */
+router.get('/coupons', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const rows = db.prepare('SELECT * FROM coupons WHERE store_id=? ORDER BY id DESC').all(store.id);
+  res.render('panel/coupons', { store, rows, pro: isPro(store), money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/coupons', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const { code, type, value, min_total, max_uses, expires } = req.body;
+  const c = String(code || '').trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 20);
+  if (c.length < 3) return res.redirect('/panel/coupons?err=' + encodeURIComponent('الكود: 3 أحرف/أرقام على الأقل (لاتيني وأرقام فقط)'));
+  const t = type === 'amount' ? 'amount' : 'percent';
+  const v = Number(value);
+  if (isNaN(v) || v <= 0 || (t === 'percent' && v > 100)) return res.redirect('/panel/coupons?err=' + encodeURIComponent('قيمة الخصم غير صحيحة'));
+  if (!isPro(store)) {
+    const cnt = db.prepare('SELECT COUNT(*) c FROM coupons WHERE store_id=?').get(store.id).c;
+    if (cnt >= 5) return res.redirect('/panel/coupons?err=' + encodeURIComponent('الباقة المجانية تسمح بـ 5 أكواد فقط — رقِّ باقتك من صفحة «الباقات» لبلا حدود'));
+  }
+  const clash = db.prepare('SELECT id FROM coupons WHERE store_id=? AND code=?').get(store.id, c);
+  if (clash) return res.redirect('/panel/coupons?err=' + encodeURIComponent('يوجد كود بنفس الاسم بالفعل'));
+  db.prepare('INSERT INTO coupons (store_id, code, type, value, min_total, max_uses, expires) VALUES (?,?,?,?,?,?,?)')
+    .run(store.id, c, t, v, Math.max(0, Number(min_total) || 0), Math.max(0, Math.floor(Number(max_uses) || 0)),
+      /^\d{4}-\d{2}-\d{2}$/.test(String(expires || '')) ? String(expires) : '');
+  logActivity(req.user.id, req.user.username, 'كود خصم', `أنشأ كود «${c}»`);
+  appendLog(`مستخدم «${req.user.username}» أنشأ كود خصم «${c}» (${t === 'percent' ? v + '%' : money(v)}) في متجر «${store.name}»`);
+  res.redirect('/panel/coupons?ok=' + encodeURIComponent('تم إنشاء الكود — شاركه مع زبائنك'));
+});
+
+router.post('/coupons/:id/toggle', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const c = db.prepare('SELECT * FROM coupons WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (c) db.prepare('UPDATE coupons SET active=? WHERE id=?').run(c.active ? 0 : 1, c.id);
+  res.redirect('/panel/coupons?ok=' + encodeURIComponent('تم التحديث'));
+});
+
+router.post('/coupons/:id/delete', (req, res) => {
+  const store = getStore(req.user.store_id);
+  db.prepare('DELETE FROM coupons WHERE id=? AND store_id=?').run(req.params.id, store.id);
+  res.redirect('/panel/coupons?ok=' + encodeURIComponent('تم حذف الكود'));
+});
+
+router.get('/password', (req, res) => {
+  res.render('panel/password', { ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/password', (req, res) => {
+  const { oldpass, newpass } = req.body;
+  const u = db.prepare('SELECT * FROM users WHERE id=?').get(req.user.id);
+  if (!checkPassword(String(oldpass || ''), u.password_hash))
+    return res.redirect('/panel/password?err=' + encodeURIComponent('كلمة المرور الحالية غير صحيحة'));
+  if (!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(String(newpass || '')))
+    return res.redirect('/panel/password?err=' + encodeURIComponent('كلمة المرور الجديدة: 8 أحرف على الأقل مع رقم وحرف'));
+  db.prepare('UPDATE users SET password_hash=? WHERE id=?').run(hashPassword(String(newpass)), req.user.id);
+  res.redirect('/panel/password?ok=' + encodeURIComponent('تم تغيير كلمة المرور'));
+});
+
+/* ====== إدارة التوصيل (Shipping) ====== */
+const shipping = require('../shipping');
+
+router.get('/shipping', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const companies = shipping.getActiveShippingCompanies(store.id);
+  const shipments = db.prepare(`
+    SELECT s.*, sc.name as company_name, o.customer_name
+    FROM shipments s
+    JOIN shipping_companies sc ON sc.id = s.shipping_company_id
+    LEFT JOIN orders o ON o.id = s.order_id
+    WHERE s.store_id = ? ORDER BY s.created_at DESC LIMIT 50
+  `).all(store.id);
+  res.render('panel/shipping', { store, companies, shipments, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.get('/shipping/companies', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const companies = shipping.getActiveShippingCompanies(store.id);
+  res.render('panel/shipping-companies', { store, companies, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/shipping/companies/:id/toggle', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const { is_enabled } = req.body;
+  db.prepare('UPDATE store_shipping_config SET is_enabled=? WHERE store_id=? AND shipping_company_id=?')
+    .run(is_enabled === 'on' ? 1 : 0, store.id, req.params.id);
+  res.redirect('/panel/shipping/companies?ok=' + encodeURIComponent('تم التحديث'));
+});
+
+router.post('/shipping/companies/:id/settings', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const { cod_fee, free_shipping_min, default_weight, api_credentials, settings } = req.body;
+  db.prepare('UPDATE store_shipping_config SET cod_fee=?, free_shipping_min=?, default_weight=?, api_credentials=?, settings=? WHERE store_id=? AND shipping_company_id=?')
+    .run(
+      Math.max(0, Number(cod_fee) || 0),
+      Math.max(0, Number(free_shipping_min) || 0),
+      Math.max(0.1, Number(default_weight) || 0.5),
+      api_credentials ? api_credentials : '',
+      settings ? settings : '',
+      store.id, req.params.id
+    );
+  res.redirect('/panel/shipping/companies?ok=' + encodeURIComponent('تم حفظ الإعدادات'));
+});
+
+router.get('/shipments', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const filter = req.query.status || 'all';
+  const q = String(req.query.q || '').trim();
+  const page = Math.max(1, Number(req.query.page) || 1);
+  const perPage = 20;
+  
+  let where = 's.store_id=?';
+  const params = [store.id];
+  if (filter !== 'all') {
+    where += ' AND s.status=?';
+    params.push(filter);
+  }
+  if (q) {
+    where += ' AND (s.tracking_number LIKE ? OR o.customer_name LIKE ? OR o.customer_phone LIKE ?)';
+    params.push(`%${q}%`, `%${q}%`, `%${q}%`);
+  }
+  
+  const total = db.prepare(`SELECT COUNT(*) c FROM shipments s LEFT JOIN orders o ON o.id=s.order_id WHERE ${where}`).get(...params).c;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  
+  const shipments = db.prepare(`
+    SELECT s.*, sc.name as company_name, o.customer_name, o.customer_phone
+    FROM shipments s
+    JOIN shipping_companies sc ON sc.id = s.shipping_company_id
+    LEFT JOIN orders o ON o.id = s.order_id
+    WHERE ${where} ORDER BY s.created_at DESC LIMIT ? OFFSET ?
+  `).all(...params, perPage, (page - 1) * perPage);
+  
+  res.render('panel/shipments', { store, shipments, filter, q, page, totalPages, total, money, user: req.user });
+});
+
+router.get('/shipments/:id', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const shipment = db.prepare(`
+    SELECT s.*, sc.name as company_name, sc.code as company_code, o.*
+    FROM shipments s
+    JOIN shipping_companies sc ON sc.id = s.shipping_company_id
+    LEFT JOIN orders o ON o.id = s.order_id
+    WHERE s.id=? AND s.store_id=?
+  `).get(req.params.id, store.id);
+  
+  if (!shipment) return res.redirect('/panel/shipments?err=' + encodeURIComponent('الشحنة غير موجودة'));
+  
+  const tracking = db.prepare('SELECT * FROM shipment_tracking WHERE shipment_id=? ORDER BY timestamp DESC').all(shipment.id);
+  const orderItems = db.prepare('SELECT * FROM order_items WHERE order_id=?').all(shipment.order_id);
+  
+  res.render('panel/shipment-detail', { store, shipment, tracking, orderItems, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/shipments/:id/update-status', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const { status, notes, location } = req.body;
+  const shipment = db.prepare('SELECT * FROM shipments WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!shipment) return res.redirect('/panel/shipments?err=' + encodeURIComponent('الشحنة غير موجودة'));
+  
+  const validStatuses = ['pending', 'pickup_scheduled', 'picked_up', 'in_transit', 'out_for_delivery', 'delivered', 'failed', 'returned', 'cancelled'];
+  if (!validStatuses.includes(status)) return res.redirect('/panel/shipments/' + req.params.id + '?err=' + encodeURIComponent('حالة غير صالحة'));
+  
+  const trackingData = {
+    status,
+    notes: notes || '',
+    location: req.body.location || '',
+    description: req.body.description || `تم تحديث الحالة إلى ${status}`
+  };
+  
+  // Update shipment status
+  shipping.updateShipmentStatus(req.params.id, status, trackingData);
+  
+  // Log tracking
+  if (trackingData.description) {
+    db.prepare('INSERT INTO shipment_tracking (shipment_id, status, location, description) VALUES (?,?,?,?)')
+      .run(req.params.id, status, trackingData.location || '', trackingData.description);
+  }
+  
+  // If delivered, update order status
+  if (status === 'delivered') {
+    db.prepare('UPDATE orders SET status=? WHERE id=?').run('completed', shipment.order_id);
+  }
+  
+  res.redirect('/panel/shipments/' + req.params.id + '?ok=' + encodeURIComponent('تم تحديث الحالة'));
+});
+
+router.get('/shipments/:id/label', asyncHandler(async (req, res) => {
+  const store = getStore(req.user.store_id);
+  const shipment = db.prepare('SELECT * FROM shipments WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!shipment) return res.redirect('/panel/shipments?err=' + encodeURIComponent('الشحنة غير موجودة'));
+  
+  try {
+    const pdf = await require('../shipping').generateShippingLabel(req.params.id);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `inline; filename="label-${req.params.id}.pdf"`);
+    res.send(pdf);
+  } catch (e) {
+    res.redirect('/panel/shipments/' + req.params.id + '?err=' + encodeURIComponent('فشل إنشاء البوليصة'));
+  }
+}));
+
+/* ====== إدارة المرتجعات والاستبدال (Returns & Exchanges) ====== */
+router.get('/returns', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const filter = req.query.status || 'all';
+  const q = String(req.query.q || '').trim();
+  const page = Math.max(1, Number(req.query.page) || 1);
+  const perPage = 20;
+  
+  let where = 're.store_id=?';
+  const params = [store.id];
+  if (filter !== 'all') {
+    where += ' AND re.status=?';
+    params.push(filter);
+  }
+  if (q) {
+    where += ' AND (re.customer_name LIKE ? OR re.customer_phone LIKE ? OR o.id LIKE ?)';
+    params.push(`%${q}%`, `%${q}%`, `%${q}%`);
+  }
+  
+  const total = db.prepare(`SELECT COUNT(*) c FROM returns_exchanges re JOIN orders o ON o.id=re.order_id WHERE ${where}`).get(...params).c;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  
+  const returns = db.prepare(`
+    SELECT re.*, o.customer_name, o.customer_phone, p.name as product_name
+    FROM returns_exchanges re
+    JOIN orders o ON o.id=re.order_id
+    JOIN order_items oi ON oi.id=re.order_item_id
+    JOIN products p ON p.id=oi.product_id
+    WHERE ${where} ORDER BY re.created_at DESC LIMIT ? OFFSET ?
+  `).all(...params, perPage, (page - 1) * perPage);
+  
+  res.render('panel/returns', { store, returns, filter, q, page, totalPages, total, money, user: req.user });
+});
+
+router.get('/returns/:id', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const ret = db.prepare(`
+    SELECT re.*, o.customer_name, o.customer_phone, o.customer_address, oi.product_name
+    FROM returns_exchanges re
+    JOIN orders o ON o.id=re.order_id
+    JOIN order_items oi ON oi.id=re.order_item_id
+    WHERE re.id=? AND re.store_id=?
+  `).get(req.params.id, store.id);
+  
+  if (!ret) return res.redirect('/panel/returns?err=' + encodeURIComponent('طلب الإرجاع/الاستبدال غير موجود'));
+  
+  const orderItems = db.prepare('SELECT * FROM order_items WHERE order_id=?').all(ret.order_id);
+  
+  res.render('panel/return-detail', { store, ret, orderItems, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/returns/:id/update-status', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const { status, notes, refund_amount } = req.body;
+  const ret = db.prepare('SELECT * FROM returns_exchanges WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!ret) return res.redirect('/panel/returns?err=' + encodeURIComponent('طلب الإرجاع غير موجود'));
+  
+  const validStatuses = ['requested', 'approved', 'rejected', 'pickup_scheduled', 'picked_up', 'received', 'inspected', 'refunded', 'exchanged', 'rejected_by_customer', 'completed', 'cancelled'];
+  if (!validStatuses.includes(status)) return res.redirect('/panel/returns/' + req.params.id + '?err=' + encodeURIComponent('حالة غير صالحة'));
+  
+  db.prepare('UPDATE returns_exchanges SET status=?, inspection_notes=?, refund_amount=?, updated_at=datetime(\'now\',\'localtime\') WHERE id=?')
+    .run(status, req.body.notes || '', Math.max(0, Number(refund_amount) || 0), ret.id);
+  
+  // If approved and type is return, create cash flow entry for refund
+  if (status === 'approved' && ret.type === 'return' && Number(refund_amount) > 0) {
+    const { addCashFlowEntry } = require('../util');
+    addCashFlowEntry(store.id, 'expense', 'refund', Number(refund_amount), 'return', ret.id, `استرداد طلب إرجاع #${ret.id}`);
+  }
+  
+  // If completed exchange, update order status
+  if (status === 'completed' && ret.type === 'exchange') {
+    db.prepare('UPDATE orders SET status=? WHERE id=?').run('completed', ret.order_id);
+  }
+  
+  res.redirect('/panel/returns/' + req.params.id + '?ok=' + encodeURIComponent('تم تحديث الحالة'));
+});
+
+/* ====== إدارة المندوبين (Drivers) ====== */
+router.get('/drivers', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('إدارة المندوبين متاحة للباقة الاحترافية فقط'));
+  
+  const drivers = db.prepare('SELECT * FROM drivers WHERE store_id=? ORDER BY created_at DESC').all(store.id);
+  res.render('panel/drivers', { store, drivers, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/drivers', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/drivers?err=' + encodeURIComponent('إدارة المندوبين متاحة للباقة الاحترافية فقط'));
+  
+  const { name, phone, email, vehicle_type, vehicle_plate, license_number, commission_type, commission_value } = req.body;
+  if (!name || !phone) return res.redirect('/panel/drivers?err=' + encodeURIComponent('الاسم والهاتف مطلوبان'));
+  
+  const info = db.prepare('INSERT INTO drivers (store_id, name, phone, email, vehicle_type, vehicle_plate, license_number, commission_type, commission_value) VALUES (?,?,?,?,?,?,?,?,?)')
+    .run(store.id, name.trim(), phone.trim(), email?.trim() || '', vehicle_type || 'motorcycle', vehicle_plate?.trim() || '', license_number?.trim() || '', commission_type || 'per_order', Number(commission_value) || 0);
+  
+  logActivity(req.user.id, req.user.username, 'إضافة مندوب', `أضاف المندوب «${name}»`);
+  res.redirect('/panel/drivers?ok=' + encodeURIComponent('تم إضافة المندوب'));
+});
+
+router.post('/drivers/:id/toggle', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const driver = db.prepare('SELECT * FROM drivers WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!driver) return res.redirect('/panel/drivers?err=' + encodeURIComponent('المندوب غير موجود'));
+  
+  db.prepare('UPDATE drivers SET is_active=? WHERE id=?').run(driver.is_active ? 0 : 1, driver.id);
+  res.redirect('/panel/drivers?ok=' + encodeURIComponent('تم التحديث'));
+});
+
+router.post('/drivers/:id/delete', (req, res) => {
+  const store = getStore(req.user.store_id);
+  db.prepare('DELETE FROM drivers WHERE id=? AND store_id=?').run(req.params.id, store.id);
+  res.redirect('/panel/drivers?ok=' + encodeURIComponent('تم حذف المندوب'));
+});
+
+router.get('/drivers/:id', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const driver = db.prepare('SELECT * FROM drivers WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!driver) return res.redirect('/panel/drivers?err=' + encodeURIComponent('المندوب غير موجود'));
+  
+  const assignments = db.prepare(`
+    SELECT da.*, s.tracking_number, o.customer_name, o.customer_phone
+    FROM driver_assignments da
+    JOIN shipments s ON s.id = da.shipment_id
+    LEFT JOIN orders o ON o.id = s.order_id
+    WHERE da.driver_id = ? ORDER BY da.assigned_at DESC
+  `).all(driver.id);
+  
+  const settlements = db.prepare('SELECT * FROM driver_settlements WHERE driver_id=? ORDER BY period_start DESC').all(driver.id);
+  
+  res.render('panel/driver-detail', { store, driver, assignments, settlements, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/drivers/:id/commission', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const { commission_type, commission_value } = req.body;
+  const driver = db.prepare('SELECT * FROM drivers WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!driver) return res.redirect('/panel/drivers?err=' + encodeURIComponent('المندوب غير موجود'));
+  
+  const ct = commission_type === 'percentage' ? 'percentage' : (commission_type === 'fixed_monthly' ? 'fixed_monthly' : 'per_order');
+  const cv = Math.max(0, Number(commission_value) || 0);
+  
+  db.prepare('UPDATE drivers SET commission_type=?, commission_value=? WHERE id=?').run(ct, cv, driver.id);
+  res.redirect('/panel/drivers/' + driver.id + '?ok=' + encodeURIComponent('تم تحديث العمولة'));
+});
+
+router.post('/shipments/:id/assign-driver', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const { driver_id } = req.body;
+  const shipment = db.prepare('SELECT * FROM shipments WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!shipment) return res.redirect('/panel/shipments?err=' + encodeURIComponent('الشحنة غير موجودة'));
+  
+  const driver = db.prepare('SELECT * FROM drivers WHERE id=? AND store_id=? AND is_active=1').get(driver_id, store.id);
+  if (!driver) return res.redirect('/panel/shipments/' + req.params.id + '?err=' + encodeURIComponent('المندوب غير موجود أو غير نشط'));
+  
+  db.prepare('INSERT INTO driver_assignments (driver_id, shipment_id) VALUES (?,?)').run(driver_id, req.params.id);
+  res.redirect('/panel/shipments/' + req.params.id + '?ok=' + encodeURIComponent('تم تعيين المندوب'));
+});
+
+router.post('/driver-assignments/:id/update-status', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const { status } = req.body;
+  const assignment = db.prepare(`
+    SELECT da.* FROM driver_assignments da
+    JOIN shipments s ON s.id = da.shipment_id
+    WHERE da.id=? AND s.store_id=?
+  `).get(req.params.id, store.id);
+  
+  if (!assignment) return res.redirect('/panel/shipments?err=' + encodeURIComponent('التعيين غير موجود'));
+  
+  const validStatuses = ['assigned', 'accepted', 'picked_up', 'delivered', 'returned', 'cancelled'];
+  if (!validStatuses.includes(status)) return res.redirect('/panel/shipments/' + assignment.shipment_id + '?err=' + encodeURIComponent('حالة غير صالحة'));
+  
+  const updates = ['status = ?'];
+  const params = [status];
+  if (status === 'accepted') { updates.push('accepted_at = datetime(\'now\',\'localtime\')'); }
+  if (status === 'picked_up') { updates.push('picked_up_at = datetime(\'now\',\'localtime\')'); }
+  if (status === 'delivered') { updates.push('delivered_at = datetime(\'now\',\'localtime\')'); }
+  if (status === 'returned') { updates.push('delivered_at = datetime(\'now\',\'localtime\')'); }
+  updates.push('updated_at = datetime(\'now\',\'localtime\')');
+  params.push(req.params.id);
+  
+  db.prepare(`UPDATE driver_assignments SET ${updates.join(', ')} WHERE id=?`).run(...params);
+  res.redirect('/panel/drivers/' + assignment.driver_id + '?ok=' + encodeURIComponent('تم تحديث حالة التعيين'));
+});
+
+/* ====== تسوية المندوبين (Driver Settlements) ====== */
+router.get('/driver-settlements', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('تسوية المندوبين متاحة للباقة الاحترافية فقط'));
+  
+  const drivers = db.prepare('SELECT * FROM drivers WHERE store_id=? AND is_active=1').all(store.id);
+  const settlements = db.prepare('SELECT ds.*, d.name as driver_name FROM driver_settlements ds JOIN drivers d ON d.id=ds.driver_id WHERE ds.store_id=? ORDER BY ds.period_start DESC').all(store.id);
+  
+  res.render('panel/driver-settlements', { store, drivers, settlements, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/driver-settlements', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/driver-settlements?err=' + encodeURIComponent('تسوية المندوبين متاحة للباقة الاحترافية فقط'));
+  
+  const { driver_id, period_start, period_end } = req.body;
+  if (!driver_id || !period_start || !period_end) return res.redirect('/panel/driver-settlements?err=' + encodeURIComponent('جميع الحقول مطلوبة'));
+  
+  const driver = db.prepare('SELECT * FROM drivers WHERE id=? AND store_id=?').get(driver_id, store.id);
+  if (!driver) return res.redirect('/panel/driver-settlements?err=' + encodeURIComponent('المندوب غير موجود'));
+  
+  // Calculate settlement
+  const assignments = db.prepare(`
+    SELECT da.*, s.cod_amount, s.shipping_fee
+    FROM driver_assignments da
+    JOIN shipments s ON s.id = da.shipment_id
+    WHERE da.driver_id = ? AND da.status IN ('delivered') AND date(da.delivered_at) BETWEEN ? AND ?
+  `).all(driver_id, period_start, period_end);
+  
+  const totalOrders = assignments.length;
+  let totalCommission = 0;
+  let totalCodCollected = 0;
+  
+  for (const a of assignments) {
+    if (driver.commission_type === 'per_order') {
+      totalCommission += driver.commission_value;
+    } else if (driver.commission_type === 'percentage') {
+      totalCommission += (a.cod_amount + a.shipping_fee) * driver.commission_value / 100;
+    } else if (driver.commission_type === 'fixed_monthly') {
+      totalCommission = driver.commission_value;
+    }
+    totalCodCollected += a.cod_amount || 0;
+  }
+  
+  const advances = db.prepare("SELECT COALESCE(SUM(amount),0) as total FROM cash_flow_entries WHERE store_id=? AND category='driver_advance' AND reference_id=? AND date(created_at) BETWEEN ? AND ?").get(store.id, driver_id, period_start, period_end).total || 0;
+  
+  const netPayable = totalCommission - advances;
+  
+  db.prepare('INSERT INTO driver_settlements (driver_id, store_id, period_start, period_end, total_orders, total_commission, total_cod_collected, advances_paid, net_payable) VALUES (?,?,?,?,?,?,?,?,?)')
+    .run(driver_id, store.id, period_start, period_end, totalOrders, totalCommission, totalCodCollected, advances, netPayable);
+  
+  res.redirect('/panel/driver-settlements?ok=' + encodeURIComponent('تم إنشاء التسوية'));
+});
+
+router.post('/driver-settlements/:id/pay', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const settlement = db.prepare('SELECT * FROM driver_settlements WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!settlement) return res.redirect('/panel/driver-settlements?err=' + encodeURIComponent('التسوية غير موجودة'));
+  
+  db.prepare('UPDATE driver_settlements SET status=?, paid_at=datetime(\'now\',\'localtime\') WHERE id=?').run('paid', req.params.id);
+  
+  // Record cash flow
+  const { addCashFlowEntry } = require('../util');
+  addCashFlowEntry(store.id, 'expense', 'driver_settlement', settlement.net_payable, 'driver_settlement', settlement.id, `تسوية المندوب #${settlement.driver_id}`);
+  
+  res.redirect('/panel/driver-settlements?ok=' + encodeURIComponent('تم تسجيل الدفع'));
+});
+
+/* ====== كاش فلو داشبورد (Cash Flow Dashboard) ====== */
+router.get('/cashflow', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('الكاش فلو متاح للباقة الاحترافية فقط'));
+  
+  const period = req.query.period || '30d'; // '7d', '30d', '90d', 'custom'
+  const customStart = req.query.start_date;
+  const customEnd = req.query.end_date;
+  
+  let dateFilter = '';
+  const params = [store.id];
+  
+  if (period === 'custom' && customStart && customEnd) {
+    dateFilter = 'AND date(created_at) BETWEEN ? AND ?';
+    params.push(customStart, customEnd);
+  } else {
+    const days = period === '7d' ? 7 : period === '30d' ? 30 : 90;
+    dateFilter = `AND date(created_at) >= date('now', '-${days} days')`;
+  }
+  
+  // Summary stats
+  const income = db.prepare(`SELECT COALESCE(SUM(amount),0) as total FROM cash_flow_entries WHERE store_id=? AND type='income' ${dateFilter}`).get(...params).total || 0;
+  const expense = db.prepare(`SELECT COALESCE(SUM(amount),0) as total FROM cash_flow_entries WHERE store_id=? AND type='expense' ${dateFilter}`).get(...params).total || 0;
+  const netFlow = income - expense;
+  
+  // Category breakdown
+  const incomeByCategory = db.prepare(`SELECT category, COALESCE(SUM(amount),0) as total FROM cash_flow_entries WHERE store_id=? AND type='income' ${dateFilter} GROUP BY category ORDER BY total DESC`).all(...params);
+  const expenseByCategory = db.prepare(`SELECT category, COALESCE(SUM(amount),0) as total FROM cash_flow_entries WHERE store_id=? AND type='expense' ${dateFilter} GROUP BY category ORDER BY total DESC`).all(...params);
+  
+  // Daily flow for chart
+  const dailyFlow = [];
+  const days = period === '7d' ? 7 : period === '30d' ? 30 : 90;
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const dayIncome = db.prepare(`SELECT COALESCE(SUM(amount),0) as total FROM cash_flow_entries WHERE store_id=? AND type='income' AND date(created_at)=?`).get(store.id, dateStr).total || 0;
+    const dayExpense = db.prepare(`SELECT COALESCE(SUM(amount),0) as total FROM cash_flow_entries WHERE store_id=? AND type='expense' AND date(created_at)=?`).get(store.id, dateStr).total || 0;
+    dailyFlow.push({ d: dateStr.slice(5), income: dayIncome, expense: dayExpense, net: dayIncome - dayExpense });
+  }
+  
+  // Recent transactions
+  const recent = db.prepare(`SELECT * FROM cash_flow_entries WHERE store_id=? ${dateFilter} ORDER BY created_at DESC LIMIT 20`).all(...params);
+  
+  // Pending receivables (COD not collected, shipping settlements pending)
+  const pendingCod = db.prepare(`SELECT COALESCE(SUM(cod_amount),0) as total FROM shipments WHERE store_id=? AND status IN ('picked_up','in_transit','out_for_delivery')`).get(store.id).total || 0;
+  const pendingShipping = db.prepare(`SELECT COALESCE(SUM(net_receivable),0) as total FROM shipping_settlements WHERE store_id=? AND status IN ('pending','partial')`).get(store.id).total || 0;
+  const pendingDriver = db.prepare(`SELECT COALESCE(SUM(net_payable),0) as total FROM driver_settlements WHERE store_id=? AND status IN ('pending','partial')`).get(store.id).total || 0;
+  
+  res.render('panel/cashflow', { store, period, customStart, customEnd, income, expense, netFlow, incomeByCategory, expenseByCategory, dailyFlow, recent, pendingCod, pendingShipping, pendingDriver, money, user: req.user });
+});
+
+router.get('/cashflow/export', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const period = req.query.period || '30d';
+  
+  let dateFilter = '';
+  const params = [store.id];
+  
+  if (period === 'custom' && req.query.start_date && req.query.end_date) {
+    dateFilter = 'AND date(created_at) BETWEEN ? AND ?';
+    params.push(req.query.start_date, req.query.end_date);
+  } else {
+    const days = period === '7d' ? 7 : period === '30d' ? 30 : 90;
+    dateFilter = `AND date(created_at) >= date('now', '-${days} days')`;
+  }
+  
+  const entries = db.prepare(`SELECT * FROM cash_flow_entries WHERE store_id=? ${dateFilter} ORDER BY created_at DESC`).all(...params);
+  
+  const csvHeader = 'النوع,الفئة,المبلغ (د.ع),الوصف,المرجع,التاريخ\n';
+  const csvRows = entries.map(e => {
+    const escape = (val) => '"' + String(val || '').replace(/"/g, '""') + '"';
+    return [
+      escape(e.type === 'income' ? 'إيراد' : 'مصروف'),
+      escape(e.category),
+      escape(e.amount),
+      escape(e.description || ''),
+      escape(e.reference_type || ''),
+      escape(e.created_at)
+    ].join(',');
+  }).join('\n');
+  
+  const csv = csvHeader + csvRows;
+  const filename = `cashflow_${store.slug}_${new Date().toISOString().slice(0,10)}.csv`;
+  
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.send('\uFEFF' + csv);
+});
+
+/* ====== إدارة المستودعات والمخزون المتعدد (Multi-location Inventory) ====== */
+router.get('/warehouses', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('إدارة المستودعات متاحة للباقة الاحترافية فقط'));
+  
+  const warehouses = db.prepare('SELECT w.*, (SELECT COUNT(*) FROM product_warehouse_stock WHERE warehouse_id=w.id) as product_count FROM warehouses w WHERE w.store_id=? ORDER BY w.is_default DESC, w.created_at').all(store.id);
+  res.render('panel/warehouses', { store, warehouses, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/warehouses', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('إدارة المستودعات متاحة للباقة الاحترافية فقط'));
+  
+  const { name, code, address, city, manager_name, manager_phone, is_default } = req.body;
+  if (!name || !code) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('اسم المستودع والكود مطلوبان'));
+  
+  const newCode = String(code).trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 10);
+  const clash = db.prepare('SELECT id FROM warehouses WHERE code=? AND store_id=?').get(newCode, store.id);
+  if (clash) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('كود المستودع مستخدم سابقاً'));
+  
+  let isDefault = is_default === 'on' ? 1 : 0;
+  if (isDefault) {
+    db.prepare('UPDATE warehouses SET is_default=0 WHERE store_id=?').run(store.id);
+  }
+  
+  const info = db.prepare('INSERT INTO warehouses (store_id, name, code, address, city, manager_name, manager_phone, is_default) VALUES (?,?,?,?,?,?,?,?)')
+    .run(store.id, name.trim(), newCode, address?.trim() || '', city?.trim() || '', manager_name?.trim() || '', manager_phone?.trim() || '', isDefault);
+  
+  logActivity(req.user.id, req.user.username, 'إضافة مستودع', `أضاف المستودع «${name}»`);
+  res.redirect('/panel/warehouses?ok=' + encodeURIComponent('تم إضافة المستودع'));
+});
+
+router.post('/warehouses/:id/toggle', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const warehouse = db.prepare('SELECT * FROM warehouses WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!warehouse) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('المستودع غير موجود'));
+  
+  if (!warehouse.is_default) {
+    db.prepare('UPDATE warehouses SET is_default=0 WHERE store_id=?').run(store.id);
+    db.prepare('UPDATE warehouses SET is_default=1 WHERE id=?').run(warehouse.id);
+  }
+  res.redirect('/panel/warehouses?ok=' + encodeURIComponent('تم التحديث'));
+});
+
+router.post('/warehouses/:id/delete', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const warehouse = db.prepare('SELECT * FROM warehouses WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!warehouse) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('المستودع غير موجود'));
+  if (warehouse.is_default) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('لا يمكن حذف المستودع الافتراضي'));
+  
+  db.prepare('DELETE FROM product_warehouse_stock WHERE warehouse_id=?').run(warehouse.id);
+  db.prepare('DELETE FROM warehouses WHERE id=?').run(warehouse.id);
+  res.redirect('/panel/warehouses?ok=' + encodeURIComponent('تم حذف المستودع'));
+});
+
+router.get('/warehouses/:id/stock', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const warehouse = db.prepare('SELECT * FROM warehouses WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!warehouse) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('المستودع غير موجود'));
+  
+  const q = String(req.query.q || '').trim();
+  const stocks = db.prepare(`
+    SELECT pws.*, p.name, p.price,
+      CASE WHEN pws.quantity <= pws.min_threshold THEN 'low'
+           WHEN pws.quantity = 0 THEN 'out'
+           ELSE 'ok' END as stock_status
+    FROM product_warehouse_stock pws
+    JOIN products p ON p.id = pws.product_id
+    WHERE pws.warehouse_id = ? AND p.store_id = ? AND p.active = 1
+      AND (? = '' OR p.name LIKE ?)
+    ORDER BY p.name
+  `).all(req.params.id, store.id, q, `%${q}%`);
+  
+  res.render('panel/warehouse-stock', { store, warehouse, stocks, money, q, ok: req.query.ok || '', err: req.query.err || '', user: req.user, csrf: req.csrfToken ? req.csrfToken() : '' });
+});
+
+router.post('/warehouses/:id/stock/adjust', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const { product_id, quantity, operation } = req.body; // operation: 'set' | 'add' | 'subtract'
+  const warehouse = db.prepare('SELECT * FROM warehouses WHERE id=? AND store_id=?').get(req.params.id, store.id);
+  if (!warehouse) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('المستودع غير موجود'));
+  
+  const stock = db.prepare('SELECT * FROM product_warehouse_stock WHERE product_id=? AND warehouse_id=?').get(product_id, warehouse.id);
+  let newQty = 0;
+  if (operation === 'set') newQty = Math.max(0, Math.floor(Number(quantity) || 0));
+  else if (operation === 'add') newQty = (stock?.quantity || 0) + Math.max(0, Math.floor(Number(quantity) || 0));
+  else if (operation === 'subtract') newQty = Math.max(0, (stock?.quantity || 0) - Math.max(0, Math.floor(Number(quantity) || 0)));
+  
+  if (stock) {
+    db.prepare("UPDATE product_warehouse_stock SET quantity=?, last_restocked_at=datetime('now','localtime') WHERE product_id=? AND warehouse_id=?").run(newQty, product_id, req.params.id);
+  } else {
+    db.prepare('INSERT INTO product_warehouse_stock (product_id, warehouse_id, quantity) VALUES (?,?,?)').run(product_id, req.params.id, newQty);
+  }
+  
+  res.redirect('/panel/warehouses/' + req.params.id + '/stock?ok=' + encodeURIComponent('تم تحديث المخزون'));
+});
+
+/* ====== دعم اللغة الكردية (Kurdish Language Support) ====== */
+router.get('/kurdish', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('دعم اللغة الكردية متاح للباقة الاحترافية فقط'));
+  
+  const q = String(req.query.q || '').trim();
+  let where = '';
+  const params = [];
+  if (q) {
+    where = 'WHERE key LIKE ? OR arabic LIKE ? OR kurdish_sorani LIKE ? OR kurdish_kurmanji LIKE ?';
+    params.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
+  }
+  
+  const translations = db.prepare(`SELECT * FROM kurdish_translations ${where} ORDER BY key`).all(...params);
+  res.render('panel/kurdish', { store, translations, q, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.get('/kurdish/new', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('دعم اللغة الكردية متاح للباقة الاحترافية فقط'));
+  
+  res.render('panel/kurdish-form', { store, translation: null, isNew: true, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.get('/kurdish/:key', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('دعم اللغة الكردية متاح للباقة الاحترافية فقط'));
+  
+  const translation = db.prepare('SELECT * FROM kurdish_translations WHERE key=?').get(req.params.key);
+  if (!translation) return res.redirect('/panel/kurdish?err=' + encodeURIComponent('الترجمة غير موجودة'));
+  
+  res.render('panel/kurdish-form', { store, translation, isNew: false, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/kurdish', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/kurdish?err=' + encodeURIComponent('دعم اللغة الكردية متاح للباقة الاحترافية فقط'));
+  
+  const { key, arabic, kurdish_sorani, kurdish_kurmanji, context } = req.body;
+  if (!key || !arabic || !kurdish_sorani || !kurdish_kurmanji) return res.redirect('/panel/kurdish/new?err=' + encodeURIComponent('جميع الحقول مطلوبة'));
+  
+  db.prepare('INSERT INTO kurdish_translations (key, arabic, kurdish_sorani, kurdish_kurmanji, context) VALUES (?,?,?,?,?) ON CONFLICT(key) DO UPDATE SET arabic=excluded.arabic, kurdish_sorani=excluded.kurdish_sorani, kurdish_kurmanji=excluded.kurdish_kurmanji, context=excluded.context')
+    .run(key.trim(), arabic.trim(), kurdish_sorani?.trim() || '', kurdish_kurmanji?.trim() || '', context?.trim() || '');
+  
+  res.redirect('/panel/kurdish?ok=' + encodeURIComponent('تم حفظ الترجمة'));
+});
+
+router.post('/kurdish/:key/delete', (req, res) => {
+  const store = getStore(req.user.store_id);
+  if (!isPro(store)) return res.redirect('/panel/kurdish?err=' + encodeURIComponent('دعم اللغة الكردية متاح للباقة الاحترافية فقط'));
+  
+  db.prepare('DELETE FROM kurdish_translations WHERE key=?').run(req.params.key);
+  res.redirect('/panel/kurdish?ok=' + encodeURIComponent('تم حذف الترجمة'));
+});
+
+module.exports = router;

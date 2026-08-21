@@ -1,0 +1,15 @@
+<aside class="sidebar">
+  <div class="brand">Dukkan.<span>دُكّان</span></div>
+  <nav>
+    <a href="/panel" class="<%= typeof active !== 'undefined' && active==='dash' ? 'on' : '' %>">نظرة عامة</a>
+    <a href="/panel/products" class="<%= typeof active !== 'undefined' && active==='products' ? 'on' : '' %>">المنتجات</a>
+    <a href="/panel/categories" class="<%= typeof active !== 'undefined' && active==='cats' ? 'on' : '' %>">الأقسام</a>
+    <a href="/panel/orders" class="<%= typeof active !== 'undefined' && active==='orders' ? 'on' : '' %>">الطلبات <span id="ordersBadge" class="nav-badge" hidden></span></a>
+    <a href="/panel/coupons" class="<%= typeof active !== 'undefined' && active==='coupons' ? 'on' : '' %>">أكواد الخصم</a>
+    <a href="/panel/templates" class="<%= typeof active !== 'undefined' && active==='templates' ? 'on' : '' %>">القوالب (9)</a>
+    <a href="/panel/billing" class="<%= typeof active !== 'undefined' && active==='billing' ? 'on' : '' %>">الباقات</a>
+    <a href="/panel/settings" class="<%= typeof active !== 'undefined' && active==='settings' ? 'on' : '' %>">إعدادات المتجر</a>
+    <a href="/panel/password">تغيير كلمة المرور</a>
+  </nav>
+  <div class="side-note">متجر: <%= typeof store !== 'undefined' && store ? store.name : '' %></div>
+</aside>

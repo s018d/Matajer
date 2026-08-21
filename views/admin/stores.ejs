@@ -1,0 +1,60 @@
+<%- include('../partials/head', { title: 'المتاجر — المدير العام' }) %>
+<body class="app">
+<%- include('../partials/sidebar-admin', { active: 'stores' }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'المتاجر' }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <div class="card">
+      <h2>إنشاء متجر جديد</h2>
+      <form method="post" action="/admin/stores" class="grid-3">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <label>اسم المتجر *
+          <input type="text" name="name" required>
+        </label>
+        <label>اسم المستخدم (يوزر) *
+          <input type="text" name="username" required dir="ltr">
+        </label>
+        <label>كلمة المرور (اتركها فارغة للتوليد التلقائي)
+          <input type="text" name="password" dir="ltr">
+        </label>
+        <label>اسم صاحب المتجر
+          <input type="text" name="owner_name">
+        </label>
+        <label>رقم الهاتف
+          <input type="text" name="phone" dir="ltr">
+        </label>
+        <label>نبذة عن المتجر
+          <input type="text" name="description">
+        </label>
+        <div class="span-all">
+          <button type="submit" class="btn btn-primary">إنشاء المتجر</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>كل المتاجر (<%= list.length %>)</h2>
+      <table>
+        <tr><th>المتجر</th><th>مستخدم</th><th>منتجات</th><th>طلبات</th><th>مبيعات</th><th>الباقة</th><th>الحالة</th><th></th></tr>
+        <% list.forEach(s => { %>
+          <tr>
+            <td><a href="/admin/stores/<%= s.id %>"><%= s.name %></a></td>
+            <td><%= s.owner_username || '—' %></td>
+            <td><%= s.products %></td>
+            <td><%= s.orders %></td>
+            <td><%= money(s.revenue) %></td>
+            <td><span class="badge <%= s.plan === 'pro' ? 'badge-ok' : 'badge-warn' %>"><%= s.plan === 'pro' ? 'احترافية' : 'مجانية' %></span></td>
+            <td><span class="badge <%= s.status === 'active' ? 'badge-ok' : 'badge-err' %>"><%= s.status === 'active' ? 'نشط' : 'موقوف' %></span></td>
+            <td class="row-actions">
+              <a class="btn btn-sm" href="/admin/stores/<%= s.id %>">إدارة</a>
+              <a class="btn btn-sm" href="/s/<%= s.slug %>" target="_blank">عرض</a>
+            </td>
+          </tr>
+        <% }) %>
+      </table>
+    </div>
+  </div>
+</main>
+</body>
+</html>

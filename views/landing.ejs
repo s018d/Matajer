@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= cfg.site_name %> — أنشئ متجرك الإلكتروني خلال دقائق</title>
+<meta name="description" content="دُكّان: منصة عراقية 100% لإنشاء متاجر إلكترونية جاهزة — تصميم مجاني + 4 أنماط عالمية، سلة طلبات، واتساب، أكواد خصم، مخزون، وتوصيل. ابدأ مجاناً في دقيقة.">
+<link rel="icon" href="/img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/site.css">
+</head>
+<body class="site">
+<header class="site-nav">
+  <div class="site-nav-inner">
+    <a class="brand" href="/"><img src="/img/logo.svg" alt="شعار دُكّان" class="brand-logo"><b><%= cfg.site_name %></b><span>متاجر</span></a>
+    <nav>
+      <a href="#features">المميزات</a>
+      <a href="#designs">التصاميم</a>
+      <a href="#showcase">متاجر حية</a>
+      <a href="#pricing">الباقات</a>
+      <a href="#faq">أسئلة شائعة</a>
+    </nav>
+    <div class="site-cta">
+      <a class="btn-ghost" href="/login">دخول</a>
+      <a class="btn-main" href="/signup">أنشئ متجرك مجاناً</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-txt">
+      <span class="pill">منصة عراقية 100% — بالعربي من أولها لآخرها</span>
+      <h1>حول نشاطك إلى <em>متجر إلكتروني</em> يبيع وأنت نايم</h1>
+      <p><%= cfg.tagline %> — بلا خبرة تقنية، بلا دومين، بلا بطاقة دفع مسبقة. تسجل في دقيقة، ترفع منتجاتك، وتستلم الطلبات على واتسابك مباشرة.</p>
+      <div class="hero-btns">
+        <a class="btn-main big" href="/signup">ابدأ الآن مجاناً →</a>
+        <a class="btn-outline big" href="#showcase">شاهد متاجر حية</a>
+      </div>
+      <div class="hero-mini">
+        <span>✓ سلة وطلب فوري</span><span>✓ دفـع عنـد الاستلام</span><span>✓ أكواد خصم ومخزون</span><span>✓ لوحة تحكم بالعربي</span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="mock-phone">
+        <div class="mock-top" style="background:linear-gradient(135deg,#0d9488,#0f766e)"></div>
+        <div class="mock-line l1"></div><div class="mock-line l2 short"></div>
+        <div class="mock-cards">
+          <div class="mc"><div class="mc-img" style="background:#ccfbf1"></div><div><b></b><i></i></div></div>
+          <div class="mc"><div class="mc-img" style="background:#fde68a"></div><div><b></b><i></i></div></div>
+          <div class="mc"><div class="mc-img" style="background:#cffafe"></div><div><b></b><i></i></div></div>
+        </div>
+        <span class="mock-badge">طلب جديد وصل!</span>
+      </div>
+      <div class="hero-stats">
+        <div><b id="statStores">0</b><span>متجر نشط</span></div>
+        <div><b id="statToday">0</b><span>متجر انطلق اليوم</span></div>
+        <div><b id="statOrders">0</b><span>طلب مُنفَّذ على المنصة</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="section-inner">
+    <h2>كل ما يحتاجه تاجر اليوم — في <em>مكان واحد</em></h2>
+    <div class="feat-grid">
+      <div class="feat"><b>🖥️ لوحة تحكم عربية</b><p>منتجات، صور، أقسام، طلبات، إحصائيات مبيعات — كل شيء بضغطة واحدة وبدون أي خبرة تقنية.</p></div>
+      <div class="feat"><b>🛒 سلة ودفع عند الاستلام</b><p>زبونك يطلب بثلاث ضغطات ويدفع عند الباب — لا بوابات دفع ولا وسائط تعقيد.</p></div>
+      <div class="feat"><b>💬 واتساب مدمج</b><p>زر أخضر عائم يفتح محادثة مباشرة معك، وزر في صفحة الطلبات يرسل تفاصيل الطلب للزبون بضغطة.</p></div>
+      <div class="feat"><b>🏷️ أكواد الخصم</b><p>نسبة أو مبلغ ثابت، حد أدنى للطلب، عدد استخدامات، وتاريخ انتهاء — بضغطة واحدة.</p></div>
+      <div class="feat"><b>📦 مخزون وخيارات</b><p>حدد كميات المخزون (ينقص تلقائياً مع كل طلب)، أضف مقاسات وألوان وإضافات بسعر لكل منتج.</p></div>
+      <div class="feat"><b>🚚 توصيل ذكي</b><p>رسوم توصيل + توصيل مجاني فوق مبلغ معين — الزبون يراه بوضوح أثناء إتمام الطلب.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="designs">
+  <div class="section-inner">
+    <h2>تصميم مجاني… و<em>4 أنماط عالمية الشهرة</em></h2>
+    <p class="sub">الباقة المجانية تعطيك تصميم «الكلاسيكي النظيف» ونمط «الماركت» كاملين. مع الباقة الاحترافية تفتح 4 أنماط مستوحاة من أشهر المتاجر العالمية — بأكوادنا الخاصة:</p>
+    <div class="design-grid">
+      <div class="design-chip free">الكلاسيكي النظيف — مجاني</div>
+      <div class="design-chip free">الماركت — مجاني</div>
+      <div class="design-chip">الأتيلييه</div>
+      <div class="design-chip">الجراند</div>
+      <div class="design-chip">الطبيعي</div>
+      <div class="design-chip">المغامر</div>
+    </div>
+    <p class="fine">كل تصميم يغيّر شكل المتجر كاملاً: الألوان، الخطوط، الأزرار، وبطاقات المنتجات — معاينة حية قبل الاعتماد.</p>
+  </div>
+</section>
+
+<section class="section alt" id="showcase">
+  <div class="section-inner">
+    <h2>متاجر <em>حية</em> تشتغل الآن 🔥</h2>
+    <p class="sub">هذا ليس ديكور — كل هذه المتاجر حقيقية وتستلم الطلبات. جرّب على أي واحد منها:</p>
+    <div class="store-showcase">
+      <% stores.forEach(s => { %>
+      <a class="show-card" href="/s/<%= s.slug %>" target="_blank">
+        <div class="show-thumb" style="background:linear-gradient(135deg, <%= s.color %>, #0f172a)">
+          <span class="show-name"><%= s.name %></span>
+          <span class="show-tpl">قالب <%= s.template %></span>
+        </div>
+        <div class="show-meta"><b><%= s.name %></b><span><%= s.products %> منتج — افتح المتجر ←</span></div>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pricing">
+  <div class="section-inner">
+    <h2>باقات بسيطة — تبدأ <em>مجاناً</em></h2>
+    <div class="price-grid three">
+      <div class="price-card">
+        <h3>مجانية</h3>
+        <div class="price">0 د.ع<span>/ شهرياً</span></div>
+        <ul>
+          <li>متجر برابط خاص + معرض عام</li>
+          <li><%= cfg.free_products %> منتج</li>
+          <li>تصميم «الكلاسيكي النظيف»</li>
+          <li>سلة وطلب وواتساب</li>
+          <li>حتى 5 أكواد خصم</li>
+          <li>علامة «صُنع بواسطة <%= cfg.site_name %>»</li>
+        </ul>
+        <a class="btn-outline" href="/signup">ابدأ مجاناً</a>
+      </div>
+      <div class="price-card hot">
+        <span class="hot-tag">الأكثر طلباً</span>
+        <h3>احترافية — 3 شهور</h3>
+        <div class="price"><%= (cfg.pro_price_3 || 30000).toLocaleString('en-US') %> د.ع<span>/ 3 شهور</span></div>
+        <ul>
+          <li>الأنماط العالمية الأربعة</li>
+          <li>منتجات وأكواد بلا حدود</li>
+          <li>مخزون وخيارات وإضافات</li>
+          <li>دومينك الخاص</li>
+          <li>بلا أي علامة للمنصة</li>
+          <li>دعم مباشر بالواتساب</li>
+        </ul>
+        <a class="btn-main" href="/signup">ابدأ ثم ترقَّ</a>
+      </div>
+      <div class="price-card">
+        <h3>احترافية — سنة</h3>
+        <div class="price"><%= (cfg.pro_price_12 || 72000).toLocaleString('en-US') %> د.ع<span>/ سنة</span></div>
+        <ul>
+          <li>كل مزايا الاحترافية</li>
+          <li>أفضل سعر — <%= Math.round((cfg.pro_price_12 || 72000) / 12 / 1000) %> ألف شهرياً فقط</li>
+          <li>أولوية الدعم والتصاميم الجديدة</li>
+        </ul>
+        <a class="btn-outline" href="/signup">ابدأ ثم ترقَّ</a>
+      </div>
+    </div>
+    <p class="fine">أو شهر واحد بـ <%= (cfg.pro_price || 12000).toLocaleString('en-US') %> د.ع لتجربة الاحترافية كاملة. الدفع يدوياً (زين كاش / على اليد) — جهة الاستلام تظهر داخل لوحة تحكمك فور التسجيل، وترقى خلال دقائق من التأكيد.</p>
+  </div>
+</section>
+
+<section class="section alt" id="faq">
+  <div class="section-inner">
+    <h2>أسئلة شائعة</h2>
+    <div class="faq-list">
+      <details><summary>هل أحتاج خبرة تقنية؟</summary><p>لا. التسجيل يلخّص بخطوتين: اسم المتجر + اسم المستخدم وكلمة مرور. بعدها ترفع منتجاتك بالصور مباشرة.</p></details>
+      <details><summary>كيف يدفع الزبون؟</summary><p>دفع عند الاستلام. الزبون يطلب من متجرك، يصلك الطلب في لوحة التحكم، تتواصل معه واتساب بضغطة واحدة، ويستلم طلبه ويدفع عند الباب.</p></details>
+      <details><summary>هل أحتاج دومين أو استضافة؟</summary><p>لا. متجرك ينطلق فوراً على رابط خاص بك (مثل dukkan.example/s/my-store). الباقة الاحترافية تسمح بربط دومينك الخاص عند توفره.</p></details>
+      <details><summary>كيف أرقّي للباقة الاحترافية؟</summary><p>من صفحة «الباقات» داخل لوحة تحكمك تختار 1 أو 3 أو 12 شهراً، تحوّل المبلغ لجهة الاستلام الموضحة هناك، وترسل إثبات التحويل — نفعّل باقتك خلال دقائق.</p></details>
+      <details><summary>ماذا يحصل بعد انتهاء الباقة؟</summary><p>يعود متجرك للباقة المجانية بكل بياناته: منتجاتك وصورك وطلباتك تبقى كما هي، ويبقى التصميم الاحترافي معطلاً حتى تجدد الباقة.</p></details>
+      <details><summary>هل أستطيع إلغاء الباقة؟</summary><p>نعم في أي وقت — ببساطة لا تجدد عند الانتهاء، أو راسلنا واتساب لإيقافها فوراً.</p></details>
+    </div>
+    <p class="sub" style="margin-top:1.5rem">سؤالك غير موجود؟ <a href="https://wa.me/<%= cfg.site_whatsapp.replace(/\D/g,'') %>" target="_blank" style="font-weight:700;color:#0d9488">راسلنا واتساب</a> — نرد خلال ساعات.</p>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="section-inner">
+    <b><%= cfg.site_name %> — منصة المتاجر الإلكترونية الجاهزة</b>
+    <div class="foot-links">
+      <a href="/signup">إنشاء متجر</a>
+      <a href="/login">دخول</a>
+      <a href="/faq">أسئلة شائعة</a>
+      <a href="/privacy">سياسة الخصوصية</a>
+      <a href="/terms">الشروط والأحكام</a>
+      <% if (cfg.site_whatsapp) { %><a href="https://wa.me/<%= cfg.site_whatsapp.replace(/\D/g,'') %>" target="_blank">واتساب: 07831020026</a><% } %>
+      <% if (cfg.site_telegram) { %><a href="https://t.me/s018d" target="_blank">تيليغرام: <%= cfg.site_telegram %></a><% } %>
+      <% if (cfg.site_instagram) { %><a href="https://instagram.com/s018d" target="_blank">إنستغرام: <%= cfg.site_instagram %></a><% } %>
+    </div>
+    <p class="fine">صُنع بحب في العراق 🇮🇶</p>
+  </div>
+</footer>
+<script>
+try {
+  function countUp(el, target) {
+    if (!el) return;
+    var i = 0; var t = setInterval(function () { i += Math.max(1, Math.ceil(target / 40)); if (i >= target) { i = target; clearInterval(t); } el.textContent = i; }, 40);
+  }
+  countUp(document.getElementById('statStores'), <%= stores.length %>);
+  countUp(document.getElementById('statToday'), <%= stats.storesToday %>);
+  countUp(document.getElementById('statOrders'), <%= stats.ordersDone %>);
+} catch (e) {}
+</script>
+</body>
+</html>

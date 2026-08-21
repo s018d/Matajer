@@ -1,0 +1,13 @@
+<aside class="sidebar">
+  <div class="brand">Dukkan.<span>دُكّان</span></div>
+  <nav>
+    <a href="/admin" class="<%= typeof active !== 'undefined' && active==='dash' ? 'on' : '' %>">نظرة عامة</a>
+    <a href="/admin/stores" class="<%= typeof active !== 'undefined' && active==='stores' ? 'on' : '' %>">المتاجر</a>
+    <a href="/admin/payments" class="<%= typeof active !== 'undefined' && active==='payments' ? 'on' : '' %>">المدفوعات والباقات</a>
+    <a href="/admin/site" class="<%= typeof active !== 'undefined' && active==='site' ? 'on' : '' %>">إعدادات المنصة</a>
+    <a href="/admin/activity" class="<%= typeof active !== 'undefined' && active==='activity' ? 'on' : '' %>">سجل النشاط</a>
+    <a href="/admin/backup">نسخة احتياطية</a>
+    <a href="/admin/password">تغيير كلمة المرور</a>
+  </nav>
+  <div class="side-note">أنت: المدير العام</div>
+</aside>

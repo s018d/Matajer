@@ -1,0 +1,29 @@
+<%
+  const out = p.stock != null && Number(p.stock) <= 0;
+%>
+<div class="st-card">
+  <a href="<%= store.base %>/p/<%= p.id %>">
+    <div class="st-img">
+      <% if (p.img) { %><img src="<%= p.img %>" alt="" loading="lazy"><% } else { %><span class="st-img-empty">لا صورة</span><% } %>
+      <% if (store.template === 'market' && p.old_price && Number(p.old_price) > Number(p.price)) { %>
+        <span class="mk-discount">خصم <%= Math.round((1 - p.price / p.old_price) * 100) %>%</span>
+      <% } %>
+      <% if (store.template === 'neo' && p.old_price && Number(p.old_price) > Number(p.price)) { %>
+        <span class="neo-off"><%= Math.round((1 - p.price / p.old_price) * 100) %>%</span>
+      <% } %>
+      <% if (out) { %><span class="st-soldout-tag">نفذ</span><% } %>
+    </div>
+  </a>
+  <div class="st-card-body">
+    <a class="st-name" href="<%= store.base %>/p/<%= p.id %>"><%= p.name %></a>
+    <div class="st-price">
+      <b><%= Number(p.price).toLocaleString('en-US') %> د.ع</b>
+      <% if (p.old_price) { %><del><%= Number(p.old_price).toLocaleString('en-US') %></del><% } %>
+    </div>
+    <% if (!out) { %>
+      <button class="add-cart st-btn" data-id="<%= p.id %>" data-name="<%= p.name.replace(/"/g,'&quot;') %>" data-price="<%= p.price %>" data-img="<%= p.img || '' %>" onclick="addToCart(this)">أضف للسلة</button>
+    <% } else { %>
+      <span class="st-btn st-btn-disabled">نفذ المخزون</span>
+    <% } %>
+  </div>
+</div>

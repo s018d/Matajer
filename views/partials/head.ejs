@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= typeof title !== 'undefined' ? title : 'دُكّان — منصة المتاجر' %></title>
+<meta name="description" content="<%= typeof desc !== 'undefined' && desc ? desc : 'دُكّان Dukkan — منصة عراقية لإنشاء متاجر إلكترونية جاهزة: تصميم مجاني + 4 أنماط عالمية، سلة طلبات، واتساب، أكواد خصم، مخزون وتوصيل.' %>">
+<meta property="og:type" content="<%= typeof ogType !== 'undefined' ? ogType : 'website' %>">
+<meta property="og:title" content="<%= typeof title !== 'undefined' ? title : 'دُكّان — منصة المتاجر' %>">
+<meta property="og:description" content="<%= typeof desc !== 'undefined' && desc ? desc : 'دُكّان Dukkan — منصة عراقية لإنشاء متاجر إلكترونية جاهزة.' %>">
+<%- typeof ogImage !== 'undefined' ? '<meta property="og:image" content="' + ogImage + '">' : '' %>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;600;700;800;900&family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="/img/logo.svg" type="image/svg+xml">
+<%- typeof pwa !== 'undefined' && pwa ? '<link rel="manifest" href="/s/' + pwa + '/manifest.json">' : '' %>
+<%- typeof themeColor !== 'undefined' ? '<meta name="theme-color" content="' + themeColor + '">' : '' %>
+<link rel="stylesheet" href="<%= typeof css !== 'undefined' ? css : '/css/app.css' %>">
+<%- typeof extraCss !== 'undefined' ? extraCss : '' %>
+<%- typeof pwa !== 'undefined' && pwa ? '<script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){navigator.serviceWorker.register("/sw.js",{updateViaCache:"none"}).then(function(reg){if(reg.waiting||navigator.serviceWorker.controller){navigator.serviceWorker.addEventListener("controllerchange",function(){location.reload()})}}).catch(function(){})}</script>' : '' %>
+</head>

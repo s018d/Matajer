@@ -1,0 +1,81 @@
+<%- include('../partials/head', { title: 'شركات التوصيل — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'shipping', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'شركات التوصيل' }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <div class="card-head-row">
+      <h2>شركات التوصيل المتاحة</h2>
+    </div>
+    <div class="card">
+      <p class="muted" style="margin-bottom:1rem">فعّل شركات التوصيل التي تريد استخدامها، وأضف بيانات الاعتماد (API Keys) لكل شركة.</p>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1.5rem">
+        <% companies.forEach(c => { %>
+          <div class="card" style="border:2px solid <%= c.is_enabled ? 'var(--primary)' : 'var(--line)' %>; position:relative">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; padding-bottom:.5rem; border-bottom:1px solid var(--line)">
+              <div>
+                <b style="font-size:1.1rem"><%= c.name %></b>
+                <span class="badge <%= c.is_enabled ? 'badge-ok' : 'badge-warn' %>" style="margin-right:.5rem; font-size:.75rem"><%= c.is_enabled ? 'مفعل' : 'معطل' %></span>
+                <span class="badge" style="background:var(--soft); color:var(--ink); font-size:.7rem"><%= c.code.toUpperCase() %></span>
+              </div>
+              <label class="switch">
+                <input type="checkbox" <%= c.is_enabled ? 'checked' : '' %> onchange="toggleCompany(<%= c.id %>, this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+            
+            <div class="muted" style="font-size:.8rem; margin-bottom:1rem; line-height:1.6">
+              <strong>المميزات:</strong>
+              <% if (c.supports_cod) { %> <span class="badge badge-ok" style="font-size:.65rem">الدفع عند الاستلام</span> <% } %>
+              <% if (c.supports_prepaid) { %> <span class="badge" style="background:var(--soft); color:var(--ink); font-size:.65rem">الدفع المسبق</span> <% } %>
+              <% if (c.supports_tracking) { %> <span class="badge" style="background:#e0e7ff; color:#3730a3; font-size:.65rem">التتبع</span> <% } %>
+              <% if (c.supports_pickup) { %> <span class="badge" style="background:#fef3c7; color:#92400e; font-size:.65rem">الاستلام</span> <% } %>
+            </div>
+            
+            <form method="post" action="/panel/shipping/companies/<%= c.id %>/settings" class="stack" style="gap:.6rem; font-size:.85rem">
+              <input type="hidden" name="_csrf" value="<%= csrf %>">
+              <label>رسوم الدفع عند الاستلام (د.ع)
+                <input type="number" name="cod_fee" value="<%= c.cod_fee || 0 %>" min="0" dir="ltr" style="width:100%">
+              </label>
+              <label>شحن مجاني من مبلغ (د.ع)
+                <input type="number" name="free_shipping_min" value="<%= c.free_shipping_min || 0 %>" min="0" dir="ltr" style="width:100%">
+              </label>
+              <label>الوزن الافتراضي (كجم)
+                <input type="number" name="default_weight" value="<%= c.default_weight || 0.5 %>" min="0.1" step="0.1" dir="ltr" style="width:100%">
+              </label>
+              <label>بيانات API (JSON)
+                <textarea name="api_credentials" rows="3" placeholder='{"api_key":"...", "api_secret":"...", "merchant_id":"..."}' style="font-family:monospace; font-size:.75rem"><%= c.api_credentials || '' %></textarea>
+              </label>
+              <label>إعدادات إضافية (JSON)
+                <textarea name="settings" rows="2" placeholder='{"base_fee":5000, "per_kg":2000}' style="font-family:monospace; font-size:.75rem"><%= c.settings || '' %></textarea>
+              </label>
+              <button type="submit" class="btn btn-primary" style="width:100%">💾 حفظ الإعدادات</button>
+            </form>
+            
+            <div style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--line)">
+              <button class="btn btn-sm btn-danger" onclick="toggleCompany(<%= c.id %>, false)" style="width:100%">إيقاف التفعيل</button>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+  function toggleCompany(companyId, enabled) {
+    fetch('/panel/shipping/companies/' + companyId + '/toggle', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-CSRF-Token': '<%= csrf %>'
+      },
+      body: 'is_enabled=' + (enabled ? 'on' : 'off') + '&_csrf=<%= csrf %>'
+    }).then(r => {
+      if (r.ok) location.reload();
+      else alert('فشل التحديث');
+    });
+  }
+</script>
+</body>
+</html>

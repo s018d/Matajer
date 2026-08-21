@@ -1,0 +1,184 @@
+<%- include('../partials/head', { title: 'نظرة عامة — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'dash', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'نظرة عامة' }) %>
+  <div class="content">
+    <div class="stat-grid">
+      <div class="stat"><span>المنتجات</span><b><%= stats.products %></b></div>
+      <div class="stat"><span>الطلبات</span><b><%= stats.orders %></b></div>
+      <div class="stat stat-strong"><span>طلبات جديدة</span><b><%= stats.newOrders %></b></div>
+      <div class="stat"><span>مشاهدات المنتجات</span><b><%= stats.views %></b></div>
+      <div class="stat stat-strong"><span>إجمالي المبيعات</span><b><%= money(stats.revenue) %></b></div>
+    </div>
+
+    <div class="card" style="margin-top:1rem">
+      <h2>مشاركة متجرك</h2>
+      <div class="share-tools" style="display:flex; flex-wrap:wrap; gap:1rem; align-items:center; margin-top:.8rem">
+        <div class="link-box" style="flex:1; min-width:250px">
+          <label style="font-size:.8rem; color:var(--muted)">رابط متجرك</label>
+          <div style="display:flex; gap:.5rem; margin-top:.4rem">
+            <code dir="ltr" style="flex:1; background:var(--soft); padding:.6rem; border-radius:8px"><%= store.base %></code>
+            <button class="btn btn-sm btn-primary" onclick="copyStoreLink()" title="نسخ الرابط">📋 نسخ</button>
+            <button class="btn btn-sm btn-ghost" onclick="window.open('<%= store.base %>', '_blank')" title="فتح المتجر">🔗 فتح</button>
+          </div>
+        </div>
+        <div class="qr-box" style="text-align:center; padding:1rem; background:var(--soft); border-radius:12px; min-width:180px">
+          <div style="font-size:.8rem; color:var(--muted); margin-bottom:.5rem">QR Code للمتجر</div>
+          <img id="storeQR" src="https://api.qrserver.com/v1/create-qr-code/?data=<%= encodeURIComponent(store.base) %>&size=180x180&margin=10" alt="QR Code" style="max-width:100%; border-radius:8px; background:#fff; padding:.5rem">
+          <a class="btn btn-sm btn-ghost" href="https://api.qrserver.com/v1/create-qr-code/?data=<%= encodeURIComponent(store.base) %>&size=400x400&margin=20" target="_blank" style="margin-top:.5rem; display:inline-block">⬇️ تحميل عالي الجودة</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-grid" style="margin-top:1rem">
+      <div class="stat"><span>متوسط قيمة السلة</span><b><%= money(avgOrder) %></b></div>
+      <div class="stat"><span>معدل التحويل</span><b><%= conversionRate %>%</b></div>
+    </div>
+
+    <div class="two-col" style="margin-top:1rem">
+      <div class="card">
+        <h2>أكثر المنتجات مبيعاً</h2>
+        <% if (topProducts.length === 0) { %><p class="muted">لا توجد مبيعات بعد</p><% } %>
+        <ul class="feed">
+          <% topProducts.forEach((p, i) => { %>
+            <li>
+              <span class="feed-act"><%= i + 1 %>. <%= p.name %></span>
+              <span class="feed-detail"><%= p.total_qty %> طلب — <%= money(p.total_revenue) %></span>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>أوقات الذروة (آخر 30 يوم)</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.5rem">
+          <% peakHours.forEach(h => { %>
+            <span class="badge badge-ok"><%= h.hour %>:00 — <%= h.cnt %> طلب</span>
+          <% }) %>
+        </div>
+        <div style="margin-top:1rem">
+          <strong>أيام الذروة:</strong>
+          <div style="display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.5rem">
+            <% peakDays.forEach(d => { %>
+              <span class="badge"><%= dowNames[Number(d.dow)] %> — <%= d.cnt %> طلب</span>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1rem">
+      <h2>مبيعات آخر 7 أيام</h2>
+      <% if (chart.every(c => c.s === 0)) { %><p class="muted">لا مبيعات بعد — أول طلب سيرسم الشريط الأول هنا</p><% } %>
+      <div class="chart-row">
+        <% chart.forEach(c => { %>
+          <div class="chart-col">
+            <div class="chart-bar" style="height:<%= Math.max(4, Math.round(c.s / chartMax * 120)) %>px" title="<%= money(c.s) %> (<%= c.c %> طلب)"></div>
+            <span class="chart-day"><%= c.d %></span>
+            <% if (c.c > 0) { %><span class="chart-amt"><%= c.c %></span><% } %>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <h2>آخر الطلبات</h2>
+        <% if (recent.length === 0) { %><p>لا توجد طلبات بعد</p><% } %>
+        <ul class="feed">
+          <% recent.forEach(o => { %>
+            <li>
+              <span class="feed-act">طلب #<%= o.id %> — <%= o.customer_name %></span>
+              <span class="feed-detail"><%= money(o.total) %> — <%= o.customer_phone %></span>
+              <small><%= o.created_at %> — <span class="badge <%= o.status==='new' ? 'badge-warn' : (o.status==='cancelled' ? 'badge-err' : 'badge-ok') %>">
+                <%= o.status === 'new' ? 'جديد' : o.status === 'confirmed' ? 'مؤكد' : o.status === 'completed' ? 'مكتمل' : 'ملغي' %></span>
+              </small>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>إعدادات سريعة</h2>
+        <div style="display:flex; flex-direction:column; gap:.6rem">
+          <label style="display:flex; align-items:center; gap:.6rem; cursor:pointer">
+            <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode(this)">
+            <span>🌙 الوضع الداكن</span>
+          </label>
+          <button class="btn btn-sm btn-primary" id="pwaInstallBtn" style="display:none" onclick="installPWA()">📱 ثبت التطبيق على الجوال</button>
+          <a class="btn btn-sm btn-ghost" href="/panel/settings" target="_blank">⚙️ إعدادات المتجر</a>
+          <a class="btn btn-sm btn-ghost" href="/panel/billing" target="_blank">💳 الباقات والترقية</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="/js/notify.js"></script>
+<script>
+  // Copy store link
+  function copyStoreLink() {
+    navigator.clipboard.writeText('<%= store.base %>').then(() => {
+      const btn = event.target;
+      const original = btn.textContent;
+      btn.textContent = '✅ تم النسخ!';
+      btn.classList.add('btn-ok');
+      setTimeout(() => { btn.textContent = original; btn.classList.remove('btn-ok'); }, 2000);
+    });
+  }
+
+  // Dark mode toggle
+  const darkToggle = document.getElementById('darkModeToggle');
+  if (darkToggle) {
+    darkToggle.addEventListener('change', function() {
+      if (this.checked) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  }
+
+  // PWA Install Prompt
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const btn = document.getElementById('pwaInstallBtn');
+    if (btn) btn.style.display = 'inline-block';
+  });
+  function installPWA() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted PWA install');
+        }
+        deferredPrompt = null;
+        document.getElementById('pwaInstallBtn').style.display = 'none';
+      });
+    }
+  }
+
+  // Apply saved theme on load
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+    document.getElementById('darkModeToggle').checked = true;
+  }
+</script>
+<script src="/js/notify.js"></script>
+<style>
+  .chart-row { display: flex; align-items: flex-end; gap: .7rem; height: 160px; padding-top: .5rem; }
+  .chart-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: .25rem; height: 100%; }
+  .chart-bar { width: 100%; max-width: 46px; background: linear-gradient(180deg, #0ea5e9, #2563eb); border-radius: 7px 7px 0 0; min-height: 4px; transition: height .4s; }
+  .chart-day { font-size: .68rem; color: var(--muted, #64748b); }
+  .chart-amt { font-size: .66rem; color: #16a34a; font-weight: 700; }
+  .muted { color: var(--muted, #64748b); font-size: .86rem; }
+  .share-tools { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+  .link-box { flex: 1; min-width: 250px; }
+  .link-box code { flex: 1; background: var(--soft); padding: .6rem; border-radius: 8px; display: block; word-break: break-all; }
+  .qr-box { text-align: center; padding: 1rem; background: var(--soft); border-radius: 12px; min-width: 180px; }
+  .qr-box img { max-width: 100%; border-radius: 8px; background: #fff; padding: .5rem; }
+  .qr-box a { margin-top: .5rem; display: inline-block; }
+</style>
+</body>
+</html>

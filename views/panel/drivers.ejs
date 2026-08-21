@@ -1,0 +1,50 @@
+<%- include('../partials/head', { title: 'المندوبين — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'shipping', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'المندوبين' }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <div class="card-head-row">
+      <h2>المندوبين (<%= drivers.length %>)</h2>
+      <a class="btn btn-primary" href="/panel/drivers/new">+ مندوب جديد</a>
+    </div>
+    <table>
+      <tr><th>الاسم</th><th>الهاتف</th><th>المركبة</th><th>العمولة</th><th>الحالة</th><th>إجراءات</th></tr>
+      <% drivers.forEach(d => { %>
+        <tr>
+          <td><%= d.name %></td>
+          <td dir="ltr"><%= d.phone %></td>
+          <td><%= d.vehicle_type === 'motorcycle' ? '🏍 دراجة' : (d.vehicle_type === 'car' ? '🚗 سيارة' : '🚚 فان') %> <% if (d.vehicle_plate) { %>(<%= d.vehicle_plate %>)<% } %></td>
+          <td>
+            <% if (d.commission_type === 'per_order') { %>
+              <%= money(d.commission_value) %> / طلب
+            <% } else if (d.commission_type === 'percentage') { %>
+              <%= d.commission_value %>%
+            <% } else { %>
+              <%= money(d.commission_value) %> / شهر
+            <% } %>
+          </td>
+          <td><span class="badge <%= d.is_active ? 'badge-ok' : 'badge-warn' %>"><%= d.is_active ? 'نشط' : 'معطل' %></span></td>
+          <td class="row-actions">
+            <a class="btn btn-sm" href="/panel/drivers/<%= d.id %>">تفاصيل</a>
+            <form method="post" action="/panel/drivers/<%= d.id %>/toggle" class="inline">
+              <input type="hidden" name="_csrf" value="<%= csrf %>">
+              <button class="btn btn-sm btn-ghost"><%= d.is_active ? 'تعطيل' : 'تفعيل' %></button>
+            </form>
+            <form method="post" action="/panel/drivers/<%= d.id %>/delete" class="inline" onsubmit="return confirm('حذف المندوب نهائياً؟')">
+              <input type="hidden" name="_csrf" value="<%= csrf %>">
+              <button class="btn btn-sm btn-danger">حذف</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </table>
+    <% if (drivers.length === 0) { %><p class="empty-note">لا يوجد مندوبين — <a href="/panel/drivers/new">أضف أول مندوب</a></p><% } %>
+    <div style="margin-top:1rem; text-align:center">
+      <a class="btn btn-primary" href="/panel/drivers/new">+ إضافة مندوب</a>
+    </div>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<%- include('../partials/head', { title: 'منتجات العرض: ' + bundle.name + ' — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'bundles', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'منتجات العرض: ' + bundle.name }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <div class="card-head-row">
+      <h2><%= bundle.name %> — <%= bundle.discount_type === 'percent' ? bundle.discount_value + '%' : money(bundle.discount_value) %> خصم (حد أدنى <%= bundle.min_products %> منتجات)</h2>
+      <a class="btn btn-ghost" href="/panel/bundles">← رجوع للعروض</a>
+    </div>
+    <form method="post" action="/panel/bundles/<%= bundle.id %>/products" class="stack" style="max-width:800px">
+      <input type="hidden" name="_csrf" value="<%= csrf %>">
+      <p class="muted" style="font-size:.85rem">اختر المنتجات التي تدخل في هذا العرض. عند إضافة <%= bundle.min_products %> من هذه المنتجات أو أكثر للسلة، يُطبق الخصم تلقائياً.</p>
+      <table>
+        <tr><th>المنتج</th><th>السعر</th><th>في العرض</th></tr>
+        <% products.forEach(p => { %>
+          <tr>
+            <td>
+              <% if (p.img) { %><img src="<%= p.img %>" class="thumb" alt=""><% } else { %><span class="thumb thumb-empty">—</span><% } %>
+              <div style="margin-top:.3rem"><b><%= p.name %></b><br><small class="muted"><%= money(p.price) %></small></div>
+            </td>
+            <td><%= money(p.price) %></td>
+            <td>
+              <label class="check-row">
+                <input type="checkbox" name="products" value="<%= p.id %>" <%= p.in_bundle ? 'checked' : '' %>>
+              </label>
+            </td>
+          </tr>
+        <% }) %>
+      </table>
+      <button type="submit" class="btn btn-primary" style="margin-top:1rem">💾 حفظ منتجات العرض</button>
+    </form>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<%- include('../partials/head', { title: 'السلال المعلقة — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'orders', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'السلال المعلقة' }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <h2>السلال المعلقة (<%= carts.length %>)</h2>
+    <p class="muted" style="margin-bottom:1rem">سلال أضافها الزبائن ولم يكملوا الشراء — يمكنك تذكيرهم عبر واتساب</p>
+    <table>
+      <tr><th>الزبون</th><th>الهاتف</th><th>المنتجات</th><th>المجموع</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th></tr>
+      <% carts.forEach(c => { %>
+        <tr>
+          <td><%= c.customer_name || '—' %></td>
+          <td dir="ltr"><%= c.customer_phone || '—' %></td>
+          <td>
+            <% try { JSON.parse(c.cart_data).forEach(item => { %><div><%= item.name %> x<%= item.qty %></div><% }) } catch(e) { %><%= c.cart_data %><% } %>
+          </td>
+          <td dir="ltr"><%= money(c.subtotal) %></td>
+          <td><%= c.created_at %></td>
+          <td>
+            <% if (c.reminded_at) { %><span class="badge badge-ok">تم التذكير</span>
+            <% } else if (c.converted_at) { %><span class="badge badge-err">تم الشراء</span>
+            <% } else { %><span class="badge badge-warn">معلقة</span><% } %>
+          </td>
+          <td>
+            <% if (!c.reminded_at && c.customer_phone) { %>
+              <form method="post" action="/panel/abandoned-carts/<%= c.id %>/remind" class="inline">
+                <input type="hidden" name="_csrf" value="<%= csrf %>">
+                <button class="btn btn-sm btn-primary" onclick="return confirm('إرسال تذكير واتساب للزبون؟')">📱 تذكير واتساب</button>
+              </form>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </table>
+    <% if (carts.length === 0) { %><p class="empty-note">لا توجد سلال معلقة حالياً</p><% } %>
+  </div>
+</main>
+<script src="/js/notify.js"></script>
+</body>
+</html>

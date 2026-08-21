@@ -1,0 +1,23 @@
+<%- include('../partials/head', { title: 'سجل النشاط — المدير العام' }) %>
+<body class="app">
+<%- include('../partials/sidebar-admin', { active: 'activity' }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'سجل النشاط' }) %>
+  <div class="content">
+    <div class="card">
+      <table>
+        <tr><th>الوقت</th><th>المستخدم</th><th>العملية</th><th>التفاصيل</th></tr>
+        <% rows.forEach(r => { %>
+          <tr>
+            <td><%= r.created_at %></td>
+            <td><%= r.username || '—' %></td>
+            <td><span class="badge"><%= r.action %></span></td>
+            <td><%= r.details %></td>
+          </tr>
+        <% }) %>
+      </table>
+    </div>
+  </div>
+</main>
+</body>
+</html>

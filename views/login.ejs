@@ -1,0 +1,33 @@
+<%- include('partials/head', { title: 'دخول — دُكّان', css: '/css/app.css' }) %>
+<body class="auth-body">
+  <div class="auth-card">
+    <div class="brand big">
+      <span>🛍️</span>
+      <b class="grad">Dukkan</b>
+      <small>منصة المتاجر العراقية</small>
+    </div>
+    <% if (error) { %><div class="alert alert-err">⚠️ <%= error %></div><% } %>
+    <form method="post" action="/login" class="stack">
+      <input type="hidden" name="_csrf" value="<%= csrf %>">
+      <label>اسم المستخدم
+        <input type="text" name="username" required autofocus placeholder="أدخل اسم المستخدم">
+      </label>
+      <label>كلمة المرور
+        <input type="password" name="password" required placeholder="أدخل كلمة المرور">
+      </label>
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:.5rem;padding:.75rem;font-size:1rem;border-radius:12px">
+        🔐 تسجيل الدخول
+      </button>
+    </form>
+    <div class="auth-divider"><span>أو</span></div>
+    <a href="/signup" class="btn btn-ghost btn-block" style="border-radius:12px;padding:.7rem;font-size:.92rem">
+      🚀 أنشئ متجرك مجاناً
+    </a>
+    <p class="auth-hint">_Callback المتاجر يدخلون من روابطهم مباشرة<br>هذه الصفحة للوحات التحكم فقط</p>
+  </div>
+</body>
+<style>
+.auth-divider{display:flex;align-items:center;gap:1rem;margin:1.2rem 0;color:#94a3b8;font-size:.82rem}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,#e2e8f0,transparent)}
+</style>
+</html>

@@ -1,0 +1,332 @@
+<%
+  const opts = (() => { try { return JSON.parse(product.options || '{}'); } catch (e) { return {}; } })();
+  const addons = (() => { try { return JSON.parse(product.addons || '[]'); } catch (e) { return []; } })();
+  const out = product.stock != null && Number(product.stock) <= 0;
+  const lowStock = product.stock != null && Number(product.stock) > 0 && Number(product.stock) <= 5;
+%>
+<%- include('../partials/head', { title: product.name + ' — ' + store.name, desc: store.meta_desc || store.description, ogType: 'product', css: '/css/store.css', pwa: store.slug, themeColor: store.color }) %>
+<% if (store.template === 'market') { %><link rel="stylesheet" href="/css/store-market.css"><% } %>
+<% if (store.template === 'neo') { %><link rel="stylesheet" href="/css/store-neo.css"><% } %>
+<% if (store.template === 'gen') { %><link rel="stylesheet" href="/css/store-gen.css"><% } %>
+<% if (tpl && tpl.css) { %><link rel="stylesheet" href="<%= tpl.css %>"><% } %>
+<% if (tpl) { %><style><%= tpl.style %></style><% } else { %><style>:root{--primary:<%= store.color %>}</style><% } %>
+<body data-template="<%= store.template %>" data-slug="<%= store.slug %>" data-base="<%= store.base %>" class="store-body<%= tpl ? ' ' + tpl.classes : '' %>">
+<% if (store.template === 'market') { %>
+  <%- include('../partials/market-marquee') %>
+  <%- include('../partials/market-nav') %>
+<% } else { %>
+  <header class="st-head small">
+    <div class="st-head-inner">
+      <% if (store.logo_path) { %><img src="<%= store.logo_path %>" class="st-logo" alt=""><% } %>
+      <h1><a href="<%= store.base %>/"><%= store.name %></a></h1>
+    </div>
+    <a class="st-back" href="<%= store.base %>/">→ رجوع للمتجر</a>
+  </header>
+<% } %>
+<main class="st-main">
+  <div class="st-product">
+    <div class="st-gallery">
+      <% if (images.length) { %>
+        <img src="<%= images[0].path %>" class="st-main-img" id="mainImg" alt="<%= product.name %>" loading="lazy" onclick="openLightbox(0)">
+        <% if (images.length > 1) { %>
+          <div class="st-thumbs">
+            <% images.forEach((im, idx) => { %>
+              <img src="<%= im.path %>" alt="" loading="lazy" class="<%= idx === 0 ? 'active' : '' %>" onclick="switchImg(this, <%= idx %>)">
+            <% }) %>
+          </div>
+        <% } %>
+      <% } else { %>
+        <div class="st-img-empty big">لا توجد صورة لهذا المنتج</div>
+      <% } %>
+    </div>
+    <div class="st-product-info">
+      <h1><%= product.name %></h1>
+      <div class="st-price big">
+        <b><%= Number(product.price).toLocaleString('en-US') %> د.ع</b>
+        <% if (product.old_price) { %><del><%= Number(product.old_price).toLocaleString('en-US') %> د.ع</del><% } %>
+      </div>
+      <% if (out) { %>
+        <div class="st-badge-soldout">eneged elمخزون</div>
+      <% } else if (lowStock) { %>
+        <div class="st-badge-lowstock">⚡ كمية محدودة: <%= product.stock %> قطع متبقية</div>
+      <% } %>
+      <p class="st-desc"><%= product.description %></p>
+      <% Object.entries(opts).forEach(([label, vals]) => { %>
+        <label class="st-opt"><%= label %>
+          <select class="st-opt-sel" data-opt="<%= label %>">
+            <% String(vals).split(',').map(v => v.trim()).filter(Boolean).forEach(v => { %>
+              <option value="<%= v %>"><%= v %></option>
+            <% }) %>
+          </select>
+        </label>
+      <% }) %>
+      <% if (addons.length) { %>
+        <div class="st-addons">
+          <% addons.forEach((a, ai) => { %>
+            <label class="st-addon"><input type="checkbox" class="st-addon-cb" data-name="<%= a.name.replace(/"/g,'&quot;') %>" data-price="<%= Number(a.price) || 0 %>">
+              <span><%= a.name %> +<%= (Number(a.price) || 0).toLocaleString('en-US') %> د.ع</span></label>
+          <% }) %>
+        </div>
+      <% } %>
+      <% if (!out) { %>
+        <div class="qty-row">
+          <button onclick="qty(-1)">−</button>
+          <input id="qty" value="1" readonly>
+          <button onclick="qty(1)">+</button>
+        </div>
+        <button class="add-cart st-btn big-btn" data-id="<%= product.id %>" data-name="<%= product.name.replace(/"/g,'&quot;') %>" data-price="<%= product.price %>" data-img="<%= images.length ? images[0].path : '' %>" onclick="productAddToCart(this)">
+          🛒 أضف للسلة
+        </button>
+        <% if (store.whatsapp) { %>
+        <a class="st-btn big-btn wa-order" href="https://wa.me/<%= store.whatsapp.replace(/^0/, '964') %>?text=<%= encodeURIComponent('أريد طلب: ' + product.name + ' - السعر: ' + Number(product.price).toLocaleString('en-US') + ' د.ع - الكمية: 1') %>" target="_blank" rel="noopener">
+          💬 اطلب عبر واتساب
+        </a>
+        <% } %>
+        <% if (product.stock != null) { %><p class="st-stock">المتبقي: <%= product.stock %> قطعة</p><% } %>
+      <% } %>
+    </div>
+  </div>
+  <% if (related.length) { %>
+    <h2 class="st-rel-title">منتجات مشابهة</h2>
+    <div class="st-grid">
+      <% related.forEach(p => { %>
+        <%- include('../partials/store-card', { p, store }) %>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <section class="st-reviews">
+    <h2 class="st-rel-title">تقييمات الزبائن (<span id="reviewCount">0</span>)</h2>
+    <div class="st-rating-summary">
+      <div class="st-rating-avg" id="avgRating">0.0</div>
+      <div class="st-rating-bars">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem">
+          <span id="avgStars" style="font-size:1.1rem;color:#f59e0b"></span>
+          <span class="muted" id="reviewCountText">(0 تقييم)</span>
+        </div>
+        <div class="st-rating-bar"><div class="st-rating-bar-fill" id="ratingBars" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div id="reviewsList" class="st-reviews-list"></div>
+    <form id="reviewForm" class="st-review-form" style="display:none">
+      <h3>أضف تقييمك</h3>
+      <input type="hidden" name="product_id" value="<%= product.id %>">
+      <div class="stack">
+        <label>اسمك *
+          <input type="text" name="customer_name" required>
+        </label>
+        <label>رقم الهاتف (اختياري)
+          <input type="text" name="customer_phone" dir="ltr" placeholder="07701234567">
+        </label>
+        <label>التقييم *
+          <div class="star-rating" id="starRating">
+            <% for(let i=1;i<=5;i++) { %><button type="button" class="star-btn" data-value="<%= i %>">☆</button><% } %>
+          </div>
+          <input type="hidden" name="rating" id="ratingInput" required>
+        </label>
+        <label>تعليقك (اختياري)
+          <textarea name="comment" rows="3" placeholder="شارك تجربتك مع هذا المنتج..."></textarea>
+        </label>
+        <button type="submit" class="st-btn big-btn">إرسال التقييم</button>
+      </div>
+    </form>
+    <p id="reviewSuccess" class="st-review-success" style="display:none">شكراً لتقييمك — سيظهر بعد المراجعة</p>
+  </section>
+</main>
+
+<!-- Lightbox -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-content" onclick="event.stopPropagation()">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-prev" onclick="navLightbox(-1)">›</button>
+    <button class="lightbox-next" onclick="navLightbox(1)">‹</button>
+    <img id="lightboxImg" src="" alt="">
+  </div>
+</div>
+
+<%- include('../partials/store-float') %>
+<% if (store.template === 'market' || store.template === 'neo') { %>
+  <%- include('../partials/market-footer') %>
+<% } %>
+<%- include('../partials/store-brand') %>
+<%- include('../partials/cart-drawer') %>
+<script>
+  const images = <%- JSON.stringify(images.map(i => i.path)) %>;
+  let currentImg = 0;
+
+  function qtyValue() { const el = document.getElementById('qty'); return el ? parseInt(el.value) || 1 : 1; }
+  function qty(d) {
+    const el = document.getElementById('qty');
+    let v = qtyValue() + d;
+    if (v < 1) v = 1; if (v > 99) v = 99;
+    el.value = v;
+  }
+  function collectOpts() {
+    let txt = '';
+    document.querySelectorAll('.st-opt-sel').forEach(sel => {
+      txt += (txt ? ' — ' : '') + sel.dataset.opt + ': ' + sel.value;
+    });
+    const addons = [];
+    document.querySelectorAll('.st-addon-cb').forEach(cb => {
+      if (cb.checked) addons.push({ name: cb.dataset.name, price: Number(cb.dataset.price) || 0 });
+    });
+    return { txt, addons };
+  }
+  function productAddToCart(btn) {
+    const q = qtyValue();
+    const o = collectOpts();
+    window.addToCart(btn, q, o.txt, o.addons);
+  }
+
+  // Gallery switch
+  function switchImg(el, idx) {
+    document.getElementById('mainImg').src = el.src;
+    document.querySelectorAll('.st-thumbs img').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    currentImg = idx;
+  }
+
+  // Lightbox
+  function openLightbox(idx) {
+    if (!images.length) return;
+    currentImg = idx;
+    document.getElementById('lightboxImg').src = images[currentImg];
+    document.getElementById('lightbox').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  function navLightbox(dir) {
+    currentImg = (currentImg + dir + images.length) % images.length;
+    document.getElementById('lightboxImg').src = images[currentImg];
+  }
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('show')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') navLightbox(-1);
+    if (e.key === 'ArrowLeft') navLightbox(1);
+  });
+
+  // Reviews
+  const productId = <%= product.id %>;
+  const storeBase = '<%= store.base %>';
+  const csrfToken = '<%= csrf %>';
+
+  fetch(storeBase + '/product/' + productId + '/reviews')
+    .then(r => r.json())
+    .then(data => { if (data.ok) renderReviews(data); }).catch(() => {});
+
+  function renderReviews(data) {
+    document.getElementById('avgRating').textContent = data.avg || '0.0';
+    document.getElementById('reviewCount').textContent = data.count;
+    document.getElementById('reviewCountText').textContent = '(' + data.count + ' تقييم)';
+    document.getElementById('ratingBars').style.width = (data.avg ? (data.avg / 5 * 100) : 0) + '%';
+    const avg = parseFloat(data.avg) || 0;
+    const full = Math.floor(avg);
+    let s = '';
+    for (let i = 1; i <= 5; i++) s += i <= full ? '★' : '☆';
+    document.getElementById('avgStars').innerHTML = s;
+
+    const list = document.getElementById('reviewsList');
+    if (data.reviews && data.reviews.length) {
+      list.innerHTML = data.reviews.map(r => `
+        <div class="st-review-card">
+          <div class="st-review-head">
+            <strong>${escapeHtml(r.customer_name)}</strong>
+            <span class="muted">${new Date(r.created_at).toLocaleDateString('ar-IQ')}</span>
+          </div>
+          <div class="st-review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
+          <p>${escapeHtml(r.comment || '')}</p>
+        </div>
+      `).join('');
+    } else {
+      list.innerHTML = '<p class="muted" style="text-align:center;padding:2rem">لا توجد تقييمات بعد — كن أول من يقيم!</p>';
+    }
+  }
+
+  function escapeHtml(text) { const d = document.createElement('div'); d.textContent = text; return d.innerHTML; }
+
+  document.querySelectorAll('.star-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const val = parseInt(this.dataset.value);
+      document.getElementById('ratingInput').value = val;
+      document.querySelectorAll('.star-btn').forEach((b, i) => {
+        b.textContent = i < val ? '★' : '☆';
+        b.classList.toggle('active', i < val);
+      });
+    });
+  });
+
+  document.getElementById('reviewForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    if (!data.rating) return alert('الرجاء اختيار التقييم');
+    fetch(storeBase + '/reviews?_csrf=' + encodeURIComponent(csrfToken), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(res => {
+      if (res.ok) {
+        this.style.display = 'none';
+        document.getElementById('reviewSuccess').style.display = 'block';
+        setTimeout(() => location.reload(), 2000);
+      } else { alert(res.message || 'حدث خطأ'); }
+    }).catch(() => alert('حدث خطأ في الإرسال'));
+  });
+</script>
+<style>
+/* Product page styles */
+.st-badge-soldout{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#991b1b;font-weight:800;padding:.65rem 1.2rem;border-radius:var(--radius);text-align:center;margin:.5rem 0;font-size:.9rem}
+.st-badge-lowstock{background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;font-weight:700;padding:.65rem 1.2rem;border-radius:var(--radius);text-align:center;margin:.5rem 0;font-size:.9rem}
+.st-opt{display:flex;flex-direction:column;gap:.3rem;margin:.7rem 0;font-size:.87rem;font-weight:700;color:var(--ink)}
+.st-opt-sel,.st-addon{font-family:inherit}
+.st-opt-sel{padding:.6rem .9rem;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--ink);transition:var(--transition)}
+.st-opt-sel:focus{outline:2px solid var(--primary);border-color:transparent}
+.st-addons{display:flex;flex-wrap:wrap;gap:.5rem;margin:.7rem 0}
+.st-addon{display:flex;align-items:center;gap:.45rem;font-size:.85rem;background:var(--soft);padding:.5rem .9rem;border-radius:99px;cursor:pointer;color:var(--ink);transition:var(--transition);border:1.5px solid transparent}
+.st-addon:hover{border-color:var(--primary);background:rgba(14,165,233,.05)}
+.st-addon input{accent-color:var(--primary);width:16px;height:16px}
+.st-stock{font-size:.82rem;color:var(--success);font-weight:700;margin-top:.5rem;display:flex;align-items:center;gap:.3rem}
+.st-stock::before{content:'✅'}
+.wa-order{background:linear-gradient(135deg,#25d366,#128c7e)!important;margin-top:.5rem}
+.wa-order:hover{filter:brightness(1.08);box-shadow:0 8px 24px rgba(37,211,102,.35)!important}
+
+/* Reviews */
+.st-reviews{margin-top:2.5rem}
+.st-reviews-list{display:flex;flex-direction:column;gap:.8rem;margin:1rem 0}
+.st-review-card{border:1.5px solid var(--line);border-radius:var(--radius-lg);padding:1.2rem;background:linear-gradient(135deg,#fff,#fafbfc);transition:var(--transition)}
+.st-review-card:hover{box-shadow:var(--shadow);border-color:transparent}
+.st-review-head{display:flex;justify-content:space-between;margin-bottom:.4rem}
+.st-review-head strong{font-size:.95rem;color:var(--ink)}
+.st-review-stars{color:#f59e0b;font-size:1.1rem;margin-bottom:.4rem;letter-spacing:2px}
+.st-review-card p{color:var(--muted);line-height:1.7;font-size:.9rem}
+.st-review-form{margin-top:1.5rem;background:#fff;border:1.5px solid var(--line);border-radius:var(--radius-xl);padding:1.8rem;box-shadow:var(--shadow)}
+.st-review-form h3{font-size:1.1rem;font-weight:800;margin-bottom:1rem;color:var(--ink)}
+.star-rating{display:flex;gap:.3rem;margin-top:.3rem}
+.star-btn{background:none;border:none;font-size:1.8rem;cursor:pointer;color:var(--line);transition:all .2s;padding:0;line-height:1}
+.star-btn:hover,.star-btn.active{color:#f59e0b;transform:scale(1.15)}
+.st-review-success{text-align:center;color:var(--success);font-weight:700;padding:2rem;font-size:1rem}
+
+/* Lightbox */
+.lightbox-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.lightbox-overlay.show{display:flex;animation:fadeIn .2s}
+.lightbox-content{position:relative;max-width:90vw;max-height:90vh}
+.lightbox-content img{max-width:90vw;max-height:85vh;object-fit:contain;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.lightbox-close{position:absolute;top:-40px;left:0;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.lightbox-close:hover{background:rgba(255,255,255,.2)}
+.lightbox-prev,.lightbox-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.15);border:none;color:#fff;font-size:2rem;cursor:pointer;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(4px)}
+.lightbox-prev{right:-60px}
+.lightbox-next{left:-60px}
+.lightbox-prev:hover,.lightbox-next:hover{background:rgba(255,255,255,.3);transform:translateY(-50%) scale(1.1)}
+@media(max-width:800px){
+  .lightbox-prev{right:10px}
+  .lightbox-next{left:10px}
+}
+</style>
+</body>
+</html>

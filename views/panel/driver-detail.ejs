@@ -1,0 +1,136 @@
+<%- include('../partials/head', { title: 'تفاصيل المندوب — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'shipping', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'تفاصيل المندوب: ' + driver.name }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    
+    <div class="card-head-row" style="flex-wrap:wrap; gap:.5rem">
+      <h2><%= driver.name %></h2>
+      <div style="display:flex; gap:.5rem; flex-wrap:wrap">
+        <a class="btn btn-ghost" href="/panel/drivers/<%= driver.id %>/commission">💰 العمولة</a>
+        <a class="btn btn-ghost" href="/panel/driver-settlements">💰 التسويات</a>
+        <a class="btn btn-ghost" href="/panel/drivers">← رجوع</a>
+      </div>
+    </div>
+    
+    <div class="two-col" style="margin-top:1rem">
+      <div class="card">
+        <h3>معلومات المندوب</h3>
+        <table class="info-table" style="width:100%">
+          <tr><th>الاسم</th><td><%= driver.name %></td></tr>
+          <tr><th>الهاتف</th><td dir="ltr"><%= driver.phone %></td></tr>
+          <tr><th>الإيميل</th><td dir="ltr"><%= driver.email || '—' %></td></tr>
+          <tr><th>نوع المركبة</th><td><%= driver.vehicle_type === 'motorcycle' ? '🏍 دراجة نارية' : (driver.vehicle_type === 'car' ? '🚗 سيارة' : '🚚 فان') %></td></tr>
+          <tr><th>لوحة المركبة</th><td dir="ltr"><%= driver.vehicle_plate || '—' %></td></tr>
+          <tr><th>رخصة القيادة</th><td dir="ltr"><%= driver.license_number || '—' %></td></tr>
+          <tr><th>الحالة</th><td><span class="badge <%= driver.is_active ? 'badge-ok' : 'badge-warn' %>"><%= driver.is_active ? 'نشط' : 'معطل' %></span></td></tr>
+          <tr><th>تاريخ الإضافة</th><td><%= driver.created_at %></td></tr>
+        </table>
+      </div>
+      
+      <div class="card">
+        <h3>العمولة</h3>
+        <table class="info-table" style="width:100%">
+          <tr><th>النوع</th><td><%= 
+            driver.commission_type === 'per_order' ? 'لكل طلب' :
+            driver.commission_type === 'percentage' ? 'نسبة مئوية' :
+            driver.commission_type === 'fixed_monthly' ? 'راتب ثابت شهري' : driver.commission_type %></td></tr>
+          <tr><th>القيمة</th><td><%= 
+            driver.commission_type === 'per_order' ? money(driver.commission_value) + ' / طلب' :
+            driver.commission_type === 'percentage' ? driver.commission_value + '%' :
+            driver.commission_type === 'fixed_monthly' ? money(driver.commission_value) + ' / شهر' : driver.commission_value %></td></tr>
+        </table>
+        <form method="post" action="/panel/drivers/<%= driver.id %>/commission" class="stack" style="margin-top:1rem; max-width:400px">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <label>نوع العمولة
+            <select name="commission_type">
+              <option value="per_order" <%= driver.commission_type==='per_order'?'selected':'' %>>لكل طلب</option>
+              <option value="percentage" <%= driver.commission_type==='percentage'?'selected':'' %>>نسبة مئوية</option>
+              <option value="fixed_monthly" <%= driver.commission_type==='fixed_monthly'?'selected':'' %>>راتب ثابت شهري</option>
+            </select>
+          </label>
+          <label>القيمة
+            <input type="number" name="commission_value" value="<%= driver.commission_value %>" min="0" step="0.01" dir="ltr" placeholder="مثال: 500 أو 5">
+          </label>
+          <button type="submit" class="btn btn-primary">💾 حفظ العمولة</button>
+        </form>
+      </div>
+    </div>
+    
+    <div class="card" style="margin-top:1rem">
+      <h3>تعيينات الشحنات</h3>
+      <% if (assignments.length === 0) { %>
+        <p class="muted">لا توجد تعيينات لهذا المندوب</p>
+      <% } else { %>
+        <table>
+          <tr><th>الشحنة</th><th>الطلب</th><th>الزبون</th><th>الحالة</th><th>تاريخ التعيين</th><th>الحالة</th></tr>
+          <% assignments.forEach(a => { %>
+            <tr>
+              <td>#<%= a.shipment_id %></td>
+              <td><a href="/panel/orders/<%= a.order_id %>/edit">#<%= a.order_id %></a></td>
+              <td><%= a.customer_name %> <br><small dir="ltr"><%= a.customer_phone %></small></td>
+              <td>
+                <span class="badge <%= a.status==='delivered'?'badge-ok':(a.status==='returned'?'badge-warn':(a.status==='cancelled'?'badge-err':'badge-warn')) %>">
+                  <%= a.status==='assigned'?'معين':a.status==='accepted'?'مقبول':a.status==='picked_up'?'مستلم':a.status==='delivered'?'تم التسليم':a.status==='returned'?'مرتجع':a.status==='cancelled'?'ملغي':a.status %>
+                </span>
+              </td>
+              <td><%= a.assigned_at %></td>
+              <td>
+                <% if (a.status !== 'delivered' && a.status !== 'returned' && a.status !== 'cancelled') { %>
+                  <form method="post" action="/panel/driver-assignments/<%= a.id %>/update-status" class="inline" style="display:flex; gap:.3rem; flex-wrap:wrap">
+                    <input type="hidden" name="_csrf" value="<%= csrf %>">
+                    <select name="status" style="font-size:.75rem; padding:.25rem .5rem" onchange="this.form.submit()">
+                      <option value="assigned" <%= a.status==='assigned'?'selected':'' %>>معين</option>
+                      <option value="accepted" <%= a.status==='accepted'?'selected':'' %>>مقبول</option>
+                      <option value="picked_up" <%= a.status==='picked_up'?'selected':'' %>>مستلم</option>
+                      <option value="delivered" <%= a.status==='delivered'?'selected':'' %>>تم التسليم</option>
+                      <option value="returned" <%= a.status==='returned'?'selected':'' %>>مرتجع</option>
+                      <option value="cancelled" <%= a.status==='cancelled'?'selected':'' %>>ملغي</option>
+                    </select>
+                  </form>
+                <% } else { %>
+                  <span class="badge <%= a.status==='delivered'?'badge-ok':(a.status==='returned'?'badge-warn':'badge-err') %>"><%= 
+                    a.status==='delivered'?'تم التسليم':a.status==='returned'?'مرتجع':'ملغي' %></span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </table>
+      <% } %>
+    </div>
+    
+    <div class="card" style="margin-top:1rem">
+      <h3>التسويات المالية</h3>
+      <% if (settlements.length === 0) { %>
+        <p class="muted">لا توجد تسويات بعد</p>
+      <% } else { %>
+        <table>
+          <tr><th>الفترة</th><th>الطلبات</th><th>العمولة</th><th>كاش مُجمع</th><th>السلف</th><th>الصافي</th><th>الحالة</th><th>إجراء</th></tr>
+          <% settlements.forEach(s => { %>
+            <tr>
+              <td><%= s.period_start %> → <%= s.period_end %></td>
+              <td dir="ltr"><%= s.total_orders %></td>
+              <td dir="ltr"><%= money(s.total_commission) %></td>
+              <td dir="ltr"><%= money(s.total_cod_collected) %></td>
+              <td dir="ltr"><%= money(s.advances_paid) %></td>
+              <td dir="ltr"><b><%= money(s.net_payable) %></b></td>
+              <td><span class="badge <%= s.status==='paid'?'badge-ok':(s.status==='disputed'?'badge-err':'badge-warn') %>"><%= s.status==='paid'?'مدفوع':s.status==='pending'?'معلق':'مختلف عليه' %></span></td>
+              <td>
+                <% if (s.status === 'pending') { %>
+                  <form method="post" action="/panel/driver-settlements/<%= s.id %>/pay" class="inline" onsubmit="return confirm('تأكيد دفع التسوية؟')">
+                    <input type="hidden" name="_csrf" value="<%= csrf %>">
+                    <button class="btn btn-sm btn-primary">دفع</button>
+                  </form>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </table>
+      <% } %>
+    </div>
+  </div>
+</main>
+</body>
+</html>

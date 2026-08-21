@@ -1,0 +1,61 @@
+<%- include('../partials/head', { title: 'الشحنات — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'shipping', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'الشحنات' }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <div class="filter-row" style="flex-wrap:wrap; gap:.5rem; align-items:center">
+      <% [['all','الكل'],['pending','قيد الانتظار'],['pickup_scheduled','تم جدولة الاستلام'],['picked_up','تم الاستلام'],['in_transit','في الطريق'],['out_for_delivery','للترسل'],['delivered','تم التسليم'],['failed','فشل التسليم'],['returned','مرتجع'],['cancelled','ملغي']].forEach(f => { %>
+        <a class="btn btn-sm <%= filter === f[0] ? 'btn-primary' : 'btn-ghost' %>" href="/panel/shipments?status=<%= f[0] %>"><%= f[1] %></a>
+      <% }) %>
+      <form class="search-form" method="get" style="margin-left:auto">
+        <input type="hidden" name="status" value="<%= filter %>">
+        <input type="search" name="q" placeholder="ابحث برقم التتبع/الطلب/الزبون…" value="<%= typeof q !== 'undefined' ? q : '' %>">
+        <button class="btn btn-sm" type="submit">🔍</button>
+        <% if (q) { %><a class="btn btn-sm btn-ghost" href="/panel/shipments?status=<%= filter %>">إلغاء</a><% } %>
+      </form>
+    </div>
+    <table>
+      <tr><th>التتبع</th><th>الطلب</th><th>الشركة</th><th>الزبون</th><th>الحالة</th><th>الدفع عند الاستلام</th><th>رسوم الشحن</th><th>التاريخ</th><th>إجراء</th></tr>
+      <% shipments.forEach(s => { %>
+        <tr>
+          <td dir="ltr"><%= s.tracking_number || '—' %></td>
+          <td><a href="/panel/orders/<%= s.order_id %>/edit">#<%= s.order_id %></a></td>
+          <td><%= s.company_name %></td>
+          <td><%= s.customer_name %> <br><small dir="ltr"><%= s.customer_phone %></small></td>
+          <td><span class="badge <%= s.status==='delivered'?'badge-ok':(s.status==='failed'?'badge-err':(s.status==='returned'?'badge-warn':(s.status==='in_transit'?'badge-ok':''))) %>"><%= 
+            s.status==='pending'?'قيد الانتظار':
+            s.status==='pickup_scheduled'?'تم جدولة الاستلام':
+            s.status==='picked_up'?'تم الاستلام':
+            s.status==='in_transit'?'في الطريق':
+            s.status==='out_for_delivery'?'للترسل':
+            s.status==='delivered'?'تم التسليم':
+            s.status==='failed'?'فشل التسليم':
+            s.status==='returned'?'مرتجع':
+            s.status==='cancelled'?'ملغي':s.status %></span></td>
+          <td dir="ltr"><%= money(s.cod_amount) %></td>
+          <td dir="ltr"><%= money(s.shipping_fee) %></td>
+          <td><%= s.created_at.slice(0,16) %></td>
+          <td class="row-actions">
+            <a class="btn btn-sm" href="/panel/shipments/<%= s.id %>">تفاصيل</a>
+            <% /* معطّل مؤقتاً حتى تجهيز PDF حقيقي — H5 */ %>
+            <% if (false) { %><% if (s.tracking_number) { %><a class="btn btn-sm btn-ghost" href="/panel/shipments/<%= s.id %>/label" target="_blank">بوليصة</a><% } %><% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </table>
+    <% if (shipments.length === 0) { %><p class="empty-note">لا توجد شحنات</p><% } %>
+    <% if (totalPages > 1) { %>
+      <div class="pager">
+        <% const qParam = q ? '&q=' + encodeURIComponent(q) : ''; %>
+        <% if (page > 1) { %><a class="btn btn-sm btn-ghost" href="/panel/shipments?status=<%= filter %><%= qParam %>&page=<%= page - 1 %>">→ السابق</a><% } %>
+        <span class="muted">صفحة <%= page %> من <%= totalPages %> (<%= total %> شحنة)</span>
+        <% if (page < totalPages) { %><a class="btn btn-sm btn-ghost" href="/panel/shipments?status=<%= filter %><%= qParam %>&page=<%= page + 1 %>">التالي ←</a><% } %>
+      </div>
+    <% } %>
+  </div>
+</main>
+<script src="/js/notify.js"></script>
+</body>
+</html>

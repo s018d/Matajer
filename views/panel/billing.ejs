@@ -1,0 +1,153 @@
+<%- include('../partials/head', { title: 'الباقات — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'billing', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'الباقات والاشتراك' }) %>
+  <div class="content">
+    <%- include('../partials/alerts', { ok: typeof ok !== 'undefined' ? ok : '', err: typeof err !== 'undefined' ? err : '' }) %>
+    <% if (pro) { %>
+      <div class="card">
+        <h2>🎉 باقتك احترافية</h2>
+        <p>متجرك بلا حدود منتجات وبلا علامة المنصة وبكل الأنماط العالمية — شكراً لثقتك!</p>
+        <% if (store.plan_expires) { %><p class="muted">تنتهي باقتك بتاريخ: <b dir="ltr"><%= store.plan_expires %></b></p><% } %>
+      </div>
+    <% } else { %>
+      <div class="card">
+        <h2>باقتك الحالية: مجانية</h2>
+        <ul class="feed">
+          <li><span class="feed-act">حد المنتجات:</span> <span class="feed-detail"><%= cfg.free_products %> منتج فقط</span></li>
+          <li><span class="feed-act">التصميم:</span> <span class="feed-detail">تصميم مجاني واحد فقط (الكلاسيكي النظيف)</span></li>
+          <li><span class="feed-act">علامة المنصة:</span> <span class="feed-detail">تظهر عبارة «صُنع بواسطة دُكّان» أسفل متجرك</span></li>
+          <li><span class="feed-act">أكواد الخصم:</span> <span class="feed-detail">حتى 5 أكواد فقط</span></li>
+          <li><span class="feed-act">كل المزايا الأخرى:</span> <span class="feed-detail">السلة والطلب والواتساب والبحث والتوصيل — متاحة بالكامل</span></li>
+        </ul>
+      </div>
+      <div class="tiers">
+        <div class="tier">
+          <h3>شهر</h3>
+          <div class="tier-price"><b><%= (cfg.pro_price / 1000).toLocaleString('en-US') %> ألف</b><span>/ شهرياً</span></div>
+          <ul>
+            <li>كل مزايا الاحترافية</li>
+            <li>تجربة شهر كامل</li>
+          </ul>
+          <form method="post" action="/panel/billing/request?_csrf=<%= csrf %>" enctype="multipart/form-data">
+            <input type="hidden" name="_csrf" value="<%= csrf %>">
+            <input type="hidden" name="months" value="1">
+            <input type="text" name="transfer_ref" placeholder="رقم الحوالة (اختياري)" dir="ltr" class="billing-input">
+            <input type="file" name="receipt" accept="image/*" class="billing-file" title="صورة إثبات الدفع">
+            <button class="btn btn-primary">أريد الترقية</button>
+          </form>
+        </div>
+        <div class="tier tier-hit">
+          <div class="tier-tag">الأكثر طلباً</div>
+          <h3>3 شهور</h3>
+          <div class="tier-price"><b><%= (cfg.pro_price_3 / 1000).toLocaleString('en-US') %> ألف</b><span>/ 3 شهور</span></div>
+          <div class="tier-save">توفّر <%= Math.round((1 - cfg.pro_price_3 / (cfg.pro_price * 3)) * 100) %>%</div>
+          <ul>
+            <li>كل مزايا الاحترافية</li>
+            <li>خصم على الشهر الواحد</li>
+          </ul>
+          <form method="post" action="/panel/billing/request?_csrf=<%= csrf %>" enctype="multipart/form-data">
+            <input type="hidden" name="_csrf" value="<%= csrf %>">
+            <input type="hidden" name="months" value="3">
+            <input type="text" name="transfer_ref" placeholder="رقم الحوالة (اختياري)" dir="ltr" class="billing-input">
+            <input type="file" name="receipt" accept="image/*" class="billing-file" title="صورة إثبات الدفع">
+            <button class="btn btn-primary">أريد الترقية</button>
+          </form>
+        </div>
+        <div class="tier">
+          <h3>سنة كاملة</h3>
+          <div class="tier-price"><b><%= (cfg.pro_price_12 / 1000).toLocaleString('en-US') %> ألف</b><span>/ سنة</span></div>
+          <div class="tier-save">توفّر <%= Math.round((1 - cfg.pro_price_12 / (cfg.pro_price * 12)) * 100) %>%</div>
+          <ul>
+            <li>كل مزايا الاحترافية</li>
+            <li>أفضل سعر — <%= Math.round(cfg.pro_price_12 / 12 / 1000) %> ألف شهرياً فقط</li>
+          </ul>
+          <form method="post" action="/panel/billing/request?_csrf=<%= csrf %>" enctype="multipart/form-data">
+            <input type="hidden" name="_csrf" value="<%= csrf %>">
+            <input type="hidden" name="months" value="12">
+            <input type="text" name="transfer_ref" placeholder="رقم الحوالة (اختياري)" dir="ltr" class="billing-input">
+            <input type="file" name="receipt" accept="image/*" class="billing-file" title="صورة إثبات الدفع">
+            <button class="btn btn-primary">أريد الترقية</button>
+          </form>
+        </div>
+      </div>
+      <div class="card">
+        <h2>ماذا تحصل مع الباقة الاحترافية؟</h2>
+        <ul class="feed">
+          <li><span class="feed-act">الأنماط العالمية الأربعة:</span> <span class="feed-detail">الأتيلييه · الجراند · الطبيعي · المغامر</span></li>
+          <li><span class="feed-act">منتجات بلا حدود</span> <span class="feed-detail">+ أكواد خصم بلا حدود + مخزون وخيارات</span></li>
+          <li><span class="feed-act">دومينك الخاص:</span> <span class="feed-detail">متجرك على نطاقك أنت (مثل myshop.com)</span></li>
+          <li><span class="feed-act">بلا علامة منصة</span> <span class="feed-detail">+ أولوية الدعم المباشر</span></li>
+        </ul>
+        <% if (cfg.pay_account) { %>
+          <p class="muted pay-note">طريقة الدفع: <b dir="ltr"><%= cfg.pay_account %></b> — بعد التحويل اكتب رقم الحوالة وأرفق صورة الإيصال مع طلب الترقية، وسنفعّل باقتك خلال دقائق (بلا حاجة لمراسلة الواتساب).</p>
+        <% } else { %>
+          <p class="muted pay-note">جهة استلام الدفع لم تُحدد بعد — أرسلناها لك عبر واتساب، أو راسلنا الآن:
+          <% if (cfg.site_whatsapp) { %> <a href="https://wa.me/<%= cfg.site_whatsapp.replace(/\D/g,'') %>" target="_blank">اضغط هنا</a><% } %></p>
+        <% } %>
+      </div>
+      <div class="card">
+        <h2>طلبات الترقية السابقة</h2>
+        <% if (payments.length === 0) { %><p class="muted">لا توجد طلبات بعد</p><% } %>
+        <ul class="feed">
+          <% payments.forEach(p => { %>
+            <li>
+              <span class="feed-act">طلب #<%= p.id %> — <%= money(p.amount) %> (<%= p.months || 1 %> شهراً)</span>
+              <span class="feed-detail">
+                <span class="badge <%= p.status==='done' ? 'badge-ok' : 'badge-warn' %>">
+                  <%= p.status === 'done' ? 'مفعّل' : (p.status === 'reported' ? 'أُرسل الدفع — بانتظار التأكيد' : 'بالتسوية') %>
+                </span>
+                <% if (p.ref) { %><small dir="ltr">المرجع: <%= p.ref %></small><% } %>
+                <% if (p.note) { %><small>رقم الحوالة: <span dir="ltr"><%= p.note %></span></small><% } %>
+                <% if (p.receipt_path) { %><a href="/panel/billing/receipt/<%= p.id %>" target="_blank" class="btn btn-sm">إثبات الدفع</a><% } %>
+              </span>
+              <small><%= p.created_at %></small>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+<% } %>
+  <div class="card">
+    <h2>🎁 ادعُ صديقاً واكسب شهراً مجانياً</h2>
+    <p class="muted">شارك رابطك مع أصحاب المتاجر — عندما يرقي أحدهم للباقة الاحترافية تحصل أنت على شهر إضافي مجاناً (حتى لو كان متجرك مجانياً).</p>
+    <div class="link-box">
+      <code dir="ltr" id="refLink"></code>
+      <button class="btn btn-sm" type="button" onclick="copyRef()">نسخ</button>
+    </div>
+    <ul class="feed">
+      <li><span class="feed-act">أصدقاؤك الذين سجلوا عبرك:</span> <span class="feed-detail"><b><%= referrals %></b> صديق</span></li>
+      <li><span class="feed-act">المكافآت التي حصلت عليها:</span> <span class="feed-detail"><b><%= rewarded %></b> شهر مجاني</span></li>
+    </ul>
+  </div>
+<script>
+  const refLink = document.getElementById('refLink');
+  refLink.textContent = location.origin + '/signup?ref=' + '<%= store.slug %>';
+  window.copyRef = function () {
+    navigator.clipboard.writeText(refLink.textContent).then(function () { refLink.nextElementSibling.textContent = 'تم النسخ ✓'; });
+  };
+</script>
+  </div>
+</main>
+<style>
+.pay-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: .9rem 1rem; margin: 1rem 0; display: flex; flex-direction: column; gap: .3rem; }
+.pay-box b { color: #1d4ed8; }
+.pay-box span { font-size: .82rem; color: #475569; }
+.pay-note { margin-top: .8rem; font-size: .85rem; }
+.muted { color: #64748b; font-size: .88rem; }
+.tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0; }
+.tier { background: #fff; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 1.2rem; display: flex; flex-direction: column; gap: .5rem; position: relative; }
+.tier h3 { margin: 0; color: #0f172a; font-size: 1.05rem; }
+.tier-price { display: flex; align-items: baseline; gap: .35rem; }
+.tier-price b { font-size: 1.6rem; color: #0d9488; }
+.tier-price span { color: #64748b; font-size: .85rem; }
+.tier ul { list-style: none; padding: 0; margin: 0 0 .5rem; font-size: .85rem; color: #475569; display: flex; flex-direction: column; gap: .3rem; }
+.tier ul li::before { content: '✓ '; color: #0d9488; font-weight: 700; }
+.tier-hit { border-color: #0d9488; box-shadow: 0 14px 34px -18px rgba(13,148,136,.5); }
+.tier-tag { position: absolute; top: -10px; inset-inline-start: 1rem; background: #0d9488; color: #fff; font-size: .72rem; font-weight: 700; padding: .15rem .7rem; border-radius: 99px; }
+.tier-save { font-size: .78rem; color: #0d9488; font-weight: 700; }
+.billing-input, .billing-file { width: 100%; padding: .45rem .6rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: .82rem; background: #fff; }
+.billing-file { padding: .35rem; }
+</style>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<%- include('../partials/head', { title: 'نظرة عامة — المدير العام' }) %>
+<body class="app">
+<%- include('../partials/sidebar-admin', { active: 'dash' }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'نظرة عامة' }) %>
+  <div class="content">
+    <div class="stat-grid">
+      <div class="stat"><span>المتاجر</span><b><%= totals.stores %></b></div>
+      <div class="stat"><span>المستخدمون</span><b><%= totals.users %></b></div>
+      <div class="stat"><span>المنتجات</span><b><%= totals.products %></b></div>
+      <div class="stat"><span>الطلبات</span><b><%= totals.orders %></b></div>
+      <div class="stat stat-strong"><span>إجمالي المبيعات</span><b><%= money(totals.revenue) %></b></div>
+      <div class="stat"><span>باقات احترافية</span><b><%= totals.pro %></b></div>
+      <div class="stat"><span>أكواد الخصم</span><b><%= totals.coupons %></b></div>
+      <div class="stat <%= totals.newOrders ? 'stat-strong' : '' %>"><span>طلبات جديدة</span><b><%= totals.newOrders %></b></div>
+      <div class="stat <%= totals.pendingPayments ? 'stat-strong' : '' %>"><span>ترقيات بانتظار التأكيد</span><b><%= totals.pendingPayments %></b></div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h2>أعلى المتاجر مبيعاً</h2>
+        <table>
+          <tr><th>المتجر</th><th>الطلبات</th><th>المبيعات</th><th>الباقة</th></tr>
+          <% topStores.forEach(s => { %>
+            <tr>
+              <td><a href="/admin/stores/<%= s.id %>"><%= s.name %></a></td>
+              <td><%= s.orders %></td>
+              <td><b><%= money(s.revenue) %></b></td>
+              <td><span class="badge <%= s.plan === 'pro' ? 'badge-ok' : '' %>"><%= s.plan === 'pro' ? 'احترافية' : 'مجانية' %></span></td>
+            </tr>
+          <% }) %>
+          <% if (topStores.length === 0) { %><tr><td colspan="4" class="muted">لا مبيعات بعد</td></tr><% } %>
+        </table>
+      </div>
+      <div class="card">
+        <h2>آخر الطلبات</h2>
+        <table>
+          <tr><th>#</th><th>المتجر</th><th>الزبون</th><th>المبلغ</th><th>الحالة</th></tr>
+          <% recentOrders.forEach(o => { %>
+            <tr>
+              <td><%= o.id %></td>
+              <td><%= o.store_name %></td>
+              <td><%= o.customer_name %></td>
+              <td><%= money(o.total) %></td>
+              <td><span class="badge <%= o.status === 'new' ? 'badge-warn' : (o.status === 'completed' ? 'badge-ok' : '') %>"><%= { new: 'جديد', confirmed: 'مؤكد', completed: 'مكتمل', cancelled: 'ملغي' }[o.status] %></span></td>
+            </tr>
+          <% }) %>
+          <% if (recentOrders.length === 0) { %><tr><td colspan="5" class="muted">لا طلبات بعد</td></tr><% } %>
+        </table>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h2>آخر المتاجر</h2>
+        <table>
+          <tr><th>المتجر</th><th>صاحب الحساب</th><th>الحالة</th><th></th></tr>
+          <% stores.slice(0, 8).forEach(s => { %>
+            <tr>
+              <td><a href="/admin/stores/<%= s.id %>"><%= s.name %></a></td>
+              <td><%= s.owner_username || '—' %></td>
+              <td><span class="badge <%= s.status === 'active' ? 'badge-ok' : 'badge-err' %>"><%= s.status === 'active' ? 'نشط' : 'موقوف' %></span></td>
+              <td><a class="btn btn-sm" href="/s/<%= s.slug %>" target="_blank">عرض</a></td>
+            </tr>
+          <% }) %>
+        </table>
+      </div>
+      <div class="card">
+        <h2>آخر النشاطات</h2>
+        <ul class="feed">
+          <% recent.forEach(r => { %>
+            <li><span class="feed-act"><%= r.action %></span> <span class="feed-detail"><%= r.details %></span><small><%= r.username %> — <%= r.created_at %></small></li>
+          <% }) %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

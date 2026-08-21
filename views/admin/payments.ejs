@@ -1,0 +1,67 @@
+<%- include('../partials/head', { title: 'المدفوعات والباقات — المدير العام' }) %>
+<body class="app">
+<%- include('../partials/sidebar-admin', { active: 'payments' }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'المدفوعات والباقات' }) %>
+  <div class="content">
+    <%- include('../partials/alerts', { ok: typeof ok !== 'undefined' ? ok : '', err: '' }) %>
+    <div class="card">
+      <h2>طلبات الترقية المعلقة</h2>
+      <% if (rows.filter(r => r.status !== 'done').length === 0) { %><p class="muted">لا توجد طلبات معلقة</p><% } %>
+      <table class="table">
+        <thead><tr><th>التاريخ</th><th>المتجر</th><th>المالك</th><th>المبلغ</th><th>المرجع</th><th>إثبات الدفع</th><th>الحالة</th><th></th></tr></thead>
+        <tbody>
+          <% rows.forEach(p => { %>
+          <tr>
+            <td><%= p.created_at %></td>
+            <td><a href="/s/<%= p.store_slug %>" target="_blank"><%= p.store_name %></a></td>
+            <td><%= p.owner_username || '-' %></td>
+            <td><%= money(p.amount) %></td>
+            <td dir="ltr"><%= p.ref || '-' %><% if (p.note) { %><small style="display:block;color:#64748b">حوالة: <span dir="ltr"><%= p.note %></span></small><% } %></td>
+            <td>
+              <% if (p.receipt_path) { %><a href="/admin/payments/receipt/<%= p.id %>" target="_blank" class="btn btn-sm">فتح الصورة</a><% } else { %>—<% } %>
+            </td>
+            <td>
+              <span class="badge <%= p.status==='done' ? 'badge-ok' : 'badge-warn' %>"><%= p.status==='done' ? 'مفعّل' : 'معلق' %></span>
+              <% if (referred[p.store_id]) { %><span class="badge" title="هذا المتجر سجل عبر دعوة صديق — سيكسب داعيه شهراً مجانياً">🎁 إحالة</span><% } %>
+            </td>
+            <td>
+              <% if (p.status !== 'done') { %>
+              <form method="post" action="/admin/payments/<%= p.id %>/confirm" class="inline-form">
+                <input type="hidden" name="_csrf" value="<%= csrf %>">
+                <input type="number" name="months" value="1" min="1" max="24" title="عدد الأشهر" style="width:60px">
+                <button class="btn btn-sm">تأكيد الدفع</button>
+              </form>
+              <% } %>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h2>المتاجر الاحترافية حالياً</h2>
+      <% if (proStores.length === 0) { %><p class="muted">لا توجد متاجر احترافية بعد</p><% } %>
+      <table class="table">
+        <thead><tr><th>المتجر</th><th>ينتهي في</th><th>الحالة</th></tr></thead>
+        <tbody>
+          <% proStores.forEach(s => { %>
+          <tr>
+            <td><a href="/admin/stores/<%= s.id %>"><%= s.name %></a></td>
+            <td dir="ltr"><%= s.plan_expires %></td>
+            <td><span class="badge <%= s.expired ? 'badge-err' : 'badge-ok' %>"><%= s.expired ? 'منتهية' : 'نشطة' %></span></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted" style="font-size:.82rem">لتعديل باقة أي متجر يدوياً (مثل ترقية مباشرة أو إلغاء): ادخل صفحة المتجر من «المتاجر» وحدّد الباقة هناك.</p>
+  </div>
+</main>
+<style>
+.inline-form { display: flex; gap: .4rem; align-items: center; }
+input[type=number] { padding: .3rem .5rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; }
+.muted { color: #64748b; font-size: .88rem; }
+</style>
+</body>
+</html>

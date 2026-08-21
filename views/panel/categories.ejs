@@ -1,0 +1,42 @@
+<%- include('../partials/head', { title: 'الأقسام — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'cats', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'الأقسام' }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <div class="two-col">
+      <div class="card">
+        <h2>قسم جديد</h2>
+        <form method="post" action="/panel/categories" class="stack">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <label>اسم القسم
+            <input type="text" name="name" required>
+          </label>
+          <button type="submit" class="btn btn-primary">إضافة</button>
+        </form>
+      </div>
+      <div class="card">
+        <h2>الأقسام الحالية</h2>
+        <table>
+          <tr><th>القسم</th><th>عدد المنتجات</th><th></th></tr>
+          <% cats.forEach(c => { %>
+            <tr>
+              <td><%= c.name %></td>
+              <td><%= c.cnt %></td>
+              <td>
+                <form method="post" action="/panel/categories/<%= c.id %>/delete" class="inline" onsubmit="return confirm('حذف القسم؟ منتجاته ستبقى بدون قسم')">
+                  <input type="hidden" name="_csrf" value="<%= csrf %>">
+                  <button class="btn btn-sm btn-danger">حذف</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+          <% if (cats.length === 0) { %><tr><td colspan="3">لا أقسام بعد</td></tr><% } %>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

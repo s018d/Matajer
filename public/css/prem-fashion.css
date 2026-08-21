@@ -240,6 +240,20 @@ body.store-body.prem-fashion * { box-sizing: border-box; }
 .prem-fashion .st-rating-avg { color: #191a1b; }
 .prem-fashion .st-rating-summary { border-radius: 0; border-color: #e4e5e7; }
 
+/* ===== FASHION HERO FULL-BLEED (ChatGPT advice) ===== */
+.prem-fashion .fashion-hero{position:relative;min-height:62vh;overflow:hidden;background:#191a1b;display:flex;align-items:flex-end}
+.prem-fashion .fashion-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.62),rgba(0,0,0,.08) 70%);z-index:1}
+.prem-fashion .fashion-hero .st-head-inner{position:relative;z-index:2;color:#fff;max-width:1200px;width:100%;padding:3rem 1.4rem}
+.prem-fashion .fashion-hero h1{color:#fff !important;-webkit-text-fill-color:#fff !important;font-size:clamp(2rem,5vw,3.2rem);font-weight:300;letter-spacing:.02em}
+.prem-fashion .fashion-hero p{color:rgba(255,255,255,.85) !important}
+.prem-fashion .fashion-hero .fashion-badge{background:#fff;color:#191a1b}
+
+/* ===== FASHION CARD MAGAZINE 3/4 + hover ===== */
+.prem-fashion .fashion-grid .st-card{border:none;background:transparent;box-shadow:none}
+.prem-fashion .fashion-grid .st-img{aspect-ratio:3/4;border-radius:2px;overflow:hidden;background:#e9eaeb}
+.prem-fashion .fashion-grid .st-img img{transition:opacity .45s, transform .7s}
+.prem-fashion .fashion-grid .st-card:hover .st-img img{transform:scale(1.035)}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 480px) {
   .prem-fashion .st-head-inner { padding: .9rem 1rem; }
@@ -247,6 +261,7 @@ body.store-body.prem-fashion * { box-sizing: border-box; }
   .prem-fashion .st-grid { grid-template-columns: repeat(2, 1fr); gap: 1px; }
   .prem-fashion .st-card-body { padding: .8rem .3rem .9rem; }
   .prem-fashion .st-btn { font-size: .72rem; }
+  .prem-fashion .fashion-hero{min-height:42vh}
 }
 @media (max-width: 360px) {
   .prem-fashion .st-grid { grid-template-columns: 1fr; }

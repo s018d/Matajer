@@ -24,13 +24,16 @@
                 <input type="radio" name="type" value="normal" id="typeNormal" checked style="display:none">
                 <span class="badge badge-ok">الأكثر طلباً</span>
               </div>
-              <div class="tier" onclick="document.getElementById('typePremium').checked=true; document.getElementById('typeNormal').checked=false" style="cursor:pointer">
+              <div class="tier" style="position:relative">
                 <div class="tier-tag">حسب الطلب</div>
                 <h3>💎 مميز</h3>
                 <div class="tier-price"><b>سعر خاص</b></div>
-                <ul><li>اسم قصير أو جميل</li><li>تواصل معنا للتسعير</li></ul>
-                <input type="radio" name="type" value="premium" id="typePremium" style="display:none">
-                <span class="badge">قابل للتفاوض</span>
+                <ul><li>اسم قصير أو جميل</li><li>تسعير حسب الطلب</li></ul>
+                <% if (typeof cfg !== 'undefined' && cfg.site_whatsapp) { %>
+                  <a class="btn btn-warn btn-block" href="https://wa.me/<%= cfg.site_whatsapp.replace(/\D/g,'') %>?text=<%= encodeURIComponent('مرحبا، أريد دومين مميز لمتجري ' + store.name + ' — شنو السعر؟') %>" target="_blank">💬 تواصل واتساب للتسعير</a>
+                <% } else { %>
+                  <a class="btn btn-warn btn-block" href="/panel/settings">حدد رقم الواتساب أولاً</a>
+                <% } %>
               </div>
             </div>
             <label style="margin-top:.8rem">ملاحظة (اختياري)

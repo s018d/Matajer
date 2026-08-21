@@ -4,7 +4,7 @@
 <div class="st-card">
   <a href="<%= store.base %>/p/<%= p.id %>">
     <div class="st-img">
-      <% if (p.img) { %><img src="<%= p.img %>" alt="" loading="lazy"><% } else { %><span class="st-img-empty">لا صورة</span><% } %>
+      <% if (p.img) { %><img src="<%= p.img %>" alt="<%= p.name %>" width="400" height="400" loading="<%= (typeof idx !== 'undefined' && idx < 2) ? 'eager' : 'lazy' %>" <%= (typeof idx !== 'undefined' && idx < 2) ? 'fetchpriority="high"' : '' %>><% } else { %><span class="st-img-empty">لا صورة</span><% } %>
       <% if (store.template === 'market' && p.old_price && Number(p.old_price) > Number(p.price)) { %>
         <span class="mk-discount">خصم <%= Math.round((1 - p.price / p.old_price) * 100) %>%</span>
       <% } %>

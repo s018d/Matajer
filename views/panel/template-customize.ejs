@@ -11,39 +11,111 @@
         <h2>🎨 لوحة التخصيص — إلعب بالألوان والشكل</h2>
         <p class="muted" style="margin-bottom:1rem">غيّر وشوف النتيجة فوراً في المعاينة على اليمين. كل تعديل يُحفظ لمتجرك فقط.</p>
         <form method="post" action="/panel/templates/customize" id="customForm">
+          <input type="hidden" name="_csrf" value="<%= typeof csrf !== 'undefined' ? csrf : '' %>">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
             <label>اللون الأساسي <input type="color" name="primary" value="<%= cfg.primary || store.color %>"></label>
             <label>اللون الثانوي <input type="color" name="accent" value="<%= cfg.accent || '#ec4899' %>"></label>
             <label>الخلفية <input type="color" name="bg" value="<%= cfg.bg || '#ffffff' %>"></label>
             <label>النص <input type="color" name="ink" value="<%= cfg.ink || '#111111' %>"></label>
             <label>الخلفية الناعمة <input type="color" name="soft" value="<%= cfg.soft || '#f1f3f5' %>"></label>
+            <label>لون الأزرار <input type="color" name="btnColor" value="<%= cfg.btnColor || cfg.primary || store.color %>"></label>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.8rem">
             <label>الخط
               <select name="font">
-                <option value="Cairo" <%= (cfg.font||'')==='Cairo'?'selected':'' %>>Cairo</option>
-                <option value="Noto Kufi Arabic" <%= (cfg.font||'')==='Noto Kufi Arabic'?'selected':'' %>>Noto Kufi Arabic</option>
-                <option value="Tajawal" <%= (cfg.font||'')==='Tajawal'?'selected':'' %>>Tajawal</option>
+                <option value="Cairo" <%= (cfg.font||'')==='Cairo'?'selected':'' %>>Cairo - عصري</option>
+                <option value="Noto Kufi Arabic" <%= (cfg.font||'')==='Noto Kufi Arabic'?'selected':'' %>>Noto Kufi - أنيق</option>
+                <option value="Tajawal" <%= (cfg.font||'')==='Tajawal'?'selected':'' %>>Tajawal - هادئ</option>
+                <option value="Amiri" <%= cfg.font==='Amiri'?'selected':'' %>>Amiri - كلاسيكي</option>
+                <option value="Changa" <%= cfg.font==='Changa'?'selected':'' %>>Changa - جريء</option>
+                <option value="IBM Plex Sans Arabic" <%= cfg.font==='IBM Plex Sans Arabic'?'selected':'' %>>IBM Plex - تقني</option>
+                <option value="Almarai" <%= cfg.font==='Almarai'?'selected':'' %>>Almarai - ودود</option>
+                <option value="Markazi Text" <%= cfg.font==='Markazi Text'?'selected':'' %>>Markazi - تحريري</option>
+              </select>
+            </label>
+            <label>حجم الخط
+              <select name="fontSize">
+                <option value="14" <%= (cfg.fontSize||'15')==='14'?'selected':'' %>>صغير 14</option>
+                <option value="15" <%= (cfg.fontSize||'15')==='15'?'selected':'' %>>متوسط 15</option>
+                <option value="16" <%= cfg.fontSize==='16'?'selected':'' %>>كبير 16</option>
+                <option value="17" <%= cfg.fontSize==='17'?'selected':'' %>>كبير جداً 17</option>
               </select>
             </label>
           </div>
-          <label style="margin-top:1rem">استدارة الحواف: <span id="radiusVal"><%= cfg.radius || 14 %></span>px
-            <input type="range" name="radius" min="0" max="24" value="<%= cfg.radius || 14 %>" oninput="document.getElementById('radiusVal').textContent=this.value; updatePreview()">
-          </label>
-          <label>شكل الهيرو
-            <select name="hero" onchange="updatePreview()">
-              <option value="default" <%= (cfg.hero||'')==='default'?'selected':'' %>>افتراضي</option>
-              <option value="editorial" <%= cfg.hero==='editorial'?'selected':'' %>>Editorial full-bleed (Fashion)</option>
-              <option value="utility" <%= cfg.hero==='utility'?'selected':'' %>>Utility مع فلاتر (Outdoor)</option>
-              <option value="flash" <%= cfg.hero==='flash'?'selected':'' %>>Flash عروض (Classic)</option>
-              <option value="story" <%= cfg.hero==='story'?'selected':'' %>>Story هادئ (Natural)</option>
-            </select>
-          </label>
-          <label>شكل الشبكة
-            <select name="grid" onchange="updatePreview()">
-              <option value="auto" <%= (cfg.grid||'')==='auto'?'selected':'' %>>تلقائي</option>
-              <option value="2col" <%= cfg.grid==='2col'?'selected':'' %>>عمودين كبير (Fashion)</option>
-              <option value="4col" <%= cfg.grid==='4col'?'selected':'' %>>4 أعمدة كثيف (Classic/Outdoor)</option>
-              <option value="masonry" <%= cfg.grid==='masonry'?'selected':'' %>>Masonry متعرج (Natural)</option>
-            </select>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.8rem">
+            <label>استدارة الحواف: <span id="radiusVal"><%= cfg.radius || 14 %></span>px
+              <input type="range" name="radius" min="0" max="28" value="<%= cfg.radius || 14 %>" oninput="document.getElementById('radiusVal').textContent=this.value; updatePreview()">
+            </label>
+            <label>الظلال
+              <select name="shadow">
+                <option value="soft" <%= (cfg.shadow||'soft')==='soft'?'selected':'' %>>ناعم</option>
+                <option value="none" <%= cfg.shadow==='none'?'selected':'' %>>بدون</option>
+                <option value="medium" <%= cfg.shadow==='medium'?'selected':'' %>>متوسط</option>
+                <option value="strong" <%= cfg.shadow==='strong'?'selected':'' %>>قوي</option>
+              </select>
+            </label>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+            <label>شكل الهيرو
+              <select name="hero" onchange="updatePreview()">
+                <option value="default" <%= (cfg.hero||'')==='default'?'selected':'' %>>افتراضي</option>
+                <option value="editorial" <%= cfg.hero==='editorial'?'selected':'' %>>Editorial full-bleed (Fashion)</option>
+                <option value="utility" <%= cfg.hero==='utility'?'selected':'' %>>Utility مع فلاتر (Outdoor)</option>
+                <option value="flash" <%= cfg.hero==='flash'?'selected':'' %>>Flash عروض (Classic)</option>
+                <option value="story" <%= cfg.hero==='story'?'selected':'' %>>Story هادئ (Natural)</option>
+              </select>
+            </label>
+            <label>شكل الشبكة
+              <select name="grid" onchange="updatePreview()">
+                <option value="auto" <%= (cfg.grid||'')==='auto'?'selected':'' %>>تلقائي</option>
+                <option value="2col" <%= cfg.grid==='2col'?'selected':'' %>>عمودين كبير (Fashion)</option>
+                <option value="4col" <%= cfg.grid==='4col'?'selected':'' %>>4 أعمدة كثيف (Classic/Outdoor)</option>
+                <option value="masonry" <%= cfg.grid==='masonry'?'selected':'' %>>Masonry متعرج (Natural)</option>
+              </select>
+            </label>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+            <label>شكل بطاقة المنتج
+              <select name="cardStyle">
+                <option value="default" <%= (cfg.cardStyle||'default')==='default'?'selected':'' %>>افتراضي</option>
+                <option value="rounded" <%= cfg.cardStyle==='rounded'?'selected':'' %>>دائري ناعم</option>
+                <option value="sharp" <%= cfg.cardStyle==='sharp'?'selected':'' %>>حاد (Fashion)</option>
+                <option value="soft" <%= cfg.cardStyle==='soft'?'selected':'' %>>ناعم جداً</option>
+              </select>
+            </label>
+            <label>شكل الأزرار
+              <select name="btnStyle">
+                <option value="pill" <%= (cfg.btnStyle||'pill')==='pill'?'selected':'' %>>حبة (pill)</option>
+                <option value="rounded" <%= cfg.btnStyle==='rounded'?'selected':'' %>>دائري</option>
+                <option value="square" <%= cfg.btnStyle==='square'?'selected':'' %>>مربع</option>
+                <option value="soft" <%= cfg.btnStyle==='soft'?'selected':'' %>>ناعم</option>
+              </select>
+            </label>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+            <label>تأثير Hover
+              <select name="hover">
+                <option value="lift" <%= (cfg.hover||'lift')==='lift'?'selected':'' %>>رفع للأعلى</option>
+                <option value="zoom" <%= cfg.hover==='zoom'?'selected':'' %>>تكبير</option>
+                <option value="glow" <%= cfg.hover==='glow'?'selected':'' %>>توهج</option>
+                <option value="none" <%= cfg.hover==='none'?'selected':'' %>>بدون</option>
+              </select>
+            </label>
+            <label>الحركة
+              <select name="anim">
+                <option value="on" <%= (cfg.anim||'on')==='on'?'selected':'' %>>مفعلة ✨</option>
+                <option value="off" <%= cfg.anim==='off'?'selected':'' %>>متوقفة</option>
+              </select>
+            </label>
+          </div>
+
+          <label>شريط إعلان علوي (اختياري)
+            <input type="text" name="announce" value="<%= cfg.announce || '' %>" placeholder="مثال: شحن مجاني فوق 50 ألف + خصم 10% اليوم">
           </label>
           <label>ترتيب الأقسام (اسحب وغير - مفصولة بفاصلة)
             <input type="text" name="sections" value="<%= cfg.sections || 'hero,search,cats,grid' %>" id="sectionsInput" placeholder="hero,search,cats,grid,brand">
@@ -79,13 +151,18 @@
 function updatePreview(){
   const f = document.getElementById('customForm');
   const data = new FormData(f);
-  const primary = data.get('primary');
-  const bg = data.get('bg');
-  // تحديث سريع للمعاينة بدون حفظ
   const frame = document.getElementById('previewFrame');
   try {
-    frame.contentDocument.documentElement.style.setProperty('--primary', primary);
-    frame.contentDocument.body.style.background = bg;
+    const doc = frame.contentDocument;
+    if (!doc) return;
+    doc.documentElement.style.setProperty('--primary', data.get('primary'));
+    doc.documentElement.style.setProperty('--accent', data.get('accent'));
+    doc.documentElement.style.setProperty('--bg', data.get('bg'));
+    doc.documentElement.style.setProperty('--ink', data.get('ink'));
+    doc.documentElement.style.setProperty('--soft', data.get('soft'));
+    doc.documentElement.style.setProperty('--radius', data.get('radius') + 'px');
+    doc.body.style.background = data.get('bg');
+    doc.body.style.fontFamily = data.get('font');
   } catch {}
 }
 // drag & drop للترتيب
@@ -108,13 +185,13 @@ drag.addEventListener('drop', e=>{
     }
   }
 });
-// تحديث ألوان مباشر
-document.querySelectorAll('input[type="color"]').forEach(inp=>{
-  inp.addEventListener('input', ()=>{
-    const frame = document.getElementById('previewFrame');
-    try { frame.contentDocument.documentElement.style.setProperty('--primary', document.querySelector('input[name="primary"]').value); } catch {}
-  });
+// تحديث فوري لكل تغيير (ألوان، خط، استدارة)
+document.querySelectorAll('input[type="color"], input[type="range"], select').forEach(inp=>{
+  inp.addEventListener('input', updatePreview);
+  inp.addEventListener('change', updatePreview);
 });
+// تحديث عند تحميل المعاينة لأول مرة
+document.getElementById('previewFrame').addEventListener('load', updatePreview);
 </script>
 </body>
 </html>

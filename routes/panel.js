@@ -588,20 +588,29 @@ router.get('/templates/customize', (req, res) => {
 
 router.post('/templates/customize', (req, res) => {
   const store = getStore(req.user.store_id);
-  const { primary, accent, bg, ink, soft, radius, font, hero, grid, sections } = req.body;
+  const { primary, accent, bg, ink, soft, btnColor, radius, font, fontSize, shadow, cardStyle, btnStyle, hover, anim, hero, grid, sections, announce } = req.body;
   const cfg = {
     primary: /^#[0-9a-fA-F]{6}$/.test(primary) ? primary : store.color,
     accent: /^#[0-9a-fA-F]{6}$/.test(accent) ? accent : '#ec4899',
     bg: /^#[0-9a-fA-F]{6}$/.test(bg) ? bg : '#ffffff',
     ink: /^#[0-9a-fA-F]{6}$/.test(ink) ? ink : '#111111',
     soft: /^#[0-9a-fA-F]{6}$/.test(soft) ? soft : '#f1f3f5',
+    btnColor: /^#[0-9a-fA-F]{6}$/.test(btnColor) ? btnColor : (primary || store.color),
     radius: String(radius || '14'),
     font: String(font || 'Cairo'),
+    fontSize: String(fontSize || '15'),
+    shadow: String(shadow || 'soft'),
+    cardStyle: String(cardStyle || 'default'),
+    btnStyle: String(btnStyle || 'pill'),
+    hover: String(hover || 'lift'),
+    anim: String(anim || 'on'),
     hero: String(hero || 'default'),
     grid: String(grid || 'auto'),
-    sections: String(sections || 'hero,search,cats,grid')
+    sections: String(sections || 'hero,search,cats,grid'),
+    announce: String(announce || '').slice(0,120)
   };
-  const customCss = `:root{--primary:${cfg.primary};--accent:${cfg.accent};--bg:${cfg.bg};--ink:${cfg.ink};--soft:${cfg.soft};--radius:${cfg.radius}px} body{font-family:'${cfg.font}', sans-serif}`;
+  const shadowVal = cfg.shadow==='none' ? 'none' : cfg.shadow==='medium' ? '0 10px 28px rgba(15,23,42,.09)' : cfg.shadow==='strong' ? '0 22px 54px rgba(15,23,42,.15)' : '0 2px 8px rgba(15,23,42,.05)';
+  const customCss = `:root{--primary:${cfg.primary};--accent:${cfg.accent};--bg:${cfg.bg};--ink:${cfg.ink};--soft:${cfg.soft};--radius:${cfg.radius}px;--btn:${cfg.btnColor};--shadow:${shadowVal}} body{font-family:'${cfg.font}', sans-serif; font-size:${cfg.fontSize}px} .st-card{${cfg.cardStyle==='sharp'?'border-radius:2px':cfg.cardStyle==='rounded'?'border-radius:18px':cfg.cardStyle==='soft'?'border-radius:24px':''}} .st-btn{${cfg.btnStyle==='square'?'border-radius:2px':cfg.btnStyle==='rounded'?'border-radius:10px':cfg.btnStyle==='soft'?'border-radius:14px':'border-radius:99px'};background:${cfg.btnColor}} ${cfg.anim==='off'?'*{animation:none !important;transition:none !important}':''} ${cfg.announce ? `.announce-bar{display:block}` : ''}`;
   db.prepare(`UPDATE stores SET template_config=?, custom_css=?, color=? WHERE id=?`).run(JSON.stringify(cfg), customCss, cfg.primary, store.id);
   logActivity(req.user.id, req.user.username, 'تخصيص القالب', `ألوان وتصميم`);
   res.redirect('/panel/templates/customize?ok=' + encodeURIComponent('تم حفظ التخصيص — شوف متجرك الآن'));

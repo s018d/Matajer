@@ -79,8 +79,8 @@
 </nav>
 <main class="st-main <%= store.template === 'prem-fashion' ? 'fashion-main' : store.template === 'prem-outdoor' ? 'outdoor-main' : store.template === 'prem-classic' ? 'classic-main' : store.template === 'prem-natural' ? 'natural-main' : '' %>">
   <div class="st-grid <%= store.template === 'prem-fashion' ? 'fashion-grid' : store.template === 'prem-outdoor' ? 'outdoor-grid' : store.template === 'prem-classic' ? 'classic-grid' : store.template === 'prem-natural' ? 'natural-grid' : '' %>">
-    <% rows.forEach(p => { %>
-      <%- include('../partials/store-card', { p, store }) %>
+    <% rows.forEach((p, i) => { %>
+      <%- include('../partials/store-card', { p, store, idx: i }) %>
     <% }) %>
   </div>
   <% if (rows.length === 0) { %>

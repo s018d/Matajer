@@ -1,84 +1,70 @@
 <%- include('../partials/head', { title: store.name, desc: store.meta_desc || store.description, ogType: 'website', css: '/css/store.css', pwa: store.slug, themeColor: store.color }) %>
+<%
+/* ===== محرك التخطيط الديناميكي — ترتيب الأقسام من layout_json ===== */
+let L = {};
+try { L = JSON.parse(store.layout_json || '{}'); } catch(e) {}
+const order = Array.isArray(L.order) && L.order.length ? L.order : ['hero','search','cats','grid','brand'];
+const vis = L.visibility || {};
+const show = k => vis[k] !== false && order.includes(k);
+const heroCfg = L.hero || {};
+const gridCfg = L.grid || {};
+const heroTitle = heroCfg.title || store.name;
+const heroSub = heroCfg.sub || store.description;
+%>
 <% if (store.template === 'market') { %><link rel="stylesheet" href="/css/store-market.css"><% } %>
-<% if (store.template === 'neo') { %><link rel="stylesheet" href="/css/store-neo.css"><% } %>
-<% if (store.template === 'gen') { %><link rel="stylesheet" href="/css/store-gen.css"><% } %>
 <% if (tpl && tpl.css) { %><link rel="stylesheet" href="<%= tpl.css %>"><% } %>
 <% if (tpl) { %><style><%= tpl.style %></style><% } else { %><style>:root{--primary:<%= store.color %>}</style><% } %>
-<% if (store.custom_css) { %><style><%= store.custom_css %> /* تخصيص حر */</style><% } %>
-<body data-template="<%= store.template %>" data-slug="<%= store.slug %>" data-base="<%= store.base %>" class="store-body<%= tpl ? ' ' + tpl.classes : '' %>">
-<% if (store.template === 'market') { %>
-  <%- include('../partials/market-marquee') %>
-  <%- include('../partials/market-nav') %>
-  <%- include('../partials/market-hero') %>
-  <%- include('../partials/market-feats') %>
-<% } else if (store.template === 'prem-fashion') { %>
-  <header class="st-head fashion-hero">
-    <div class="st-head-inner fashion-inner">
-      <% if (store.logo_path) { %><img src="<%= store.logo_path %>" class="st-logo" alt=""><% } %>
-      <div>
-        <h1><%= store.name %></h1>
-        <p><%= store.description %> — تشكيلة تحريرية فاخرة</p>
-        <span class="fashion-badge">Lookbook • Editorial</span>
-      </div>
-      <div class="fashion-visual">✦</div>
-    </div>
-  </header>
-<% } else if (store.template === 'prem-outdoor') { %>
-  <header class="st-head outdoor-hero">
-    <div class="st-head-inner">
-      <% if (store.logo_path) { %><img src="<%= store.logo_path %>" class="st-logo" alt=""><% } %>
-      <div>
-        <h1><%= store.name %></h1>
-        <p><%= store.description %> — اختر حسب مغامرتك</p>
-      </div>
-    </div>
-    <div class="outdoor-filters">
-      <span>🏔️ Hiking</span><span>⛺ Camping</span><span>🧳 Travel</span><span>🧗 Climbing</span>
-    </div>
-  </header>
-<% } else if (store.template === 'prem-classic') { %>
-  <header class="st-head classic-hero">
-    <div class="st-head-inner">
-      <% if (store.logo_path) { %><img src="<%= store.logo_path %>" class="st-logo" alt=""><% } %>
-      <div>
-        <h1><%= store.name %></h1>
-        <p><%= store.description %> — عروض حصرية وخصومات يومية</p>
-        <span class="classic-badge">⚡ Flash 24H • خصم حتى 50%</span>
-      </div>
-    </div>
-  </header>
-<% } else if (store.template === 'prem-natural') { %>
-  <header class="st-head natural-hero">
-    <div class="st-head-inner">
-      <% if (store.logo_path) { %><img src="<%= store.logo_path %>" class="st-logo" alt=""><% } %>
-      <div>
-        <h1><%= store.name %></h1>
-        <p><%= store.description %> — من الطبيعة إلى بيتك</p>
-        <span class="natural-badge">🌿 طبيعي 100% • مستدام</span>
-      </div>
-    </div>
-  </header>
-<% } else { %>
-  <header class="st-head">
-    <div class="st-head-inner">
-      <% if (store.logo_path) { %><img src="<%= store.logo_path %>" class="st-logo" alt=""><% } %>
-      <div>
-        <h1><%= store.name %></h1>
-        <p><%= store.description %></p>
-      </div>
-    </div>
-    <% if (store.template === 'neo') { %><span class="neo-sticker">أحدث العروض</span><% } %>
-  </header>
+<% if (store.custom_css) { %><style><%= store.custom_css %></style><% } %>
+<% /* خلفية المتجر العامة */ %>
+<% if (store.store_bg_image) { %>
+<style>body.store-body{background-image:url('<%= store.store_bg_image %>');background-size:cover;background-attachment:fixed}</style>
 <% } %>
-<%- include('../partials/store-search') %>
+<body data-template="<%= store.template %>" data-slug="<%= store.slug %>" data-base="<%= store.base %>" class="store-body<%= tpl ? ' ' + tpl.classes : '' %>">
+
+<% /* ====== كل قسم دالة عرض، والترتيب من layout.order ====== */ %>
+
+<% function renderHero(){ %>
+  <% if (store.template === 'market') { %>
+    <%- include('../partials/market-hero') %>
+  <% } else { const hStyle = `position:relative;${heroCfg.image ? `background:url('${heroCfg.image}') center/cover;` : ''}` ; const overlay = heroCfg.overlay != null ? Number(heroCfg.overlay) : (heroCfg.image ? 40 : 0); %>
+    <header class="st-head <%= store.template==='prem-fashion'?'fashion-hero':store.template==='prem-outdoor'?'outdoor-hero':store.template==='prem-classic'?'classic-hero':store.template==='prem-natural'?'natural-hero':'' %>" style="<%= hStyle %>">
+      <% if (heroCfg.video) { %>
+        <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0" src="<%= heroCfg.video %>"></video>
+      <% } %>
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,<%= overlay/100 %>)"></div>
+      <div class="st-head-inner" style="position:relative;z-index:1">
+        <% if (store.logo_path) { %><img src="<%= store.logo_path %>" class="st-logo" alt=""><% } %>
+        <div>
+          <h1 style="<%= heroCfg.image||heroCfg.video ? `color:${heroCfg.textColor||'#fff'} !important;-webkit-text-fill-color:${heroCfg.textColor||'#fff'} !important` : '' %>"><%= heroTitle %></h1>
+          <p style="<%= heroCfg.image||heroCfg.video ? 'color:rgba(255,255,255,.88)' : '' %>"><%= heroSub %></p>
+          <% if (store.template==='prem-fashion') { %><span class="fashion-badge">Lookbook • Editorial</span><% } %>
+          <% if (store.template==='prem-outdoor') { %>
+            <div class="outdoor-filters" style="margin-inline-start:0">
+              <span>🏔️ Hiking</span><span>⛺ Camping</span><span>🧳 Travel</span><span>🧗 Climbing</span>
+            </div>
+          <% } %>
+          <% if (store.template==='prem-classic') { %><span class="classic-badge">⚡ Flash 24H • خصم حتى 50%</span><% } %>
+          <% if (store.template==='prem-natural') { %><span class="natural-badge">🌿 طبيعي 100%</span><% } %>
+        </div>
+      </div>
+    </header>
+  <% } %>
+<% } %>
+
+<% function renderSearch(){ %><%- include('../partials/store-search') %><% } %>
+
+<% function renderCats(){ %>
 <nav class="st-nav" id="mkCats">
   <a href="<%= store.base %>/" class="<%= cat === 0 ? 'on' : '' %>">الكل</a>
   <% cats.forEach(c => { %>
     <a href="<%= store.base %>/?cat=<%= c.id %>" class="<%= cat === c.id ? 'on' : '' %>"><%= c.name %></a>
   <% }) %>
 </nav>
-<main class="st-main <%= store.template === 'prem-fashion' ? 'fashion-main' : store.template === 'prem-outdoor' ? 'outdoor-main' : store.template === 'prem-classic' ? 'classic-main' : store.template === 'prem-natural' ? 'natural-main' : '' %>">
-  <div class="st-grid <%= store.template === 'prem-fashion' ? 'fashion-grid' : store.template === 'prem-outdoor' ? 'outdoor-grid' : store.template === 'prem-classic' ? 'classic-grid' : store.template === 'prem-natural' ? 'natural-grid' : '' %>">
+<% } %>
+
+<% function renderGrid(){ const cols = gridCfg.cols; const gap = gridCfg.gap || 16; const cls = store.template==='prem-fashion'?'fashion-grid':store.template==='prem-outdoor'?'outdoor-grid':store.template==='prem-classic'?'classic-grid':store.template==='prem-natural'?'natural-grid':''; %>
+<main class="st-main">
+  <div class="st-grid <%= cls %>" style="<%= cols&&cols!=='auto' ? `grid-template-columns:repeat(${cols},1fr) !important;` : '' %>gap:<%= gap %>px">
     <% rows.forEach((p, i) => { %>
       <%- include('../partials/store-card', { p, store, idx: i }) %>
     <% }) %>
@@ -87,11 +73,23 @@
     <div class="st-empty"><%= q ? 'لا توجد نتائج للبحث عن «' + q + '»' : 'لا توجد منتجات في هذا القسم حالياً' %></div>
   <% } %>
 </main>
+<% } %>
+
+<% function renderBrand(){ %><%- include('../partials/store-brand') %><% } %>
+
+<% const renderers = { hero: renderHero, search: renderSearch, cats: renderCats, grid: renderGrid, brand: renderBrand }; %>
+
+<% if (store.template === 'market') { %>
+  <%- include('../partials/market-marquee') %>
+  <%- include('../partials/market-nav') %>
+<% } %>
+
+<% for (const sec of order) { if (show(sec) && renderers[sec]) { renderers[sec](); } } %>
+
 <%- include('../partials/store-float') %>
 <% if (store.template === 'market' || store.template === 'neo') { %>
   <%- include('../partials/market-footer') %>
 <% } %>
-<%- include('../partials/store-brand') %>
 <%- include('../partials/cart-drawer') %>
 </body>
 </html>

@@ -1192,3 +1192,120 @@ money is not defined
 - **[٢١‏/٨‏/٢٠٢٦، ٣:٠٣:٠٩ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
 - **[٢١‏/٨‏/٢٠٢٦، ٣:٠٣:١٣ م]** مستخدم «s018d» اعتمد قالب المتجر «prem-fashion» لمتجر «مريم»
 - **[٢١‏/٨‏/٢٠٢٦، ٣:٠٣:٣٥ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢٠:٠٣ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٣:٢٠:٠٣ م
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢٠:٠٣ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢١:١٤ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢١:١٧ م]** **خطأ في الخادم:** SyntaxError: missing ) after argument list in A:\05-الملفاتPersonal\سطح المكتب\Matajer\views\panel\template-customize.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+    at new Function (<anonymous>)
+    at Template.compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:673:12)
+    at Object.compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:398:16)
+    at handleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:235:18)
+    at tryHandleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:274:16)
+    at exports.renderFile [as engine] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:491:10)
+    at View.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\view.js:135:8)
+    at tryRender (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:657:10)
+    at app.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:609:3)
+    at ServerResponse.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\response.js:1049:7)
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢١:٤٣ م]** **خطأ في الخادم:** SyntaxError: missing ) after argument list in A:\05-الملفاتPersonal\سطح المكتب\Matajer\views\panel\template-customize.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+    at new Function (<anonymous>)
+    at Template.compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:673:12)
+    at Object.compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:398:16)
+    at handleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:235:18)
+    at tryHandleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:274:16)
+    at exports.renderFile [as engine] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:491:10)
+    at View.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\view.js:135:8)
+    at tryRender (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:657:10)
+    at app.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:609:3)
+    at ServerResponse.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\response.js:1049:7)
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢١:٤٨ م]** دخول ناجح للمستخدم «admin» بتصريح مدير عام
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢١:٥٧ م]** المدير حدّث طلب دومين «sc.com» لمتجر «مريم» إلى: rejected
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢٢:١٢ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢٢:١٦ م]** **خطأ في الخادم:** SyntaxError: missing ) after argument list in A:\05-الملفاتPersonal\سطح المكتب\Matajer\views\panel\template-customize.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+    at new Function (<anonymous>)
+    at Template.compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:673:12)
+    at Object.compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:398:16)
+    at handleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:235:18)
+    at tryHandleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:274:16)
+    at exports.renderFile [as engine] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:491:10)
+    at View.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\view.js:135:8)
+    at tryRender (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:657:10)
+    at app.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:609:3)
+    at ServerResponse.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\response.js:1049:7)
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢٢:٢٣ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢٢:٢٥ م]** **خطأ في الخادم:** SyntaxError: missing ) after argument list in A:\05-الملفاتPersonal\سطح المكتب\Matajer\views\panel\template-customize.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+    at new Function (<anonymous>)
+    at Template.compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:673:12)
+    at Object.compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:398:16)
+    at handleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:235:18)
+    at tryHandleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:274:16)
+    at exports.renderFile [as engine] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:491:10)
+    at View.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\view.js:135:8)
+    at tryRender (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:657:10)
+    at app.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:609:3)
+    at ServerResponse.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\response.js:1049:7)
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢٣:٠٨ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢٣:١٠ م]** **خطأ في الخادم:** SyntaxError: missing ) after argument list in A:\05-الملفاتPersonal\سطح المكتب\Matajer\views\panel\template-customize.ejs while compiling ejs
+
+If the above error is not helpful, you may want to try EJS-Lint:
+https://github.com/RyanZim/EJS-Lint
+Or, if you meant to create an async function, pass `async: true` as an option.
+    at new Function (<anonymous>)
+    at Template.compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:673:12)
+    at Object.compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:398:16)
+    at handleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:235:18)
+    at tryHandleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:274:16)
+    at exports.renderFile [as engine] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:491:10)
+    at View.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\view.js:135:8)
+    at tryRender (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:657:10)
+    at app.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:609:3)
+    at ServerResponse.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\response.js:1049:7)
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢٤:١٩ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢٤:٣٩ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢٥:٥٨ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٣:٢٥:٥٨ م
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٢٥:٥٨ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٣٢:٤٠ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٣٣:٣٦ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٣:٣٣:٣٦ م
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٣٣:٣٦ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٣٣:٤٢ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٣٦:٠١ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٣:٣٦:٠١ م
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٣٦:٠١ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٣٦:٠٧ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٣٧:٢٤ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٣٨:٠٧ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٣:٣٨:٠٧ م
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٣٨:٠٧ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٣٨:١٣ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٣٩:٥٢ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٣:٣٩:٥٢ م
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٣٩:٥٢ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٣٩:٥٨ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٤٠:٤٩ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٤٢:١٩ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٣:٤٢:١٩ م
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٤٢:١٩ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٤٢:٢٥ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٤٤:١٠ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٤٤:٥٠ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٤٧:٤٠ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٣:٤٧:٤٠ م
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٤٧:٤٠ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٤٧:٤٦ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٤٨:٢٩ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٥٠:٤٦ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٣:٥٠:٤٦ م
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٥٠:٤٦ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٥٠:٥٣ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٥٢:٣٨ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٣:٥٢:٣٨ م
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٥٢:٣٨ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٣:٥٢:٤٤ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر

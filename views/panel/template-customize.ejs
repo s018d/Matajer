@@ -1,197 +1,236 @@
-<%- include('../partials/head', { title: 'تخصيص القالب — متجري' }) %>
+<%- include('../partials/head', { title: 'محرر المتجر المرئي — اسحب ورتب' }) %>
 <body class="app">
-<%- include('../partials/sidebar-panel', { active: 'templates', store }) %>
+<%- include('../partials/sidebar-panel', { active: 'customize', store }) %>
 <main class="main">
-  <%- include('../partials/topbar', { pageTitle: 'تخصيص القالب — حرر ألوانك وتصميمك' }) %>
-  <div class="content">
+  <%- include('../partials/topbar', { pageTitle: '🎨 محرر المتجر — اسحب، أفلت، عدّل' }) %>
+  <div class="content" style="max-width:1400px">
     <%- include('../partials/alerts', { ok: typeof ok !== 'undefined' ? ok : '', err: typeof err !== 'undefined' ? err : '' }) %>
     
-    <div class="two-col" style="align-items:start">
+    <div style="display:grid;grid-template-columns:380px 1fr;gap:1.2rem;align-items:start">
+      <!-- لوحة التحكم -->
       <div class="card">
-        <h2>🎨 لوحة التخصيص — إلعب بالألوان والشكل</h2>
-        <p class="muted" style="margin-bottom:1rem">غيّر وشوف النتيجة فوراً في المعاينة على اليمين. كل تعديل يُحفظ لمتجرك فقط.</p>
-        <form method="post" action="/panel/templates/customize" id="customForm">
-          <input type="hidden" name="_csrf" value="<%= typeof csrf !== 'undefined' ? csrf : '' %>">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
-            <label>اللون الأساسي <input type="color" name="primary" value="<%= cfg.primary || store.color %>"></label>
-            <label>اللون الثانوي <input type="color" name="accent" value="<%= cfg.accent || '#ec4899' %>"></label>
-            <label>الخلفية <input type="color" name="bg" value="<%= cfg.bg || '#ffffff' %>"></label>
-            <label>النص <input type="color" name="ink" value="<%= cfg.ink || '#111111' %>"></label>
-            <label>الخلفية الناعمة <input type="color" name="soft" value="<%= cfg.soft || '#f1f3f5' %>"></label>
-            <label>لون الأزرار <input type="color" name="btnColor" value="<%= cfg.btnColor || cfg.primary || store.color %>"></label>
-          </div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.8rem">
-            <label>الخط
-              <select name="font">
-                <option value="Cairo" <%= (cfg.font||'')==='Cairo'?'selected':'' %>>Cairo - عصري</option>
-                <option value="Noto Kufi Arabic" <%= (cfg.font||'')==='Noto Kufi Arabic'?'selected':'' %>>Noto Kufi - أنيق</option>
-                <option value="Tajawal" <%= (cfg.font||'')==='Tajawal'?'selected':'' %>>Tajawal - هادئ</option>
-                <option value="Amiri" <%= cfg.font==='Amiri'?'selected':'' %>>Amiri - كلاسيكي</option>
-                <option value="Changa" <%= cfg.font==='Changa'?'selected':'' %>>Changa - جريء</option>
-                <option value="IBM Plex Sans Arabic" <%= cfg.font==='IBM Plex Sans Arabic'?'selected':'' %>>IBM Plex - تقني</option>
-                <option value="Almarai" <%= cfg.font==='Almarai'?'selected':'' %>>Almarai - ودود</option>
-                <option value="Markazi Text" <%= cfg.font==='Markazi Text'?'selected':'' %>>Markazi - تحريري</option>
-              </select>
-            </label>
-            <label>حجم الخط
-              <select name="fontSize">
-                <option value="14" <%= (cfg.fontSize||'15')==='14'?'selected':'' %>>صغير 14</option>
-                <option value="15" <%= (cfg.fontSize||'15')==='15'?'selected':'' %>>متوسط 15</option>
-                <option value="16" <%= cfg.fontSize==='16'?'selected':'' %>>كبير 16</option>
-                <option value="17" <%= cfg.fontSize==='17'?'selected':'' %>>كبير جداً 17</option>
-              </select>
-            </label>
-          </div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.8rem">
-            <label>استدارة الحواف: <span id="radiusVal"><%= cfg.radius || 14 %></span>px
-              <input type="range" name="radius" min="0" max="28" value="<%= cfg.radius || 14 %>" oninput="document.getElementById('radiusVal').textContent=this.value; updatePreview()">
-            </label>
-            <label>الظلال
-              <select name="shadow">
-                <option value="soft" <%= (cfg.shadow||'soft')==='soft'?'selected':'' %>>ناعم</option>
-                <option value="none" <%= cfg.shadow==='none'?'selected':'' %>>بدون</option>
-                <option value="medium" <%= cfg.shadow==='medium'?'selected':'' %>>متوسط</option>
-                <option value="strong" <%= cfg.shadow==='strong'?'selected':'' %>>قوي</option>
-              </select>
-            </label>
-          </div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
-            <label>شكل الهيرو
-              <select name="hero" onchange="updatePreview()">
-                <option value="default" <%= (cfg.hero||'')==='default'?'selected':'' %>>افتراضي</option>
-                <option value="editorial" <%= cfg.hero==='editorial'?'selected':'' %>>Editorial full-bleed (Fashion)</option>
-                <option value="utility" <%= cfg.hero==='utility'?'selected':'' %>>Utility مع فلاتر (Outdoor)</option>
-                <option value="flash" <%= cfg.hero==='flash'?'selected':'' %>>Flash عروض (Classic)</option>
-                <option value="story" <%= cfg.hero==='story'?'selected':'' %>>Story هادئ (Natural)</option>
-              </select>
-            </label>
-            <label>شكل الشبكة
-              <select name="grid" onchange="updatePreview()">
-                <option value="auto" <%= (cfg.grid||'')==='auto'?'selected':'' %>>تلقائي</option>
-                <option value="2col" <%= cfg.grid==='2col'?'selected':'' %>>عمودين كبير (Fashion)</option>
-                <option value="4col" <%= cfg.grid==='4col'?'selected':'' %>>4 أعمدة كثيف (Classic/Outdoor)</option>
-                <option value="masonry" <%= cfg.grid==='masonry'?'selected':'' %>>Masonry متعرج (Natural)</option>
-              </select>
-            </label>
-          </div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
-            <label>شكل بطاقة المنتج
-              <select name="cardStyle">
-                <option value="default" <%= (cfg.cardStyle||'default')==='default'?'selected':'' %>>افتراضي</option>
-                <option value="rounded" <%= cfg.cardStyle==='rounded'?'selected':'' %>>دائري ناعم</option>
-                <option value="sharp" <%= cfg.cardStyle==='sharp'?'selected':'' %>>حاد (Fashion)</option>
-                <option value="soft" <%= cfg.cardStyle==='soft'?'selected':'' %>>ناعم جداً</option>
-              </select>
-            </label>
-            <label>شكل الأزرار
-              <select name="btnStyle">
-                <option value="pill" <%= (cfg.btnStyle||'pill')==='pill'?'selected':'' %>>حبة (pill)</option>
-                <option value="rounded" <%= cfg.btnStyle==='rounded'?'selected':'' %>>دائري</option>
-                <option value="square" <%= cfg.btnStyle==='square'?'selected':'' %>>مربع</option>
-                <option value="soft" <%= cfg.btnStyle==='soft'?'selected':'' %>>ناعم</option>
-              </select>
-            </label>
-          </div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
-            <label>تأثير Hover
-              <select name="hover">
-                <option value="lift" <%= (cfg.hover||'lift')==='lift'?'selected':'' %>>رفع للأعلى</option>
-                <option value="zoom" <%= cfg.hover==='zoom'?'selected':'' %>>تكبير</option>
-                <option value="glow" <%= cfg.hover==='glow'?'selected':'' %>>توهج</option>
-                <option value="none" <%= cfg.hover==='none'?'selected':'' %>>بدون</option>
-              </select>
-            </label>
-            <label>الحركة
-              <select name="anim">
-                <option value="on" <%= (cfg.anim||'on')==='on'?'selected':'' %>>مفعلة ✨</option>
-                <option value="off" <%= cfg.anim==='off'?'selected':'' %>>متوقفة</option>
-              </select>
-            </label>
-          </div>
-
-          <label>شريط إعلان علوي (اختياري)
-            <input type="text" name="announce" value="<%= cfg.announce || '' %>" placeholder="مثال: شحن مجاني فوق 50 ألف + خصم 10% اليوم">
-          </label>
-          <label>ترتيب الأقسام (اسحب وغير - مفصولة بفاصلة)
-            <input type="text" name="sections" value="<%= cfg.sections || 'hero,search,cats,grid' %>" id="sectionsInput" placeholder="hero,search,cats,grid,brand">
-            <small class="field-hint">اسحب البطاقات على اليمين أو اكتب الترتيب: hero, search, cats, grid, brand, footer</small>
-          </label>
-          
-          <div id="dragSections" style="display:flex;gap:.4rem;flex-wrap:wrap;margin:.6rem 0">
-            <% (cfg.sections || 'hero,search,cats,grid').split(',').forEach(s=>{ %>
-              <span draggable="true" class="badge" style="cursor:grab;background:var(--soft);padding:.5rem .8rem" data-sec="<%= s.trim() %>"><%= s.trim() %> ↕</span>
-            <% }) %>
-          </div>
-
-          <button class="btn btn-primary btn-block" style="margin-top:1rem">💾 حفظ التخصيص</button>
-          <a href="/s/<%= store.slug %>" target="_blank" class="btn btn-ghost btn-block" style="margin-top:.5rem">👁️ عرض متجري الحقيقي</a>
-        </form>
+        <h2>🧩 أقسام متجرك — اسحب لإعادة الترتيب</h2>
+        <p class="muted" style="font-size:.82rem;margin-bottom:.8rem">اسحب البطاقة وفلتها بالمكان اللي تريده. اضغط ⚙️ لتحرير تفاصيل القسم.</p>
+        
+        <div id="sectionsList" style="display:flex;flex-direction:column;gap:.5rem">
+          <% sections.forEach(s => { %>
+            <div class="sec-item card" draggable="true" data-sec="<%= s.key %>" 
+                 style="padding:.8rem;cursor:grab;border:1.5px solid <%= s.visible ? 'var(--line)' : '#ef4444' %>;transition:all .2s;position:relative"
+                 onmouseover="this.style.borderColor='var(--brand)'" onmouseout="this.style.borderColor='<%= s.visible ? 'var(--line)' : '#ef4444' %>'">
+              <div class="sec-head" style="display:flex;align-items:center;gap:.6rem">
+                <span style="font-size:1.1rem"><%= s.icon %></span>
+                <div style="flex:1">
+                  <b style="font-size:.92rem"><%= s.name %></b>
+                  <div class="muted" style="font-size:.72rem"><%= s.desc %></div>
+                </div>
+                <button type="button" onclick="toggleSec('<%= s.key %>')" title="إظهار/إخفاء" 
+                        style="border:none;background:none;cursor:pointer;font-size:1.1rem"><%= s.visible ? '👁️' : '🚫' %></button>
+              </div>
+              <!-- لوحة تحرير القسم -->
+              <div id="edit-<%= s.key %>" style="display:none;margin-top:.7rem;padding-top:.7rem;border-top:1px dashed var(--line)">
+                <% if (s.key === 'hero') { %>
+                  <label style="font-size:.8rem">عنوان الهيرو
+                    <input type="text" name="heroTitle" value="<%= (layout.hero||{}).title || store.name %>" onchange="markDirty()" style="padding:.4rem .6rem;font-size:.85rem">
+                  </label>
+                  <label style="font-size:.8rem;margin-top:.4rem">نص فرعي
+                    <input type="text" name="heroSub" value="<%= (layout.hero||{}).sub || '' %>" placeholder="جملة قصيرة تجذب الزبون" onchange="markDirty()" style="padding:.4rem .6rem;font-size:.85rem">
+                  </label>
+                  <label style="font-size:.8rem;margin-top:.4rem">صورة خلفية الهيرو
+                    <input type="file" accept="image/*" onchange="previewHeroImg(this)" style="font-size:.78rem;padding:.3rem;width:100%">
+                    <% if ((layout.hero||{}).image) { %><img src="<%= layout.hero.image %>" style="max-width:100%;height:60px;object-fit:cover;border-radius:6px;margin-top:.3rem" id="heroPreview"><% } else { %><div id="heroPreview"></div><% } %>
+                  </label>
+                  <label style="font-size:.8rem;margin-top:.4rem">أو رابط فيديو خلفية (mp4)
+                    <input type="url" name="heroVideo" value="<%= (layout.hero||{}).video || '' %>" dir="ltr" placeholder="https://.../video.mp4" onchange="markDirty()" style="padding:.4rem .6rem;font-size:.85rem">
+                  </label>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem;margin-top:.4rem">
+                    <label style="font-size:.8rem">لون النص
+                      <input type="color" name="heroText" value="<%= (layout.hero||{}).textColor || '#ffffff' %>" onchange="markDirty()" style="height:34px">
+                    </label>
+                    <label style="font-size:.8rem">طبقة تعتيم
+                      <input type="range" name="heroOverlay" min="0" max="90" value="<%= (layout.hero||{}).overlay != null ? layout.hero.overlay : 40 %>" oninput="document.getElementById('ovVal').textContent=this.value+'%';markDirty()">
+                      <span id="ovVal"><%= (layout.hero||{}).overlay != null ? layout.hero.overlay : 40 %>%</span>
+                    </label>
+                  </div>
+                <% } else if (s.key === 'grid') { %>
+                  <label style="font-size:.8rem">عدد الأعمدة
+                    <select name="gridCols" onchange="markDirty()" style="width:100%;padding:.4rem">
+                      <option value="auto" <%= (layout.grid||{}).cols==='auto'||!(layout.grid||{}).cols?'selected':'' %>>تلقائي حسب الشاشة</option>
+                      <option value="2" <%= (layout.grid||{}).cols===2?'selected':'' %>>عمودان (كبير)</option>
+                      <option value="3" <%= (layout.grid||{}).cols===3?'selected':'' %>>ثلاثة أعمدة</option>
+                      <option value="4" <%= (layout.grid||{}).cols===4?'selected':'' %>>أربعة (كثيف)</option>
+                    </select>
+                  </label>
+                  <label style="font-size:.8rem;margin-top:.4rem">المسافة بين البطاقات
+                    <input type="range" name="gridGap" min="4" max="32" value="<%= (layout.grid||{}).gap || 16 %>" oninput="markDirty()">
+                  </label>
+                <% } else { %>
+                  <p class="muted" style="font-size:.8rem;margin:0">هذا القسم يتبع إعداداته العامة — ألوان وخطوط المتجر من الأسفل.</p>
+                <% } %>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+        
+        <div style="margin-top:1rem;display:flex;flex-direction:column;gap:.5rem">
+          <button type="button" class="btn btn-primary btn-block" onclick="saveLayout()" id="saveBtn">💾 حفظ التصميم</button>
+          <a href="/s/<%= store.slug %>" target="_blank" class="btn btn-ghost btn-block">👁️ فتح متجري الحقيقي</a>
+          <button type="button" class="btn btn-ghost btn-block" onclick="resetLayout()">↩️ استعادة الافتراضي</button>
+        </div>
       </div>
       
+      <!-- المعاينة الحية -->
       <div class="card" style="position:sticky;top:80px">
-        <h2>👁️ معاينة حية</h2>
-        <p class="muted">تتحدث مع كل تعديل</p>
-        <iframe id="previewFrame" src="/s/<%= store.slug %>" style="width:100%;height:520px;border:1.5px solid var(--line);border-radius:12px;background:#fff"></iframe>
-        <div style="display:flex;gap:.4rem;margin-top:.6rem">
-          <button type="button" class="btn btn-sm" onclick="document.getElementById('previewFrame').style.width='100%'">دسكتوب</button>
-          <button type="button" class="btn btn-sm" onclick="document.getElementById('previewFrame').style.width='375px'">جوال</button>
-          <button type="button" class="btn btn-sm" onclick="document.getElementById('previewFrame').style.width='768px'">تابلت</button>
+        <h2>👁️ معاينة مباشرة <span class="badge badge-warn" id="dirtyBadge" hidden>تعديلات غير محفوظة</span></h2>
+        <div style="display:flex;gap:.4rem;margin-bottom:.6rem;align-items:center">
+          <button type="button" class="btn btn-sm" onclick="setW('100%')">🖥️ كامل</button>
+          <button type="button" class="btn btn-sm" onclick="setW('768px')">📱 تابلت</button>
+          <button type="button" class="btn btn-sm" onclick="setW('375px')">📲 جوال</button>
+          <span style="flex:1"></span>
+          <button type="button" class="btn btn-sm" onclick="refreshPreview()">🔄 تحديث</button>
         </div>
-        <small class="field-hint">اضغط جوال/تابلت لتشوف كيف يظهر على كل شاشة - لا شيء يخرج برا ✅</small>
+        <div style="display:flex;justify-content:center;background:#f0f2f7;border-radius:12px;padding:.8rem">
+          <iframe id="pv" src="/s/<%= store.slug %>?live=1" style="width:100%;height:600px;border:none;border-radius:8px;background:#fff;transition:width .3s"></iframe>
+        </div>
       </div>
+    </div>
+
+    <!-- ألوان المتجر العامة -->
+    <div class="card" style="margin-top:1.2rem">
+      <h2>🎨 ألوان وخطوط المتجر (العامة)</h2>
+      <form method="post" action="/panel/templates/customize" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;align-items:end">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <label style="font-size:.8rem">أساسي<input type="color" name="primary" value="<%= cfg.primary || store.color %>" style="height:38px"></label>
+        <label style="font-size:.8rem">ثانوي<input type="color" name="accent" value="<%= cfg.accent || '#ec4899' %>" style="height:38px"></label>
+        <label style="font-size:.8rem">خلفية<input type="color" name="bg" value="<%= cfg.bg || '#ffffff' %>" style="height:38px"></label>
+        <label style="font-size:.8rem">نص<input type="color" name="ink" value="<%= cfg.ink || '#111111' %>" style="height:38px"></label>
+        <label style="font-size:.8rem">ناعم<input type="color" name="soft" value="<%= cfg.soft || '#f1f3f5' %>" style="height:38px"></label>
+        <label style="font-size:.8rem">أزرار<input type="color" name="btnColor" value="<%= cfg.btnColor || cfg.primary || store.color %>" style="height:38px"></label>
+        <label style="font-size:.8rem">الخط
+          <select name="font" style="padding:.45rem">
+            <option value="Cairo" <%= cfg.font==='Cairo'?'selected':'' %>>Cairo</option>
+            <option value="Noto Kufi Arabic" <%= cfg.font==='Noto Kufi Arabic'?'selected':'' %>>Kufi</option>
+            <option value="Tajawal" <%= cfg.font==='Tajawal'?'selected':'' %>>Tajawal</option>
+            <option value="Amiri" <%= cfg.font==='Amiri'?'selected':'' %>>Amiri</option>
+            <option value="Changa" <%= cfg.font==='Changa'?'selected':'' %>>Changa</option>
+            <option value="IBM Plex Sans Arabic" <%= cfg.font==='IBM Plex Sans Arabic'?'selected':'' %>>Plex</option>
+            <option value="Almarai" <%= cfg.font==='Almarai'?'selected':'' %>>Almarai</option>
+            <option value="Markazi Text" <%= cfg.font==='Markazi Text'?'selected':'' %>>Markazi</option>
+          </select>
+        </label>
+        <label style="font-size:.8rem">حجم<input type="number" name="fontSize" min="13" max="18" value="<%= cfg.fontSize || 15 %>" style="padding:.45rem"></label>
+        <label style="font-size:.8rem">استدارة
+          <select name="radius" style="padding:.45rem">
+            <option value="0" <%= cfg.radius==='0'?'selected':'' %>>حاد</option>
+            <option value="8" <%= cfg.radius==='8'?'selected':'' %>>ناعم</option>
+            <option value="14" <%= cfg.radius==='14'||!cfg.radius?'selected':'' %>>متوسط</option>
+            <option value="22" <%= cfg.radius==='22'?'selected':'' %>>دائري</option>
+          </select>
+        </label>
+        <label style="font-size:.8rem">شكل الأزرار
+          <select name="btnStyle" style="padding:.45rem">
+            <option value="pill" <%= cfg.btnStyle==='pill'||!cfg.btnStyle?'selected':'' %>>حبة</option>
+            <option value="rounded" <%= cfg.btnStyle==='rounded'?'selected':'' %>>دائري</option>
+            <option value="square" <%= cfg.btnStyle==='square'?'selected':'' %>>مربع</option>
+          </select>
+        </label>
+        <button class="btn btn-primary">💾 حفظ الألوان</button>
+      </form>
     </div>
   </div>
 </main>
+
+<style>
+.sec-item.dragging{opacity:.5;transform:scale(.98)}
+.sec-item.drag-over{border-color:var(--brand) !important;border-style:dashed !important;transform:translateY(-2px)}
+</style>
+
 <script>
-function updatePreview(){
-  const f = document.getElementById('customForm');
-  const data = new FormData(f);
-  const frame = document.getElementById('previewFrame');
-  try {
-    const doc = frame.contentDocument;
-    if (!doc) return;
-    doc.documentElement.style.setProperty('--primary', data.get('primary'));
-    doc.documentElement.style.setProperty('--accent', data.get('accent'));
-    doc.documentElement.style.setProperty('--bg', data.get('bg'));
-    doc.documentElement.style.setProperty('--ink', data.get('ink'));
-    doc.documentElement.style.setProperty('--soft', data.get('soft'));
-    doc.documentElement.style.setProperty('--radius', data.get('radius') + 'px');
-    doc.body.style.background = data.get('bg');
-    doc.body.style.fontFamily = data.get('font');
-  } catch {}
-}
-// drag & drop للترتيب
-const drag = document.getElementById('dragSections');
+const SECTIONS = <%- JSON.stringify(sections.map(s=>s.key)) %>;
+let layout = <%- JSON.stringify(layout) %> || {};
+let dirty = false;
+
+function markDirty(){ dirty=true; document.getElementById('dirtyBadge').hidden=false; }
+
+// ===== سحب وإفلات =====
+const list = document.getElementById('sectionsList');
 let dragged = null;
-drag.addEventListener('dragstart', e=> dragged=e.target);
-drag.addEventListener('dragover', e=> e.preventDefault());
-drag.addEventListener('drop', e=>{
-  e.preventDefault();
-  if (dragged && e.target.dataset.sec) {
-    const secs = [...drag.children].map(c=>c.dataset.sec);
-    const from = secs.indexOf(dragged.dataset.sec);
-    const to = secs.indexOf(e.target.dataset.sec);
-    if (from>-1 && to>-1) {
-      const nsecs = [...secs];
-      nsecs.splice(from,1);
-      nsecs.splice(to,0,dragged.dataset.sec);
-      document.getElementById('sectionsInput').value = nsecs.join(',');
-      drag.innerHTML = nsecs.map(s=>`<span draggable="true" class="badge" style="cursor:grab;background:var(--soft);padding:.5rem .8rem" data-sec="${s}">${s} ↕</span>`).join('');
-    }
-  }
+list.querySelectorAll('.sec-item').forEach(el=>{
+  el.addEventListener('dragstart', ()=>{ dragged=el; el.classList.add('dragging'); });
+  el.addEventListener('dragend', ()=>{ el.classList.remove('dragging'); list.querySelectorAll('.sec-item').forEach(x=>x.classList.remove('drag-over')); });
+  el.addEventListener('dragover', e=>{ e.preventDefault(); if(el!==dragged) el.classList.add('drag-over'); });
+  el.addEventListener('dragleave', ()=> el.classList.remove('drag-over'));
+  el.addEventListener('drop', e=>{
+    e.preventDefault();
+    if (!dragged || dragged===el) return;
+    const rect = el.getBoundingClientRect();
+    const after = (e.clientY - rect.top) > rect.height/2;
+    list.insertBefore(dragged, after ? el.nextSibling : el);
+    markDirty();
+    refreshPreview();
+  });
 });
-// تحديث فوري لكل تغيير (ألوان، خط، استدارة)
-document.querySelectorAll('input[type="color"], input[type="range"], select').forEach(inp=>{
-  inp.addEventListener('input', updatePreview);
-  inp.addEventListener('change', updatePreview);
+
+function getOrder(){
+  return [...list.querySelectorAll('.sec-item')].map(el=>({
+    key: el.dataset.sec,
+    visible: el.querySelector('[onclick*="toggleSec"]').textContent.trim() === '👁️'
+  }));
+}
+
+function toggleSec(key){
+  const item = list.querySelector(`[data-sec="${key}"]`);
+  const btn = item.querySelector('[onclick*="toggleSec"]');
+  btn.textContent = btn.textContent.trim()==='👁️' ? '🚫' : '👁️';
+  item.style.borderColor = btn.textContent.trim()==='👁️' ? 'var(--line)' : '#ef4444';
+  markDirty();
+}
+
+// فتح/غلق محرر كل قسم - زر ⚙️ واضح (inline onclick حتى يشتغل مع Playwright)
+list.querySelectorAll('.sec-item').forEach(el=>{
+  const key = el.dataset.sec;
+  const btnRow = el.querySelector('.sec-head');
+  if (!btnRow) return;
+  const gear = document.createElement('button');
+  gear.type='button'; gear.textContent='⚙️'; gear.setAttribute('title','تحرير هذا القسم');
+  gear.setAttribute('data-gear', key);
+  gear.style.cssText='border:none;background:none;cursor:pointer;font-size:1rem';
+  gear.onclick = ()=>{
+    const ed = document.getElementById('edit-'+key);
+    if (ed) ed.style.display = ed.style.display==='none' ? 'block' : 'none';
+  };
+  btnRow.appendChild(gear);
 });
-// تحديث عند تحميل المعاينة لأول مرة
-document.getElementById('previewFrame').addEventListener('load', updatePreview);
+
+async function saveLayout(){
+  const order = getOrder().map(o=>o.key);
+  const visibility = Object.fromEntries(getOrder().map(o=>[o.key,o.visible]));
+  // جمع خصائص الأقسام المفتوحة
+  const hero = {
+    title: document.querySelector('[name="heroTitle"]')?.value,
+    sub: document.querySelector('[name="heroSub"]')?.value,
+    video: document.querySelector('[name="heroVideo"]')?.value,
+    textColor: document.querySelector('[name="heroText"]')?.value,
+    overlay: Number(document.querySelector('[name="heroOverlay"]')?.value || 40)
+  };
+  const grid = {
+    cols: document.querySelector('[name="gridCols"]')?.value || 'auto',
+    gap: Number(document.querySelector('[name="gridGap"]')?.value || 16)
+  };
+  layout = { ...layout, order, visibility, hero, grid };
+  
+  const payload = new URLSearchParams();
+  payload.append('_csrf', '<%= csrf %>');
+  payload.append('layout_json', JSON.stringify(layout));
+  const res = await fetch('/panel/templates/layout?_csrf=<%= csrf %>', { method:'POST', headers: {'x-csrf-token':'<%= csrf %>','Content-Type':'application/x-www-form-urlencoded'}, body: payload });
+  if (res.ok) { dirty=false; document.getElementById('dirtyBadge').hidden=true; alert('✅ تم حفظ تصميمك'); refreshPreview(); }
+  else alert('❌ فشل الحفظ');
+}
+
+function resetLayout(){ if(confirm('استعادة التصميم الافتراضي؟')){ location.href='/panel/templates/customize?reset=1'; } }
+
+function setW(w){ document.getElementById('pv').style.width = w; }
+function refreshPreview(){ document.getElementById('pv').src = '/s/<%= store.slug %>?t='+Date.now(); }
+window.addEventListener('beforeunload', e=>{ if(dirty){ e.preventDefault(); e.returnValue=''; } });
 </script>
 </body>
 </html>

@@ -447,8 +447,6 @@ router.post('/domain', (req, res) => {
   // التاجر لا يعدل الدومين يدوياً — الطلب عبر /panel/domain/buy والربط من لوحة الأدمن
   return res.redirect('/panel/domain');
 });
-  res.redirect('/panel/domain?ok=' + encodeURIComponent('تم حفظ الدومين — تأكد من إضافة سجل CNAME يشير إلى نطاق المنصة'));
-});
 
 router.get('/settings', (req, res) => {
   const store = getStore(req.user.store_id);
@@ -573,7 +571,38 @@ router.get('/templates/customize', (req, res) => {
   const store = getStore(req.user.store_id);
   let cfg = {};
   try { cfg = JSON.parse(store.template_config || '{}'); } catch {}
-  res.render('panel/template-customize', { store, cfg, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+  let layout = {};
+  try { layout = JSON.parse(store.layout_json || '{}'); } catch {}
+  
+  // الأقسام حسب ترتيب التخزين أو الافتراضي
+  const defs = [
+    { key:'hero',   icon:'🖼️', name:'الهيرو (الواجهة)', desc:'العنوان الرئيسي + صورة/فيديو خلفية' },
+    { key:'search', icon:'🔍', name:'البحث', desc:'شريط البحث عن المنتجات' },
+    { key:'cats',   icon:'🗂️', name:'الأقسام', desc:'أزرار تصنيفات المنتجات' },
+    { key:'grid',   icon:'🛍️', name:'شبكة المنتجات', desc:'بطاقات المنتجات' },
+    { key:'brand',  icon:'🏷️', name:'توقيع المنصة', desc:'«صُنع بواسطة دُكّان» (مجاني فقط)' }
+  ];
+  const order = Array.isArray(layout.order) && layout.order.length ? layout.order : ['hero','search','cats','grid','brand'];
+  const vis = layout.visibility || {};
+  const sections = order.filter(k=>defs.find(d=>d.key===k)).map(k=>({
+    ...defs.find(d=>d.key===k),
+    visible: vis[k] !== false
+  }));
+  
+  res.render('panel/template-customize', { store, cfg, layout, sections, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+// حفظ التخطيط من المحرر المرئي (multipart) — استخراج layout_json من req.body
+router.post('/templates/layout', (req, res) => {
+  try {
+    const store = getStore(req.user.store_id);
+    const raw = req.body.layout_json;
+    if (!raw) return res.status(400).json({ error: 'layout_json missing' });
+    JSON.parse(raw); // validate
+    db.prepare(`UPDATE stores SET layout_json=? WHERE id=?`).run(raw, store.id);
+    logActivity(req.user.id, req.user.username, 'تحديث تصميم المتجر', 'ترتيب وتخصيص الأقسام');
+    res.json({ ok: true });
+  } catch(e){ res.status(400).json({error:e.message}); }
 });
 
 router.post('/templates/customize', (req, res) => {

@@ -1,0 +1,76 @@
+<%- include('../partials/head', { title: 'شراء دومين — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'domain', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: '🛒 شراء دومين — نحن نشتريه ونربطه لك' }) %>
+  <div class="content">
+    <%- include('../partials/alerts', { ok: typeof ok !== 'undefined' ? ok : '', err: typeof err !== 'undefined' ? err : '' }) %>
+    
+    <div class="two-col" style="align-items:start">
+      <div>
+        <div class="card">
+          <h2>اطلب دومينك — بلا تعب، بلا DNS</h2>
+          <p class="muted" style="margin-bottom:1rem">اكتب الدومين اللي تريده، احنا نشتريه ونربطه بمتجرك مباشرة. أنت بس تدفع وتستلم متجرك على دومينك الخاص.</p>
+          <form method="post" action="/panel/domain/buy?_csrf=<%= csrf %>">
+            <input type="hidden" name="_csrf" value="<%= csrf %>">
+            <label>الدومين المطلوب
+              <input type="text" name="domain" dir="ltr" placeholder="my-shop.com" required style="font-size:1.05rem;text-align:center">
+            </label>
+            <div class="tiers" style="margin-top:1rem">
+              <div class="tier tier-hit" onclick="document.getElementById('typeNormal').checked=true; document.getElementById('typePremium').checked=false" style="cursor:pointer">
+                <h3>🌐 عادي</h3>
+                <div class="tier-price"><b><%= (domainPrice / 1000).toLocaleString('en-US') %> ألف</b><span>د.ع</span></div>
+                <ul><li>.com / .net / .org</li><li>ربط كامل خلال 24 ساعة</li></ul>
+                <input type="radio" name="type" value="normal" id="typeNormal" checked style="display:none">
+                <span class="badge badge-ok">الأكثر طلباً</span>
+              </div>
+              <div class="tier" onclick="document.getElementById('typePremium').checked=true; document.getElementById('typeNormal').checked=false" style="cursor:pointer">
+                <div class="tier-tag">حسب الطلب</div>
+                <h3>💎 مميز</h3>
+                <div class="tier-price"><b>سعر خاص</b></div>
+                <ul><li>اسم قصير أو جميل</li><li>تواصل معنا للتسعير</li></ul>
+                <input type="radio" name="type" value="premium" id="typePremium" style="display:none">
+                <span class="badge">قابل للتفاوض</span>
+              </div>
+            </div>
+            <label style="margin-top:.8rem">ملاحظة (اختياري)
+              <textarea name="note" rows="2" placeholder="مثال: أريد هذا الدومين ضروري، اذا مشغود اقترحوا بدائل"></textarea>
+            </label>
+            <button class="btn btn-primary btn-block" style="margin-top:.8rem">📩 إرسال الطلب</button>
+          </form>
+        </div>
+        
+        <div class="card" style="margin-top:1rem">
+          <h2>طلباتي السابقة</h2>
+          <% if (!requests.length) { %><p class="muted">لا طلبات بعد</p><% } %>
+          <ul class="feed">
+            <% requests.forEach(r => { %>
+              <li>
+                <span class="feed-act"><span dir="ltr"><%= r.domain %></span></span>
+                <span class="feed-detail">
+                  <span class="badge <%= r.status==='done'?'badge-ok':r.status==='rejected'?'badge-err':'badge-warn' %>">
+                    <%= r.status==='done'?'✅ مربوط بمتجرك':r.status==='rejected'?'❌ مرفول':'⏳ بانتظار المراجعة' %>
+                  </span>
+                  <%= r.type==='normal' ? `(${(Number(r.price||20000)/1000).toLocaleString('en-US')} ألف د.ع)` : '(مميز - سعر خاص)' %>
+                </span>
+                <small><%= r.created_at %></small>
+              </li>
+            <% }) %>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="card" style="position:sticky;top:80px">
+        <h2>💡 ليش تشتري مننا؟</h2>
+        <ul class="feed">
+          <li><span class="feed-act">صفر تعقيد</span><span class="feed-detail">ما تحتاج تفهم DNS ولا تسجل بأي موقع — كلشي علينا</span></li>
+          <li><span class="feed-act">ربط فوري</span><span class="feed-detail">متجرك يشتغل على الدومين خلال 24 ساعة</span></li>
+          <li><span class="feed-act">تجديد سنوي سهل</span><span class="feed-detail">نذكرك قبل الانتهاء وتجدد من هنا بضغطة</span></li>
+          <li><span class="feed-act">الدومين باسمك</span><span class="feed-detail">سجلته باسمك أنت — ملكيتك الكاملة</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

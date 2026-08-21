@@ -1,0 +1,65 @@
+<%- include('../partials/head', { title: 'طلبات الدومينات — المدير العام' }) %>
+<body class="app">
+<%- include('../partials/sidebar-admin', { active: 'domains' }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: '🌐 طلبات شراء الدومينات' }) %>
+  <div class="content">
+    <%- include('../partials/alerts', { ok: typeof ok !== 'undefined' ? ok : '', err: typeof err !== 'undefined' ? err : '' }) %>
+    
+    <% if (pendingCount > 0) { %>
+      <div class="alert alert-err" style="background:#fff7ed;border-color:#fdba74;color:#9a3412">
+        ⏳ عندك <b><%= pendingCount %></b> طلب جديد بانتظار المراجعة
+      </div>
+    <% } %>
+
+    <div class="card">
+      <h2>كل الطلبات (<%= requests.length %>)</h2>
+      <% if (!requests.length) { %><p class="muted">لا طلبات بعد</p><% } %>
+      <div class="table-wrap">
+        <table class="table">
+          <tr><th>#</th><th>المتجر</th><th>الدومين</th><th>النوع</th><th>السعر</th><th>الحالة</th><th>التاريخ</th><th>تحديث</th></tr>
+          <% requests.forEach(r => { %>
+            <tr>
+              <td><%= r.id %></td>
+              <td><a href="/admin/stores/<%= r.store_id %>"><%= r.store_name %></a></td>
+              <td dir="ltr"><b><%= r.domain %></b></td>
+              <td><span class="badge <%= r.type==='premium'?'badge-warn':'' %>"><%= r.type==='premium' ? '💎 مميز' : 'عادي' %></span></td>
+              <td><%= r.type==='normal' ? (Number(r.price)||20000).toLocaleString('en-US') + ' د.ع' : 'سعر خاص' %></td>
+              <td>
+                <span class="badge <%= r.status==='done'?'badge-ok':r.status==='rejected'?'badge-err':'badge-warn' %>">
+                  <%= r.status==='done'?'مربوط ✅':r.status==='rejected'?'مرفول ❌':'بانتظار ⏳' %>
+                </span>
+                <% if (r.note) { %><small style="display:block;color:var(--muted)"><%= r.note %></small><% } %>
+              </td>
+              <td><small><%= r.created_at %></small></td>
+              <td>
+                <form method="post" action="/admin/domains/<%= r.id %>/status?_csrf=<%= csrf %>" style="display:flex;gap:.3rem;flex-wrap:wrap;align-items:center">
+                  <input type="hidden" name="_csrf" value="<%= csrf %>">
+                  <input type="number" name="final_price" placeholder="السعر النهائي" style="width:110px" title="اختياري - للدومين المميز">
+                  <select name="status" style="width:auto">
+                    <option value="pending" <%= r.status==='pending'?'selected':'' %>>⏳ انتظار</option>
+                    <option value="done" <%= r.status==='done'?'selected':'' %>>✅ تم الربط</option>
+                    <option value="rejected" <%= r.status==='rejected'?'selected':'' %>>❌ مرفول</option>
+                  </select>
+                  <button class="btn btn-sm btn-primary">حفظ</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </table>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2>📋 خطوات تنفيذ الطلب (للتذكير)</h2>
+      <ul class="feed">
+        <li><span class="feed-act">1.</span> <span class="feed-detail">اشترِ الدومين من Namecheap/GoDaddy بحساب المنصة (~$10 تكلفة)</span></li>
+        <li><span class="feed-act">2.</span> <span class="feed-detail">اطلب من التاجر إضافة A record أو CNAME (أو اربطه أنت من لوحة DNS)</span></li>
+        <li><span class="feed-act">3.</span> <span class="feed-detail">أضف الدومين لمتجر التاجر من /admin/stores/:id (حقل الدومين)</span></li>
+        <li><span class="feed-act">4.</span> <span class="feed-detail">حدّث الحالة إلى "تم الربط" هنا مع السعر النهائي المحصل</span></li>
+      </ul>
+    </div>
+  </div>
+</main>
+</body>
+</html>

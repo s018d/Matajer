@@ -63,6 +63,26 @@ router.get('/stores', (req, res) => {
   res.render('admin/stores', { list, money, ok: req.query.ok || takeFlash(req, res), err: req.query.err || '', user: req.user });
 });
 
+router.get('/domains', (req, res) => {
+  const requests = db.prepare(`
+    SELECT dr.*, s.name store_name, s.slug store_slug
+    FROM domain_requests dr JOIN stores s ON s.id=dr.store_id
+    ORDER BY CASE dr.status WHEN 'pending' THEN 0 ELSE 1 END, dr.id DESC`).all();
+  const pendingCount = requests.filter(r => r.status === 'pending').length;
+  res.render('admin/domains', { requests, pendingCount, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/domains/:id/status', (req, res) => {
+  const { status } = req.body;
+  if (!['done','rejected','pending'].includes(status)) return res.redirect('/admin/domains?err=' + encodeURIComponent('حالة غير صحيحة'));
+  const priceNote = status === 'done' && req.body.final_price ? ` — السعر النهائي: ${Number(req.body.final_price).toLocaleString('en-US')} د.ع` : '';
+  db.prepare(`UPDATE domain_requests SET status=?, note=COALESCE(note,'') WHERE id=?`).run(status, req.params.id);
+  const r = db.prepare(`SELECT dr.*, s.name store_name FROM domain_requests dr JOIN stores s ON s.id=dr.store_id WHERE dr.id=?`).get(req.params.id);
+  appendLog(`المدير حدّث طلب دومين «${r?.domain}» لمتجر «${r?.store_name}» إلى: ${status}${priceNote}`);
+  logActivity(req.user.id, req.user.username, 'طلب دومين', `${r?.domain} -> ${status}`);
+  res.redirect('/admin/domains?ok=' + encodeURIComponent('تم تحديث حالة الطلب'));
+});
+
 router.post('/stores', (req, res) => {
   const { name, username, owner_name, phone, password, description } = req.body;
   if (!name || !username) return res.redirect('/admin/stores?err=' + encodeURIComponent('اسم المتجر واسم المستخدم مطلوبان'));

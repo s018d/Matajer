@@ -416,6 +416,27 @@ router.post('/abandoned-carts/:id/remind', (req, res) => {
   res.redirect(`/panel/abandoned-carts?ok=` + encodeURIComponent('تم إرسال تذكير واتساب'));
 });
 
+router.get('/domain/buy', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const requests = db.prepare(`SELECT * FROM domain_requests WHERE store_id=? ORDER BY id DESC`).all(store.id);
+  const domainPrice = Number(siteSettings().domain_price || 20000);
+  res.render('panel/domain-buy', { store, requests, cfg: siteSettings(), domainPrice, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/domain/buy', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const domain = String(req.body.domain || '').trim().toLowerCase().replace(/^https?:\/\//,'').replace(/\/.*$/,'');
+  const type = req.body.type === 'premium' ? 'premium' : 'normal';
+  if (!/^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)+$/.test(domain))
+    return res.redirect('/panel/domain/buy?err=' + encodeURIComponent('صيغة الدومين غير صحيحة — مثال: my-shop.com'));
+  const price = type === 'normal' ? Number(siteSettings().domain_price || 20000) : null;
+  db.prepare(`INSERT INTO domain_requests (store_id, domain, type, price, note) VALUES (?,?,?,?,?)`)
+    .run(store.id, domain, type, price, String(req.body.note || '').slice(0,200));
+  appendLog(`متجر «${store.name}» طلب شراء دومين ${domain} (${type === 'normal' ? 'عادي ' + price + ' د.ع' : 'مميز — سعر خاص'})`);
+  logActivity(req.user.id, req.user.username, 'طلب دومين', `${domain} (${type})`);
+  res.redirect('/panel/domain/buy?ok=' + encodeURIComponent('وصل طلبك! راح نتواصل وياك لتأكيد الدفع والربط خلال 24 ساعة'));
+});
+
 router.get('/domain', (req, res) => {
   const store = getStore(req.user.store_id);
   if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('الدومين المخصص متاح للباقة الاحترافية فقط'));

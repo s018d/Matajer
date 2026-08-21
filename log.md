@@ -992,3 +992,177 @@
 - **[٢١‏/٨‏/٢٠٢٦، ٢:٠٦:١٦ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
 - **[٢١‏/٨‏/٢٠٢٦، ٢:٠٨:٢٣ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
 - **[٢١‏/٨‏/٢٠٢٦، ٢:١٠:٠٢ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٢٤:٤١ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٢:٢٤:٤١ م
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٢٤:٤١ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٢٥:١٥ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٢٥:١٨ م]** **خطأ في الخادم:** ReferenceError: A:\05-الملفاتPersonal\سطح المكتب\Matajer\views\panel\domain-buy.ejs:22
+    20|               <div class="tier tier-hit" onclick="document.getElementById('typeNormal').checked=true; document.getElementById('typePremium').checked=false" style="cursor:pointer">
+    21|                 <h3>🌐 عادي</h3>
+ >> 22|                 <div class="tier-price"><b><%= (Number(cfg.domain_price || 20000) / 1000).toLocaleString('en-US') %> ألف</b><span>د.ع</span></div>
+    23|                 <ul><li>.com / .net / .org</li><li>ربط كامل خلال 24 ساعة</li></ul>
+    24|                 <input type="radio" name="type" value="normal" id="typeNormal" checked style="display:none">
+    25|                 <span class="badge badge-ok">الأكثر طلباً</span>
+
+cfg is not defined
+    at eval (eval at compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:673:12), <anonymous>:28:34)
+    at domain-buy (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:703:17)
+    at tryHandleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:274:36)
+    at exports.renderFile [as engine] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:491:10)
+    at View.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\view.js:135:8)
+    at tryRender (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:657:10)
+    at app.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:609:3)
+    at ServerResponse.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\response.js:1049:7)
+    at A:\05-الملفاتPersonal\سطح المكتب\Matajer\routes\panel.js:422:7
+    at Layer.handle [as handle_request] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\layer.js:95:5)
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٢٦:٠٩ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٢:٢٦:٠٩ م
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٢٦:٠٩ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٢٨:٢١ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٢:٢٨:٢١ م
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٢٨:٢١ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٢٨:٢٨ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٢٨:٣٠ م]** **خطأ في الخادم:** ReferenceError: A:\05-الملفاتPersonal\سطح المكتب\Matajer\views\panel\domain-buy.ejs:22
+    20|               <div class="tier tier-hit" onclick="document.getElementById('typeNormal').checked=true; document.getElementById('typePremium').checked=false" style="cursor:pointer">
+    21|                 <h3>🌐 عادي</h3>
+ >> 22|                 <div class="tier-price"><b><%= (Number(cfg.domain_price || 20000) / 1000).toLocaleString('en-US') %> ألف</b><span>د.ع</span></div>
+    23|                 <ul><li>.com / .net / .org</li><li>ربط كامل خلال 24 ساعة</li></ul>
+    24|                 <input type="radio" name="type" value="normal" id="typeNormal" checked style="display:none">
+    25|                 <span class="badge badge-ok">الأكثر طلباً</span>
+
+cfg is not defined
+    at eval (eval at compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:673:12), <anonymous>:28:34)
+    at domain-buy (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:703:17)
+    at tryHandleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:274:36)
+    at exports.renderFile [as engine] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:491:10)
+    at View.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\view.js:135:8)
+    at tryRender (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:657:10)
+    at app.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:609:3)
+    at ServerResponse.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\response.js:1049:7)
+    at A:\05-الملفاتPersonal\سطح المكتب\Matajer\routes\panel.js:422:7
+    at Layer.handle [as handle_request] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\layer.js:95:5)
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٢٩:٣٥ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٢٩:٣٨ م]** **خطأ في الخادم:** ReferenceError: A:\05-الملفاتPersonal\سطح المكتب\Matajer\views\panel\domain-buy.ejs:22
+    20|               <div class="tier tier-hit" onclick="document.getElementById('typeNormal').checked=true; document.getElementById('typePremium').checked=false" style="cursor:pointer">
+    21|                 <h3>🌐 عادي</h3>
+ >> 22|                 <div class="tier-price"><b><%= (Number(cfg.domain_price || 20000) / 1000).toLocaleString('en-US') %> ألف</b><span>د.ع</span></div>
+    23|                 <ul><li>.com / .net / .org</li><li>ربط كامل خلال 24 ساعة</li></ul>
+    24|                 <input type="radio" name="type" value="normal" id="typeNormal" checked style="display:none">
+    25|                 <span class="badge badge-ok">الأكثر طلباً</span>
+
+cfg is not defined
+    at eval (eval at compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:673:12), <anonymous>:28:34)
+    at domain-buy (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:703:17)
+    at tryHandleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:274:36)
+    at exports.renderFile [as engine] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:491:10)
+    at View.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\view.js:135:8)
+    at tryRender (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:657:10)
+    at app.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:609:3)
+    at ServerResponse.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\response.js:1049:7)
+    at A:\05-الملفاتPersonal\سطح المكتب\Matajer\routes\panel.js:422:7
+    at Layer.handle [as handle_request] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\layer.js:95:5)
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣٠:٢٧ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣٠:٢٩ م]** **خطأ في الخادم:** ReferenceError: A:\05-الملفاتPersonal\سطح المكتب\Matajer\views\panel\domain-buy.ejs:22
+    20|               <div class="tier tier-hit" onclick="document.getElementById('typeNormal').checked=true; document.getElementById('typePremium').checked=false" style="cursor:pointer">
+    21|                 <h3>🌐 عادي</h3>
+ >> 22|                 <div class="tier-price"><b><%= (Number(cfg.domain_price || 20000) / 1000).toLocaleString('en-US') %> ألف</b><span>د.ع</span></div>
+    23|                 <ul><li>.com / .net / .org</li><li>ربط كامل خلال 24 ساعة</li></ul>
+    24|                 <input type="radio" name="type" value="normal" id="typeNormal" checked style="display:none">
+    25|                 <span class="badge badge-ok">الأكثر طلباً</span>
+
+cfg is not defined
+    at eval (eval at compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:673:12), <anonymous>:28:34)
+    at domain-buy (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:703:17)
+    at tryHandleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:274:36)
+    at exports.renderFile [as engine] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:491:10)
+    at View.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\view.js:135:8)
+    at tryRender (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:657:10)
+    at app.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:609:3)
+    at ServerResponse.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\response.js:1049:7)
+    at A:\05-الملفاتPersonal\سطح المكتب\Matajer\routes\panel.js:422:7
+    at Layer.handle [as handle_request] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\layer.js:95:5)
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣٠:٥٨ م]** **خطأ في الخادم:** ReferenceError: A:\05-الملفاتPersonal\سطح المكتب\Matajer\views\panel\domain-buy.ejs:22
+    20|               <div class="tier tier-hit" onclick="document.getElementById('typeNormal').checked=true; document.getElementById('typePremium').checked=false" style="cursor:pointer">
+    21|                 <h3>🌐 عادي</h3>
+ >> 22|                 <div class="tier-price"><b><%= (Number(cfg.domain_price || 20000) / 1000).toLocaleString('en-US') %> ألف</b><span>د.ع</span></div>
+    23|                 <ul><li>.com / .net / .org</li><li>ربط كامل خلال 24 ساعة</li></ul>
+    24|                 <input type="radio" name="type" value="normal" id="typeNormal" checked style="display:none">
+    25|                 <span class="badge badge-ok">الأكثر طلباً</span>
+
+cfg is not defined
+    at eval (eval at compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:673:12), <anonymous>:28:34)
+    at domain-buy (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:703:17)
+    at tryHandleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:274:36)
+    at exports.renderFile [as engine] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:491:10)
+    at View.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\view.js:135:8)
+    at tryRender (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:657:10)
+    at app.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:609:3)
+    at ServerResponse.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\response.js:1049:7)
+    at A:\05-الملفاتPersonal\سطح المكتب\Matajer\routes\panel.js:422:7
+    at Layer.handle [as handle_request] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\layer.js:95:5)
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣١:١٥ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٢:٣١:١٥ م
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣١:١٥ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣١:٣٥ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣١:٣٨ م]** **خطأ في الخادم:** ReferenceError: A:\05-الملفاتPersonal\سطح المكتب\Matajer\views\panel\domain-buy.ejs:22
+    20|               <div class="tier tier-hit" onclick="document.getElementById('typeNormal').checked=true; document.getElementById('typePremium').checked=false" style="cursor:pointer">
+    21|                 <h3>🌐 عادي</h3>
+ >> 22|                 <div class="tier-price"><b><%= (Number(cfg.domain_price || 20000) / 1000).toLocaleString('en-US') %> ألف</b><span>د.ع</span></div>
+    23|                 <ul><li>.com / .net / .org</li><li>ربط كامل خلال 24 ساعة</li></ul>
+    24|                 <input type="radio" name="type" value="normal" id="typeNormal" checked style="display:none">
+    25|                 <span class="badge badge-ok">الأكثر طلباً</span>
+
+cfg is not defined
+    at eval (eval at compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:673:12), <anonymous>:28:34)
+    at domain-buy (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:703:17)
+    at tryHandleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:274:36)
+    at exports.renderFile [as engine] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:491:10)
+    at View.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\view.js:135:8)
+    at tryRender (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:657:10)
+    at app.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:609:3)
+    at ServerResponse.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\response.js:1049:7)
+    at A:\05-الملفاتPersonal\سطح المكتب\Matajer\routes\panel.js:422:7
+    at Layer.handle [as handle_request] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\router\layer.js:95:5)
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣٣:٤٤ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٢:٣٣:٤٤ م
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣٣:٤٤ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣٤:٠٣ م]** دخول ناجح للمستخدم «s018d» بتصريح صاحب متجر
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣٤:٠٦ م]** متجر «تجربه» طلب شراء دومين sajjad-shop.com (عادي 20000 د.ع)
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣٤:١١ م]** دخول ناجح للمستخدم «admin» بتصريح مدير عام
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣٤:١٣ م]** **خطأ في الخادم:** ReferenceError: A:\05-الملفاتPersonal\سطح المكتب\Matajer\views\admin\domains.ejs:27
+    25|               <td dir="ltr"><b><%= r.domain %></b></td>
+    26|               <td><span class="badge <%= r.type==='premium'?'badge-warn':'' %>"><%= r.type==='premium' ? '💎 مميز' : 'عادي' %></span></td>
+ >> 27|               <td><%= r.type==='normal' ? money(r.price) : 'سعر خاص' %></td>
+    28|               <td>
+    29|                 <span class="badge <%= r.status==='done'?'badge-ok':r.status==='rejected'?'badge-err':'badge-warn' %>">
+    30|                   <%= r.status==='done'?'مربوط ✅':r.status==='rejected'?'مرفول ❌':'بانتظار ⏳' %>
+
+money is not defined
+    at eval (eval at compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:673:12), <anonymous>:58:32)
+    at Array.forEach (<anonymous>)
+    at eval (eval at compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:673:12), <anonymous>:39:17)
+    at domains (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:703:17)
+    at tryHandleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:274:36)
+    at exports.renderFile [as engine] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:491:10)
+    at View.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\view.js:135:8)
+    at tryRender (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:657:10)
+    at app.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:609:3)
+    at ServerResponse.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\response.js:1049:7)
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣٥:٠٧ م]** دخول ناجح للمستخدم «admin» بتصريح مدير عام
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣٥:٠٩ م]** **خطأ في الخادم:** ReferenceError: A:\05-الملفاتPersonal\سطح المكتب\Matajer\views\admin\domains.ejs:27
+    25|               <td dir="ltr"><b><%= r.domain %></b></td>
+    26|               <td><span class="badge <%= r.type==='premium'?'badge-warn':'' %>"><%= r.type==='premium' ? '💎 مميز' : 'عادي' %></span></td>
+ >> 27|               <td><%= r.type==='normal' ? money(r.price) : 'سعر خاص' %></td>
+    28|               <td>
+    29|                 <span class="badge <%= r.status==='done'?'badge-ok':r.status==='rejected'?'badge-err':'badge-warn' %>">
+    30|                   <%= r.status==='done'?'مربوط ✅':r.status==='rejected'?'مرفول ❌':'بانتظار ⏳' %>
+
+money is not defined
+    at eval (eval at compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:673:12), <anonymous>:58:32)
+    at Array.forEach (<anonymous>)
+    at eval (eval at compile (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:673:12), <anonymous>:39:17)
+    at domains (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:703:17)
+    at tryHandleCache (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:274:36)
+    at exports.renderFile [as engine] (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\ejs\lib\ejs.js:491:10)
+    at View.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\view.js:135:8)
+    at tryRender (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:657:10)
+    at app.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\application.js:609:3)
+    at ServerResponse.render (A:\05-الملفاتPersonal\سطح المكتب\Matajer\node_modules\express\lib\response.js:1049:7)
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣٥:٣٨ م]** تم تشغيل الخادم — المنصة جاهزة على http://localhost:3000 — الوقت: ٢١‏/٨‏/٢٠٢٦، ٢:٣٥:٣٨ م
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣٥:٣٨ م]** تم تفعيل النسخ الاحتياطي التلقائي اليومي (الساعة 3 فجراً) + صيانة قاعدة البيانات
+- **[٢١‏/٨‏/٢٠٢٦، ٢:٣٥:٤٣ م]** دخول ناجح للمستخدم «admin» بتصريح مدير عام

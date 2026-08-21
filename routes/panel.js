@@ -579,6 +579,34 @@ router.post('/templates/apply', (req, res) => {
   res.redirect('/panel/templates?ok=' + encodeURIComponent('تم اعتماد القالب — اسمه: ' + tpl));
 });
 
+router.get('/templates/customize', (req, res) => {
+  const store = getStore(req.user.store_id);
+  let cfg = {};
+  try { cfg = JSON.parse(store.template_config || '{}'); } catch {}
+  res.render('panel/template-customize', { store, cfg, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+
+router.post('/templates/customize', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const { primary, accent, bg, ink, soft, radius, font, hero, grid, sections } = req.body;
+  const cfg = {
+    primary: /^#[0-9a-fA-F]{6}$/.test(primary) ? primary : store.color,
+    accent: /^#[0-9a-fA-F]{6}$/.test(accent) ? accent : '#ec4899',
+    bg: /^#[0-9a-fA-F]{6}$/.test(bg) ? bg : '#ffffff',
+    ink: /^#[0-9a-fA-F]{6}$/.test(ink) ? ink : '#111111',
+    soft: /^#[0-9a-fA-F]{6}$/.test(soft) ? soft : '#f1f3f5',
+    radius: String(radius || '14'),
+    font: String(font || 'Cairo'),
+    hero: String(hero || 'default'),
+    grid: String(grid || 'auto'),
+    sections: String(sections || 'hero,search,cats,grid')
+  };
+  const customCss = `:root{--primary:${cfg.primary};--accent:${cfg.accent};--bg:${cfg.bg};--ink:${cfg.ink};--soft:${cfg.soft};--radius:${cfg.radius}px} body{font-family:'${cfg.font}', sans-serif}`;
+  db.prepare(`UPDATE stores SET template_config=?, custom_css=?, color=? WHERE id=?`).run(JSON.stringify(cfg), customCss, cfg.primary, store.id);
+  logActivity(req.user.id, req.user.username, 'تخصيص القالب', `ألوان وتصميم`);
+  res.redirect('/panel/templates/customize?ok=' + encodeURIComponent('تم حفظ التخصيص — شوف متجرك الآن'));
+});
+
 router.post('/settings', (req, res) => {
   const store = getStore(req.user.store_id);
   const { name, description, owner_name, phone, whatsapp, template, color, custom_domain, delivery_fee, free_delivery_min, meta_desc } = req.body;

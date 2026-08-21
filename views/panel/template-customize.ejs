@@ -1,0 +1,120 @@
+<%- include('../partials/head', { title: 'تخصيص القالب — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'templates', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: 'تخصيص القالب — حرر ألوانك وتصميمك' }) %>
+  <div class="content">
+    <%- include('../partials/alerts', { ok: typeof ok !== 'undefined' ? ok : '', err: typeof err !== 'undefined' ? err : '' }) %>
+    
+    <div class="two-col" style="align-items:start">
+      <div class="card">
+        <h2>🎨 لوحة التخصيص — إلعب بالألوان والشكل</h2>
+        <p class="muted" style="margin-bottom:1rem">غيّر وشوف النتيجة فوراً في المعاينة على اليمين. كل تعديل يُحفظ لمتجرك فقط.</p>
+        <form method="post" action="/panel/templates/customize" id="customForm">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+            <label>اللون الأساسي <input type="color" name="primary" value="<%= cfg.primary || store.color %>"></label>
+            <label>اللون الثانوي <input type="color" name="accent" value="<%= cfg.accent || '#ec4899' %>"></label>
+            <label>الخلفية <input type="color" name="bg" value="<%= cfg.bg || '#ffffff' %>"></label>
+            <label>النص <input type="color" name="ink" value="<%= cfg.ink || '#111111' %>"></label>
+            <label>الخلفية الناعمة <input type="color" name="soft" value="<%= cfg.soft || '#f1f3f5' %>"></label>
+            <label>الخط
+              <select name="font">
+                <option value="Cairo" <%= (cfg.font||'')==='Cairo'?'selected':'' %>>Cairo</option>
+                <option value="Noto Kufi Arabic" <%= (cfg.font||'')==='Noto Kufi Arabic'?'selected':'' %>>Noto Kufi Arabic</option>
+                <option value="Tajawal" <%= (cfg.font||'')==='Tajawal'?'selected':'' %>>Tajawal</option>
+              </select>
+            </label>
+          </div>
+          <label style="margin-top:1rem">استدارة الحواف: <span id="radiusVal"><%= cfg.radius || 14 %></span>px
+            <input type="range" name="radius" min="0" max="24" value="<%= cfg.radius || 14 %>" oninput="document.getElementById('radiusVal').textContent=this.value; updatePreview()">
+          </label>
+          <label>شكل الهيرو
+            <select name="hero" onchange="updatePreview()">
+              <option value="default" <%= (cfg.hero||'')==='default'?'selected':'' %>>افتراضي</option>
+              <option value="editorial" <%= cfg.hero==='editorial'?'selected':'' %>>Editorial full-bleed (Fashion)</option>
+              <option value="utility" <%= cfg.hero==='utility'?'selected':'' %>>Utility مع فلاتر (Outdoor)</option>
+              <option value="flash" <%= cfg.hero==='flash'?'selected':'' %>>Flash عروض (Classic)</option>
+              <option value="story" <%= cfg.hero==='story'?'selected':'' %>>Story هادئ (Natural)</option>
+            </select>
+          </label>
+          <label>شكل الشبكة
+            <select name="grid" onchange="updatePreview()">
+              <option value="auto" <%= (cfg.grid||'')==='auto'?'selected':'' %>>تلقائي</option>
+              <option value="2col" <%= cfg.grid==='2col'?'selected':'' %>>عمودين كبير (Fashion)</option>
+              <option value="4col" <%= cfg.grid==='4col'?'selected':'' %>>4 أعمدة كثيف (Classic/Outdoor)</option>
+              <option value="masonry" <%= cfg.grid==='masonry'?'selected':'' %>>Masonry متعرج (Natural)</option>
+            </select>
+          </label>
+          <label>ترتيب الأقسام (اسحب وغير - مفصولة بفاصلة)
+            <input type="text" name="sections" value="<%= cfg.sections || 'hero,search,cats,grid' %>" id="sectionsInput" placeholder="hero,search,cats,grid,brand">
+            <small class="field-hint">اسحب البطاقات على اليمين أو اكتب الترتيب: hero, search, cats, grid, brand, footer</small>
+          </label>
+          
+          <div id="dragSections" style="display:flex;gap:.4rem;flex-wrap:wrap;margin:.6rem 0">
+            <% (cfg.sections || 'hero,search,cats,grid').split(',').forEach(s=>{ %>
+              <span draggable="true" class="badge" style="cursor:grab;background:var(--soft);padding:.5rem .8rem" data-sec="<%= s.trim() %>"><%= s.trim() %> ↕</span>
+            <% }) %>
+          </div>
+
+          <button class="btn btn-primary btn-block" style="margin-top:1rem">💾 حفظ التخصيص</button>
+          <a href="/s/<%= store.slug %>" target="_blank" class="btn btn-ghost btn-block" style="margin-top:.5rem">👁️ عرض متجري الحقيقي</a>
+        </form>
+      </div>
+      
+      <div class="card" style="position:sticky;top:80px">
+        <h2>👁️ معاينة حية</h2>
+        <p class="muted">تتحدث مع كل تعديل</p>
+        <iframe id="previewFrame" src="/s/<%= store.slug %>" style="width:100%;height:520px;border:1.5px solid var(--line);border-radius:12px;background:#fff"></iframe>
+        <div style="display:flex;gap:.4rem;margin-top:.6rem">
+          <button type="button" class="btn btn-sm" onclick="document.getElementById('previewFrame').style.width='100%'">دسكتوب</button>
+          <button type="button" class="btn btn-sm" onclick="document.getElementById('previewFrame').style.width='375px'">جوال</button>
+          <button type="button" class="btn btn-sm" onclick="document.getElementById('previewFrame').style.width='768px'">تابلت</button>
+        </div>
+        <small class="field-hint">اضغط جوال/تابلت لتشوف كيف يظهر على كل شاشة - لا شيء يخرج برا ✅</small>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+function updatePreview(){
+  const f = document.getElementById('customForm');
+  const data = new FormData(f);
+  const primary = data.get('primary');
+  const bg = data.get('bg');
+  // تحديث سريع للمعاينة بدون حفظ
+  const frame = document.getElementById('previewFrame');
+  try {
+    frame.contentDocument.documentElement.style.setProperty('--primary', primary);
+    frame.contentDocument.body.style.background = bg;
+  } catch {}
+}
+// drag & drop للترتيب
+const drag = document.getElementById('dragSections');
+let dragged = null;
+drag.addEventListener('dragstart', e=> dragged=e.target);
+drag.addEventListener('dragover', e=> e.preventDefault());
+drag.addEventListener('drop', e=>{
+  e.preventDefault();
+  if (dragged && e.target.dataset.sec) {
+    const secs = [...drag.children].map(c=>c.dataset.sec);
+    const from = secs.indexOf(dragged.dataset.sec);
+    const to = secs.indexOf(e.target.dataset.sec);
+    if (from>-1 && to>-1) {
+      const nsecs = [...secs];
+      nsecs.splice(from,1);
+      nsecs.splice(to,0,dragged.dataset.sec);
+      document.getElementById('sectionsInput').value = nsecs.join(',');
+      drag.innerHTML = nsecs.map(s=>`<span draggable="true" class="badge" style="cursor:grab;background:var(--soft);padding:.5rem .8rem" data-sec="${s}">${s} ↕</span>`).join('');
+    }
+  }
+});
+// تحديث ألوان مباشر
+document.querySelectorAll('input[type="color"]').forEach(inp=>{
+  inp.addEventListener('input', ()=>{
+    const frame = document.getElementById('previewFrame');
+    try { frame.contentDocument.documentElement.style.setProperty('--primary', document.querySelector('input[name="primary"]').value); } catch {}
+  });
+});
+</script>
+</body>
+</html>

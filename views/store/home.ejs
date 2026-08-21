@@ -4,6 +4,7 @@
 <% if (store.template === 'gen') { %><link rel="stylesheet" href="/css/store-gen.css"><% } %>
 <% if (tpl && tpl.css) { %><link rel="stylesheet" href="<%= tpl.css %>"><% } %>
 <% if (tpl) { %><style><%= tpl.style %></style><% } else { %><style>:root{--primary:<%= store.color %>}</style><% } %>
+<% if (store.custom_css) { %><style><%= store.custom_css %> /* تخصيص حر */</style><% } %>
 <body data-template="<%= store.template %>" data-slug="<%= store.slug %>" data-base="<%= store.base %>" class="store-body<%= tpl ? ' ' + tpl.classes : '' %>">
 <% if (store.template === 'market') { %>
   <%- include('../partials/market-marquee') %>

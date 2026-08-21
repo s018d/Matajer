@@ -35,6 +35,28 @@
       <span>🏔️ Hiking</span><span>⛺ Camping</span><span>🧳 Travel</span><span>🧗 Climbing</span>
     </div>
   </header>
+<% } else if (store.template === 'prem-classic') { %>
+  <header class="st-head classic-hero">
+    <div class="st-head-inner">
+      <% if (store.logo_path) { %><img src="<%= store.logo_path %>" class="st-logo" alt=""><% } %>
+      <div>
+        <h1><%= store.name %></h1>
+        <p><%= store.description %> — عروض حصرية وخصومات يومية</p>
+        <span class="classic-badge">⚡ Flash 24H • خصم حتى 50%</span>
+      </div>
+    </div>
+  </header>
+<% } else if (store.template === 'prem-natural') { %>
+  <header class="st-head natural-hero">
+    <div class="st-head-inner">
+      <% if (store.logo_path) { %><img src="<%= store.logo_path %>" class="st-logo" alt=""><% } %>
+      <div>
+        <h1><%= store.name %></h1>
+        <p><%= store.description %> — من الطبيعة إلى بيتك</p>
+        <span class="natural-badge">🌿 طبيعي 100% • مستدام</span>
+      </div>
+    </div>
+  </header>
 <% } else { %>
   <header class="st-head">
     <div class="st-head-inner">
@@ -54,8 +76,8 @@
     <a href="<%= store.base %>/?cat=<%= c.id %>" class="<%= cat === c.id ? 'on' : '' %>"><%= c.name %></a>
   <% }) %>
 </nav>
-<main class="st-main <%= store.template === 'prem-fashion' ? 'fashion-main' : store.template === 'prem-outdoor' ? 'outdoor-main' : '' %>">
-  <div class="st-grid <%= store.template === 'prem-fashion' ? 'fashion-grid' : store.template === 'prem-outdoor' ? 'outdoor-grid' : '' %>">
+<main class="st-main <%= store.template === 'prem-fashion' ? 'fashion-main' : store.template === 'prem-outdoor' ? 'outdoor-main' : store.template === 'prem-classic' ? 'classic-main' : store.template === 'prem-natural' ? 'natural-main' : '' %>">
+  <div class="st-grid <%= store.template === 'prem-fashion' ? 'fashion-grid' : store.template === 'prem-outdoor' ? 'outdoor-grid' : store.template === 'prem-classic' ? 'classic-grid' : store.template === 'prem-natural' ? 'natural-grid' : '' %>">
     <% rows.forEach(p => { %>
       <%- include('../partials/store-card', { p, store }) %>
     <% }) %>

@@ -299,4 +299,29 @@ img{max-width:100%;display:block}
 @media(max-width:768px){.outdoor-grid{grid-template-columns:repeat(2,1fr) !important;gap:10px !important}}
 @media(max-width:360px){.outdoor-grid{grid-template-columns:1fr !important}}
 
+/* ===== PREMIUM CLASSIC - Conversion dense ===== */
+.classic-hero{background:linear-gradient(135deg,#008827 0%, #00a1e0 100%);color:#fff}
+.classic-hero h1{color:#fff !important;-webkit-text-fill-color:#fff !important}
+.classic-hero p{color:rgba(255,255,255,.9) !important}
+.classic-badge{display:inline-block;margin-top:.6rem;background:#fff;color:#008827;padding:.35rem .9rem;border-radius:99px;font-size:.78rem;font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.classic-grid{grid-template-columns:repeat(4,1fr) !important;gap:10px !important}
+.classic-grid .st-card{border:1px solid #e8f4e8;border-radius:8px}
+.classic-grid .st-card:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,136,39,.15)}
+.classic-grid .st-price b{color:#008827}
+@media(max-width:900px){.classic-grid{grid-template-columns:repeat(3,1fr) !important}}
+@media(max-width:768px){.classic-grid{grid-template-columns:repeat(2,1fr) !important}}
+@media(max-width:360px){.classic-grid{grid-template-columns:1fr !important}}
+
+/* ===== PREMIUM NATURAL - Masonry storytelling ===== */
+.natural-hero{background:linear-gradient(135deg,#3e6f5e 0%, #faf9f6 100%);color:#2d2a26}
+.natural-hero h1{color:#2d2a26 !important;-webkit-text-fill-color:#2d2a26 !important}
+.natural-hero p{color:#5a5a5a !important}
+.natural-badge{display:inline-block;margin-top:.6rem;background:#3e6f5e;color:#fff;padding:.35rem .9rem;border-radius:99px;font-size:.78rem;font-weight:700}
+.natural-grid{grid-template-columns:repeat(3,1fr) !important;gap:16px !important}
+.natural-grid .st-card{border-radius:16px;border:1px solid #f0ece3;background:#fff}
+.natural-grid .st-card:nth-child(3n+1){transform:translateY(8px)}
+.natural-grid .st-card:nth-child(3n+2){transform:translateY(-4px)}
+@media(max-width:900px){.natural-grid{grid-template-columns:repeat(2,1fr) !important} .natural-grid .st-card:nth-child(3n+1), .natural-grid .st-card:nth-child(3n+2){transform:none}}
+@media(max-width:360px){.natural-grid{grid-template-columns:1fr !important}}
+
 /* FIX removed - existing 800/480/360 breakpoints handle mobile cleanly */

@@ -112,6 +112,7 @@ textarea{resize:vertical}
 .badge-err{background:#fee2e2;color:#991b1b}
 .badge-danger{background:#fee2e2;color:#991b1b}
 .nav-badge{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;border-radius:99px;font-size:.68rem;font-weight:800;min-width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
+.nav-badge[hidden]{display:none !important}
 
 /* ===== TABLES ===== */
 .table{width:100%;border-collapse:separate;border-spacing:0;font-size:.87rem}

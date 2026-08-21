@@ -89,6 +89,10 @@
         
         <div style="margin-top:1rem;display:flex;flex-direction:column;gap:.5rem">
           <button type="button" class="btn btn-primary btn-block" onclick="saveLayout()" id="saveBtn">💾 حفظ التصميم</button>
+          <div style="display:flex;gap:.5rem">
+            <button type="button" class="btn btn-ghost" style="flex:1" onclick="undo()" title="Ctrl+Z">↩️ تراجع</button>
+            <button type="button" class="btn btn-ghost" style="flex:1" onclick="redo()" title="Ctrl+Y">↪️ إعادة</button>
+          </div>
           <a href="/s/<%= store.slug %>" target="_blank" class="btn btn-ghost btn-block">👁️ فتح متجري الحقيقي</a>
           <button type="button" class="btn btn-ghost btn-block" onclick="resetLayout()">↩️ استعادة الافتراضي</button>
         </div>
@@ -187,7 +191,7 @@ const SECTIONS = <%- JSON.stringify(sections.map(s=>s.key)) %>;
 let layout = <%- JSON.stringify(layout) %> || {};
 let dirty = false;
 
-function markDirty(){ dirty=true; document.getElementById('dirtyBadge').hidden=false; }
+function markDirty(){ dirty=true; document.getElementById('dirtyBadge').hidden=false; saveHistory(); }
 
 // ===== سحب وإفلات =====
 const list = document.getElementById('sectionsList');
@@ -268,14 +272,12 @@ async function saveLayout(){
 async function uploadStoreBg(){
   const fileInput = document.querySelector('input[name="store_bg_image"]');
   const videoInput = document.querySelector('input[name="store_bg_video"]');
-  const overlay = document.querySelector('input[name="bg_overlay"]').value;
+  if (!fileInput.files[0] && !videoInput.files[0]){ alert('⚠️ اختر صورة أو فيديو أولاً'); return; }
   const form = new FormData();
-  form.append('_csrf', '<%= csrf %>');
   if (fileInput.files[0]) form.append('store_bg_image', fileInput.files[0]);
   if (videoInput.files[0]) form.append('store_bg_video', videoInput.files[0]);
   form.append('bg_overlay', document.querySelector('input[name="bg_overlay"]').value);
-  form.append('_csrf', '<%= csrf %>');
-  const res = await fetch('/panel/templates/store-bg', { method:'POST', headers:{'x-csrf-token':'<%= csrf %>'}, body:new FormData(document.getElementById('bgForm')) });
+  const res = await fetch('/panel/templates/store-bg', { method:'POST', headers:{'x-csrf-token':'<%= csrf %>'}, body:form });
   if (res.ok){ alert('✅ تم حفظ خلفية المتجر'); refreshPreview(); }
   else alert('❌ فشل الحفظ');
 }
@@ -289,46 +291,67 @@ function previewStoreBg(input){
 // ===== Undo/Redo =====
 const history = [];
 let historyIndex = -1;
+let restoring = false;
+function snapshot(){
+  const fields = {};
+  document.querySelectorAll('#edit-hero [name], #edit-grid [name], #edit-announce [name]').forEach(inp=>{ fields[inp.name] = inp.value; });
+  return { order: getOrder(), fields };
+}
 function saveHistory(){
-  const state = { layout: JSON.parse(JSON.stringify(layout)), customCss: document.querySelector('style[data-custom]')?.textContent || '' };
+  if (restoring) return;
+  const state = snapshot();
   history.splice(historyIndex+1);
   history.push(state);
   historyIndex = history.length-1;
-  if (history.length > 50) { history.shift(); historyIndex = history.length-1; }
+  if (history.length > 50){ history.shift(); historyIndex = history.length-1; }
 }
 document.addEventListener('keydown', e=>{
+  const tag = (e.target.tagName||'').toLowerCase();
+  if (tag==='input' || tag==='select' || tag==='textarea') return;
   if ((e.ctrlKey || e.metaKey) && e.key === 'z'){
+    e.preventDefault();
     if (e.shiftKey) redo(); else undo();
   }
-  if ((e.ctrlKey || e.metaKey) && e.key === 'y') redo();
+  if ((e.ctrlKey || e.metaKey) && e.key === 'y'){ e.preventDefault(); redo(); }
 });
 function undo(){
   if (historyIndex > 0){
     historyIndex--;
-    restoreState(history[historyIndex]);
+    restoring = true;
+    try { restoreState(history[historyIndex]); } finally { restoring = false; }
   }
 }
 function redo(){
   if (historyIndex < history.length-1){
     historyIndex++;
-    restoreState(history[historyIndex]);
+    restoring = true;
+    try { restoreState(history[historyIndex]); } finally { restoring = false; }
   }
 }
 function restoreState(state){
-  layout = state.layout;
-  document.querySelectorAll('.sec-item').forEach(el=>{
-    const key = el.dataset.sec;
-    const btn = el.querySelector('[onclick*="toggleSec"]');
-    const vis = state.layout.visibility?.[el.dataset.sec] !== false;
-    const btnEl = el.querySelector('[onclick*="toggleSec"]');
+  // إعادة ترتيب الأقسام في القائمة حسب الحالة المحفوظة
+  state.order.forEach(o=>{
+    const el = list.querySelector(`[data-sec="${o.key}"]`);
+    if (el) list.appendChild(el);
+  });
+  // إرجاع أزرار الإظهار/الإخفاء
+  state.order.forEach(o=>{
+    const item = list.querySelector(`[data-sec="${o.key}"]`);
+    const btnEl = item?.querySelector('[onclick*="toggleSec"]');
     if (btnEl){
-      btnEl.textContent = vis ? '👁️' : '🚫';
-      el.style.borderColor = vis ? 'var(--line)' : '#ef4444';
+      btnEl.textContent = o.visible ? '👁️' : '🚫';
+      item.style.borderColor = o.visible ? 'var(--line)' : '#ef4444';
     }
   });
-  layout = state.layout;
+  // إرجاع قيم حقول التحرير (هيرو/شبكة/إعلان)
+  Object.entries(state.fields).forEach(([name,val])=>{
+    const inp = document.querySelector(`[name="${name}"]`);
+    if (inp && inp.type !== 'file') inp.value = val;
+  });
   refreshPreview();
 }
+// نقطة البداية: الحالة الحالية عند فتح الصفحة
+saveHistory();
 </script>
 </body>
 </html>

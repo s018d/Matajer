@@ -81,7 +81,14 @@
           <li><span class="feed-act">بلا علامة منصة</span> <span class="feed-detail">+ أولوية الدعم المباشر</span></li>
         </ul>
         <% if (cfg.pay_account) { %>
-          <p class="muted pay-note">طريقة الدفع: <b dir="ltr"><%= cfg.pay_account %></b> — بعد التحويل اكتب رقم الحوالة وأرفق صورة الإيصال مع طلب الترقية، وسنفعّل باقتك خلال دقائق (بلا حاجة لمراسلة الواتساب).</p>
+          <div class="pay-box" style="background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;border:none">
+            <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+              <span style="font-size:1.4rem">💳</span>
+              <b dir="ltr" id="payAccount" style="font-size:1.05rem;letter-spacing:.04em;color:#fff"><%= cfg.pay_account %></b>
+              <button type="button" class="btn btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('payAccount').textContent).then(()=>this.textContent='تم النسخ ✓')" style="background:#fff;color:#0f172a">نسخ</button>
+            </div>
+            <span style="color:#94a3b8">بعد التحويل اكتب رقم الحوالة وأرفق صورة الإيصال — التفعيل خلال دقائق. الماستر محلي عراقي.</span>
+          </div>
         <% } else { %>
           <p class="muted pay-note">جهة استلام الدفع لم تُحدد بعد — أرسلناها لك عبر واتساب، أو راسلنا الآن:
           <% if (cfg.site_whatsapp) { %> <a href="https://wa.me/<%= cfg.site_whatsapp.replace(/\D/g,'') %>" target="_blank">اضغط هنا</a><% } %></p>

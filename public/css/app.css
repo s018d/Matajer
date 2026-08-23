@@ -254,7 +254,20 @@ textarea{resize:vertical}
 .store-card h3{margin:.6rem 0 .35rem;font-weight:800}
 .store-card p{color:var(--muted);font-size:.88rem;margin-bottom:1.2rem;min-height:2.6em}
 
-/* ===== RESPONSIVE ===== */
+/* ===== RESPONSIVE — fluid ===== */
+@media(max-width:1200px){
+  .content{padding:1.5rem}
+  .two-col{grid-template-columns:1.2fr 1fr}
+  .grid-3{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:1024px){
+  .sidebar{width:220px}
+  .two-col{grid-template-columns:1fr;gap:1.2rem}
+  .grid-3{grid-template-columns:1fr}
+  .grid-2{grid-template-columns:1fr}
+  .order-body{grid-template-columns:1fr 1fr}
+  .content{padding:1.4rem}
+}
 @media(max-width:900px){
   .sidebar{width:210px}
   .two-col{grid-template-columns:1fr}
@@ -262,6 +275,13 @@ textarea{resize:vertical}
   .grid-2{grid-template-columns:1fr}
   .order-body{grid-template-columns:1fr}
   .auth-card{width:92vw;padding:1.8rem}
+}
+@media(max-width:768px){
+  .content{padding:1.2rem}
+  .topbar{padding:.7rem 1rem}
+  .card{padding:1.2rem}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .order-body{grid-template-columns:1fr}
 }
 @media(max-width:600px){
   .sidebar{position:fixed;left:0;z-index:100;transform:translateX(-100%);transition:transform .3s;box-shadow:var(--shadow-lg)}
@@ -312,6 +332,13 @@ textarea{resize:vertical}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(11,18,32,.5);z-index:99;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .sidebar-overlay.show{display:block}
 
-/* ===== CLEAN MOBILE ===== */
-.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+/* ===== CLEAN MOBILE — جداول قابلة للسحب على الجوال ===== */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;display:block}
 .table-wrap table{min-width:600px;width:100%}
+.card:has(> table), .card > table{ display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.card > table{ min-width:500px; width:100%; }
+@media(max-width:600px){
+  .table-wrap table{ min-width:520px; }
+  .card > table{ min-width:520px; }
+  .card{ overflow-x:auto; }
+}

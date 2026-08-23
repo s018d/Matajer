@@ -8,7 +8,7 @@
     <div class="card">
       <h2>طلبات الترقية المعلقة</h2>
       <% if (rows.filter(r => r.status !== 'done').length === 0) { %><p class="muted">لا توجد طلبات معلقة</p><% } %>
-      <table class="table">
+      <div class="table-wrap"><table class="table">
         <thead><tr><th>التاريخ</th><th>المتجر</th><th>المالك</th><th>المبلغ</th><th>المرجع</th><th>إثبات الدفع</th><th>الحالة</th><th></th></tr></thead>
         <tbody>
           <% rows.forEach(p => { %>
@@ -37,12 +37,12 @@
           </tr>
           <% }) %>
         </tbody>
-      </table>
+      </table></div>
     </div>
     <div class="card">
       <h2>المتاجر الاحترافية حالياً</h2>
       <% if (proStores.length === 0) { %><p class="muted">لا توجد متاجر احترافية بعد</p><% } %>
-      <table class="table">
+      <div class="table-wrap"><table class="table">
         <thead><tr><th>المتجر</th><th>ينتهي في</th><th>الحالة</th></tr></thead>
         <tbody>
           <% proStores.forEach(s => { %>
@@ -53,7 +53,7 @@
           </tr>
           <% }) %>
         </tbody>
-      </table>
+      </table></div>
     </div>
     <p class="muted" style="font-size:.82rem">لتعديل باقة أي متجر يدوياً (مثل ترقية مباشرة أو إلغاء): ادخل صفحة المتجر من «المتاجر» وحدّد الباقة هناك.</p>
   </div>

@@ -35,7 +35,7 @@
 
     <div class="card">
       <h2>كل المتاجر (<%= list.length %>)</h2>
-      <table>
+      <div class="table-wrap"><table>
         <tr><th>المتجر</th><th>مستخدم</th><th>منتجات</th><th>طلبات</th><th>مبيعات</th><th>الباقة</th><th>الحالة</th><th></th></tr>
         <% list.forEach(s => { %>
           <tr>
@@ -52,7 +52,7 @@
             </td>
           </tr>
         <% }) %>
-      </table>
+      </table></div>
     </div>
   </div>
 </main>

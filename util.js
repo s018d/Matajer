@@ -242,6 +242,41 @@ function getLoyaltyConfig() {
   };
 }
 
+/* ====== حماية المحتوى — كلمات ممنوعة ====== */
+const FORBIDDEN_WORDS = [
+  // مخدرات
+  'مخدر','مخدرات','حشيش','كبتاجون','ترامادول','كريستال','هيروين','كوكايين','افيون','أفيون','حبوب مخدرة',
+  // سلاح
+  'سلاح','مسدس','بندقية','كلاشنكوف','رشاش','قنبلة','متفجرات',
+  // خمور/قمار
+  'خمور','خمر','كحول','ويسكي','فودكا','بيرة','قمار','مراهنات','كازينو',
+  // إباحي
+  'اباحي','إباحي','جنس','عري','بورنو','اباحية','إباحية',
+  // إنجليزي
+  'drugs','drug','cannabis','cocaine','heroin','opium','weapon','gun','rifle','porn','xxx','casino','gambling','viagra','tramadol'
+];
+function containsForbidden(text){
+  if(!text) return false;
+  const lower = String(text).toLowerCase();
+  // إزالة المسافات والشرطات لتجاوز محاولات التمويه
+  const compact = lower.replace(/[\s\-_\.،,]+/g,'');
+  for(const w of FORBIDDEN_WORDS){
+    const lw = w.toLowerCase();
+    if(lower.includes(lw) || compact.includes(lw.replace(/[\s\-_\.]+/g,''))) return true;
+  }
+  return false;
+}
+function getForbiddenWord(text){
+  if(!text) return null;
+  const lower = String(text).toLowerCase();
+  const compact = lower.replace(/[\s\-_\.،,]+/g,'');
+  for(const w of FORBIDDEN_WORDS){
+    const lw = w.toLowerCase();
+    if(lower.includes(lw) || compact.includes(lw.replace(/[\s\-_\.]+/g,''))) return w;
+  }
+  return null;
+}
+
 /* تسجيل قيد في الكاش فلو */
 function addCashFlowEntry(storeId, type, category, amount, referenceType, referenceId, description) {
   db.prepare('INSERT INTO cash_flow_entries (store_id, type, category, amount, reference_type, reference_id, description) VALUES (?,?,?,?,?,?,?)')
@@ -256,7 +291,7 @@ module.exports = {
   checkLimit, loginLocked, loginFail, loginOk, captchaNew, captchaCheck,
   sendTelegram, notifyNewOrder,
   getLoyaltyPoints, addLoyaltyPoints, redeemLoyaltyPoints, getLoyaltyConfig,
-  addCashFlowEntry,
+  addCashFlowEntry, containsForbidden, getForbiddenWord,
   asyncHandler
 };
 

@@ -57,6 +57,12 @@ router.get('/', (req, res) => {
   res.render('admin/dashboard', { stores, totals, topStores, recentOrders, recent, money, user: req.user });
 });
 
+router.get('/review', (req, res) => {
+  const newStores = db.prepare("SELECT s.*, u.username owner_username FROM stores s LEFT JOIN users u ON u.store_id=s.id WHERE date(s.created_at) >= date('now','-7 days') ORDER BY s.id DESC").all();
+  const pendingReviews = db.prepare("SELECT r.*, p.name product_name, s.name store_name, s.slug store_slug FROM reviews r JOIN products p ON p.id=r.product_id JOIN stores s ON s.id=p.store_id WHERE r.approved=0 ORDER BY r.id DESC LIMIT 30").all();
+  res.render('admin/review', { newStores, pendingReviews, user: req.user });
+});
+
 router.get('/stores', (req, res) => {
   const rows = db.prepare('SELECT s.*, u.username owner_username FROM stores s LEFT JOIN users u ON u.store_id = s.id ORDER BY s.id DESC').all();
   const list = rows.map(r => ({ ...r, ...storeStats(r.id) }));
@@ -99,9 +105,23 @@ router.post('/domains/:id/link', (req, res) => {
   res.redirect('/admin/domains?ok=' + encodeURIComponent(`تم ربط ${domain} بمتجر ${r.store_name}`));
 });
 
+router.post('/review/:id/approve', (req, res) => {
+  db.prepare('UPDATE reviews SET approved=1 WHERE id=?').run(req.params.id);
+  res.redirect('/admin/review?ok=' + encodeURIComponent('تمت الموافقة على التقييم'));
+});
+router.post('/review/:id/delete', (req, res) => {
+  db.prepare('DELETE FROM reviews WHERE id=?').run(req.params.id);
+  res.redirect('/admin/review?ok=' + encodeURIComponent('تم حذف التقييم'));
+});
+
 router.post('/stores', (req, res) => {
   const { name, username, owner_name, phone, password, description } = req.body;
   if (!name || !username) return res.redirect('/admin/stores?err=' + encodeURIComponent('اسم المتجر واسم المستخدم مطلوبان'));
+  const { containsForbidden, getForbiddenWord } = require('../util');
+  if (containsForbidden(name)) {
+    const w = getForbiddenWord(name) || 'ممنوعة';
+    return res.redirect('/admin/stores?err=' + encodeURIComponent(`اسم المتجر يحتوي على كلمة غير مسموحة: "${w}"`));
+  }
   const existing = db.prepare('SELECT id FROM users WHERE username=?').get(String(username).trim());
   if (existing) return res.redirect('/admin/stores?err=' + encodeURIComponent(`اسم المستخدم «${username}» مستعمل سابقاً`));
   const pass = password ? String(password) : genPassword();

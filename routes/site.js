@@ -1,7 +1,7 @@
 const express = require('express');
 const crypto = require('crypto');
 const { db, logActivity, siteSettings, setSetting, isPro } = require('../db');
-const { hashPassword, checkPassword, genSlug, createSession, destroySession, appendLog, checkLimit, captchaNew, captchaCheck } = require('../util');
+const { hashPassword, checkPassword, genSlug, createSession, destroySession, appendLog, checkLimit, captchaNew, captchaCheck, containsForbidden, getForbiddenWord } = require('../util');
 const TPL = require('../templates');
 const router = express.Router();
 
@@ -127,6 +127,10 @@ router.post('/signup', (req, res) => {
     return res.redirect('/signup?err=' + encodeURIComponent('كلمة المرور: 8 أحرف على الأقل مع رقم وحرف'));
   if (pname.length < 2)
     return res.redirect('/signup?err=' + encodeURIComponent('اكتب اسم متجرك'));
+  if (containsForbidden(pname) || containsForbidden(uname)) {
+    const w = getForbiddenWord(pname + ' ' + uname) || 'ممنوعة';
+    return res.redirect('/signup?err=' + encodeURIComponent(`الاسم يحتوي على كلمة غير مسموحة: "${w}" — يرجى اختيار اسم آخر`));
+  }
   const tpl = 'classic';
   const cfg = siteSettings();
   const trialExp = new Date(Date.now() + Number(cfg.trial_days || 7) * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);

@@ -1,0 +1,50 @@
+<%- include('../partials/head', { title: 'التقييمات — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'reviews', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: '⭐ تقييمات الزبائن' }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <div class="card" style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fde68a">
+      <p style="margin:0;color:#92400e">💡 التقييمات تزيد ثقة الزبائن وترفع المبيعات. عندما يقيّم زبون منتجك، يظهر هنا بانتظار موافقتك — وافق ليظهر في صفحة المنتج للجميع. التقييمات الموافق عليها تكسب الزبون نقاط ولاء.</p>
+    </div>
+    <% if(reviews.length===0){ %>
+      <div class="empty-state" style="text-align:center;padding:3rem 1.5rem;background:linear-gradient(135deg,#f8fafc,#eff6ff);border:1.5px dashed #bfdbfe;border-radius:16px;margin-top:1rem">
+        <div style="font-size:3rem;margin-bottom:.8rem">⭐</div>
+        <h3 style="margin:0 0 .4rem;color:#0f172a">لا تقييمات بعد</h3>
+        <p class="muted">عندما يقيّم زبون أحد منتجاتك سيظهر هنا — شارك متجرك واطلب من زبائنك التقييم</p>
+      </div>
+    <% } else { %>
+      <div class="card" style="margin-top:1rem">
+        <h2>التقييمات (<%= reviews.length %>) — المعلقة أولاً</h2>
+        <table>
+          <tr><th>المنتج</th><th>الزبون</th><th>التقييم</th><th>التعليق</th><th>الحالة</th><th>التاريخ</th><th></th></tr>
+          <% reviews.forEach(r=>{ %>
+            <tr style="<%= r.approved ? '' : 'background:#fffbeb' %>">
+              <td><%= r.product_name %></td>
+              <td><%= r.customer_name %><% if(r.customer_phone){ %><br><small dir="ltr" class="muted"><%= r.customer_phone %></small><% } %></td>
+              <td><%= '★'.repeat(r.rating) %><span style="color:#e2e8f0"><%= '☆'.repeat(5-r.rating) %></span></td>
+              <td style="max-width:260px;word-break:break-word"><%= r.comment || '—' %></td>
+              <td><span class="badge <%= r.approved ? 'badge-ok' : 'badge-warn' %>"><%= r.approved ? 'ظاهر' : 'بانتظار' %></span></td>
+              <td><small class="muted"><%= r.created_at %></small></td>
+              <td style="display:flex;gap:.3rem">
+                <% if(!r.approved){ %>
+                  <form method="post" action="/panel/reviews/<%= r.id %>/approve" class="inline">
+                    <input type="hidden" name="_csrf" value="<%= csrf %>">
+                    <button class="btn btn-sm btn-ok">موافقة</button>
+                  </form>
+                <% } %>
+                <form method="post" action="/panel/reviews/<%= r.id %>/delete" class="inline" onsubmit="return confirm('حذف التقييم نهائياً؟')">
+                  <input type="hidden" name="_csrf" value="<%= csrf %>">
+                  <button class="btn btn-sm btn-danger">حذف</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </table>
+      </div>
+    <% } %>
+  </div>
+</main>
+</body>
+</html>

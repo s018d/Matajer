@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 const { db, logActivity, UPLOADS_DIR, siteSettings, setSetting, isPro } = require('../db');
-const { requireOwner, hashPassword, checkPassword, appendLog, money, thumb, asyncHandler } = require('../util');
+const { requireOwner, hashPassword, checkPassword, appendLog, money, thumb, asyncHandler, containsForbidden, getForbiddenWord } = require('../util');
 const TPL = require('../templates');
 const { tplFor } = require('./store');
 const router = express.Router();
@@ -200,6 +200,10 @@ router.post('/products', upNewPics().array('images', 20), asyncHandler(async (re
   const store = getStore(req.user.store_id);
   const { name, category_id, price, old_price, description, active, stock, options, addons } = req.body;
   if (!name || isNaN(Number(price))) return res.redirect('/panel/products/new?err=' + encodeURIComponent('اسم المنتج وسعره مطلوبان'));
+  if (containsForbidden(name) || containsForbidden(description)) {
+    const w = getForbiddenWord(name + ' ' + (description||'')) || 'ممنوعة';
+    return res.redirect('/panel/products/new?err=' + encodeURIComponent(`المنتج يحتوي على كلمة غير مسموحة: "${w}" — يرجى تعديل الاسم/الوصف`));
+  }
   if (!isPro(store)) {
     const maxP = Number(siteSettings().free_products || 10);
     const cnt = db.prepare('SELECT COUNT(*) c FROM products WHERE store_id=?').get(store.id).c;
@@ -244,6 +248,10 @@ router.post('/products/:id', (req, res) => {
   const { name, category_id, price, old_price, description, active, stock, options, addons } = req.body;
   const p = db.prepare('SELECT * FROM products WHERE id=? AND store_id=?').get(req.params.id, store.id);
   if (!p) return res.redirect('/panel/products');
+  if (containsForbidden(name) || containsForbidden(description)) {
+    const w = getForbiddenWord(name + ' ' + (description||'')) || 'ممنوعة';
+    return res.redirect('/panel/products/' + p.id + '/edit?err=' + encodeURIComponent(`المنتج يحتوي على كلمة غير مسموحة: "${w}"`));
+  }
   const stockVal = stock === '' || stock == null ? null : Math.max(0, Math.floor(Number(stock) || 0));
   db.prepare('UPDATE products SET name=?, category_id=?, description=?, price=?, old_price=?, active=?, stock=?, options=?, addons=? WHERE id=?')
     .run(String(name || p.name), category_id ? Number(category_id) : null, String(description ?? ''), Number(price), old_price && !isNaN(Number(old_price)) ? Number(old_price) : null, active === 'on' ? 1 : 0, stockVal, sanitizeOptions(options), sanitizeAddons(addons), p.id);
@@ -336,6 +344,10 @@ router.post('/categories', (req, res) => {
   const store = getStore(req.user.store_id);
   const { name } = req.body;
   if (!String(name || '').trim()) return res.redirect('/panel/categories?err=' + encodeURIComponent('اكتب اسم القسم'));
+  if (containsForbidden(name)) {
+    const w = getForbiddenWord(name) || 'ممنوعة';
+    return res.redirect('/panel/categories?err=' + encodeURIComponent(`القسم يحتوي على كلمة غير مسموحة: "${w}"`));
+  }
   const maxPos = db.prepare('SELECT COALESCE(MAX(position),0) m FROM categories WHERE store_id=?').get(store.id).m;
   db.prepare('INSERT INTO categories (store_id, name, position) VALUES (?,?,?)').run(store.id, String(name).trim(), maxPos + 1);
   res.redirect('/panel/categories?ok=' + encodeURIComponent('تمت إضافة القسم'));
@@ -728,6 +740,10 @@ router.post('/settings', (req, res) => {
       } else return res.redirect('/panel/settings?err=' + encodeURIComponent('صيغة الدومين غير صحيحة — مثال: my-shop.example.com'));
     } else domain = '';
   }
+  if (containsForbidden(name) || containsForbidden(description)) {
+    const w = getForbiddenWord(name + ' ' + (description||'')) || 'ممنوعة';
+    return res.redirect('/panel/settings?err=' + encodeURIComponent(`الاسم/الوصف يحتوي على كلمة غير مسموحة: "${w}"`));
+  }
   let tpl = TPL.valid(template) ? template : store.template;
   if (TPL.isPremium(tpl) && !isPro(store)) tpl = store.template;
   db.prepare('UPDATE stores SET name=?, description=?, owner_name=?, phone=?, whatsapp=?, template=?, color=?, custom_domain=?, delivery_fee=?, free_delivery_min=?, meta_desc=? WHERE id=?')
@@ -815,6 +831,33 @@ router.post('/password', (req, res) => {
     return res.redirect('/panel/password?err=' + encodeURIComponent('كلمة المرور الجديدة: 8 أحرف على الأقل مع رقم وحرف'));
   db.prepare('UPDATE users SET password_hash=? WHERE id=?').run(hashPassword(String(newpass)), req.user.id);
   res.redirect('/panel/password?ok=' + encodeURIComponent('تم تغيير كلمة المرور'));
+});
+
+/* ====== التقييمات — إدارة تقييمات الزبائن ====== */
+router.get('/reviews', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const reviews = db.prepare(`
+    SELECT r.*, p.name product_name
+    FROM reviews r JOIN products p ON p.id=r.product_id
+    WHERE p.store_id=? ORDER BY r.approved ASC, r.id DESC
+  `).all(store.id);
+  res.render('panel/reviews', { store, reviews, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+router.post('/reviews/:id/approve', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const r = db.prepare('SELECT r.* FROM reviews r JOIN products p ON p.id=r.product_id WHERE r.id=? AND p.store_id=?').get(req.params.id, store.id);
+  if (!r) return res.redirect('/panel/reviews?err=' + encodeURIComponent('التقييم غير موجود'));
+  db.prepare('UPDATE reviews SET approved=1 WHERE id=?').run(r.id);
+  // نقاط ولاء للمراجع
+  try{ const cfg=require('../util').getLoyaltyConfig(); require('../util').addLoyaltyPoints(store.id, r.customer_phone||'review-'+r.id, cfg.points_per_review, 'review', r.id, 'تقييم منتج'); }catch(e){}
+  res.redirect('/panel/reviews?ok=' + encodeURIComponent('تمت الموافقة — يظهر الآن للزوار'));
+});
+router.post('/reviews/:id/delete', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const r = db.prepare('SELECT r.* FROM reviews r JOIN products p ON p.id=r.product_id WHERE r.id=? AND p.store_id=?').get(req.params.id, store.id);
+  if (!r) return res.redirect('/panel/reviews?err=' + encodeURIComponent('التقييم غير موجود'));
+  db.prepare('DELETE FROM reviews WHERE id=?').run(r.id);
+  res.redirect('/panel/reviews?ok=' + encodeURIComponent('تم حذف التقييم'));
 });
 
 /* ====== إدارة التوصيل (Shipping) ====== */

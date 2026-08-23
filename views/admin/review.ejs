@@ -1,0 +1,76 @@
+<%- include('../partials/head', { title: 'المراجعة — متاجر وتقييمات' }) %>
+<body class="app">
+<%- include('../partials/sidebar-admin', { active: 'review' }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: '🛡️ المراجعة — متاجر جديدة وتقييمات' }) %>
+  <div class="content">
+    <div class="card">
+      <h2>🆕 متاجر جديدة (آخر 7 أيام — <%= newStores.length %>)</h2>
+      <% if (newStores.length === 0) { %><p class="muted">لا متاجر جديدة هذا الأسبوع</p><% } else { %>
+      <table>
+        <tr><th>المتجر</th><th>الرابط</th><th>المالك</th><th>الحالة</th><th>تاريخ الإنشاء</th><th>إجراءات</th></tr>
+        <% newStores.forEach(s=>{ %>
+          <tr>
+            <td><a href="/admin/stores/<%= s.id %>"><%= s.name %></a></td>
+            <td><a href="/s/<%= s.slug %>" target="_blank">/s/<%= s.slug %></a></td>
+            <td><%= s.owner_username || '—' %></td>
+            <td><span class="badge <%= s.status==='active'?'badge-ok':'badge-err' %>"><%= s.status==='active'?'نشط':'موقوف' %></span></td>
+            <td><small><%= s.created_at %></small></td>
+            <td>
+              <a class="btn btn-sm" href="/admin/stores/<%= s.id %>">عرض</a>
+              <% if(s.status==='active'){ %>
+                <form method="post" action="/admin/stores/<%= s.id %>" class="inline">
+                  <input type="hidden" name="status" value="suspended">
+                  <input type="hidden" name="name" value="<%= s.name %>">
+                  <input type="hidden" name="slug" value="<%= s.slug %>">
+                  <input type="hidden" name="_csrf" value="<%= csrf %>">
+                  <button class="btn btn-sm btn-danger" onclick="return confirm('إيقاف المتجر؟')">إيقاف</button>
+                </form>
+              <% } else { %>
+                <form method="post" action="/admin/stores/<%= s.id %>" class="inline">
+                  <input type="hidden" name="status" value="active">
+                  <input type="hidden" name="name" value="<%= s.name %>">
+                  <input type="hidden" name="slug" value="<%= s.slug %>">
+                  <input type="hidden" name="_csrf" value="<%= csrf %>">
+                  <button class="btn btn-sm btn-ok">تفعيل</button>
+                </form>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </table>
+      <% } %>
+    </div>
+
+    <div class="card" style="margin-top:1rem">
+      <h2>⭐ تقييمات بانتظار الموافقة (<%= pendingReviews.length %>)</h2>
+      <% if(pendingReviews.length===0){ %><p class="muted">لا تقييمات معلقة — كل التقييمات موافق عليها</p><% } else { %>
+      <table>
+        <tr><th>المتجر</th><th>المنتج</th><th>الزبون</th><th>التقييم</th><th>التعليق</th><th>التاريخ</th><th>إجراءات</th></tr>
+        <% pendingReviews.forEach(r=>{ %>
+          <tr>
+            <td><a href="/s/<%= r.store_slug %>" target="_blank"><%= r.store_name %></a></td>
+            <td><%= r.product_name %></td>
+            <td><%= r.customer_name %></td>
+            <td><%= '★'.repeat(r.rating) %><span style="color:#cbd5e1"><%= '☆'.repeat(5-r.rating) %></span></td>
+            <td><%= r.comment || '—' %></td>
+            <td><small><%= r.created_at %></small></td>
+            <td>
+              <form method="post" action="/admin/review/<%= r.id %>/approve" class="inline">
+                <input type="hidden" name="_csrf" value="<%= csrf %>">
+                <button class="btn btn-sm btn-ok">موافقة</button>
+              </form>
+              <form method="post" action="/admin/review/<%= r.id %>/delete" class="inline" onsubmit="return confirm('حذف التقييم؟')">
+                <input type="hidden" name="_csrf" value="<%= csrf %>">
+                <button class="btn btn-sm btn-danger">حذف</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </table>
+      <% } %>
+    </div>
+  </div>
+</main>
+</body>
+</html>

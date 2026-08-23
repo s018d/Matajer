@@ -24,12 +24,22 @@
     b.textContent = n;
     b.hidden = !n;
   }
+  function pushNotify(n, msg) {
+    try {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('طلب جديد في متجرك 🛒', { body: msg || `لديك ${n} طلب جديد`, icon: '/img/logo.svg' });
+      } else if ('Notification' in window && Notification.permission !== 'denied') {
+        Notification.requestPermission();
+      }
+    } catch(e){}
+  }
   function poll() {
     fetch('/panel/api/neworders' + (last ? '?since=' + encodeURIComponent(last) : ''), { headers: { accept: 'application/json' } })
       .then(r => r.json())
       .then(d => {
         const n = Number(d.count) || 0;
-        if (last !== null && n > 0 && localStorage.getItem(KEY) !== '0') beep();
+        if (last !== null && n > 0 && localStorage.getItem(KEY) !== '0') { beep(); pushNotify(n, d.msg); }
+        if (n > 0) document.title = `(${n}) طلب جديد — دُكّان`;
         last = last === null ? new Date().toISOString().slice(0, 19).replace('T', ' ') : last;
         setBadge(n);
       })
@@ -37,6 +47,8 @@
   }
   document.addEventListener('DOMContentLoaded', function () {
     last = null;
+    // طلب إذن الإشعارات مرة واحدة
+    try{ if('Notification' in window && Notification.permission==='default') Notification.requestPermission(); }catch(e){}
     poll();
     setInterval(poll, 30000);
   });

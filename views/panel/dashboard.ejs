@@ -4,6 +4,30 @@
 <main class="main">
   <%- include('../partials/topbar', { pageTitle: 'نظرة عامة' }) %>
   <div class="content">
+    <% if (stats.products === 0) { %>
+    <div class="card" style="background:linear-gradient(135deg,#0f172a,#1e3a5f);color:#fff;border:none;padding:1.6rem 1.4rem;margin-bottom:1rem;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-40px;left:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(14,165,233,.25),transparent 70%);border-radius:50%"></div>
+      <h2 style="color:#fff;margin:0 0 .3rem;position:relative">👋 أهلاً بيك في متجرك الجديد!</h2>
+      <p style="color:#cbd5e1;margin:0 0 1.2rem;position:relative">خلّي متجرك جاهز للبيع بـ 3 خطوات — دقيقتين وتبلش</p>
+      <div style="display:flex;flex-direction:column;gap:.7rem;position:relative">
+        <a href="/panel/products/new" style="display:flex;align-items:center;gap:.8rem;background:rgba(255,255,255,.12);padding:.8rem 1rem;border-radius:12px;text-decoration:none;color:#fff;border:1px solid rgba(255,255,255,.15);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.12)'">
+          <span style="background:#0ea5e9;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem">1</span>
+          <div style="flex:1"><b>أضف أول منتج</b><div style="font-size:.82rem;color:#cbd5e1">صورة + سعر + وصف — 30 ثانية</div></div>
+          <span>→</span>
+        </a>
+        <a href="/panel/templates" style="display:flex;align-items:center;gap:.8rem;background:rgba(255,255,255,.08);padding:.8rem 1rem;border-radius:12px;text-decoration:none;color:#fff;border:1px solid rgba(255,255,255,.1)">
+          <span style="background:rgba(255,255,255,.2);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem">2</span>
+          <div style="flex:1"><b>اختر شكل متجرك</b><div style="font-size:.82rem;color:#94a3b8">6 قوالب — معاينة حية قبل الاعتماد</div></div>
+          <span>→</span>
+        </a>
+        <div style="display:flex;align-items:center;gap:.8rem;background:rgba(255,255,255,.06);padding:.8rem 1rem;border-radius:12px;border:1px solid rgba(255,255,255,.08)">
+          <span style="background:rgba(255,255,255,.15);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem">3</span>
+          <div style="flex:1"><b>شارك رابطك على واتساب</b><div style="font-size:.82rem;color:#94a3b8">انسخ الرابط أدناه وأرسله للزبائن — الطلبات توصلك هنا فوراً</div></div>
+          <span>📋</span>
+        </div>
+      </div>
+    </div>
+    <% } %>
     <div class="stat-grid">
       <div class="stat"><span>المنتجات</span><b><%= stats.products %></b></div>
       <div class="stat"><span>الطلبات</span><b><%= stats.orders %></b></div>

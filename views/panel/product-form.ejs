@@ -15,7 +15,7 @@
     <a href="/panel/products" class="auth-back" style="margin-bottom:1rem">→ رجوع للمنتجات</a>
     <div class="two-col">
       <div class="card">
-        <form method="post" action="<%= isNew ? '/panel/products' : '/panel/products/' + pid %>" class="stack">
+        <form method="post" action="<%= isNew ? '/panel/products' : '/panel/products/' + pid %>" class="stack" <%= isNew ? 'enctype="multipart/form-data"' : '' %>>
           <input type="hidden" name="_csrf" value="<%= csrf %>">
           <label>اسم المنتج *
             <input type="text" name="name" value="<%= product ? product.name : '' %>" required>
@@ -41,15 +41,81 @@
           </label>
           <details class="adv-box" <%= !product || (product.options || product.addons) ? 'open' : '' %>>
             <summary>خيارات وإضافات متقدمة (اختياري)</summary>
-            <label>خيارات المنتج — JSON (الاسم مقابل قيم مفصولة بفواصل)
-              <textarea name="options" rows="3" dir="ltr" placeholder='مثال: {"المقاس":"XL,L,M","اللون":"أسود,أبيض"}'><%- optsVal %></textarea>
-            </label>
-            <small class="muted">يظهر للزبون قوائم اختيار قبل الإضافة للسلة.</small>
-            <label style="margin-top:.8rem">إضافات بسعر — JSON
-              <textarea name="addons" rows="3" dir="ltr" placeholder='مثال: [{"name":"تغليف هدية","price":2000}]'><%- addonsVal %></textarea>
-            </label>
-            <small class="muted">السعر يُضاف للوحدة عند اختيار الزبون لها.</small>
+            <!-- خيارات المنتج: واجهة بسيطة بدون JSON -->
+            <div style="margin-bottom:1rem">
+              <label style="font-weight:700;font-size:.88rem;display:flex;align-items:center;justify-content:space-between">خيارات المنتج <button type="button" class="btn btn-sm btn-ghost" onclick="addOptRow()">+ خيار</button></label>
+              <small class="muted">مثال: المقاس → XL , L , M — يظهر للزبون قائمة اختيار</small>
+              <div id="optsWrap" style="display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem"></div>
+              <textarea name="options" id="optsJson" hidden><%- optsVal %></textarea>
+            </div>
+            <div>
+              <label style="font-weight:700;font-size:.88rem;display:flex;align-items:center;justify-content:space-between">إضافات بسعر <button type="button" class="btn btn-sm btn-ghost" onclick="addAddonRow()">+ إضافة</button></label>
+              <small class="muted">مثال: تغليف هدية +2000 د.ع</small>
+              <div id="addonsWrap" style="display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem"></div>
+              <textarea name="addons" id="addonsJson" hidden><%- addonsVal %></textarea>
+            </div>
           </details>
+          <script>
+          (function(){
+            const optsWrap=document.getElementById('optsWrap');
+            const addonsWrap=document.getElementById('addonsWrap');
+            const optsJson=document.getElementById('optsJson');
+            const addonsJson=document.getElementById('addonsJson');
+            function rowOpt(k,v){
+              const d=document.createElement('div');d.style.cssText='display:flex;gap:.4rem;align-items:center';
+              d.innerHTML='<input placeholder="الاسم: المقاس" value="'+esc(k)+'" style="flex:1;padding:.45rem .6rem;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.85rem" oninput="syncOpts()">'
+                        +'<input placeholder="القيم: XL,L,M" value="'+esc(v)+'" style="flex:1.4;padding:.45rem .6rem;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.85rem" oninput="syncOpts()">'
+                        +'<button type="button" onclick="this.parentElement.remove();syncOpts()" style="background:#fee2e2;border:none;color:#991b1b;width:32px;height:32px;border-radius:8px;cursor:pointer">×</button>';
+              return d;
+            }
+            function rowAddon(n,p){
+              const d=document.createElement('div');d.style.cssText='display:flex;gap:.4rem;align-items:center';
+              d.innerHTML='<input placeholder="الاسم: تغليف هدية" value="'+esc(n)+'" style="flex:1;padding:.45rem .6rem;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.85rem" oninput="syncAddons()">'
+                        +'<input type="number" placeholder="السعر" value="'+esc(p)+'" style="width:120px;padding:.45rem .6rem;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.85rem" oninput="syncAddons()">'
+                        +'<button type="button" onclick="this.parentElement.remove();syncAddons()" style="background:#fee2e2;border:none;color:#991b1b;width:32px;height:32px;border-radius:8px;cursor:pointer">×</button>';
+              return d;
+            }
+            function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+            window.addOptRow=function(k,v){optsWrap.appendChild(rowOpt(k||'',v||''));syncOpts()}
+            window.addAddonRow=function(n,p){addonsWrap.appendChild(rowAddon(n||'',p||''));syncAddons()}
+            window.syncOpts=function(){
+              const o={};
+              optsWrap.querySelectorAll('div').forEach(r=>{
+                const inp=r.querySelectorAll('input');
+                const k=inp[0].value.trim(), v=inp[1].value.trim();
+                if(k&&v) o[k]=v;
+              });
+              optsJson.value=Object.keys(o).length?JSON.stringify(o):'';
+            }
+            window.syncAddons=function(){
+              const a=[];
+              addonsWrap.querySelectorAll('div').forEach(r=>{
+                const inp=r.querySelectorAll('input');
+                const n=inp[0].value.trim(), pr=Number(inp[1].value);
+                if(n && !isNaN(pr)) a.push({name:n,price:pr});
+              });
+              addonsJson.value=a.length?JSON.stringify(a):'';
+            }
+            // تحميل القيم القديمة
+            try{
+              const o=JSON.parse(optsJson.value||'{}');
+              Object.entries(o).forEach(([k,v])=> addOptRow(k,v));
+            }catch(e){}
+            try{
+              const a=JSON.parse(addonsJson.value||'[]');
+              if(Array.isArray(a)) a.forEach(x=> addAddonRow(x.name,x.price));
+            }catch(e){}
+            // مزامنة قبل الإرسال
+            const form=document.querySelector('form.stack');
+            if(form) form.addEventListener('submit',()=>{syncOpts();syncAddons()});
+          })();
+          </script>
+          <% if (isNew) { %>
+          <label>صور المنتج (اختياري — يمكنك الرفع الآن أو لاحقاً)
+            <input type="file" name="images" accept="image/jpeg,image/png,image/gif,image/webp" multiple style="padding:.5rem;border:1.5px dashed #cbd5e1;border-radius:10px;background:#f8fafc">
+            <small class="muted">حتى 20 صورة — JPG/PNG/WEBP حتى 12MB</small>
+          </label>
+          <% } %>
           <label>الوصف
             <textarea name="description" rows="4"><%= product ? product.description : '' %></textarea>
           </label>

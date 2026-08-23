@@ -77,6 +77,9 @@ async function processImage(filePath) {
     await sharp(filePath, { failOn: 'none' }).resize({ width: 400, withoutEnlargement: true }).toFormat(fmt, opts).toFile(thumbPath);
   } catch (e) { /* نُبقي الصورة الأصلية عند أي خطأ */ }
 }
+// مولتر للمنتجات: مجلد مؤقت للإنشاء + مجلد المنتج للتعديل
+const upPics = () => uploader(req => `product_${req.params.id}`);
+const upNewPics = () => uploader(() => `tmp_new`);
 
 router.use(requireOwner);
 
@@ -193,7 +196,7 @@ router.get('/products/new', (req, res) => {
   res.render('panel/product-form', { store, ...f, err: req.query.err || '', user: req.user });
 });
 
-router.post('/products', (req, res) => {
+router.post('/products', upNewPics().array('images', 20), asyncHandler(async (req, res) => {
   const store = getStore(req.user.store_id);
   const { name, category_id, price, old_price, description, active, stock, options, addons } = req.body;
   if (!name || isNaN(Number(price))) return res.redirect('/panel/products/new?err=' + encodeURIComponent('اسم المنتج وسعره مطلوبان'));
@@ -208,10 +211,26 @@ router.post('/products', (req, res) => {
   const addonsJson = sanitizeAddons(addons);
   const info = db.prepare('INSERT INTO products (store_id, category_id, name, description, price, old_price, active, stock, options, addons) VALUES (?,?,?,?,?,?,?,?,?,?)')
     .run(store.id, category_id ? Number(category_id) : null, String(name), String(description || ''), Number(price), old_price && !isNaN(Number(old_price)) ? Number(old_price) : null, active === 'on' ? 1 : 0, stockVal, optsJson, addonsJson);
+  // حفظ الصور مباشرة إن رُفعت مع الإنشاء (خطوة واحدة) — نقل من tmp_new إلى مجلد المنتج الصحيح
+  if (req.files && req.files.length) {
+    let pos = 0;
+    const destDir = path.join(UPLOADS_DIR, `store_${store.id}`, `product_${info.lastInsertRowid}`);
+    fs.mkdirSync(destDir, { recursive: true });
+    for (const f of req.files) {
+      await processImage(f.path);
+      const thumbSrc = f.path.replace(/(\.[^.]+)$/, '_t$1');
+      const destPath = path.join(destDir, f.filename);
+      const thumbDest = destPath.replace(/(\.[^.]+)$/, '_t$1');
+      try { if (fs.existsSync(f.path)) fs.renameSync(f.path, destPath); } catch(e){}
+      try { if (fs.existsSync(thumbSrc)) fs.renameSync(thumbSrc, thumbDest); } catch(e){}
+      db.prepare('INSERT INTO product_images (product_id, path, position) VALUES (?,?,?)').run(info.lastInsertRowid, '/uploads/store_' + store.id + `/product_${info.lastInsertRowid}/` + f.filename, pos++);
+    }
+  }
   logActivity(req.user.id, req.user.username, 'إضافة منتج', `أضاف منتج «${name}»`);
   appendLog(`مستخدم «${req.user.username}» أضاف منتج «${name}» في متجر «${store.name}»`);
-  res.redirect('/panel/products/' + info.lastInsertRowid + '/edit?ok=' + encodeURIComponent('تم إضافة المنتج — الآن ارفع صوره'));
-});
+  const msg = req.files && req.files.length ? `تم إضافة المنتج مع ${req.files.length} صورة` : 'تم إضافة المنتج — يمكنك إضافة صوره الآن';
+  res.redirect('/panel/products/' + info.lastInsertRowid + '/edit?ok=' + encodeURIComponent(msg));
+}));
 
 router.get('/products/:id/edit', (req, res) => {
   const store = getStore(req.user.store_id);
@@ -231,8 +250,6 @@ router.post('/products/:id', (req, res) => {
   logActivity(req.user.id, req.user.username, 'تعديل منتج', `عدّل منتج «${name}»`);
   res.redirect('/panel/products/' + p.id + '/edit?ok=' + encodeURIComponent('تم حفظ التعديلات'));
 });
-
-const upPics = () => uploader(req => `product_${req.params.id}`);
 
 router.post('/products/:id/images', upPics().array('images', 20), asyncHandler(async (req, res) => {
   const p = db.prepare('SELECT * FROM products WHERE id=? AND store_id=?').get(req.params.id, req.user.store_id);

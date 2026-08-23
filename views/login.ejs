@@ -1,6 +1,7 @@
 <%- include('partials/head', { title: 'دخول — دُكّان', css: '/css/app.css' }) %>
 <body class="auth-body">
   <div class="auth-card">
+    <a href="/" class="auth-back">→ رجوع للرئيسية</a>
     <div class="brand big">
       <span>🛍️</span>
       <b class="grad">Dukkan</b>
@@ -29,5 +30,7 @@
 <style>
 .auth-divider{display:flex;align-items:center;gap:1rem;margin:1.2rem 0;color:#94a3b8;font-size:.82rem}
 .auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,#e2e8f0,transparent)}
+.auth-back{display:inline-flex;align-items:center;gap:.35rem;color:#0ea5e9;font-size:.85rem;font-weight:700;text-decoration:none;margin-bottom:1rem;padding:.35rem .6rem;border-radius:8px;background:#eff6ff;border:1px solid #bfdbfe;transition:all .2s}
+.auth-back:hover{background:#dbeafe;transform:translateX(2px)}
 </style>
 </html>

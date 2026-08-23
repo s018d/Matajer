@@ -109,14 +109,16 @@ a { text-decoration: none; color: inherit; }
 .fine { text-align: center; color: #94a3b8; font-size: .8rem; margin-top: 1.3rem; line-height: 1.9; }
 
 /* ===== FOOTER ===== */
-.site-foot { background: #0b1120; color: #cbd5e1; padding: 2.4rem 0; position: relative; overflow: hidden; }
-.site-foot::before { content: ''; position: absolute; top: -160px; inset-inline-start: 30%; width: 500px; height: 300px; background: radial-gradient(circle, rgba(99,102,241,.14), transparent 70%); pointer-events: none; }
-.site-foot .section-inner { display: flex; flex-direction: column; align-items: center; gap: .7rem; position: relative; z-index: 1; }
-.site-foot b { color: #fff; font-size: 1rem; }
-.foot-links { display: flex; gap: 1.3rem; font-size: .85rem; flex-wrap: wrap; justify-content: center; }
-.foot-links a { color: #94a3b8; transition: color .2s; }
+* { max-width: 100%; overflow-wrap: break-word; word-break: break-word; }
+img, video, iframe, table { max-width: 100%; }
+.site-foot { background: #0b1120; color: #cbd5e1; padding: 2.4rem 0; position: relative; overflow: hidden; max-width: 100vw; }
+.site-foot::before { content: ''; position: absolute; inset: 0; background: radial-gradient(500px 300px at 30% 0%, rgba(99,102,241,.14), transparent 70%); pointer-events: none; }
+.site-foot .section-inner { display: flex; flex-direction: column; align-items: center; gap: .7rem; position: relative; z-index: 1; max-width: 100%; padding: 0 1.2rem; box-sizing: border-box; }
+.site-foot b { color: #fff; font-size: 1rem; text-align: center; line-height: 1.6; word-break: break-word; }
+.foot-links { display: flex; gap: 1.3rem; font-size: .85rem; flex-wrap: wrap; justify-content: center; max-width: 100%; }
+.foot-links a { color: #94a3b8; transition: color .2s; word-break: break-word; white-space: normal; }
 .foot-links a:hover { color: #fff; }
-.site-foot .fine { margin-top: 0; color: #5b6b8c; }
+.site-foot .fine { margin-top: 0; color: #5b6b8c; text-align: center; }
 
 /* ===== DESIGN CHIPS ===== */
 .design-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .9rem; margin-top: 1.4rem; }
@@ -197,6 +199,14 @@ a { text-decoration: none; color: inherit; }
   .mock-phone { border-width: 6px; border-radius: 26px; padding: 10px; }
   .btn-main.big, .btn-outline.big { font-size: .9rem; }
   .design-chip { font-size: .8rem; padding: .5rem .8rem; }
+  .site-foot .section-inner { padding: 0 .8rem; }
+  .site-foot b { font-size: .85rem; line-height: 1.5; }
+  .foot-links { flex-direction: column; align-items: center; gap: .5rem; font-size: .78rem; }
+  .foot-links a { text-align: center; word-break: break-word; }
+  .section-inner { padding: 0 .8rem; }
+  .faq-list details { padding: .8rem 1rem; }
 }
+html, body { overflow-x: hidden; max-width: 100vw; }
+.section-inner, .hero-inner, .site-nav-inner { max-width: 100%; overflow-wrap: break-word; }
 
 /* FIX removed - existing 900/560 breakpoints handle landing cleanly */

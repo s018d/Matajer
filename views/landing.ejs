@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><%= cfg.site_name %> — أنشئ متجرك الإلكتروني خلال دقائق</title>
-<meta name="description" content="دُكّان: منصة عراقية 100% لإنشاء متاجر إلكترونية جاهزة — تصميم مجاني + 4 أنماط عالمية، سلة طلبات، واتساب، أكواد خصم، مخزون، وتوصيل. ابدأ مجاناً في دقيقة.">
+<meta name="description" content="دُكّان: منصة عراقية 100% لإنشاء متاجر إلكترونية جاهزة — 1 مجاني نضيف + 3 بريميوم (أتيلييه/تقني/دافئ)، سلة طلبات، واتساب، تقييمات، ألوان حسب الصورة. ابدأ مجاناً في دقيقة.">
 <link rel="icon" href="/img/logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/css/site.css">
 </head>
@@ -29,9 +29,9 @@
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-txt">
-      <span class="pill">🔥 منصة عراقية — تجذب الملايين وتبيع 24/7</span>
-      <h1>من فكرة إلى <em>متجر يربح</em> خلال 60 ثانية — بدون مبرمج</h1>
-      <p><%= cfg.tagline %> — آلاف العملاء ينتظرون. بلا خبرة، بلا دومين، بلا دفع مقدم. تسجل، ترفع منتجاتك بصور احترافية، وتستلم الطلبات على واتسابك فوراً. <b>مصمم ليجذب الملايين.</b></p>
+      <span class="pill">🇮🇶 منصة عراقية — متجرك جاهز بـ60 ثانية</span>
+      <h1>من فكرة إلى <em>متجر يبيع</em> خلال 60 ثانية — بدون مبرمج</h1>
+      <p><%= cfg.tagline %> — بلا خبرة، بلا دومين، بلا دفع مقدم. تسجل، ترفع منتجاتك (حتى بألوانها وصورها)، وتستلم الطلبات على واتسابك فوراً.</p>
       <div class="hero-btns">
         <a class="btn-main big" href="/signup">ابدأ الآن مجاناً →</a>
         <a class="btn-outline big" href="#showcase">شاهد متاجر حية</a>
@@ -39,7 +39,7 @@
       <div class="hero-mini">
         <span>✓ سلة وطلب فوري</span><span>✓ دفـع عنـد الاستلام</span><span>✓ أكواد خصم ومخزون</span><span>✓ لوحة تحكم بالعربي</span>
       </div>
-      <p style="margin-top:.9rem;font-size:.82rem;color:#64748b">🎁 هديتنا لك: تجربة الاحترافية كاملة 7 أيام — بلا بطاقة، بلا التزام. تقدر توقفها بضغطة.</p>
+      <p style="margin-top:.9rem;font-size:.82rem;color:#64748b">🎁 هديتنا: 1 يوم برو مجاناً عند التسجيل — بلا بطاقة. جرب الأتيلييه/التقني/الدافئ ثم قرر.</p>
     </div>
     <div class="hero-visual">
       <div class="mock-phone">
@@ -61,52 +61,73 @@
   </div>
 </section>
 
+<section class="section alt" id="showcase">
+  <div class="section-inner">
+    <h2>متاجر <em>حية</em> تشتغل الآن 🔥</h2>
+    <% if (stores.length === 0) { %>
+      <p class="sub">أول المتاجر قيد الإنشاء — سجل وكن أول من يظهر هنا. هذه معاينات حية للقوالب:</p>
+      <div class="store-showcase">
+        <div class="show-card" style="opacity:.85">
+          <div class="show-thumb" style="background:linear-gradient(135deg,#0ea5e9,#0284c7)"><span class="show-name">الواضح — مجاني</span><span class="show-tpl">نضيف وسريع</span></div>
+          <div class="show-meta"><b>الواضح</b><span>أبيض نضيف — لكل المتاجر</span></div>
+        </div>
+        <div class="show-card" style="opacity:.85">
+          <div class="show-thumb" style="background:linear-gradient(135deg,#191a1b,#2d2a26)"><span class="show-name">الأتيلييه</span><span class="show-tpl">للأزياء والعطور</span></div>
+          <div class="show-meta"><b>الأتيلييه</b><span>Editorial فاخر</span></div>
+        </div>
+        <div class="show-card" style="opacity:.85">
+          <div class="show-thumb" style="background:linear-gradient(135deg,#0f172a,#06b6d4)"><span class="show-name">التقني</span><span class="show-tpl">للإلكترونيات</span></div>
+          <div class="show-meta"><b>التقني</b><span>Dark Tech</span></div>
+        </div>
+        <div class="show-card" style="opacity:.85">
+          <div class="show-thumb" style="background:linear-gradient(135deg,#92400e,#f59e0b)"><span class="show-name">الدافئ</span><span class="show-tpl">للحلويات والأكل</span></div>
+          <div class="show-meta"><b>الدافئ</b><span>ألوان ترابية حنونة</span></div>
+        </div>
+      </div>
+      <p style="text-align:center;margin-top:1rem"><a class="btn-main" href="/signup">كن أول متجر حي →</a></p>
+    <% } else { %>
+      <p class="sub">هذه متاجر حقيقية تستلم الطلبات الآن — اضغط وجرّب:</p>
+      <div class="store-showcase">
+        <% stores.forEach(s => { %>
+        <a class="show-card" href="/s/<%= s.slug %>" target="_blank">
+          <div class="show-thumb" style="background:linear-gradient(135deg, <%= s.color %>, #0f172a)">
+            <span class="show-name"><%= s.name %></span>
+            <span class="show-tpl">قالب <%= s.template %></span>
+          </div>
+          <div class="show-meta"><b><%= s.name %></b><span><%= s.products %> منتج — افتح المتجر ←</span></div>
+        </a>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
 <section class="section" id="features">
   <div class="section-inner">
-    <h2>منصة كاملة تجذب <em>الملايين</em> — وكل العملاء سعداء</h2>
-    <p class="sub">بنيناها كأنها لنا — كل ميزة شغالة 100%، وكل واجهة نظيفة احترافية، وكل نص متناسق على كل شاشة</p>
+    <h2>كلشي تحتاجه — <em>بسيط وقوي</em></h2>
+    <p class="sub">لوحة خفيفة، سلة سريعة، وحماية من التخريب — بدون تعقيد</p>
     <div class="feat-grid">
       <div class="feat"><b>⚡ انطلق في 60 ثانية</b><p>لا دومين، لا استضافة، لا مبرمج. رابطك الخاص جاهز فوراً + PWA يثبت على جوال الزبون.</p></div>
-      <div class="feat"><b>🎨 6 تصاميم عالمية حصرية</b><p>كل قالب تجربة مختلفة 30-40% (Editorial، Utility، Dense، Story) — مو بس لون. العميل يحس بالفرق ويدفع.</p></div>
-      <div class="feat"><b>📊 لوحة تحكم تكشف كل شيء</b><p>19 قسم واضح: طلبات، سلال مهجورة، بنادل، شحن، مندوبون، مستودعات، كاش فلو — لا شيء مخفي.</p></div>
-      <div class="feat"><b>🛒 سلة تبيع وهي نايمة</b><p>زبونك يطلب بثلاث ضغطات، يشوف التوصيل والخصم لحظياً، ويدفع عند الباب — بلا تعقيد.</p></div>
-      <div class="feat"><b>💬 واتساب + تيليجرام</b><p>زر عائم + زر طلبات يرسل التفاصيل للزبون بضغطة — تواصل يبني ثقة.</p></div>
-      <div class="feat"><b>🔒 صحيح بدون ثغرات</b><p>عزل متاجر server-side، أسعار من السيرفر، snapshots قبل كل تعديل — ترفع وتنام مرتاح.</p></div>
+      <div class="feat"><b>🎨 1+3 قوالب مميزة كلياً</b><p>الواضح مجاني نضيف — والأتيلييه للأزياء، التقني للإلكترونيات، الدافئ للأكل. كل واحد شكل وروح.</p></div>
+      <div class="feat"><b>📊 لوحة تحكم خفيفة</b><p>8 أقسام واضحة: منتجات، طلبات، كوبونات، تقييمات، قوالب، محرر، باقات، إعدادات — بدون زحمة.</p></div>
+      <div class="feat"><b>🛒 سلة تبيع وهي نايمة</b><p>زبونك يطلب بثلاث ضغطات، يشوف التوصيل والخصم لحظياً، ويدفع عند الباب.</p></div>
+      <div class="feat"><b>💬 واتساب مباشر</b><p>زر طلب يرسل التفاصيل للزبون بضغطة — تواصل يبني ثقة ويقفل البيع.</p></div>
+      <div class="feat"><b>🔒 حماية من التخريب</b><p>فلتر كلمات ممنوعة + مراجعة متاجر جديدة + تقييمات بموافقة — متجرك آمن.</p></div>
     </div>
   </div>
 </section>
 
 <section class="section alt" id="designs">
   <div class="section-inner">
-    <h2>تصميم مجاني… و<em>4 أنماط عالمية الشهرة</em></h2>
-    <p class="sub">الباقة المجانية تعطيك تصميم «الكلاسيكي النظيف» ونمط «الماركت» كاملين. مع الباقة الاحترافية تفتح 4 أنماط مستوحاة من أشهر المتاجر العالمية — بأكوادنا الخاصة:</p>
+    <h2>قالب مجاني نضيف + <em>3 بريميوم كل واحد عالم</em></h2>
+    <p class="sub"><b>الواضح</b> مجاني وسريع — والبريميوم: <b>الأتيلييه</b> للأزياء والعطور، <b>التقني</b> للإلكترونيات والموبايلات، <b>الدافئ</b> للحلويات والأكل. كل تصميم يغيّر الألوان والخطوط والأزرار والشبكة — معاينة حية قبل الاعتماد.</p>
     <div class="design-grid">
-      <div class="design-chip free">الكلاسيكي النظيف — مجاني</div>
-      <div class="design-chip free">الماركت — مجاني</div>
-      <div class="design-chip">الأتيلييه</div>
-      <div class="design-chip">الجراند</div>
-      <div class="design-chip">الطبيعي</div>
-      <div class="design-chip">المغامر</div>
+      <div class="design-chip free">الواضح — مجاني نضيف</div>
+      <div class="design-chip">الأتيلييه — فاخر</div>
+      <div class="design-chip">التقني — Dark Tech</div>
+      <div class="design-chip">الدافئ — ترابي حنون</div>
     </div>
-    <p class="fine">كل تصميم يغيّر شكل المتجر كاملاً: الألوان، الخطوط، الأزرار، وبطاقات المنتجات — معاينة حية قبل الاعتماد.</p>
-  </div>
-</section>
-
-<section class="section alt" id="showcase">
-  <div class="section-inner">
-    <h2>متاجر <em>حية</em> تشتغل الآن 🔥</h2>
-    <p class="sub">هذا ليس ديكور — كل هذه المتاجر حقيقية وتستلم الطلبات. جرّب على أي واحد منها:</p>
-    <div class="store-showcase">
-      <% stores.forEach(s => { %>
-      <a class="show-card" href="/s/<%= s.slug %>" target="_blank">
-        <div class="show-thumb" style="background:linear-gradient(135deg, <%= s.color %>, #0f172a)">
-          <span class="show-name"><%= s.name %></span>
-          <span class="show-tpl">قالب <%= s.template %></span>
-        </div>
-        <div class="show-meta"><b><%= s.name %></b><span><%= s.products %> منتج — افتح المتجر ←</span></div>
-      </a>
-      <% }) %>
-    </div>
+    <p class="fine">اختر شخصية متجرك — كل قالب شبكة مختلفة وتجربة مختلفة، مو بس لون.</p>
   </div>
 </section>
 
@@ -120,7 +141,7 @@
         <ul>
           <li>متجر برابط خاص + معرض عام</li>
           <li><%= cfg.free_products %> منتج</li>
-          <li>تصميم «الكلاسيكي النظيف»</li>
+          <li>تصميم «الواضح» النضيف</li>
           <li>سلة وطلب وواتساب</li>
           <li>حتى 5 أكواد خصم</li>
           <li>علامة «صُنع بواسطة <%= cfg.site_name %>»</li>
@@ -132,9 +153,9 @@
         <h3>احترافية — 3 شهور</h3>
         <div class="price"><%= (cfg.pro_price_3 || 30000).toLocaleString('en-US') %> د.ع<span>/ 3 شهور</span></div>
         <ul>
-          <li>الأنماط العالمية الأربعة</li>
-          <li>منتجات وأكواد بلا حدود</li>
-          <li>مخزون وخيارات وإضافات</li>
+          <li>الأنماط العالمية الثلاثة (أتيلييه/تقني/دافئ)</li>
+          <li>منتجات وأكواد وتقييمات بلا حدود</li>
+          <li>مخزون وألوان بصورها وخيارات</li>
           <li>دومينك الخاص</li>
           <li>بلا أي علامة للمنصة</li>
           <li>دعم مباشر بالواتساب</li>
@@ -152,7 +173,7 @@
         <a class="btn-outline" href="/signup">ابدأ ثم ترقَّ</a>
       </div>
     </div>
-    <p class="fine">أو شهر واحد بـ <%= (cfg.pro_price || 12000).toLocaleString('en-US') %> د.ع لتجربة الاحترافية كاملة. الدفع يدوياً (زين كاش / على اليد) — جهة الاستلام تظهر داخل لوحة تحكمك فور التسجيل، وترقى خلال دقائق من التأكيد.</p>
+    <p class="fine">أو شهر واحد بـ <%= (cfg.pro_price || 12000).toLocaleString('en-US') %> د.ع. الترقية: تواصل واتساب من لوحة تحكمك للحصول على رقم التحويل — ترفع الإثبات ويتفعل خلال دقائق.</p>
   </div>
 </section>
 

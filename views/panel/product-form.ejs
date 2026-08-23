@@ -5,12 +5,14 @@
   const addonsVal = product ? (product.addons || '') : '';
 %>
 <%- include('../partials/head', { title: (isNew ? 'منتج جديد' : 'تعديل: ' + product.name) + ' — متجري' }) %>
+<style>.auth-back{display:inline-flex;align-items:center;gap:.35rem;color:#0ea5e9;font-size:.85rem;font-weight:700;text-decoration:none;padding:.4rem .7rem;border-radius:8px;background:#eff6ff;border:1px solid #bfdbfe;transition:all .2s}.auth-back:hover{background:#dbeafe;transform:translateX(2px)}</style>
 <body class="app">
 <%- include('../partials/sidebar-panel', { active: 'products', store }) %>
 <main class="main">
   <%- include('../partials/topbar', { pageTitle: isNew ? 'منتج جديد' : 'تعديل المنتج' }) %>
   <div class="content">
     <%- include('../partials/alerts') %>
+    <a href="/panel/products" class="auth-back" style="margin-bottom:1rem">→ رجوع للمنتجات</a>
     <div class="two-col">
       <div class="card">
         <form method="post" action="<%= isNew ? '/panel/products' : '/panel/products/' + pid %>" class="stack">

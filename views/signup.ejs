@@ -65,7 +65,10 @@
         <input type="text" name="username" required dir="ltr" placeholder="hmet-furniture">
       </label>
       <label>كلمة المرور
-        <input type="password" name="password" required minlength="8" placeholder="8 أحرف على الأقل">
+        <div style="position:relative">
+          <input type="password" name="password" id="suPass" required minlength="8" placeholder="8 أحرف على الأقل" style="padding-left:2.6rem">
+          <button type="button" onclick="togglePass('suPass',this)" style="position:absolute;left:.5rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem" title="إظهار/إخفاء">👁️</button>
+        </div>
       </label>
       <label>رقم الهاتف (اختياري)
         <input type="text" name="phone" dir="ltr" placeholder="07XX XXX XXXX">
@@ -94,5 +97,6 @@
     <p class="alt">عندك حساب؟ <a href="/login">سجل الدخول</a></p>
   </div>
 </div>
+<script>function togglePass(id,btn){const i=document.getElementById(id);const s=i.type==='password';i.type=s?'text':'password';btn.textContent=s?'🙈':'👁️'}</script>
 </body>
 </html>

@@ -14,7 +14,10 @@
         <input type="text" name="username" required autofocus placeholder="أدخل اسم المستخدم">
       </label>
       <label>كلمة المرور
-        <input type="password" name="password" required placeholder="أدخل كلمة المرور">
+        <div style="position:relative">
+          <input type="password" name="password" id="loginPass" required placeholder="أدخل كلمة المرور" style="padding-left:2.6rem">
+          <button type="button" onclick="togglePass('loginPass',this)" style="position:absolute;left:.5rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem" title="إظهار/إخفاء">👁️</button>
+        </div>
       </label>
       <button type="submit" class="btn btn-primary btn-block" style="margin-top:.5rem;padding:.75rem;font-size:1rem;border-radius:12px">
         🔐 تسجيل الدخول
@@ -33,4 +36,5 @@
 .auth-back{display:inline-flex;align-items:center;gap:.35rem;color:#0ea5e9;font-size:.85rem;font-weight:700;text-decoration:none;margin-bottom:1rem;padding:.35rem .6rem;border-radius:8px;background:#eff6ff;border:1px solid #bfdbfe;transition:all .2s}
 .auth-back:hover{background:#dbeafe;transform:translateX(2px)}
 </style>
+<script>function togglePass(id,btn){const i=document.getElementById(id);const s=i.type==='password';i.type=s?'text':'password';btn.textContent=s?'🙈':'👁️'}</script>
 </html>

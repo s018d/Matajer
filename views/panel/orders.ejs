@@ -16,6 +16,14 @@
         <% if (searchQ) { %><a class="btn btn-sm btn-ghost" href="/panel/orders?status=<%= filter %>">إلغاء</a><% } %>
       </form>
     </div>
+    <% if (rows.length === 0) { %>
+      <div class="empty-state" style="text-align:center;padding:3rem 1.5rem;background:linear-gradient(135deg,#f8fafc,#eff6ff);border:1.5px dashed #bfdbfe;border-radius:16px;margin-top:1rem">
+        <div style="font-size:3rem;margin-bottom:.8rem">🧾</div>
+        <h3 style="margin:0 0 .4rem;color:#0f172a">لا طلبات بعد</h3>
+        <p class="muted" style="margin-bottom:.6rem">عندما يطلب زبون من متجرك سيظهر الطلب هنا مع تنبيه صوتي</p>
+        <p class="muted" style="font-size:.82rem">شارك رابط متجرك على واتساب لتبدأ البيع</p>
+      </div>
+    <% } %>
     <% rows.forEach(o => { %>
       <div class="order-card">
         <div class="order-head">
@@ -71,7 +79,7 @@
         </div>
       </div>
     <% }) %>
-    <% if (rows.length === 0) { %><p class="empty-note">لا طلبات في هذا التصنيف</p><% } %>
+
     <% if (totalPages > 1) { %>
       <div class="pager">
         <% const qParam = searchQ ? '&q=' + encodeURIComponent(searchQ) : ''; %>

@@ -4,6 +4,8 @@
 <main class="main">
   <%- include('../partials/topbar', { pageTitle: '🎨 محرر المتجر — اسحب، أفلت، عدّل' }) %>
   <div class="content" style="max-width:1400px">
+    <a href="/panel/templates" class="auth-back" style="display:inline-flex;margin-bottom:1rem">→ رجوع لمعرض القوالب</a>
+    <style>.auth-back{display:inline-flex;align-items:center;gap:.35rem;color:#0ea5e9;font-size:.85rem;font-weight:700;text-decoration:none;padding:.4rem .7rem;border-radius:8px;background:#eff6ff;border:1px solid #bfdbfe;transition:all .2s}.auth-back:hover{background:#dbeafe;transform:translateX(2px)}</style>
     <%- include('../partials/alerts', { ok: typeof ok !== 'undefined' ? ok : '', err: typeof err !== 'undefined' ? err : '' }) %>
     
     <div style="display:grid;grid-template-columns:380px 1fr;gap:1.2rem;align-items:start">

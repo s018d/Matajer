@@ -1,10 +1,29 @@
-<%- include('partials/head', { title: 'خطأ', css: '/css/app.css' }) %>
+<%- include('partials/head', { title: 'خطأ — دُكّان', css: '/css/app.css' }) %>
+<style>
+.error-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;background:linear-gradient(135deg,#0f172a 0%,#0c4a6e 50%,#134e4a 100%)}
+.error-card{background:#fff;border-radius:20px;padding:2.5rem 2rem;max-width:480px;width:100%;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,.4);animation:fadeInUp .4s ease}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.error-icon{font-size:3rem;margin-bottom:1rem}
+.error-card h2{margin:0 0 .6rem;color:#0f172a;font-size:1.4rem;font-weight:900}
+.error-card p{color:#64748b;font-size:.92rem;margin-bottom:1.5rem;line-height:1.7}
+.error-actions{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
+.error-actions .btn{padding:.7rem 1.4rem;border-radius:12px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;transition:all .2s}
+.btn-primary{background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;box-shadow:0 6px 16px rgba(14,165,233,.3)}
+.btn-primary:hover{filter:brightness(1.05);transform:translateY(-1px)}
+.btn-ghost{background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}
+.btn-ghost:hover{background:#e2e8f0}
+</style>
 <body class="app">
-<main class="bare">
-  <div class="card" style="max-width:500px;margin:6rem auto;text-align:center">
+<div class="error-wrap">
+  <div class="error-card">
+    <div class="error-icon">😕</div>
     <h2><%= msg %></h2>
-    <a class="btn" href="/">العودة للرئيسية</a>
+    <p>عذراً، حدث شيء غير متوقع — جرّب الرجوع أو العودة للرئيسية</p>
+    <div class="error-actions">
+      <a class="btn btn-ghost" href="javascript:history.back()">→ رجوع</a>
+      <a class="btn btn-primary" href="/">🏠 الرئيسية</a>
+    </div>
   </div>
-</main>
+</div>
 </body>
 </html>

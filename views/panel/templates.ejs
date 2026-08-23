@@ -5,6 +5,8 @@
   <%- include('../partials/topbar', { pageTitle: 'معرض القوالب (6 تصاميم)' }) %>
   <div class="content">
     <%- include('../partials/alerts', { ok: typeof ok !== 'undefined' ? ok : '', err: typeof err !== 'undefined' ? err : '' }) %>
+    <a href="/panel" class="auth-back" style="display:inline-flex;margin-bottom:1rem">→ رجوع للوحة</a>
+    <style>.auth-back{display:inline-flex;align-items:center;gap:.35rem;color:#0ea5e9;font-size:.85rem;font-weight:700;text-decoration:none;padding:.4rem .7rem;border-radius:8px;background:#eff6ff;border:1px solid #bfdbfe;transition:all .2s}.auth-back:hover{background:#dbeafe;transform:translateX(2px)}</style>
     <div class="tpl-toolbar">
       <input type="text" id="tplSearch" placeholder="ابحث: اسم القالب، اللون، الشكل، الخط…" autocomplete="off">
       <button class="btn btn-ghost" id="tplRandom" title="اختر قالباً عشوائياً">قالب عشوائي</button>

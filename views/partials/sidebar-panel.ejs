@@ -1,29 +1,19 @@
 <aside class="sidebar">
   <div class="brand">Dukkan.<span>دُكّان</span></div>
   <nav>
-    <a href="/panel" class="<%= typeof active !== 'undefined' && active==='dash' ? 'on' : '' %>">📊 نظرة عامة</a>
+    <a href="/panel" class="<%= typeof active !== 'undefined' && active==='dash' ? 'on' : '' %>">📊 الرئيسية</a>
     <a href="/panel/products" class="<%= typeof active !== 'undefined' && active==='products' ? 'on' : '' %>">📦 المنتجات</a>
-    <a href="/panel/categories" class="<%= typeof active !== 'undefined' && active==='cats' ? 'on' : '' %>">🗂 الأقسام</a>
     <a href="/panel/orders" class="<%= typeof active !== 'undefined' && active==='orders' ? 'on' : '' %>">🧾 الطلبات <span id="ordersBadge" class="nav-badge" hidden></span></a>
-    <a href="/panel/abandoned-carts" class="<%= typeof active !== 'undefined' && active==='abandoned' ? 'on' : '' %>">🛒 السلال المهجورة</a>
-    <div style="height:1px;background:rgba(255,255,255,.08);margin:.4rem 0"></div>
-    <small style="color:#5b6b8c;font-size:.7rem;padding:.2rem .85rem;font-weight:800;letter-spacing:.04em">التسويق</small>
-    <a href="/panel/coupons" class="<%= typeof active !== 'undefined' && active==='coupons' ? 'on' : '' %>">🎟️ أكواد الخصم</a>
-    <div style="height:1px;background:rgba(255,255,255,.08);margin:.4rem 0"></div>
-    <small style="color:#5b6b8c;font-size:.7rem;padding:.2rem .85rem;font-weight:800;letter-spacing:.04em">العمليات</small>
-    <a href="/panel/shipping" class="<%= typeof active !== 'undefined' && active==='shipping' ? 'on' : '' %>">🚚 التوصيل (رسوم + مناطق)</a>
-    <a href="/panel/cashflow" class="<%= typeof active !== 'undefined' && active==='cashflow' ? 'on' : '' %>">💰 التدفق النقدي</a>
-    <div style="height:1px;background:rgba(255,255,255,.08);margin:.4rem 0"></div>
-    <small style="color:#5b6b8c;font-size:.7rem;padding:.2rem .85rem;font-weight:800;letter-spacing:.04em">المتجر</small>
-    <a href="/panel/templates" class="<%= typeof active !== 'undefined' && active==='templates' ? 'on' : '' %>">🎨 القوالب (6)</a>
-    <a href="/panel/templates/customize" class="<%= typeof active !== 'undefined' && active==='customize' ? 'on' : '' %>">✨ تخصيص القالب (حر)</a>
-    <a href="/panel/settings" class="<%= typeof active !== 'undefined' && active==='settings' ? 'on' : '' %>">⚙️ إعدادات المتجر</a>
-    <a href="/panel/domain" class="<%= typeof active !== 'undefined' && active==='domain' ? 'on' : '' %>">🌐 الدومين (ربط)</a>
-    <a href="/panel/domain/buy" class="<%= typeof active !== 'undefined' && active==='domain-buy' ? 'on' : '' %>">🛒 شراء دومين جديد</a>
-    <a href="/panel/kurdish" class="<%= typeof active !== 'undefined' && active==='kurdish' ? 'on' : '' %>">🌙 اللغة الكردية</a>
-    <div style="height:1px;background:rgba(255,255,255,.08);margin:.4rem 0"></div>
+    <a href="/panel/coupons" class="<%= typeof active !== 'undefined' && active==='coupons' ? 'on' : '' %>">🎟️ الكوبونات</a>
+    <a href="/panel/templates" class="<%= typeof active !== 'undefined' && active==='templates' ? 'on' : '' %>">🎨 القوالب</a>
+    <a href="/panel/templates/customize" class="<%= typeof active !== 'undefined' && active==='customize' ? 'on' : '' %>">✨ المحرر البصري</a>
     <a href="/panel/billing" class="<%= typeof active !== 'undefined' && active==='billing' ? 'on' : '' %>">💳 الباقات والفوترة</a>
-    <a href="/panel/password">🔒 تغيير كلمة المرور</a>
+    <a href="/panel/settings" class="<%= typeof active !== 'undefined' && active==='settings' ? 'on' : '' %>">⚙️ الإعدادات</a>
+    <!-- v4.3-clean-launch: الروابط المتقدمة مخفية (الكود والمسارات باقية تحت الغطاء):
+         /panel/categories, /panel/abandoned-carts, /panel/shipping, /panel/shipments,
+         /panel/returns, /panel/drivers, /panel/driver-settlements, /panel/warehouses,
+         /panel/cashflow, /panel/domain, /panel/domain/buy, /panel/kurdish, /panel/bundles
+    -->
   </nav>
-  <div class="side-note">متجر: <%= typeof store !== 'undefined' && store ? store.name : '' %><br><small style="color:#475569">واجهات نضيفة • كل شاشة</small></div>
+  <div class="side-note">متجر: <%= typeof store !== 'undefined' && store ? store.name : '' %><br><small style="color:#475569">منصة خفيفة • جاهز للانطلاق</small></div>
 </aside>

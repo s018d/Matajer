@@ -93,6 +93,7 @@ const SAMPLES = [
 ];
 
 function seedSamples() {
+  if (process.env.DISABLE_SAMPLES === '1') return;
   if (db.prepare('SELECT COUNT(*) c FROM stores').get().c > 0) return;
   let orderNo = 1;
   for (const s of SAMPLES) {

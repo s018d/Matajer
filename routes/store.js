@@ -190,7 +190,9 @@ router.post('/s/:slug/checkout', asyncHandler(async (req, res) => {
   const freeMin = Number(store.free_delivery_min) || 0;
   const deliveryFee = df > 0 && (freeMin <= 0 || subtotal - discount < freeMin) ? df : 0;
   const total = Math.max(0, subtotal - discount) + deliveryFee;
-  const paymentMethod = req.body.payment_method || 'cod'; // 'cod' or 'zaincash'
+  let paymentMethod = req.body.payment_method || 'cod'; // 'cod' or 'zaincash'
+  // v4.3: زين كاش معطّل افتراضياً — أي طلب zaincash يُعامل كدفع عند الاستلام
+  if (process.env.ZAINCASH_ENABLED === 'false' && paymentMethod === 'zaincash') paymentMethod = 'cod';
   
   // For Zain Cash, create order with pending status and redirect to payment
   let orderStatus = 'new';

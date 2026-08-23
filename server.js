@@ -1,7 +1,20 @@
+const fs = require('fs');
 const express = require('express');
 const path = require('path');
 const crypto = require('crypto');
 const compression = require('compression');
+// v4.3: تحميل .env يدوياً بدون dotenv
+try {
+  const envPath = path.join(__dirname, '.env');
+  if (fs.existsSync(envPath)) {
+    for (const line of fs.readFileSync(envPath, 'utf8').split('\n')) {
+      const t = line.trim();
+      if (!t || t.startsWith('#')) continue;
+      const i = t.indexOf('=');
+      if (i > 0) { const k = t.slice(0,i).trim(); const v = t.slice(i+1).trim(); if (!(k in process.env)) process.env[k]=v; }
+    }
+  }
+} catch(e) {}
 const { db } = require('./db');
 const { genPassword, hashPassword, appendLog, now } = require('./util');
 
@@ -118,7 +131,7 @@ function seed() {
 }
 
 seed();
-require('./seed').seedSamples();
+if (process.env.DISABLE_SAMPLES !== '1') require('./seed').seedSamples();
 appendLog(`تم تشغيل الخادم — المنصة جاهزة على http://localhost:${PORT} — الوقت: ${now()}`);
 
 /* نسخة احتياطية تلقائية يومياً + WAL checkpoint — بدون إزعاج المستخدمين */

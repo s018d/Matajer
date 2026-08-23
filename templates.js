@@ -1,23 +1,22 @@
-/* أنماط دُكّان — تصميم مجاني واحد + 4 أنماط عالمية احترافية (كود أصلي خاص بالمنصة) */
+/* أنماط دُكّان — 1 مجاني نضيف + 3 بريميوم مميزة كلياً (كل واحد شخصية) */
 
 const FREE = {
-  id: 'classic', name: 'متجر احترافي',
-  desc: 'تصميم مجاني احترافي سريع، متوافق مع الجوال، يدعم جميع المنتجات وأكواد الخصم. يمكنك الترقية لاحترافية للحصول على 4 أنماط عالمية وحل مخصص.',
+  id: 'classic', name: 'الواضح',
+  desc: 'مجاني وصاروخي: أبيض نضيف، خط واضح، سريع على الجوال، يدعم كل المنتجات والخصومات. تفتح متجرك وتبيع فوراً بدون دفع.',
   classes: 'tpl-c',
-  palette: { primary: '#0d9488', accent: '#ec4899', bg: '#ffffff', ink: '#111111', soft: '#f1f3f5' },
+  palette: { primary: '#0ea5e9', accent: '#0284c7', bg: '#ffffff', ink: '#0f172a', soft: '#f1f5f9' },
   premium: false
 };
 
 const PREMIUM = [
-  { id: 'prem-fashion', name: 'الأتيلييه', palette: { primary: '#191a1b', accent: '#cacbcc', bg: '#f2f3f5', ink: '#191a1b', soft: '#e9eaeb' }, desc: 'Editorial فاخر: هيرو صورة كبيرة + Grid عمودين + hover صورة ثانية + Lookbook — للأزياء التي تبيع بالصور', layout: 'editorial', hero: 'fashion', grid: '2col', feature: 'lookbook' },
-  { id: 'prem-classic', name: 'الجراند', palette: { primary: '#008827', accent: '#00a1e0', bg: '#ffffff', ink: '#212529', soft: '#f8f9fa' }, desc: 'Conversion كثيف: Grid 4 أعمدة + Flash deals + countdown — كلاسيكي يبيع بالثقة', layout: 'dense', hero: 'deal', grid: '4col', feature: 'flash' },
-  { id: 'prem-natural', name: 'الطبيعي', palette: { primary: '#3e6f5e', accent: '#b85c38', bg: '#faf9f6', ink: '#2d2a26', soft: '#f0ece3' }, desc: 'Storytelling هادئ: Masonry غير منتظم + قصة المنتج والمواد + Brand Story — للمنتجات الطبيعية', layout: 'masonry', hero: 'story', grid: 'masonry', feature: 'story' },
-  { id: 'prem-outdoor', name: 'المغامر', palette: { primary: '#fa4616', accent: '#003da5', bg: '#f5f5f5', ink: '#1a1a1a', soft: '#e8e8e8' }, desc: 'Utility عملي: هيرو بحث حسب الاستخدام (Hiking/Camping/Travel) + Filters ثابتة + مقارنة مواصفات — للمعدات', layout: 'utility', hero: 'utility', grid: 'dense', feature: 'compare' }
+  { id: 'prem-fashion', name: 'الأتيلييه', palette: { primary: '#191a1b', accent: '#d4a574', bg: '#f2f3f5', ink: '#191a1b', soft: '#e9eaeb' }, desc: 'للأزياء والعطور والجمال — Editorial فاخر: هيرو 3/4 + عمودين + لقطة ثانية عند المرور. يبيع بالصور.', layout: 'editorial', hero: 'fashion', grid: '2col', feature: 'lookbook' },
+  { id: 'prem-classic', name: 'التقني', palette: { primary: '#0f172a', accent: '#06b6d4', bg: '#f8fafc', ink: '#0f172a', soft: '#e2e8f0' }, desc: 'للإلكترونيات والموبايلات — Dark Tech: هيدر داكن + شبكة كثيفة + شارة مواصفات. يبيع بالثقة.', layout: 'dense', hero: 'tech', grid: '4col', feature: 'specs' },
+  { id: 'prem-natural', name: 'الدافئ', palette: { primary: '#92400e', accent: '#f59e0b', bg: '#fffbeb', ink: '#451a03', soft: '#fef3c7' }, desc: 'للحلويات والأكل والعطارة — دافئ مستدير: ألوان ترابية + مسافات حنينة + قصة المنتج. يبيع بالدفء.', layout: 'masonry', hero: 'warm', grid: 'masonry', feature: 'story' }
 ];
 
 const PREMIUM_MAP = new Map(PREMIUM.map(p => [p.id, p]));
 
-const LEGACY = ['market'];
+const LEGACY = [];
 
 const LIST = [FREE];
 

@@ -2,7 +2,7 @@
 <body class="app">
 <%- include('../partials/sidebar-panel', { active: 'templates', store }) %>
 <main class="main">
-  <%- include('../partials/topbar', { pageTitle: 'معرض القوالب (6 تصاميم)' }) %>
+  <%- include('../partials/topbar', { pageTitle: 'معرض القوالب (4 تصاميم — 1 مجاني + 3 بريميوم)' }) %>
   <div class="content">
     <%- include('../partials/alerts', { ok: typeof ok !== 'undefined' ? ok : '', err: typeof err !== 'undefined' ? err : '' }) %>
     <a href="/panel" class="auth-back" style="display:inline-flex;margin-bottom:1rem">→ رجوع للوحة</a>
@@ -12,7 +12,7 @@
       <button class="btn btn-ghost" id="tplRandom" title="اختر قالباً عشوائياً">قالب عشوائي</button>
       <a class="btn btn-primary" href="/s/<%= store.slug %>" target="_blank">زيارة متجري</a>
     </div>
-    <p class="tpl-hint">مرّر الماوس فوق أي قالب لمشاهدته فوراً دون اختياره، وانقر عليه لفتح المعاينة الكبيرة ثم اعتمده. تصميم «الكلاسيكي النظيف» ونمط «الماركت» مجانيان، و<strong>4 تصاميم عالمية الشهرة</strong> (أتيلييه، جراند، طبيعي، مغامر) من الباقة الاحترافية — اعتمد منها ما شئت عندما ترفع باقتك.</p>
+    <p class="tpl-hint">اختر شخصية متجرك: <strong>الواضح</strong> مجاني نضيف وسريع — و<strong>3 بريميوم مميزة كلياً</strong>: <b>الأتيلييه</b> للأزياء، <b>التقني</b> للإلكترونيات، <b>الدافئ</b> للأكل والحلويات. كل واحد شكل وروح مختلفة.</p>
 
     <div class="tpl-grid" id="tplGrid">
       <% list.forEach(t => { %>

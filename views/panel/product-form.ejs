@@ -137,6 +137,7 @@
             <% images.forEach(im => { %>
               <div class="img-cell">
                 <img src="<%= im.path %>" alt="">
+                <% if (im.variant) { %><span class="badge" style="position:absolute;top:6px;right:6px;background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;font-size:.7rem;padding:.15rem .4rem;border-radius:99px"><%= im.variant %></span><% } %>
                 <div class="img-cell-actions">
                   <% if (im.position !== 0) { %>
                     <form method="post" action="/panel/products/<%= pid %>/images/<%= im.id %>/setmain">
@@ -151,6 +152,12 @@
                     <button class="btn btn-sm btn-danger">حذف</button>
                   </form>
                 </div>
+                <!-- تغيير لون الصورة -->
+                <form method="post" action="/panel/products/<%= pid %>/images/<%= im.id %>/variant" style="margin-top:.35rem;display:flex;gap:.3rem">
+                  <input type="hidden" name="_csrf" value="<%= csrf %>">
+                  <input type="text" name="variant" value="<%= im.variant || '' %>" placeholder="اللون: أحمر" style="flex:1;padding:.3rem .5rem;border:1px solid #e2e8f0;border-radius:6px;font-size:.78rem">
+                  <button class="btn btn-sm btn-ghost" style="padding:.2rem .5rem;font-size:.75rem">حفظ</button>
+                </form>
               </div>
             <% }) %>
           </div>
@@ -160,9 +167,12 @@
           <form method="post" action="/panel/products/<%= pid %>/images?_csrf=<%= csrf %>" enctype="multipart/form-data" class="stack upload-box">
             <input type="hidden" name="_csrf" value="<%= csrf %>">
             <h3>إضافة صور (حتى 20 دفعة)</h3>
-            <input type="file" name="images" accept="image/jpeg,image/png,image/gif,image/webp" multiple>
+            <label style="font-size:.82rem">اللون لهذه الصور (اختياري — اتركه فارغ للصور العامة)
+              <input type="text" name="variant" placeholder="مثال: أحمر — إذا اختار الزبون أحمر تظهر هذه الصور فقط" style="padding:.4rem .6rem;border:1.5px solid #e2e8f0;border-radius:8px;font-size:.85rem;margin-top:.3rem">
+            </label>
+            <input type="file" name="images" accept="image/jpeg,image/png,image/gif,image/webp" multiple style="margin-top:.5rem">
             <button type="submit" class="btn btn-primary">رفع الصور</button>
-            <small>JPG / PNG / GIF / WEBP — حتى 12MB للصورة الواحدة، بدون حد لعدد الصور</small>
+            <small>JPG / PNG / GIF / WEBP — حتى 12MB. إذا حددت لوناً، الصورة تظهر فقط عند اختيار الزبون لذلك اللون.</small>
           </form>
         <% } %>
       </div>

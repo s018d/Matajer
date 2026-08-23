@@ -255,11 +255,12 @@ router.post('/products/:id/images', upPics().array('images', 20), asyncHandler(a
   const p = db.prepare('SELECT * FROM products WHERE id=? AND store_id=?').get(req.params.id, req.user.store_id);
   if (!p) return res.redirect('/panel/products');
   if (req.files && req.files.length) {
+    const variant = String(req.body.variant || '').trim().slice(0,30);
     const maxPos = db.prepare('SELECT COALESCE(MAX(position),-1) m FROM product_images WHERE product_id=?').get(p.id).m;
     let pos = maxPos + 1;
     for (const f of req.files) {
       await processImage(f.path);
-      db.prepare('INSERT INTO product_images (product_id, path, position) VALUES (?,?,?)').run(p.id, '/uploads/store_' + req.user.store_id + `/product_${p.id}/` + f.filename, pos++);
+      db.prepare('INSERT INTO product_images (product_id, path, position, variant) VALUES (?,?,?,?)').run(p.id, '/uploads/store_' + req.user.store_id + `/product_${p.id}/` + f.filename, pos++, variant);
     }
     logActivity(req.user.id, req.user.username, 'رفع صور', `رفع ${req.files.length} صورة لمنتج «${p.name}»`);
     appendLog(`مستخدم «${req.user.username}» رفع ${req.files.length} صورة لمنتج «${p.name}»`);
@@ -289,6 +290,15 @@ router.post('/products/:id/images/:imgid/delete', (req, res) => {
   if (fs.existsSync(thumbAbs)) fs.unlinkSync(thumbAbs);
   db.prepare('DELETE FROM product_images WHERE id=?').run(img.id);
   res.redirect('/panel/products/' + p.id + '/edit?ok=تم حذف الصورة');
+});
+
+router.post('/products/:id/images/:imgid/variant', (req, res) => {
+  const img = db.prepare('SELECT * FROM product_images WHERE id=?').get(req.params.imgid);
+  const p = img && db.prepare('SELECT * FROM products WHERE id=? AND store_id=?').get(img.product_id, req.user.store_id);
+  if (!img || !p) return res.redirect('/panel/products');
+  const variant = String(req.body.variant || '').trim().slice(0,30);
+  db.prepare('UPDATE product_images SET variant=? WHERE id=?').run(variant, img.id);
+  res.redirect('/panel/products/' + p.id + '/edit?ok=' + encodeURIComponent(variant ? `تم ربط الصورة باللون «${variant}»` : 'تم إزالة ربط اللون'));
 });
 
 router.post('/products/:id/toggle', (req, res) => {

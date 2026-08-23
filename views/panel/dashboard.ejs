@@ -130,11 +130,26 @@
           <button class="btn btn-sm btn-primary" id="pwaInstallBtn" style="display:none" onclick="installPWA()">📱 ثبت التطبيق على الجوال</button>
           <a class="btn btn-sm btn-ghost" href="/panel/settings" target="_blank">⚙️ إعدادات المتجر</a>
           <a class="btn btn-sm btn-ghost" href="/panel/billing" target="_blank">💳 الباقات والترقية</a>
+          <button class="btn btn-sm btn-ghost" onclick="startTour(true)" style="margin-top:.3rem">🎓 إعادة الشرح</button>
         </div>
       </div>
     </div>
   </div>
 </main>
+<!-- جولة تعليمية للتاجر الجديد -->
+<div id="tourOverlay" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.75);z-index:9999;align-items:center;justify-content:center;padding:1rem">
+  <div id="tourCard" style="background:#fff;border-radius:18px;max-width:480px;width:100%;padding:1.8rem 1.5rem;box-shadow:0 25px 60px rgba(0,0,0,.4);text-align:center;position:relative">
+    <div id="tourIcon" style="font-size:2.6rem;margin-bottom:.6rem">👋</div>
+    <h3 id="tourTitle" style="margin:0 0 .4rem;color:#0f172a;font-size:1.25rem;font-weight:900"></h3>
+    <p id="tourText" style="color:#475569;font-size:.92rem;line-height:1.7;margin:0 0 1.4rem"></p>
+    <div style="display:flex;gap:.5rem;justify-content:center">
+      <button onclick="skipTour()" style="flex:1;padding:.65rem;border-radius:10px;border:1.5px solid #e2e8f0;background:#f8fafc;color:#475569;font-weight:700;cursor:pointer">تخطي الشرح</button>
+      <button onclick="nextTour()" id="tourNext" style="flex:1.4;padding:.65rem;border-radius:10px;border:none;background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;font-weight:800;cursor:pointer">التالي →</button>
+    </div>
+    <div style="margin-top:1rem;display:flex;gap:.35rem;justify-content:center" id="tourDots"></div>
+    <div id="tourStep" style="margin-top:.4rem;font-size:.72rem;color:#94a3b8"></div>
+  </div>
+</div>
 <script src="/js/notify.js"></script>
 <script>
   // Copy store link
@@ -188,6 +203,42 @@
     document.documentElement.classList.add('dark');
     document.getElementById('darkModeToggle').checked = true;
   }
+
+  // جولة تعليمية
+  const tourSteps=[
+    {icon:'👋',title:'أهلاً بيك في دُكّان!',text:'متجرك جاهز — 3 خطوات وتبلش تبيع. خل نأخذك بجولة سريعة (30 ثانية).'},
+    {icon:'📦',title:'1 — أضف منتجاتك',text:'اضغط "المنتجات" من القائمة الجانبية → "منتج جديد" → اكتب الاسم والسعر وارفع الصور. للمنتج الملون: أضف الألوان كخيار وارفع لكل لون صوره.'},
+    {icon:'🧾',title:'2 — استقبل طلباتك',text:'عندما يطلب زبون، يظهر الطلب فوراً هنا مع تنبيه صوتي وإشعار. اضغط "واتساب الزبون" لتأكيد التوصيل.'},
+    {icon:'🎨',title:'3 — زيّن متجرك',text:'من "القوالب" اختر شكلاً، ومن "المحرر البصري" اسحب الأقسام ورتبها. كلشي يتحدث مباشرة.'},
+    {icon:'🔗',title:'4 — شارك رابطك',text:'انسخ رابط متجرك أو QR من هذه الصفحة وأرسله على واتساب/إنستغرام — أول طلب يجيك خلال دقائق!'},
+    {icon:'🚀',title:'جاهز تنطلق؟',text:'اضغط "ابدأ البيع" وأضف أول منتج — إحنا وياك خطوة بخطوة.'}
+  ];
+  let tourIdx=0;
+  function renderTour(){
+    const s=tourSteps[tourIdx];
+    document.getElementById('tourIcon').textContent=s.icon;
+    document.getElementById('tourTitle').textContent=s.title;
+    document.getElementById('tourText').textContent=s.text;
+    document.getElementById('tourStep').textContent=(tourIdx+1)+' / '+tourSteps.length;
+    document.getElementById('tourNext').textContent= tourIdx===tourSteps.length-1 ? 'ابدأ البيع 🚀' : 'التالي →';
+    const dots=document.getElementById('tourDots');
+    dots.innerHTML=tourSteps.map((_,i)=>'<span style="width:8px;height:8px;border-radius:50%;background:'+(i===tourIdx?'#0ea5e9':'#e2e8f0')+';display:inline-block"></span>').join('');
+  }
+  function showTour(){ document.getElementById('tourOverlay').style.display='flex'; renderTour(); }
+  function hideTour(){ document.getElementById('tourOverlay').style.display='none'; localStorage.setItem('dukkan_tour_done','1'); }
+  window.nextTour=function(){
+    if(tourIdx < tourSteps.length-1){ tourIdx++; renderTour(); }
+    else { hideTour(); if(tourIdx===tourSteps.length-1) location.href='/panel/products/new'; }
+  };
+  window.skipTour=hideTour;
+  window.startTour=function(force){ tourIdx=0; localStorage.removeItem('dukkan_tour_done'); showTour(); };
+  // إظهار تلقائي للتاجر الجديد (0 منتجات ولم يشاهد الشرح)
+  (function(){
+    const products=<%= stats.products %>;
+    if(products===0 && localStorage.getItem('dukkan_tour_done')!=='1'){
+      setTimeout(showTour, 800);
+    }
+  })();
 </script>
 <script src="/js/notify.js"></script>
 <style>

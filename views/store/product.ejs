@@ -27,11 +27,11 @@
   <div class="st-product">
     <div class="st-gallery">
       <% if (images.length) { %>
-        <img src="<%= images[0].path %>" class="st-main-img" id="mainImg" alt="<%= product.name %>" loading="lazy" onclick="openLightbox(0)">
+        <img src="<%= images[0].path %>" class="st-main-img" id="mainImg" alt="<%= product.name %>" loading="lazy" onclick="openLightbox(0)" data-variant="<%= images[0].variant || '' %>">
         <% if (images.length > 1) { %>
-          <div class="st-thumbs">
+          <div class="st-thumbs" id="stThumbs">
             <% images.forEach((im, idx) => { %>
-              <img src="<%= im.path %>" alt="" loading="lazy" class="<%= idx === 0 ? 'active' : '' %>" onclick="switchImg(this, <%= idx %>)">
+              <img src="<%= im.path %>" alt="" loading="lazy" class="<%= idx === 0 ? 'active' : '' %>" data-variant="<%= im.variant || '' %>" data-idx="<%= idx %>" onclick="switchImg(this, <%= idx %>)">
             <% }) %>
           </div>
         <% } %>
@@ -151,8 +151,33 @@
 <%- include('../partials/store-brand') %>
 <%- include('../partials/cart-drawer') %>
 <script>
-  const images = <%- JSON.stringify(images.map(i => i.path)) %>;
+  const images = <%- JSON.stringify(images.map(i => ({path: i.path, variant: i.variant || ''}))) %>;
   let currentImg = 0;
+  // تبديل الصور حسب اللون المختار
+  function applyVariantImages(){
+    const selected = Array.from(document.querySelectorAll('.st-opt-sel')).map(s=>s.value.trim());
+    const hasVariantImages = images.some(im=> im.variant && selected.includes(im.variant));
+    let filtered = images;
+    if(hasVariantImages){
+      filtered = images.filter(im=> !im.variant || selected.includes(im.variant));
+      if(filtered.length===0) filtered=images.filter(im=> selected.includes(im.variant));
+    }
+    if(!filtered.length) filtered=images;
+    const thumbsBox=document.getElementById('stThumbs');
+    if(thumbsBox){
+      thumbsBox.querySelectorAll('img').forEach(el=>{
+        const v=el.dataset.variant||'';
+        const show = !v || selected.includes(v) || !hasVariantImages;
+        el.style.display= show ? '' : 'none';
+        if(!show) el.classList.remove('active');
+      });
+      const firstVisible=thumbsBox.querySelector('img:not([style*="display: none"])');
+      if(firstVisible) switchImg(firstVisible, parseInt(firstVisible.dataset.idx));
+    } else if(filtered[0]){
+      document.getElementById('mainImg').src=filtered[0].path;
+    }
+  }
+  document.querySelectorAll('.st-opt-sel').forEach(sel=> sel.addEventListener('change', applyVariantImages));
 
   function qtyValue() { const el = document.getElementById('qty'); return el ? parseInt(el.value) || 1 : 1; }
   function qty(d) {
@@ -186,11 +211,11 @@
     currentImg = idx;
   }
 
-  // Lightbox
+  // Lightbox - يفتح الصور المرئية فقط حسب اللون
   function openLightbox(idx) {
     if (!images.length) return;
     currentImg = idx;
-    document.getElementById('lightboxImg').src = images[currentImg];
+    document.getElementById('lightboxImg').src = images[currentImg].path || images[currentImg];
     document.getElementById('lightbox').classList.add('show');
     document.body.style.overflow = 'hidden';
   }
@@ -200,7 +225,7 @@
   }
   function navLightbox(dir) {
     currentImg = (currentImg + dir + images.length) % images.length;
-    document.getElementById('lightboxImg').src = images[currentImg];
+    document.getElementById('lightboxImg').src = images[currentImg].path || images[currentImg];
   }
   document.addEventListener('keydown', e => {
     if (!document.getElementById('lightbox').classList.contains('show')) return;

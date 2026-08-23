@@ -63,7 +63,8 @@ CREATE TABLE IF NOT EXISTS product_images (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   product_id INTEGER NOT NULL,
   path TEXT NOT NULL,
-  position INTEGER DEFAULT 0
+  position INTEGER DEFAULT 0,
+  variant TEXT DEFAULT ''
 );
 
 CREATE TABLE IF NOT EXISTS orders (
@@ -160,6 +161,7 @@ try { db.exec("ALTER TABLE order_items ADD COLUMN addons_price REAL DEFAULT 0");
 try { db.exec("ALTER TABLE payments ADD COLUMN months INTEGER DEFAULT 1"); } catch (e) {}
 try { db.exec("ALTER TABLE payments ADD COLUMN ref TEXT DEFAULT ''"); } catch (e) {}
 try { db.exec("ALTER TABLE payments ADD COLUMN receipt_path TEXT DEFAULT ''"); } catch (e) {}
+try { db.exec("ALTER TABLE product_images ADD COLUMN variant TEXT DEFAULT ''"); } catch (e) {}
 try { db.exec("CREATE UNIQUE INDEX IF NOT EXISTS idx_coupons_store_code ON coupons(store_id, code)"); } catch (e) {}
 try { db.exec(`
 CREATE TABLE IF NOT EXISTS bundles (

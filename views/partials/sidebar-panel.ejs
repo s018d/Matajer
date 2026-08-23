@@ -9,12 +9,9 @@
     <a href="/panel/templates" class="<%= typeof active !== 'undefined' && active==='templates' ? 'on' : '' %>">🎨 القوالب</a>
     <a href="/panel/templates/customize" class="<%= typeof active !== 'undefined' && active==='customize' ? 'on' : '' %>">✨ المحرر البصري</a>
     <a href="/panel/billing" class="<%= typeof active !== 'undefined' && active==='billing' ? 'on' : '' %>">💳 الباقات والفوترة</a>
+    <a href="/panel/domain/buy" class="<%= typeof active !== 'undefined' && active==='domain-buy' ? 'on' : '' %>">🌐 شراء دومين</a>
     <a href="/panel/settings" class="<%= typeof active !== 'undefined' && active==='settings' ? 'on' : '' %>">⚙️ الإعدادات</a>
-    <!-- v4.3-clean-launch: الروابط المتقدمة مخفية (الكود والمسارات باقية تحت الغطاء):
-         /panel/categories, /panel/abandoned-carts, /panel/shipping, /panel/shipments,
-         /panel/returns, /panel/drivers, /panel/driver-settlements, /panel/warehouses,
-         /panel/cashflow, /panel/domain, /panel/domain/buy, /panel/kurdish, /panel/bundles
-    -->
+    <!-- روابط متقدمة مخفية: /panel/categories, /panel/abandoned-carts, /panel/shipping, /panel/shipments, /panel/returns, /panel/drivers, /panel/warehouses, /panel/cashflow, /panel/domain, /panel/kurdish, /panel/bundles -->
   </nav>
   <div class="side-note">متجر: <%= typeof store !== 'undefined' && store ? store.name : '' %><br><small style="color:#475569">منصة خفيفة • جاهز للانطلاق</small></div>
 </aside>

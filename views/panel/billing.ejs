@@ -78,24 +78,20 @@
       <div class="card">
         <h2>ماذا تحصل مع الباقة الاحترافية؟</h2>
         <ul class="feed">
-          <li><span class="feed-act">الأنماط العالمية الأربعة:</span> <span class="feed-detail">الأتيلييه · الجراند · الطبيعي · المغامر</span></li>
-          <li><span class="feed-act">منتجات بلا حدود</span> <span class="feed-detail">+ أكواد خصم بلا حدود + مخزون وخيارات</span></li>
-          <li><span class="feed-act">دومينك الخاص:</span> <span class="feed-detail">متجرك على نطاقك أنت (مثل myshop.com)</span></li>
+          <li><span class="feed-act">الأنماط العالمية الثلاثة:</span> <span class="feed-detail">الأتيلييه · التقني · الدافئ</span></li>
+          <li><span class="feed-act">منتجات بلا حدود</span> <span class="feed-detail">+ أكواد خصم وتقييمات بلا حدود + مخزون وألوان</span></li>
+          <li><span class="feed-act">دومينك الخاص:</span> <span class="feed-detail">شراء منفصل — تواصل واتساب للحصول على دومينك (مو ضمن سعر الباقة)</span></li>
           <li><span class="feed-act">بلا علامة منصة</span> <span class="feed-detail">+ أولوية الدعم المباشر</span></li>
         </ul>
-        <% if (cfg.pay_account) { %>
-          <div class="pay-box" style="background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;border:none">
-            <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
-              <span style="font-size:1.4rem">💳</span>
-              <b dir="ltr" id="payAccount" style="font-size:1.05rem;letter-spacing:.04em;color:#fff"><%= cfg.pay_account %></b>
-              <button type="button" class="btn btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('payAccount').textContent).then(()=>this.textContent='تم النسخ ✓')" style="background:#fff;color:#0f172a">نسخ</button>
-            </div>
-            <span style="color:#94a3b8">بعد التحويل اكتب رقم الحوالة وأرفق صورة الإيصال — التفعيل خلال دقائق. الماستر محلي عراقي.</span>
-          </div>
-        <% } else { %>
-          <p class="muted pay-note">جهة استلام الدفع لم تُحدد بعد — أرسلناها لك عبر واتساب، أو راسلنا الآن:
-          <% if (cfg.site_whatsapp) { %> <a href="https://wa.me/<%= cfg.site_whatsapp.replace(/\D/g,'') %>" target="_blank">اضغط هنا</a><% } %></p>
-        <% } %>
+        <div class="pay-box" style="background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;border:none;text-align:center">
+          <div style="font-size:1.2rem;margin-bottom:.4rem">💬 للترقية تواصل واتساب مباشرة</div>
+          <% if (cfg.site_whatsapp) { %>
+            <a href="https://wa.me/<%= cfg.site_whatsapp.replace(/\D/g,'') %>?text=<%= encodeURIComponent('مرحبا، أريد ترقية متجري ' + store.name + ' (' + store.slug + ') — ما رقم التحويل والباقة؟') %>" target="_blank" class="btn btn-primary" style="background:#25d366;color:#fff;border:none;padding:.7rem 1.6rem;border-radius:12px;font-weight:800">واتساب: <%= cfg.site_whatsapp %></a>
+          <% } else { %>
+            <span style="color:#94a3b8">راسلنا واتساب للحصول على رقم التحويل — التفعيل خلال دقائق</span>
+          <% } %>
+          <div style="margin-top:.6rem;color:#94a3b8;font-size:.82rem">بعد التحويل اكتب رقم الحوالة وأرفق صورة الإيصال هنا — التفعيل خلال دقائق</div>
+        </div>
       </div>
       <div class="card">
         <h2>طلبات الترقية السابقة</h2>

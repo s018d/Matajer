@@ -13,11 +13,11 @@
   <div class="site-nav-inner">
     <a class="brand" href="/"><img src="/img/logo.svg" alt="شعار دُكّان" class="brand-logo"><b><%= cfg.site_name %></b><span>متاجر</span></a>
     <nav>
-      <a href="#features">المميزات</a>
-      <a href="#designs">التصاميم</a>
-      <a href="#showcase">متاجر حية</a>
-      <a href="#pricing">الباقات</a>
-      <a href="#faq">أسئلة شائعة</a>
+      <a href="/#features">المميزات</a>
+      <a href="/#designs">التصاميم</a>
+      <a href="/#showcase">متاجر حية</a>
+      <a href="/#pricing">الباقات</a>
+      <a href="/#faq">أسئلة شائعة</a>
     </nav>
     <div class="site-cta">
       <a class="btn-ghost" href="/login">دخول</a>
@@ -34,7 +34,7 @@
       <p><%= cfg.tagline %> — بلا خبرة، بلا دومين، بلا دفع مقدم. تسجل، ترفع منتجاتك (حتى بألوانها وصورها)، وتستلم الطلبات على واتسابك فوراً.</p>
       <div class="hero-btns">
         <a class="btn-main big" href="/signup">ابدأ الآن مجاناً →</a>
-        <a class="btn-outline big" href="#showcase">شاهد متاجر حية</a>
+        <a class="btn-outline big" href="/#showcase">شاهد متاجر حية</a>
       </div>
       <div class="hero-mini">
         <span>✓ سلة وطلب فوري</span><span>✓ دفـع عنـد الاستلام</span><span>✓ أكواد خصم ومخزون</span><span>✓ لوحة تحكم بالعربي</span>
@@ -67,22 +67,22 @@
     <% if (stores.length === 0) { %>
       <p class="sub">أول المتاجر قيد الإنشاء — سجل وكن أول من يظهر هنا. هذه معاينات حية للقوالب:</p>
       <div class="store-showcase">
-        <div class="show-card" style="opacity:.85">
+        <a class="show-card" href="/signup" style="opacity:.9">
           <div class="show-thumb" style="background:linear-gradient(135deg,#0ea5e9,#0284c7)"><span class="show-name">الواضح — مجاني</span><span class="show-tpl">نضيف وسريع</span></div>
           <div class="show-meta"><b>الواضح</b><span>أبيض نضيف — لكل المتاجر</span></div>
-        </div>
-        <div class="show-card" style="opacity:.85">
+        </a>
+        <a class="show-card" href="/signup" style="opacity:.9">
           <div class="show-thumb" style="background:linear-gradient(135deg,#191a1b,#2d2a26)"><span class="show-name">الأتيلييه</span><span class="show-tpl">للأزياء والعطور</span></div>
           <div class="show-meta"><b>الأتيلييه</b><span>Editorial فاخر</span></div>
-        </div>
-        <div class="show-card" style="opacity:.85">
+        </a>
+        <a class="show-card" href="/signup" style="opacity:.9">
           <div class="show-thumb" style="background:linear-gradient(135deg,#0f172a,#06b6d4)"><span class="show-name">التقني</span><span class="show-tpl">للإلكترونيات</span></div>
           <div class="show-meta"><b>التقني</b><span>Dark Tech</span></div>
-        </div>
-        <div class="show-card" style="opacity:.85">
+        </a>
+        <a class="show-card" href="/signup" style="opacity:.9">
           <div class="show-thumb" style="background:linear-gradient(135deg,#92400e,#f59e0b)"><span class="show-name">الدافئ</span><span class="show-tpl">للحلويات والأكل</span></div>
           <div class="show-meta"><b>الدافئ</b><span>ألوان ترابية حنونة</span></div>
-        </div>
+        </a>
       </div>
       <p style="text-align:center;margin-top:1rem"><a class="btn-main" href="/signup">كن أول متجر حي →</a></p>
     <% } else { %>

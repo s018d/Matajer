@@ -1,270 +1,57 @@
-/* ===== DUKKAN PREMIUM — الأزياء (Atelier) =====
-   مستوحى من Moda Operandi: أحادي اللون، حبر داكن، زوايا شبه حادة، خط تحريري فاخر */
-
-body.store-body.prem-fashion {
-  font-family: 'Noto Kufi Arabic', 'Cairo', 'Segoe UI', Tahoma, sans-serif;
-  background: #f2f3f5;
-  color: #191a1b;
+/* ===== DUKKAN PREMIUM — الأتيلييه (Violet/Amber Friendly) =====
+   خلط: Template 1 بنفسجي/عنبري + لمسة Template 2 التحريرية + компакт
+   مصمم لكل الشاشات: جوال 375 → تابلت 768 → لابتوب 1280 */
+body.store-body.prem-fashion{
+  font-family:'Tajawal','Noto Kufi Arabic','Cairo',sans-serif;
+  background:#f7f6fc;
+  color:#191430;
 }
-body.store-body.prem-fashion * { box-sizing: border-box; }
-
-/* ===== HEADER ===== */
-.prem-fashion .st-head {
-  padding: 0;
-  background: #ffffff;
-  border-bottom: 1px solid #e4e5e7;
-  overflow: hidden;
-}
-.prem-fashion .st-head::before { display: none; }
-.prem-fashion .st-head-inner {
-  max-width: 1200px;
-  padding: 1.2rem 1.4rem;
-  border-bottom: 1px solid #e4e5e7;
-}
-.prem-fashion .st-head h1 {
-  font-size: 1.7rem;
-  font-weight: 300;
-  letter-spacing: .02em;
-  color: #191a1b;
-  background: none;
-  -webkit-text-fill-color: initial;
-}
-.prem-fashion .st-head p {
-  color: #656566;
-  font-size: .85rem;
-  font-weight: 300;
-}
-.prem-fashion .st-logo {
-  border-radius: 0;
-  box-shadow: none;
-}
-.prem-fashion .st-back {
-  border-radius: 2px;
-  border-color: #d4d5d6;
-  color: #656566;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  font-size: .75rem;
-}
-.prem-fashion .st-back:hover {
-  color: #191a1b;
-  border-color: #191a1b;
-  box-shadow: none;
-}
-
-/* ===== SEARCH ===== */
-.prem-fashion .st-search form {
-  border-radius: 0;
-  border: 1px solid #d4d5d6;
-  background: #fff;
-  box-shadow: none;
-}
-.prem-fashion .st-search form:focus-within {
-  border-color: #191a1b;
-  box-shadow: none;
-}
-.prem-fashion .st-search input { font-weight: 300; }
-.prem-fashion .st-search button {
-  background: #191a1b;
-  border-radius: 0;
-  font-weight: 500;
-  letter-spacing: .03em;
-}
-.prem-fashion .st-search button:hover {
-  background: #000;
-  box-shadow: none;
-}
-
-/* ===== CATEGORY NAV ===== */
-.prem-fashion .st-nav a {
-  border-radius: 2px;
-  background: transparent;
-  border: 1px solid transparent;
-  color: #656566;
-  font-weight: 500;
-  letter-spacing: .02em;
-}
-.prem-fashion .st-nav a:hover {
-  border-color: #191a1b;
-  color: #191a1b;
-  box-shadow: none;
-  transform: none;
-}
-.prem-fashion .st-nav a.on {
-  background: #191a1b;
-  border-color: #191a1b;
-  color: #fff;
-  box-shadow: none;
-}
-
-/* ===== GRID - Editorial compact premium ===== */
-.prem-fashion .st-main { max-width: 1100px; }
-.prem-fashion .st-grid { gap: 12px; grid-template-columns: repeat(2, 1fr); }
-.prem-fashion .fashion-grid { gap: 12px; grid-template-columns: repeat(2, 1fr); }
-
-/* ===== CARD ===== */
-.prem-fashion .st-card {
-  background: #fff;
-  border-radius: 0;
-  border: none;
-  box-shadow: none;
-}
-.prem-fashion .st-card:hover {
-  transform: none;
-  box-shadow: none;
-  border: none;
-}
-.prem-fashion .st-img { background: #f2f3f5; border-radius: 0; }
-.prem-fashion .st-card:hover .st-img img { transform: scale(1.04); }
-.prem-fashion .st-card-body { padding: .7rem .5rem .9rem; }
-.prem-fashion .st-name {
-  font-weight: 500;
-  font-size: .82rem;
-  letter-spacing: .02em;
-  color: #191a1b;
-  min-height: 0;
-  line-height: 1.4;
-}
-.prem-fashion .st-name:hover { color: #656566; }
-.prem-fashion .st-price b { color: #191a1b; font-weight: 600; font-size: .92rem; }
-.prem-fashion .st-price del { font-size: .72rem; }
-.prem-fashion .st-price del { color: #a3a4a5; font-weight: 300; }
-.prem-fashion .mk-discount,
-.prem-fashion .neo-off {
-  border-radius: 0;
-  background: #191a1b;
-  box-shadow: none;
-  font-weight: 600;
-  letter-spacing: .03em;
-}
-.prem-fashion .st-soldout-tag { border-radius: 0; background: #656566; }
-
-/* ===== BUTTON ===== */
-.prem-fashion .st-btn {
-  background: #191a1b;
-  border-radius: 2px;
-  font-weight: 600;
-  letter-spacing: .03em;
-  text-transform: uppercase;
-  font-size: .8rem;
-}
-.prem-fashion .st-btn::before { display: none; }
-.prem-fashion .st-btn:hover {
-  background: #000;
-  box-shadow: 0 14px 30px rgba(25,26,27,.18);
-  transform: translateY(-1px);
-}
-.prem-fashion .st-btn-disabled { background: #e4e5e7; color: #a3a4a5; }
-
-/* ===== BRAND FOOTER ===== */
-.prem-fashion .st-brand { color: #a3a4a5; border-top: 1px solid #e4e5e7; margin-top: 2rem; }
-.prem-fashion .st-brand a { color: #191a1b; font-weight: 500; }
-
-/* ===== PRODUCT PAGE ===== */
-.prem-fashion .st-gallery {
-  border-radius: 0;
-  border: 1px solid #e4e5e7;
-  box-shadow: none;
-  padding: 0;
-  background: #fff;
-}
-.prem-fashion .st-main-img { border-radius: 0; }
-.prem-fashion .st-thumbs img { border-radius: 0; }
-.prem-fashion .st-thumbs img:hover,
-.prem-fashion .st-thumbs img.active { border-color: #191a1b; }
-.prem-fashion .st-product-info {
-  border-radius: 0;
-  border: 1px solid #e4e5e7;
-  box-shadow: none;
-  padding: 1.6rem 1.8rem;
-}
-.prem-fashion .st-product-info h1 { font-weight: 500; font-size: 1.5rem; letter-spacing: .01em; }
-.prem-fashion .st-desc { color: #656566; font-weight: 300; }
-.prem-fashion .st-price.big b { color: #191a1b; font-weight: 600; }
-.prem-fashion .st-rel-title { font-weight: 500; letter-spacing: .02em; }
-.prem-fashion .st-rel-title::after { background: linear-gradient(90deg,#191a1b,transparent); }
-
-/* ===== QUANTITY ===== */
-.prem-fashion .qty-row button { border-radius: 2px; }
-.prem-fashion .qty-row button:hover { border-color: #191a1b; color: #191a1b; }
-.prem-fashion .qty-row input { border-radius: 2px; }
-.prem-fashion .qty-row input:focus { outline: 1px solid #191a1b; }
-
-/* ===== CHECKOUT ===== */
-.prem-fashion .st-checkout .card {
-  border-radius: 0;
-  border: 1px solid #e4e5e7;
-  box-shadow: none;
-}
-.prem-fashion .st-checkout h2 { font-weight: 600; letter-spacing: .02em; }
-.prem-fashion .st-checkout input,
-.prem-fashion .st-checkout textarea {
-  border-radius: 2px;
-  border-color: #d4d5d6;
-  background: #fff;
-}
-.prem-fashion .st-checkout input:focus,
-.prem-fashion .st-checkout textarea:focus {
-  border-color: #191a1b;
-  box-shadow: none;
-}
-.prem-fashion .co-payment { border-radius: 2px; }
-.prem-fashion .co-payment label:has(input:checked) { border-color: #191a1b; background: #f2f3f5; }
-.prem-fashion .co-payment input[type="radio"] { accent-color: #191a1b; }
-
-/* ===== CART ===== */
-.prem-fashion .cart-fab {
-  background: #191a1b;
-  border-radius: 2px;
-  box-shadow: 0 14px 36px rgba(25,26,27,.35);
-}
-.prem-fashion .cart-fab:hover { box-shadow: 0 18px 44px rgba(25,26,27,.4); }
-.prem-fashion .cart-count { background: #fff; color: #191a1b; border-radius: 0; }
-.prem-fashion .cart-drawer { border-radius: 0; }
-.prem-fashion .drawer-total b { color: #191a1b; }
-.prem-fashion #cartCheckout {
-  background: #191a1b;
-  border-radius: 2px;
-  box-shadow: none;
-  font-weight: 600;
-  letter-spacing: .03em;
-}
-.prem-fashion #cartCheckout:hover { box-shadow: 0 14px 32px rgba(25,26,27,.3); }
-.prem-fashion .co-item { border-radius: 2px; }
-.prem-fashion .co-item img { border-radius: 0; }
-.prem-fashion .mc-toast { border-radius: 2px; background: #191a1b; }
-
-/* ===== DONE ===== */
-.prem-fashion .st-done h1 { background: none; -webkit-text-fill-color: #191a1b; color: #191a1b; }
-.prem-fashion .st-done-icon { background: #191a1b; border-radius: 0; box-shadow: none; color: #fff; }
-.prem-fashion .st-done-sum { border-radius: 0; border-color: #e4e5e7; box-shadow: none; }
-.prem-fashion .st-done-line.total b { color: #191a1b; }
-.prem-fashion .st-rating-avg { color: #191a1b; }
-.prem-fashion .st-rating-summary { border-radius: 0; border-color: #e4e5e7; }
-
-/* ===== FASHION HERO FULL-BLEED (ChatGPT advice) ===== */
-.prem-fashion .fashion-hero{position:relative;min-height:62vh;overflow:hidden;background:#191a1b;display:flex;align-items:flex-end}
-.prem-fashion .fashion-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.62),rgba(0,0,0,.08) 70%);z-index:1}
-.prem-fashion .fashion-hero .st-head-inner{position:relative;z-index:2;color:#fff;max-width:1200px;width:100%;padding:3rem 1.4rem}
-.prem-fashion .fashion-hero h1{color:#fff !important;-webkit-text-fill-color:#fff !important;font-size:clamp(2rem,5vw,3.2rem);font-weight:300;letter-spacing:.02em}
-.prem-fashion .fashion-hero p{color:rgba(255,255,255,.85) !important}
-.prem-fashion .fashion-hero .fashion-badge{background:#fff;color:#191a1b}
-
-/* ===== FASHION CARD MAGAZINE 3/4 + hover ===== */
-.prem-fashion .fashion-grid .st-card{border:none;background:transparent;box-shadow:none}
-.prem-fashion .fashion-grid .st-img{aspect-ratio:3/4;border-radius:2px;overflow:hidden;background:#e9eaeb}
-.prem-fashion .fashion-grid .st-img img{transition:opacity .45s, transform .7s}
-.prem-fashion .fashion-grid .st-card:hover .st-img img{transform:scale(1.035)}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 480px) {
-  .prem-fashion .st-head-inner { padding: .9rem 1rem; }
-  .prem-fashion .st-head h1 { font-size: 1.2rem; }
-  .prem-fashion .st-grid { grid-template-columns: repeat(2, 1fr); gap: 1px; }
-  .prem-fashion .st-card-body { padding: .8rem .3rem .9rem; }
-  .prem-fashion .st-btn { font-size: .72rem; }
-  .prem-fashion .fashion-hero{min-height:42vh}
-}
-@media (max-width: 360px) {
-  .prem-fashion .st-grid { grid-template-columns: 1fr; }
-}
+body.store-body.prem-fashion *{box-sizing:border-box}
+/* HEADER — compact */
+.prem-fashion .st-head{padding:0;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid #e8e5f2;overflow:hidden}
+.prem-fashion .st-head-inner{max-width:1240px;padding:.9rem 1.2rem}
+.prem-fashion .st-head h1{font-size:1.35rem;font-weight:800;color:#191430;background:none;-webkit-text-fill-color:#191430;letter-spacing:-.01em}
+.prem-fashion .st-head p{color:#8a85a0;font-size:.8rem}
+.prem-fashion .st-back{border-radius:50px;border-color:#e8e5f2;color:#8a85a0;font-size:.72rem;padding:.35rem .7rem}
+.prem-fashion .st-back:hover{border-color:#6c3cf5;color:#6c3cf5}
+/* SEARCH — pill compact */
+.prem-fashion .st-search form{border-radius:50px;border:1.5px solid #e8e5f2;background:#fff;box-shadow:0 2px 10px rgba(25,20,48,.06);padding:.25rem .3rem .25rem 1rem}
+.prem-fashion .st-search form:focus-within{border-color:#6c3cf5;box-shadow:0 0 0 3px rgba(108,60,245,.12)}
+.prem-fashion .st-search button{background:linear-gradient(135deg,#6c3cf5,#5425d8);border-radius:50px;font-weight:700;letter-spacing:.02em;padding:.55rem 1.3rem;font-size:.84rem}
+/* NAV — compact */
+.prem-fashion .st-nav{gap:.4rem;padding:.8rem 1.2rem}
+.prem-fashion .st-nav a{border-radius:50px;background:#fff;border:1.5px solid #e8e5f2;color:#6b6588;font-size:.8rem;font-weight:600;padding:.42rem .9rem}
+.prem-fashion .st-nav a:hover{border-color:#6c3cf5;color:#6c3cf5;transform:translateY(-1px)}
+.prem-fashion .st-nav a.on{background:linear-gradient(135deg,#6c3cf5,#5425d8);border-color:transparent;color:#fff;box-shadow:0 6px 18px rgba(108,60,245,.35)}
+/* GRID — compact 180px */
+.prem-fashion .st-main{max-width:1240px;padding:1rem 1.2rem 4rem}
+.prem-fashion .st-grid{gap:10px;grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+/* CARD — compact 220px */
+.prem-fashion .st-card{background:#fff;border-radius:14px;border:1px solid #e8e5f2;box-shadow:0 2px 10px rgba(25,20,48,.06);overflow:hidden}
+.prem-fashion .st-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(25,20,48,.12);border-color:transparent}
+.prem-fashion .st-img{background:#f7f6fc;aspect-ratio:1/1}
+.prem-fashion .st-img img{transition:transform .4s}
+.prem-fashion .st-card:hover .st-img img{transform:scale(1.05)}
+.prem-fashion .st-card-body{padding:.65rem .75rem .85rem;gap:.25rem}
+.prem-fashion .st-name{font-weight:700;font-size:.82rem;line-height:1.4;min-height:2.3em;color:#191430}
+.prem-fashion .st-price b{color:#6c3cf5;font-weight:800;font-size:.92rem}
+.prem-fashion .st-price del{color:#b0aac8;font-size:.72rem}
+.prem-fashion .mk-discount{background:linear-gradient(135deg,#ffb400,#e09e00);border-radius:50px;font-size:.68rem;padding:.28rem .6rem;box-shadow:0 4px 12px rgba(255,180,0,.3)}
+.prem-fashion .st-soldout-tag{border-radius:50px;background:#8a85a0;font-size:.68rem}
+.prem-fashion .st-btn{background:linear-gradient(135deg,#6c3cf5,#5425d8);border-radius:12px;font-weight:700;font-size:.82rem;padding:.6rem;border:none;letter-spacing:.01em}
+.prem-fashion .st-btn:hover{box-shadow:0 8px 20px rgba(108,60,245,.4);transform:translateY(-1px)}
+/* PRODUCT PAGE — compact */
+.prem-fashion .st-product{grid-template-columns:1fr 1fr;gap:1.5rem}
+.prem-fashion .st-gallery{border-radius:14px;border:1px solid #e8e5f2;padding:1rem}
+.prem-fashion .st-product-info{border-radius:14px;border:1px solid #e8e5f2;padding:1.4rem;gap:.8rem}
+.prem-fashion .st-product-info h1{font-size:1.25rem;font-weight:800}
+.prem-fashion .qty-row button{border-radius:10px;width:38px;height:38px}
+.prem-fashion .qty-row input{border-radius:10px;width:52px;height:38px}
+/* CART — compact */
+.prem-fashion .cart-fab{background:linear-gradient(135deg,#6c3cf5,#5425d8);border-radius:50px;padding:.6rem 1.2rem;font-size:.85rem}
+.prem-fashion .cart-count{background:#fff;color:#6c3cf5;min-width:20px;height:20px;font-size:.7rem}
+/* RESPONSIVE — كل الشاشات */
+@media(max-width:1024px){.prem-fashion .st-grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}}
+@media(max-width:768px){.prem-fashion .st-product{grid-template-columns:1fr;gap:1.2rem}.prem-fashion .st-head-inner{padding:.7rem 1rem}.prem-fashion .st-main{padding:.8rem 1rem 4rem}.prem-fashion .st-grid{grid-template-columns:repeat(2,1fr);gap:8px}.prem-fashion .st-card-body{padding:.55rem .6rem .75rem}.prem-fashion .st-name{font-size:.78rem}.prem-fashion .st-price b{font-size:.85rem}}
+@media(max-width:480px){.prem-fashion .st-grid{grid-template-columns:repeat(2,1fr);gap:8px}.prem-fashion .st-head h1{font-size:1.15rem}.prem-fashion .st-search form{padding:.2rem}.prem-fashion .st-nav{gap:.3rem;padding:.6rem 1rem}.prem-fashion .st-nav a{font-size:.75rem;padding:.35rem .75rem}}
+@media(max-width:360px){.prem-fashion .st-grid{grid-template-columns:1fr;gap:10px}.prem-fashion .st-head-inner{padding:.6rem .8rem}.prem-fashion .st-main{padding:.6rem .8rem 3rem}}

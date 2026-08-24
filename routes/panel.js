@@ -698,6 +698,27 @@ router.post('/templates/layout', (req, res) => {
 
 router.post('/templates/customize', (req, res) => {
   const store = getStore(req.user.store_id);
+  // دعم النموذج المبسط (heroTitle/heroSub/heroImage...) + النموذج القديم
+  let layout = {};
+  try { layout = JSON.parse(store.layout_json || '{}'); } catch {}
+  // إذا جاءت حقول مبسطة من النموذج الجديد، حدث الـ layout
+  if (req.body.heroTitle !== undefined || req.body.heroSub !== undefined || req.body.heroImage !== undefined) {
+    layout.hero = {
+      title: String(req.body.heroTitle || store.name),
+      sub: String(req.body.heroSub || ''),
+      image: String(req.body.heroImage || (layout.hero||{}).image || ''),
+      video: String(req.body.heroVideo || (layout.hero||{}).video || ''),
+      textColor: String(req.body.heroText || (layout.hero||{}).textColor || '#ffffff'),
+      overlay: Number(req.body.heroOverlay != null ? req.body.heroOverlay : ((layout.hero||{}).overlay ?? 40))
+    };
+  }
+  if (req.body.announce !== undefined && !req.body.layout_json) {
+    layout.announce = String(req.body.announce || '').slice(0,120);
+  }
+  // حفظ الـ layout إذا تغير عبر النموذج المبسط
+  if (req.body.heroTitle !== undefined || (req.body.announce !== undefined && !req.body.layout_json)) {
+    db.prepare(`UPDATE stores SET layout_json=? WHERE id=?`).run(JSON.stringify(layout), store.id);
+  }
   const { primary, accent, bg, ink, soft, btnColor, radius, font, fontSize, shadow, cardStyle, btnStyle, hover, anim, hero, grid, sections, announce } = req.body;
   const cfg = {
     primary: /^#[0-9a-fA-F]{6}$/.test(primary) ? primary : store.color,
@@ -717,7 +738,7 @@ router.post('/templates/customize', (req, res) => {
     hero: String(hero || 'default'),
     grid: String(grid || 'auto'),
     sections: String(sections || 'hero,search,cats,grid'),
-    announce: String(announce || '').slice(0,120)
+    announce: String(announce || layout.announce || '').slice(0,120)
   };
   const shadowVal = cfg.shadow==='none' ? 'none' : cfg.shadow==='medium' ? '0 10px 28px rgba(15,23,42,.09)' : cfg.shadow==='strong' ? '0 22px 54px rgba(15,23,42,.15)' : '0 2px 8px rgba(15,23,42,.05)';
   const customCss = `:root{--primary:${cfg.primary};--accent:${cfg.accent};--bg:${cfg.bg};--ink:${cfg.ink};--soft:${cfg.soft};--radius:${cfg.radius}px;--btn:${cfg.btnColor};--shadow:${shadowVal}} body{font-family:'${cfg.font}', sans-serif; font-size:${cfg.fontSize}px} .st-card{${cfg.cardStyle==='sharp'?'border-radius:2px':cfg.cardStyle==='rounded'?'border-radius:18px':cfg.cardStyle==='soft'?'border-radius:24px':''}} .st-btn{${cfg.btnStyle==='square'?'border-radius:2px':cfg.btnStyle==='rounded'?'border-radius:10px':cfg.btnStyle==='soft'?'border-radius:14px':'border-radius:99px'};background:${cfg.btnColor}} ${cfg.anim==='off'?'*{animation:none !important;transition:none !important}':''} ${cfg.announce ? `.announce-bar{display:block}` : ''}`;

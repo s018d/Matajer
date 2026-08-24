@@ -50,7 +50,16 @@
       <% } else if (lowStock) { %>
         <div class="st-badge-lowstock">⚡ كمية محدودة: <%= product.stock %> قطع متبقية</div>
       <% } %>
-      <p class="st-desc"><%= product.description %></p>
+      <% const isTech = store.template === 'prem-classic'; const descLines = String(product.description||'').split('\n').map(s=>s.trim()).filter(Boolean); const hasSpecs = descLines.some(l=>l.includes(':')); %>
+      <% if (isTech && hasSpecs) { %>
+        <table class="st-specs" style="width:100%;border-collapse:collapse;margin:.8rem 0;font-size:.85rem">
+          <% descLines.forEach(line=>{ const [k,v]=line.split(':'); if(v!==undefined){ %>
+            <tr style="border-bottom:1px solid var(--line)"><td style="padding:.5rem .7rem;background:var(--soft);font-weight:700;width:38%"><%= k.trim() %></td><td style="padding:.5rem .7rem"><%= v.trim() %></td></tr>
+          <% }}) %>
+        </table>
+      <% } else { %>
+        <p class="st-desc"><%= product.description %></p>
+      <% } %>
       <% Object.entries(opts).forEach(([label, vals]) => { %>
         <label class="st-opt"><%= label %>
           <select class="st-opt-sel" data-opt="<%= label %>">
@@ -108,6 +117,7 @@
       </div>
     </div>
     <div id="reviewsList" class="st-reviews-list"></div>
+    <button id="showReviewBtn" class="st-btn" style="margin:1rem auto;display:block" onclick="document.getElementById('reviewForm').style.display='block';this.style.display='none'">✍️ أضف تقييمك</button>
     <form id="reviewForm" class="st-review-form" style="display:none">
       <h3>أضف تقييمك</h3>
       <input type="hidden" name="product_id" value="<%= product.id %>">

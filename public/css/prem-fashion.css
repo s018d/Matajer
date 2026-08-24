@@ -1,57 +1,714 @@
-/* ===== DUKKAN PREMIUM — الأتيلييه (Violet/Amber Friendly) =====
-   خلط: Template 1 بنفسجي/عنبري + لمسة Template 2 التحريرية + компакт
-   مصمم لكل الشاشات: جوال 375 → تابلت 768 → لابتوب 1280 */
+/* ============================================================
+   PREM-FASHION — متجر الفخامة (Violet/Amber) → Matajer
+   Ported from: قوالب متاجر احترافية /1 — css/style.css (615 lines)
+   Tokens:  --primary #6c3cf5  --accent #ffb400  --dark #191430
+            --radius 14px / --radius-lg 18px  --font Tajawal/Poppins
+   Compact premium — gaps/paddings/fonts ~8-12% smaller than original
+   Targets: body.store-body.prem-fashion + Matajer classes
+   Responsive: 1280 / 1024 / 768 / 600 / 480 / 375 / 360  no-overflow
+   ============================================================ */
+
+/* ---------- 0. TOKENS & BASE ---------- */
 body.store-body.prem-fashion{
-  font-family:'Tajawal','Noto Kufi Arabic','Cairo',sans-serif;
-  background:#f7f6fc;
-  color:#191430;
+  --pf-primary:#6c3cf5;
+  --pf-primary-dark:#5425d8;
+  --pf-primary-light:#efe9fe;
+  --pf-accent:#ffb400;
+  --pf-accent-dark:#e09e00;
+  --pf-dark:#191430;
+  --pf-text:#3f3a55;
+  --pf-muted:#8a85a0;
+  --pf-border:#e8e5f2;
+  --pf-bg:#ffffff;
+  --pf-bg-soft:#f7f6fc;
+  --pf-success:#16a34a;
+  --pf-danger:#e11d48;
+  --pf-radius:14px;
+  --pf-radius-lg:18px;
+  --pf-radius-pill:50px;
+  --pf-shadow-sm:0 2px 10px rgba(25,20,48,.06);
+  --pf-shadow-md:0 8px 24px rgba(25,20,48,.10);
+  --pf-shadow-lg:0 16px 44px rgba(25,20,48,.14);
+  --pf-font:'Tajawal','Poppins','Cairo','Noto Kufi Arabic',sans-serif;
+  --pf-t:all .28s cubic-bezier(.4,0,.2,1);
+  font-family:var(--pf-font);
+  background:var(--pf-bg-soft);
+  color:var(--pf-text);
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  max-width:100vw;
 }
-body.store-body.prem-fashion *{box-sizing:border-box}
-/* HEADER — compact */
-.prem-fashion .st-head{padding:0;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid #e8e5f2;overflow:hidden}
-.prem-fashion .st-head-inner{max-width:1240px;padding:.9rem 1.2rem}
-.prem-fashion .st-head h1{font-size:1.35rem;font-weight:800;color:#191430;background:none;-webkit-text-fill-color:#191430;letter-spacing:-.01em}
-.prem-fashion .st-head p{color:#8a85a0;font-size:.8rem}
-.prem-fashion .st-back{border-radius:50px;border-color:#e8e5f2;color:#8a85a0;font-size:.72rem;padding:.35rem .7rem}
-.prem-fashion .st-back:hover{border-color:#6c3cf5;color:#6c3cf5}
-/* SEARCH — pill compact */
-.prem-fashion .st-search form{border-radius:50px;border:1.5px solid #e8e5f2;background:#fff;box-shadow:0 2px 10px rgba(25,20,48,.06);padding:.25rem .3rem .25rem 1rem}
-.prem-fashion .st-search form:focus-within{border-color:#6c3cf5;box-shadow:0 0 0 3px rgba(108,60,245,.12)}
-.prem-fashion .st-search button{background:linear-gradient(135deg,#6c3cf5,#5425d8);border-radius:50px;font-weight:700;letter-spacing:.02em;padding:.55rem 1.3rem;font-size:.84rem}
-/* NAV — compact */
-.prem-fashion .st-nav{gap:.4rem;padding:.8rem 1.2rem}
-.prem-fashion .st-nav a{border-radius:50px;background:#fff;border:1.5px solid #e8e5f2;color:#6b6588;font-size:.8rem;font-weight:600;padding:.42rem .9rem}
-.prem-fashion .st-nav a:hover{border-color:#6c3cf5;color:#6c3cf5;transform:translateY(-1px)}
-.prem-fashion .st-nav a.on{background:linear-gradient(135deg,#6c3cf5,#5425d8);border-color:transparent;color:#fff;box-shadow:0 6px 18px rgba(108,60,245,.35)}
-/* GRID — compact 180px */
-.prem-fashion .st-main{max-width:1240px;padding:1rem 1.2rem 4rem}
-.prem-fashion .st-grid{gap:10px;grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
-/* CARD — compact 220px */
-.prem-fashion .st-card{background:#fff;border-radius:14px;border:1px solid #e8e5f2;box-shadow:0 2px 10px rgba(25,20,48,.06);overflow:hidden}
-.prem-fashion .st-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(25,20,48,.12);border-color:transparent}
-.prem-fashion .st-img{background:#f7f6fc;aspect-ratio:1/1}
-.prem-fashion .st-img img{transition:transform .4s}
-.prem-fashion .st-card:hover .st-img img{transform:scale(1.05)}
-.prem-fashion .st-card-body{padding:.65rem .75rem .85rem;gap:.25rem}
-.prem-fashion .st-name{font-weight:700;font-size:.82rem;line-height:1.4;min-height:2.3em;color:#191430}
-.prem-fashion .st-price b{color:#6c3cf5;font-weight:800;font-size:.92rem}
-.prem-fashion .st-price del{color:#b0aac8;font-size:.72rem}
-.prem-fashion .mk-discount{background:linear-gradient(135deg,#ffb400,#e09e00);border-radius:50px;font-size:.68rem;padding:.28rem .6rem;box-shadow:0 4px 12px rgba(255,180,0,.3)}
-.prem-fashion .st-soldout-tag{border-radius:50px;background:#8a85a0;font-size:.68rem}
-.prem-fashion .st-btn{background:linear-gradient(135deg,#6c3cf5,#5425d8);border-radius:12px;font-weight:700;font-size:.82rem;padding:.6rem;border:none;letter-spacing:.01em}
-.prem-fashion .st-btn:hover{box-shadow:0 8px 20px rgba(108,60,245,.4);transform:translateY(-1px)}
-/* PRODUCT PAGE — compact */
-.prem-fashion .st-product{grid-template-columns:1fr 1fr;gap:1.5rem}
-.prem-fashion .st-gallery{border-radius:14px;border:1px solid #e8e5f2;padding:1rem}
-.prem-fashion .st-product-info{border-radius:14px;border:1px solid #e8e5f2;padding:1.4rem;gap:.8rem}
-.prem-fashion .st-product-info h1{font-size:1.25rem;font-weight:800}
-.prem-fashion .qty-row button{border-radius:10px;width:38px;height:38px}
-.prem-fashion .qty-row input{border-radius:10px;width:52px;height:38px}
-/* CART — compact */
-.prem-fashion .cart-fab{background:linear-gradient(135deg,#6c3cf5,#5425d8);border-radius:50px;padding:.6rem 1.2rem;font-size:.85rem}
-.prem-fashion .cart-count{background:#fff;color:#6c3cf5;min-width:20px;height:20px;font-size:.7rem}
-/* RESPONSIVE — كل الشاشات */
-@media(max-width:1024px){.prem-fashion .st-grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}}
-@media(max-width:768px){.prem-fashion .st-product{grid-template-columns:1fr;gap:1.2rem}.prem-fashion .st-head-inner{padding:.7rem 1rem}.prem-fashion .st-main{padding:.8rem 1rem 4rem}.prem-fashion .st-grid{grid-template-columns:repeat(2,1fr);gap:8px}.prem-fashion .st-card-body{padding:.55rem .6rem .75rem}.prem-fashion .st-name{font-size:.78rem}.prem-fashion .st-price b{font-size:.85rem}}
-@media(max-width:480px){.prem-fashion .st-grid{grid-template-columns:repeat(2,1fr);gap:8px}.prem-fashion .st-head h1{font-size:1.15rem}.prem-fashion .st-search form{padding:.2rem}.prem-fashion .st-nav{gap:.3rem;padding:.6rem 1rem}.prem-fashion .st-nav a{font-size:.75rem;padding:.35rem .75rem}}
-@media(max-width:360px){.prem-fashion .st-grid{grid-template-columns:1fr;gap:10px}.prem-fashion .st-head-inner{padding:.6rem .8rem}.prem-fashion .st-main{padding:.6rem .8rem 3rem}}
+body.store-body.prem-fashion *{box-sizing:border-box;overflow-wrap:break-word;word-break:break-word}
+body.store-body.prem-fashion html{scroll-behavior:smooth}
+body.store-body.prem-fashion img{max-width:100%;display:block}
+body.store-body.prem-fashion a{text-decoration:none;color:inherit;transition:var(--pf-t)}
+
+/* ---------- 1. HEADER — compact sticky + violet hero ---------- */
+.prem-fashion .st-head{
+  position:relative;
+  padding:0;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--pf-border);
+  overflow:hidden;
+}
+.prem-fashion .st-head::before{
+  content:'';
+  position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 85% 20%, rgba(255,180,0,.06), transparent 38%),
+    radial-gradient(circle at 10% 85%, rgba(108,60,245,.07), transparent 44%);
+  pointer-events:none;
+}
+/* fashion-hero override — violet gradient hero (distinctive from source .hero) — compact */
+.prem-fashion .st-head.fashion-hero,
+.prem-fashion .fashion-hero.st-head{
+  background:linear-gradient(120deg,#22164f 0%, #3d2295 55%, var(--pf-primary) 100%);
+  color:#fff;
+  border-bottom:none;
+}
+.prem-fashion .fashion-hero.st-head::before{
+  background:
+    radial-gradient(circle at 85% 20%, rgba(255,180,0,.16), transparent 40%),
+    radial-gradient(circle at 10% 85%, rgba(155,92,255,.30), transparent 45%);
+}
+.prem-fashion .st-head-inner{
+  max-width:1180px;
+  margin:0 auto;
+  padding:.85rem 1.15rem;
+  display:flex;
+  align-items:center;
+  gap:.85rem;
+  position:relative;
+  z-index:1;
+  flex-wrap:wrap;
+}
+.prem-fashion .st-head h1{
+  font-size:1.28rem;
+  font-weight:800;
+  letter-spacing:-.01em;
+  line-height:1.35;
+  color:var(--pf-dark);
+  background:none;
+  -webkit-text-fill-color:var(--pf-dark);
+}
+.prem-fashion .fashion-hero.st-head h1{
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+  font-size:1.38rem;
+  font-weight:800;
+  line-height:1.28;
+}
+.prem-fashion .fashion-hero.st-head h1 em{font-style:normal;color:var(--pf-accent)}
+.prem-fashion .st-head p{
+  color:var(--pf-muted);
+  font-size:.78rem;
+  font-weight:400;
+  margin-top:.18rem;
+  line-height:1.6;
+  max-width:520px;
+}
+.prem-fashion .fashion-hero.st-head p{color:#d5cdf0 !important; font-size:.84rem}
+.prem-fashion .st-logo{
+  max-height:52px;
+  max-width:170px;
+  object-fit:contain;
+  border-radius:12px;
+  box-shadow:var(--pf-shadow-sm);
+  transition:var(--pf-t);
+}
+.prem-fashion .st-logo:hover{transform:scale(1.04);box-shadow:var(--pf-shadow-md)}
+.prem-fashion .fashion-badge,
+.prem-fashion .st-head .fashion-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:.45rem;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.25);
+  color:#fff;
+  padding:.28rem .75rem;
+  border-radius:var(--pf-radius-pill);
+  font-size:.72rem;
+  font-weight:700;
+  letter-spacing:.02em;
+}
+.prem-fashion .st-back{
+  display:inline-flex;
+  align-items:center;
+  gap:.3rem;
+  margin:0 auto .4rem;
+  font-size:.74rem;
+  font-weight:700;
+  color:var(--pf-muted);
+  background:#fff;
+  border:1.5px solid var(--pf-border);
+  border-radius:var(--pf-radius-pill);
+  padding:.36rem .85rem;
+  transition:var(--pf-t);
+  max-width:max-content;
+  white-space:nowrap;
+}
+.prem-fashion .st-back:hover{color:var(--pf-primary);border-color:var(--pf-primary);transform:translateY(-1px);box-shadow:var(--pf-shadow-sm)}
+.prem-fashion .fashion-hero .st-back{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:#fff}
+.prem-fashion .fashion-hero .st-back:hover{background:var(--pf-accent);border-color:var(--pf-accent);color:var(--pf-dark)}
+.prem-fashion .st-head.small{padding:.55rem 1.15rem .2rem}
+
+/* ---------- 2. SEARCH — pill compact ---------- */
+.prem-fashion .st-search{
+  max-width:1180px;
+  margin:.65rem auto 0;
+  padding:0 1.15rem;
+}
+.prem-fashion .st-search form{
+  display:flex;
+  align-items:center;
+  gap:.4rem;
+  background:#fff;
+  border:1.5px solid var(--pf-border);
+  border-radius:var(--pf-radius-pill);
+  padding:.22rem .24rem .22rem .9rem;
+  box-shadow:var(--pf-shadow-sm);
+  transition:var(--pf-t);
+}
+.prem-fashion .st-search form:focus-within{
+  border-color:var(--pf-primary);
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(108,60,245,.12), var(--pf-shadow-sm);
+}
+.prem-fashion .st-search input{
+  flex:1;
+  border:none;
+  background:transparent;
+  padding:.5rem .3rem;
+  font-size:.88rem;
+  font-family:inherit;
+  color:var(--pf-text);
+  min-width:0;
+  outline:none;
+}
+.prem-fashion .st-search input::placeholder{color:#b0aac8}
+.prem-fashion .st-search button{
+  background:linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark));
+  color:#fff;
+  border:none;
+  border-radius:var(--pf-radius-pill);
+  padding:.52rem 1.25rem;
+  font-weight:700;
+  font-size:.82rem;
+  cursor:pointer;
+  transition:var(--pf-t);
+  font-family:inherit;
+  white-space:nowrap;
+  box-shadow:0 4px 14px rgba(108,60,245,.28);
+}
+.prem-fashion .st-search button:hover{background:var(--pf-primary-dark);transform:translateY(-1px);box-shadow:0 8px 18px rgba(108,60,245,.35)}
+
+/* ---------- 3. CATEGORY NAV — pill 6-col feeling compact ---------- */
+.prem-fashion .st-nav{
+  max-width:1180px;
+  margin:0 auto;
+  display:flex;
+  gap:.38rem;
+  padding:.7rem 1.15rem;
+  flex-wrap:wrap;
+}
+.prem-fashion .st-nav a{
+  padding:.4rem .9rem;
+  border-radius:var(--pf-radius-pill);
+  background:#fff;
+  border:1.5px solid var(--pf-border);
+  color:#6b6588;
+  font-size:.78rem;
+  font-weight:700;
+  transition:var(--pf-t);
+  white-space:nowrap;
+  line-height:1;
+}
+.prem-fashion .st-nav a:hover{border-color:var(--pf-primary);color:var(--pf-primary);transform:translateY(-1px);box-shadow:var(--pf-shadow-sm)}
+.prem-fashion .st-nav a.on{
+  background:linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark));
+  border-color:transparent;
+  color:#fff;
+  box-shadow:0 6px 18px rgba(108,60,245,.35);
+}
+/* decorative cats count style — compact badge */
+.prem-fashion .st-nav a .count{
+  background:var(--pf-bg-soft);
+  padding:1px 7px;
+  border-radius:20px;
+  font-size:.68rem;
+  color:var(--pf-muted);
+  margin-inline-start:4px;
+}
+
+/* announce bar — compact violet/amber tint */
+.prem-fashion .announce-bar{
+  font-size:.82rem !important;
+  padding:.5rem 1rem !important;
+  gap:.4rem !important;
+  border-bottom:1px solid var(--pf-border);
+}
+
+/* ---------- 4. GRID — compact 180px (4-col original → auto-fill compact) ---------- */
+.prem-fashion .st-main{
+  max-width:1180px;
+  margin:0 auto;
+  padding:.9rem 1.15rem 3.5rem;
+}
+.prem-fashion .st-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(172px,1fr));
+  gap:12px;
+}
+/* fashion editorial 2-col override — compact 2-col with amber accent */
+.prem-fashion .fashion-grid.st-grid,
+.prem-fashion .st-grid.fashion-grid{
+  grid-template-columns:repeat(2,1fr) !important;
+  gap:14px !important;
+}
+.prem-fashion .outdoor-grid,.prem-fashion .classic-grid,.prem-fashion .natural-grid{gap:12px !important}
+
+/* ---------- 5. CARD — compact premium violet card (from source .product-card) ---------- */
+.prem-fashion .st-card{
+  background:#fff;
+  border-radius:var(--pf-radius-lg);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  transition:var(--pf-t);
+  border:1px solid var(--pf-border);
+  position:relative;
+  box-shadow:var(--pf-shadow-sm);
+}
+.prem-fashion .st-card:hover{
+  transform:translateY(-5px);
+  box-shadow:var(--pf-shadow-md);
+  border-color:transparent;
+}
+.prem-fashion .st-img{
+  aspect-ratio:1/1;
+  background:var(--pf-bg-soft);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  position:relative;
+}
+.prem-fashion .st-img img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .48s cubic-bezier(.4,0,.2,1);
+}
+.prem-fashion .st-card:hover .st-img img{transform:scale(1.06)}
+.prem-fashion .st-img-empty{color:#8a85a0;font-size:.8rem;display:flex;flex-direction:column;align-items:center;gap:.25rem}
+.prem-fashion .st-img-empty::before{content:'📦';font-size:1.6rem;opacity:.45}
+.prem-fashion .st-img-empty.big{font-size:.95rem;padding:2.6rem}
+.prem-fashion .st-img-empty.big::before{font-size:2.2rem}
+
+/* badges — pill violet/amber/danger (source .badge) */
+.prem-fashion .mk-discount,
+.prem-fashion .neo-off{
+  position:absolute;top:10px;right:10px;
+  background:linear-gradient(135deg,var(--pf-accent),var(--pf-accent-dark));
+  color:var(--pf-dark);
+  font-size:.68rem;font-weight:800;
+  padding:.3rem .6rem;
+  border-radius:var(--pf-radius-pill);
+  box-shadow:0 4px 12px rgba(255,180,0,.32);
+  z-index:2;letter-spacing:.01em;
+}
+.prem-fashion .st-soldout-tag{
+  position:absolute;top:10px;left:10px;
+  background:linear-gradient(135deg,#64748b,#475569);
+  color:#fff;font-weight:700;
+  padding:.28rem .65rem;
+  border-radius:var(--pf-radius-pill);
+  font-size:.66rem;z-index:2;
+  box-shadow:0 4px 12px rgba(71,85,105,.3);
+}
+
+/* card body — compact 0.65rem */
+.prem-fashion .st-card-body{
+  padding:.6rem .7rem .75rem;
+  display:flex;
+  flex-direction:column;
+  gap:.22rem;
+  flex:1;
+}
+.prem-fashion .st-name{
+  font-weight:700;
+  font-size:.80rem;
+  line-height:1.42;
+  color:var(--pf-dark);
+  min-height:2.25em;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  transition:color .2s;
+}
+.prem-fashion .st-name:hover{color:var(--pf-primary)}
+.prem-fashion .st-price{
+  display:flex;gap:.35rem;align-items:baseline;
+  margin-top:auto;padding-top:.18rem;
+}
+.prem-fashion .st-price b{color:var(--pf-primary);font-size:.90rem;font-weight:800}
+.prem-fashion .st-price del{color:#b0aac8;font-size:.70rem;text-decoration:line-through}
+.prem-fashion .st-price.big b{font-size:1.28rem;font-weight:800}
+.prem-fashion .st-price.big del{font-size:.9rem}
+
+/* button — pill gradient violet (source .btn) */
+.prem-fashion .st-btn{
+  border:none;
+  background:linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark));
+  color:#fff;
+  padding:.58rem .9rem;
+  border-radius:12px;
+  font-weight:700;
+  font-size:.80rem;
+  cursor:pointer;
+  margin-top:auto;
+  transition:var(--pf-t);
+  font-family:inherit;
+  display:flex;align-items:center;justify-content:center;gap:.35rem;
+  position:relative;overflow:hidden;
+  letter-spacing:.01em;
+  box-shadow:0 4px 14px rgba(108,60,245,.24);
+}
+.prem-fashion .st-btn::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
+  transition:left .5s;
+}
+.prem-fashion .st-btn:hover::before{left:100%}
+.prem-fashion .st-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(108,60,245,.38);filter:brightness(1.04)}
+.prem-fashion .st-btn:active{transform:scale(.97)}
+.prem-fashion .st-btn-disabled{
+  background:#e8ecf4 !important;
+  color:#94a3b8 !important;
+  cursor:not-allowed;pointer-events:none;box-shadow:none !important;transform:none !important;
+}
+.prem-fashion .st-btn.big-btn{padding:.82rem 1.4rem;font-size:.92rem;width:100%;border-radius:var(--pf-radius-pill)}
+.prem-fashion .st-empty{text-align:center;color:var(--pf-muted);padding:3.5rem 1rem;font-size:.95rem;font-weight:600}
+
+/* ---------- 6. PRODUCT PAGE — compact 1.1fr/0.9fr inspired hero-grid ---------- */
+.prem-fashion .st-product{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.35rem;
+  animation:pfFadeUp .45s ease;
+}
+@keyframes pfFadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.prem-fashion .st-gallery{
+  background:#fff;
+  border:1px solid var(--pf-border);
+  border-radius:var(--pf-radius-lg);
+  padding:.9rem;
+  box-shadow:var(--pf-shadow-sm);
+  align-self:start;
+}
+.prem-fashion .st-main-img{
+  width:100%;aspect-ratio:1/1;object-fit:cover;
+  border-radius:12px;cursor:zoom-in;transition:transform .3s;
+  background:var(--pf-bg-soft);
+}
+.prem-fashion .st-main-img:hover{transform:scale(1.015)}
+.prem-fashion .st-thumbs{display:flex;gap:.5rem;margin-top:.7rem;flex-wrap:wrap}
+.prem-fashion .st-thumbs img{
+  width:58px;height:58px;object-fit:cover;
+  border-radius:10px;cursor:pointer;
+  border:2.5px solid transparent;transition:var(--pf-t);opacity:.78;
+}
+.prem-fashion .st-thumbs img:hover,
+.prem-fashion .st-thumbs img.active{border-color:var(--pf-primary);opacity:1;transform:scale(1.04)}
+.prem-fashion .st-product-info{
+  background:#fff;
+  border:1px solid var(--pf-border);
+  border-radius:var(--pf-radius-lg);
+  padding:1.35rem;
+  display:flex;flex-direction:column;gap:.75rem;
+  align-self:start;
+  box-shadow:var(--pf-shadow-sm);
+  position:sticky;top:78px;
+}
+.prem-fashion .st-product-info h1{font-size:1.22rem;font-weight:800;line-height:1.4;color:var(--pf-dark)}
+.prem-fashion .st-desc{color:var(--pf-muted);line-height:1.85;font-size:.88rem}
+.prem-fashion .st-badge-soldout{
+  background:linear-gradient(135deg,#fee2e2,#fecaca);color:#991b1b;
+  font-weight:800;padding:.55rem 1rem;border-radius:12px;text-align:center;font-size:.84rem;
+  border:1px solid #fecaca;
+}
+.prem-fashion .st-badge-lowstock{
+  background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;
+  font-weight:700;padding:.55rem 1rem;border-radius:12px;text-align:center;font-size:.84rem;
+  border:1px solid #fde68a;
+}
+.prem-fashion .st-stock{font-size:.78rem;color:var(--pf-success);font-weight:700;margin-top:.35rem;display:flex;align-items:center;gap:.3rem}
+.prem-fashion .st-stock::before{content:'✅';font-size:.85rem}
+.prem-fashion .st-opt{font-size:.82rem;font-weight:700;color:var(--pf-dark);display:flex;flex-direction:column;gap:.28rem;margin:.55rem 0}
+.prem-fashion .st-opt-sel{
+  padding:.55rem .8rem;border-radius:12px;border:1.5px solid var(--pf-border);
+  background:#fff;color:var(--pf-text);font-family:inherit;transition:var(--pf-t);width:100%;
+}
+.prem-fashion .st-opt-sel:focus{outline:none;border-color:var(--pf-primary);box-shadow:0 0 0 3px var(--pf-primary-light)}
+.prem-fashion .st-addons{display:flex;flex-wrap:wrap;gap:.45rem;margin:.6rem 0}
+.prem-fashion .st-addon{
+  display:flex;align-items:center;gap:.4rem;font-size:.80rem;
+  background:var(--pf-bg-soft);padding:.42rem .8rem;border-radius:var(--pf-radius-pill);
+  cursor:pointer;color:var(--pf-dark);transition:var(--pf-t);border:1.5px solid transparent;
+}
+.prem-fashion .st-addon:hover{border-color:var(--pf-primary);background:var(--pf-primary-light)}
+.prem-fashion .st-addon input{accent-color:var(--pf-primary);width:15px;height:15px}
+.prem-fashion .qty-row{display:flex;align-items:center;gap:.4rem}
+.prem-fashion .qty-row button{
+  width:38px;height:38px;border-radius:10px;
+  border:1.5px solid var(--pf-border);background:#fff;
+  font-size:1.05rem;color:var(--pf-dark);cursor:pointer;transition:var(--pf-t);
+  font-weight:700;display:flex;align-items:center;justify-content:center;
+}
+.prem-fashion .qty-row button:hover{background:var(--pf-primary-light);border-color:var(--pf-primary);color:var(--pf-primary);transform:scale(1.04)}
+.prem-fashion .qty-row input{
+  width:52px;height:38px;text-align:center;
+  border:1.5px solid var(--pf-border);border-radius:10px;
+  font-size:.95rem;font-weight:800;background:#fafbfc;color:var(--pf-dark);font-family:inherit;
+}
+.prem-fashion .qty-row input:focus{outline:2px solid var(--pf-primary);border-color:transparent}
+.prem-fashion .qty-row.mini button{width:28px;height:28px;font-size:.85rem}
+.prem-fashion .qty-row.mini input{width:38px;height:28px;font-size:.82rem}
+.prem-fashion .wa-order{
+  background:linear-gradient(135deg,#25d366,#128c7e) !important;
+  margin-top:.35rem;
+}
+.prem-fashion .wa-order:hover{filter:brightness(1.06);box-shadow:0 8px 18px rgba(37,211,102,.32) !important}
+.prem-fashion .st-rel-title{
+  margin:1.8rem 0 .9rem;font-size:1.05rem;font-weight:800;color:var(--pf-dark);
+  display:flex;align-items:center;gap:.5rem;
+}
+.prem-fashion .st-rel-title::after{content:'';flex:1;height:2px;background:linear-gradient(90deg,var(--pf-primary),transparent)}
+.prem-fashion .st-specs td{font-size:.82rem}
+
+/* ---------- 7. CHECKOUT / DONE ---------- */
+.prem-fashion .st-checkout{display:grid;grid-template-columns:1.1fr 1fr;gap:1.35rem;align-items:start}
+.prem-fashion .st-checkout .card{
+  background:#fff;border:1px solid var(--pf-border);border-radius:var(--pf-radius-lg);
+  padding:1.4rem;box-shadow:var(--pf-shadow-sm);
+}
+.prem-fashion .st-checkout h2{
+  margin-bottom:.9rem;font-size:1.02rem;font-weight:800;color:var(--pf-dark);
+  padding-bottom:.65rem;border-bottom:2px solid var(--pf-bg-soft);display:flex;align-items:center;gap:.45rem;
+}
+.prem-fashion .st-checkout label{font-size:.82rem;font-weight:700;color:#374151}
+.prem-fashion .st-checkout input,.prem-fashion .st-checkout textarea{
+  padding:.7rem .9rem;border:1.5px solid var(--pf-border);border-radius:12px;
+  font-size:.88rem;font-family:inherit;background:#fafbfc;color:var(--pf-text);transition:var(--pf-t);
+}
+.prem-fashion .st-checkout input:focus,.prem-fashion .st-checkout textarea:focus{
+  outline:none;border-color:var(--pf-primary);box-shadow:0 0 0 3px var(--pf-primary-light);background:#fff;
+}
+.prem-fashion .st-done{padding:3.5rem 1.2rem}
+.prem-fashion .st-done-icon{background:linear-gradient(135deg,#dcfce7,#bbf7d0);box-shadow:0 10px 28px rgba(22,163,74,.22)}
+.prem-fashion .st-done h1{
+  background:linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.prem-fashion .st-done-sum{border:1.5px solid var(--pf-border);border-radius:var(--pf-radius-lg)}
+
+/* ---------- 8. REVIEWS — amber stars (source .stars) ---------- */
+.prem-fashion .st-reviews .st-rating-summary{
+  background:linear-gradient(135deg,var(--pf-bg-soft),#fff);
+  border:1px solid var(--pf-border);border-radius:var(--pf-radius);
+}
+.prem-fashion .st-rating-avg{color:var(--pf-primary)}
+.prem-fashion .st-rating-bar-fill{background:linear-gradient(90deg,var(--pf-accent),#f59e0b)}
+.prem-fashion .star-btn.active,.prem-fashion .star-btn:hover{color:var(--pf-accent)}
+.prem-fashion .st-review-stars{color:var(--pf-accent)}
+.prem-fashion .st-review-card{border:1.5px solid var(--pf-border);border-radius:var(--pf-radius)}
+.prem-fashion .st-review-card:hover{box-shadow:var(--pf-shadow-sm);border-color:transparent}
+.prem-fashion .st-review-form{border:1.5px solid var(--pf-border);border-radius:var(--pf-radius-lg)}
+
+/* ---------- 9. CART FAB + DRAWER — violet pill (source .cart-fab/.cart-drawer) ---------- */
+.prem-fashion .cart-fab{
+  background:linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark));
+  border-radius:var(--pf-radius-pill);
+  padding:.62rem 1.2rem;
+  font-size:.84rem;font-weight:700;
+  box-shadow:0 10px 28px rgba(108,60,245,.42);
+  gap:.6rem;
+}
+.prem-fashion .cart-fab:hover{transform:scale(1.04) translateY(-1px);box-shadow:0 14px 34px rgba(108,60,245,.48)}
+.prem-fashion .cart-count{
+  background:#fff;color:var(--pf-primary);
+  min-width:20px;height:20px;font-size:.68rem;font-weight:900;
+  border-radius:var(--pf-radius-pill);padding:0 5px;
+}
+.prem-fashion .drawer-overlay{background:rgba(25,20,48,.48);backdrop-filter:blur(6px)}
+.prem-fashion .cart-drawer{box-shadow:var(--pf-shadow-lg)}
+.prem-fashion .drawer-head{
+  background:linear-gradient(180deg,#fbfcff,#fff);
+  border-bottom:1px solid var(--pf-border);
+}
+.prem-fashion .drawer-head h3{font-size:1.05rem;font-weight:800;color:var(--pf-dark)}
+.prem-fashion .co-item{border:1px solid var(--pf-border);border-radius:var(--pf-radius)}
+.prem-fashion .co-item:hover{box-shadow:var(--pf-shadow-sm)}
+.prem-fashion #cartCheckout{
+  background:linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark));
+  border-radius:12px;font-weight:800;
+  box-shadow:0 8px 20px rgba(108,60,245,.32);
+}
+.prem-fashion #cartCheckout:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.prem-fashion .mc-toast{
+  background:var(--pf-dark);color:#fff;
+  border-radius:var(--pf-radius-pill);
+  font-weight:700;box-shadow:var(--pf-shadow-lg);
+}
+.prem-fashion .lightbox-overlay{background:rgba(25,20,48,.88)}
+
+/* ---------- 10. FLOAT / BRAND / MISC ---------- */
+.prem-fashion .store-float .sf-wa{
+  background:linear-gradient(135deg,#25d366,#128c7e);
+  box-shadow:0 8px 20px rgba(37,211,102,.35);
+}
+.prem-fashion .store-float .sf-share{
+  background:#fff;color:var(--pf-primary);
+  border:1.5px solid var(--pf-border);box-shadow:var(--pf-shadow-sm);
+}
+.prem-fashion .store-float .sf-share:hover{border-color:var(--pf-primary);transform:translateY(-2px)}
+.prem-fashion .st-brand{color:#8a85a0;font-size:.74rem}
+.prem-fashion .st-brand a{color:var(--pf-primary)}
+.prem-fashion .co-coupon .st-btn{border-radius:10px}
+.prem-fashion .co-payment label:has(input:checked){border-color:var(--pf-primary);background:var(--pf-primary-light)}
+.prem-fashion .alert-err{border-radius:12px}
+
+/* premium features — compact promo & newsletter feel (source .promo-banner/.newsletter) */
+.prem-fashion .st-main .promo-banner{
+  background:linear-gradient(120deg,var(--pf-accent),#ff8a00);
+  border-radius:var(--pf-radius-lg);
+}
+
+/* ---------- 11. RESPONSIVE — no overflow, compact ---------- */
+@media(max-width:1280px){
+  .prem-fashion .st-head-inner{max-width:1180px}
+  .prem-fashion .st-main{max-width:1180px}
+}
+@media(max-width:1024px){
+  .prem-fashion .st-head-inner{padding:.8rem 1rem}
+  .prem-fashion .st-main{padding:.9rem 1rem 3.2rem}
+  .prem-fashion .st-grid{grid-template-columns:repeat(auto-fill,minmax(164px,1fr));gap:10px}
+  .prem-fashion .fashion-grid.st-grid{grid-template-columns:repeat(2,1fr) !important;gap:12px !important}
+  .prem-fashion .st-product{grid-template-columns:1fr 1fr;gap:1.2rem}
+  .prem-fashion .st-checkout{grid-template-columns:1fr 1fr;gap:1.2rem}
+}
+@media(max-width:900px){
+  .prem-fashion .st-product{grid-template-columns:1fr}
+  .prem-fashion .st-product-info{position:static}
+  .prem-fashion .st-checkout{grid-template-columns:1fr}
+  .prem-fashion .st-grid{grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:10px}
+}
+@media(max-width:768px){
+  .prem-fashion .st-head-inner{padding:.7rem 1rem}
+  .prem-fashion .st-search{padding:0 1rem;margin-top:.55rem}
+  .prem-fashion .st-nav{
+    overflow-x:auto;flex-wrap:nowrap;justify-content:flex-start;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+    gap:.38rem;padding:.6rem 1rem;
+  }
+  .prem-fashion .st-nav::-webkit-scrollbar{display:none}
+  .prem-fashion .st-main{padding:.75rem 1rem 3.2rem}
+  .prem-fashion .st-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .prem-fashion .fashion-grid.st-grid{grid-template-columns:repeat(2,1fr) !important;gap:8px !important}
+  .prem-fashion .st-card-body{padding:.52rem .6rem .65rem}
+  .prem-fashion .st-name{font-size:.76rem;min-height:2.15em}
+  .prem-fashion .st-price b{font-size:.85rem}
+  .prem-fashion .st-price del{font-size:.68rem}
+  .prem-fashion .st-btn{font-size:.76rem;padding:.5rem .8rem}
+  .prem-fashion .cart-fab{bottom:14px;left:12px;right:12px;justify-content:center;border-radius:14px;padding:.6rem 1rem}
+  .prem-fashion .cart-drawer{width:100%}
+  .prem-fashion .fashion-hero.st-head h1{font-size:1.22rem}
+  .prem-fashion .st-thumbs img{width:52px;height:52px}
+}
+@media(max-width:600px){
+  .prem-fashion .st-head h1{font-size:1.15rem}
+  .prem-fashion .fashion-hero.st-head h1{font-size:1.14rem}
+  .prem-fashion .st-head p{font-size:.74rem}
+  .prem-fashion .st-grid{grid-template-columns:repeat(2,1fr);gap:7px}
+  .prem-fashion .fashion-grid.st-grid{gap:7px !important}
+  .prem-fashion .st-card{border-radius:13px}
+  .prem-fashion .st-img{aspect-ratio:1/1}
+  .prem-fashion .st-product-info{padding:1.05rem}
+  .prem-fashion .st-product-info h1{font-size:1.08rem}
+  .prem-fashion .st-price.big b{font-size:1.15rem}
+  .prem-fashion .st-checkout .card{padding:1rem}
+  .prem-fashion .st-rel-title{font-size:.98rem;margin:1.45rem 0 .8rem}
+  .prem-fashion .st-done{padding:2.2rem 1rem}
+  .prem-fashion .announce-bar{font-size:.78rem !important}
+}
+@media(max-width:480px){
+  .prem-fashion .st-head{padding:0}
+  .prem-fashion .st-head-inner{padding:.62rem .9rem}
+  .prem-fashion .st-head h1{font-size:1.05rem}
+  .prem-fashion .fashion-hero.st-head h1{font-size:1.06rem}
+  .prem-fashion .st-logo{max-height:46px;max-width:150px}
+  .prem-fashion .st-search{padding:0 .9rem}
+  .prem-fashion .st-search form{padding:.18rem .18rem .18rem .75rem}
+  .prem-fashion .st-search input{font-size:.84rem;padding:.42rem .2rem}
+  .prem-fashion .st-search button{padding:.45rem 1rem;font-size:.78rem}
+  .prem-fashion .st-nav{padding:.5rem .9rem;gap:.32rem}
+  .prem-fashion .st-nav a{font-size:.72rem;padding:.36rem .75rem}
+  .prem-fashion .st-main{padding:.6rem .9rem 3rem}
+  .prem-fashion .st-grid{grid-template-columns:repeat(2,1fr);gap:7px}
+  .prem-fashion .mk-discount{font-size:.62rem;padding:.24rem .5rem;top:8px;right:8px}
+  .prem-fashion .st-soldout-tag{font-size:.62rem;padding:.22rem .55rem;top:8px;left:8px}
+  .prem-fashion .st-card-body{padding:.48rem .55rem .6rem}
+  .prem-fashion .st-name{font-size:.74rem}
+  .prem-fashion .st-price b{font-size:.82rem}
+  .prem-fashion .st-btn{font-size:.74rem;padding:.48rem .7rem;border-radius:10px}
+  .prem-fashion .drawer-head{padding:.85rem 1rem}
+  .prem-fashion #cartItems{padding:.85rem 1rem}
+  .prem-fashion .drawer-foot{padding:.85rem 1rem}
+  .prem-fashion .co-item{gap:.55rem;padding:.55rem}
+  .prem-fashion .co-item img,.prem-fashion .co-noimg{width:48px;height:48px}
+  .prem-fashion .st-thumbs img{width:48px;height:48px}
+  .prem-fashion .qty-row button{width:36px;height:36px;font-size:1rem}
+  .prem-fashion .qty-row input{width:48px;height:36px}
+  .prem-fashion .st-done h1{font-size:1.4rem}
+  .prem-fashion .st-rating-summary{flex-direction:column;text-align:center}
+}
+@media(max-width:375px){
+  .prem-fashion .st-head-inner{padding:.58rem .8rem}
+  .prem-fashion .st-main{padding:.55rem .8rem 3rem}
+  .prem-fashion .st-grid{grid-template-columns:repeat(2,1fr);gap:6px}
+  .prem-fashion .fashion-grid.st-grid{grid-template-columns:repeat(2,1fr) !important;gap:6px !important}
+  .prem-fashion .st-nav{padding:.5rem .8rem}
+  .prem-fashion .st-search{padding:0 .8rem}
+  .prem-fashion .st-card-body{padding:.44rem .5rem .55rem}
+  .prem-fashion .st-name{font-size:.72rem;min-height:2.05em}
+  .prem-fashion .st-price b{font-size:.80rem}
+  .prem-fashion .st-btn{padding:.46rem .65rem;font-size:.72rem}
+  .prem-fashion .st-product-info{padding:.9rem}
+  .prem-fashion .st-done{padding:1.8rem .8rem}
+}
+@media(max-width:360px){
+  .prem-fashion .st-head-inner{padding:.5rem .7rem}
+  .prem-fashion .st-main{padding:.5rem .7rem 2.8rem}
+  .prem-fashion .st-grid{grid-template-columns:1fr;gap:8px}
+  .prem-fashion .fashion-grid.st-grid{grid-template-columns:1fr !important;gap:8px !important}
+  .prem-fashion .st-addons{flex-direction:column;align-items:stretch}
+  .prem-fashion .st-addon{justify-content:center}
+  .prem-fashion .qty-row{justify-content:center}
+  .prem-fashion .qty-row input{width:46px}
+  .prem-fashion .st-done .st-btn{min-width:0;width:100%}
+  .prem-fashion .co-coupon{flex-direction:column}
+  .prem-fashion .co-coupon .st-btn{width:100%}
+  .prem-fashion .st-rating-avg{font-size:2.5rem}
+  .prem-fashion .cart-fab{left:10px;right:10px;bottom:10px}
+}
+
+/* ---------- 12. RTL / LTR helpers ---------- */
+[dir="rtl"] body.store-body.prem-fashion{text-align:right}
+[dir="ltr"] body.store-body.prem-fashion{text-align:left}
+.prem-fashion .st-head,.prem-fashion .st-search,.prem-fashion .st-main,.prem-fashion .st-product,.prem-fashion .st-checkout{max-width:100%}
+
+/* no overflow guarantee */
+body.store-body.prem-fashion, .prem-fashion .st-head, .prem-fashion .st-main, .prem-fashion .st-grid, .prem-fashion .st-card{max-width:100%;overflow-wrap:break-word}

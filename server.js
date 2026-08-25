@@ -28,14 +28,33 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(compression());
+app.use(compression({ level: 9, threshold: 256 }));
+
+/* Static files — cache طويل مع ETag */
+const staticDir = path.join(__dirname, 'public');
+app.use(express.static(staticDir, {
+  etag: true,
+  lastModified: true,
+  maxAge: '7d',
+  setHeaders(res, filePath) {
+    if (/\.(css|js|svg|woff2?|ttf|eot)$/.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
+    } else if (/\.(jpg|jpeg|png|gif|webp|ico|avif)$/.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=2592000, immutable');
+    } else if (/\.(html|ejs)$/.test(filePath)) {
+      res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+    }
+  }
+}));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
+  maxAge: '30d', etag: true, lastModified: true,
+  setHeaders(res) { res.setHeader('Cache-Control', 'public, max-age=2592000, immutable'); }
+}));
 app.get('/sw.js', (req, res) => {
-  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('Cache-Control', 'no-cache, must-revalidate');
   res.setHeader('Content-Type', 'application/javascript');
   res.sendFile(path.join(__dirname, 'public', 'sw.js'));
 });
-app.use(express.static(path.join(__dirname, 'public'), { etag: true }));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'), { maxAge: '1d', etag: true }));
 
 app.use((req, res, next) => {
   req.cookies = {};

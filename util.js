@@ -89,7 +89,8 @@ function requireAdmin(req, res, next) {
 function requireOwner(req, res, next) {
   const user = currentUser(req);
   if (!user) return res.redirect('/login');
-  if (user.role !== 'owner' || !user.store_id) return res.status(403).render('error', { msg: 'ليس لديك متجر مرتبط بحسابك', user });
+  if (user.role === 'superadmin') return res.redirect('/admin?err=' + encodeURIComponent('أنت مدير عام — لوحة المتجر للتجار فقط. استخدم لوحة الإدارة.'));
+  if (user.role !== 'owner' || !user.store_id) return res.status(403).render('error', { msg: 'ليس لديك متجر مرتبط بحسابك — سجل متجراً جديداً من الصفحة الرئيسية', user });
   req.user = user;
   next();
 }

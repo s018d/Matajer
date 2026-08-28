@@ -4,24 +4,44 @@
 <main class="main">
   <%- include('../partials/topbar', { pageTitle: 'الطلبات' }) %>
   <div class="content">
-    <div class="filter-row" style="flex-wrap:wrap; gap:.5rem; align-items:center">
-      <% [['all','الكل'],['new','جديد'],['confirmed','مؤكد'],['completed','مكتمل'],['cancelled','ملغي']].forEach(f => { %>
-        <a class="btn btn-sm <%= filter === f[0] ? 'btn-primary' : 'btn-ghost' %>" href="/panel/orders?status=<%= f[0] %>"><%= f[1] %></a>
-      <% }) %>
-      <a class="btn btn-sm btn-primary" href="/panel/orders/export?status=<%= filter %>&q=<%= typeof searchQ !== 'undefined' ? encodeURIComponent(searchQ) : '' %>" style="margin-left:auto">⬇️ تصدير CSV</a>
-      <form class="search-form" method="get" style="margin-left:auto">
-        <input type="hidden" name="status" value="<%= filter %>">
-        <input type="search" name="q" placeholder="ابحث بالاسم/الهاتف/رقم الطلب…" value="<%= typeof searchQ !== 'undefined' ? searchQ : '' %>">
-        <button class="btn btn-sm" type="submit">🔍</button>
-        <% if (searchQ) { %><a class="btn btn-sm btn-ghost" href="/panel/orders?status=<%= filter %>">إلغاء</a><% } %>
-      </form>
+    <div class="filter-row" style="display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;justify-content:space-between">
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap;align-items:center">
+        <% [['all','الكل'],['new','جديد'],['confirmed','مؤكد'],['completed','مكتمل'],['cancelled','ملغي']].forEach(f => { %>
+          <a class="btn btn-sm <%= filter === f[0] ? 'btn-primary' : 'btn-ghost' %>" href="/panel/orders?status=<%= f[0] %>"><%= f[1] %></a>
+        <% }) %>
+      </div>
+      <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-inline-start:auto">
+        <a class="btn btn-sm btn-ghost" href="/panel/orders/export?status=<%= filter %>&q=<%= typeof searchQ !== 'undefined' ? encodeURIComponent(searchQ) : '' %>" style="border:1.5px solid var(--line,#e2e8f0);background:#fff;font-weight:700;white-space:nowrap">⬇ تصدير CSV</a>
+        <form class="search-form" method="get" style="display:flex;gap:.4rem;align-items:center">
+          <input type="hidden" name="status" value="<%= filter %>">
+          <input type="search" name="q" placeholder="ابحث بالاسم/الهاتف/رقم الطلب…" value="<%= typeof searchQ !== 'undefined' ? searchQ : '' %>">
+          <button class="btn btn-sm" type="submit">🔍</button>
+          <% if (searchQ) { %><a class="btn btn-sm btn-ghost" href="/panel/orders?status=<%= filter %>">إلغاء</a><% } %>
+        </form>
+      </div>
     </div>
     <% if (rows.length === 0) { %>
-      <div class="empty-state" style="text-align:center;padding:3rem 1.5rem;background:linear-gradient(135deg,#f8fafc,#eff6ff);border:1.5px dashed #bfdbfe;border-radius:16px;margin-top:1rem">
-        <div style="font-size:3rem;margin-bottom:.8rem">🧾</div>
-        <h3 style="margin:0 0 .4rem;color:#0f172a">لا طلبات بعد</h3>
-        <p class="muted" style="margin-bottom:.6rem">عندما يطلب زبون من متجرك سيظهر الطلب هنا مع تنبيه صوتي</p>
-        <p class="muted" style="font-size:.82rem">شارك رابط متجرك على واتساب لتبدأ البيع</p>
+      <div class="empty-state" style="text-align:center;padding:2.6rem 1.5rem;background:#fff;border:1.5px dashed #e2e8f0;border-radius:16px;margin-top:1rem;display:flex;flex-direction:column;align-items:center;gap:.6rem">
+        <% if (typeof searchQ !== 'undefined' && searchQ) { %>
+          <div style="width:64px;height:64px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:1.8rem">🔍</div>
+          <h3 style="margin:0;color:#0f172a;font-size:1.05rem">لا نتائج لـ “<%= searchQ %>”</h3>
+          <p class="muted" style="font-size:.88rem">جرّب كلمة أخرى أو امسح البحث لعرض كل الطلبات</p>
+          <a class="btn btn-sm btn-ghost" href="/panel/orders?status=<%= filter %>" style="margin-top:.4rem;border:1.5px solid var(--line,#e2e8f0)">مسح البحث</a>
+        <% } else if (filter !== 'all') { %>
+          <div style="width:64px;height:64px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:1.8rem">📂</div>
+          <h3 style="margin:0;color:#0f172a;font-size:1.05rem">لا طلبات بحالة “<%= ({new:'جديد',confirmed:'مؤكد',completed:'مكتمل',cancelled:'ملغي'}[filter]) %>”</h3>
+          <p class="muted" style="font-size:.88rem">غيّر الفلتر لعرض حالات أخرى</p>
+          <a class="btn btn-sm btn-ghost" href="/panel/orders?status=all" style="margin-top:.4rem;border:1.5px solid var(--line,#e2e8f0)">عرض كل الطلبات</a>
+        <% } else { %>
+          <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#f8fafc,#eff6ff);border:1px solid #dbeafe;display:flex;align-items:center;justify-content:center;font-size:2rem">🧾</div>
+          <h3 style="margin:0;color:#0f172a;font-size:1.1rem">لا طلبات بعد</h3>
+          <p class="muted" style="max-width:360px;font-size:.88rem;line-height:1.7">عندما يطلب زبون من متجرك سيظهر الطلب هنا مع تنبيه صوتي فوري</p>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:.4rem">
+            <a class="btn btn-sm btn-primary" href="/panel/products">➕ أضف منتجاً</a>
+            <button class="btn btn-sm btn-ghost" onclick="navigator.clipboard.writeText(location.origin+'/s/<%= store.slug %>');this.textContent='✓ تم النسخ'" style="border:1.5px solid var(--line,#e2e8f0);background:#fff">🔗 نسخ رابط المتجر</button>
+          </div>
+          <p class="muted" style="font-size:.78rem;margin-top:.2rem">شارك رابط متجرك على واتساب لتبدأ البيع</p>
+        <% } %>
       </div>
     <% } %>
     <% rows.forEach(o => { %>

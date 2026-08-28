@@ -32,6 +32,19 @@ img{max-width:100%;display:block}
 .st-logo:hover{transform:scale(1.04);box-shadow:var(--shadow-md)}
 .st-back{display:inline-flex;align-items:center;gap:.35rem;margin:0 auto .45rem;font-size:.8rem;font-weight:700;color:var(--muted);background:#fff;border:1.5px solid var(--line);border-radius:99px;padding:.42rem .95rem;transition:var(--transition);max-width:max-content}
 .st-back:hover{color:var(--primary);border-color:var(--primary);transform:translateY(-1px);box-shadow:0 6px 16px -8px rgba(14,165,233,.4)}
+/* ===== BREADCRUMB — minimal polish ===== */
+.st-breadcrumb{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;font-size:.82rem;color:var(--muted);margin-bottom:.9rem;padding:.5rem .9rem;background:#fff;border:1.5px solid var(--line);border-radius:99px;width:fit-content;max-width:100%;box-shadow:var(--shadow)}
+.st-breadcrumb a{color:var(--muted);font-weight:600;transition:var(--transition);display:inline-flex;align-items:center;gap:.25rem}
+.st-breadcrumb a:hover{color:var(--primary)}
+.st-breadcrumb span{opacity:.35}
+.st-breadcrumb span:last-child{opacity:1;color:var(--ink);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}
+/* ===== TRUST BADGES — minimal polish ===== */
+.trust-badges{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:.8rem}
+.trust-badge{display:inline-flex;align-items:center;gap:.32rem;font-size:.74rem;font-weight:700;padding:.32rem .7rem;border-radius:99px;border:1.5px solid;letter-spacing:.01em}
+.trust-badge.cod{background:#f0fdf4;border-color:#bbf7d0;color:#15803d}
+.trust-badge.delivery{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}
+.trust-badge.guarantee{background:#fffbeb;border-color:#fde68a;color:#92400e}
+.st-product-info .trust-badges{justify-content:flex-start}
 
 /* ===== SEARCH ===== */
 .st-search{max-width:1120px;margin:0 auto;padding:0 1.2rem}

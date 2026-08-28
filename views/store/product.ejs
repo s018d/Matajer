@@ -24,6 +24,9 @@
   </header>
 <% } %>
 <main class="st-main">
+  <nav class="st-breadcrumb" style="font-size:.82rem; color:var(--muted); margin-bottom:.8rem; display:flex; gap:.4rem; align-items:center; flex-wrap:wrap">
+    <a href="<%= store.base %>/">🏠 <%= store.name %></a><span>›</span><a href="<%= store.base %>/?cat=<%= product.category_id %>">القسم</a><span>›</span><span style="color:var(--ink); font-weight:700"><%= product.name %></span>
+  </nav>
   <div class="st-product">
     <div class="st-gallery">
       <% if (images.length) { %>

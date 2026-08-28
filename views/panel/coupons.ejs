@@ -50,7 +50,7 @@
             <tr><th>الكود</th><th>الخصم</th><th>الحد الأدنى</th><th>استُخدم</th><th>ينتهي</th><th>الحالة</th><th></th></tr>
             <% rows.forEach(c => { %>
               <tr>
-                <td><b dir="ltr"><%= c.code %></b></td>
+                <td><b dir="ltr"><%= c.code %></b> <button class="btn btn-sm btn-ghost" style="padding:.15rem .4rem; font-size:.7rem" onclick="navigator.clipboard.writeText('<%= c.code %>'); this.textContent='✅'; setTimeout(()=>this.textContent='📋',1500)">📋</button></td>
                 <td><%= c.type === 'percent' ? c.value + '%' : money(c.value) %></td>
                 <td><%= c.min_total ? money(c.min_total) : '—' %></td>
                 <td><%= c.used %><%= c.max_uses ? ' / ' + c.max_uses : '' %></td>

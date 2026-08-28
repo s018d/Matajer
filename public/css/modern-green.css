@@ -1,201 +1,95 @@
 /* ============================================================
-   MODERN GREEN MARKET — تصميم عصري بأخضر زمردي وأبيض
-   Matajer adapted: body.store-body.modern-green + Matajer classes
+   MODERN GREEN — السوق النظيف (هندسة + هواء) — هوية عصرية
    ============================================================ */
+body.store-body.modern-green{ background:#F2F7F3 !important; color:#13231D; font-family:'Cairo','Noto Kufi Arabic',sans-serif; }
 
-body.store-body.modern-green,
-body.modern-green {
-    background-color: #F5F7F6 !important;
-    color: #1A2E2A !important;
-    font-family: 'Cairo','Noto Kufi Arabic',sans-serif;
-    padding-bottom: 0 !important;
+/* Hero — بطاقة بيضاء بشريط أخضر يساري + شبكة خلفية نقطية */
+.store-body.modern-green .st-head{
+  background: #FFFFFF !important;
+  border:1px solid #DCE8DF !important; border-left:6px solid #2E7D5E !important;
+  border-radius:16px !important; margin:20px auto !important; max-width:1120px;
+  padding:36px 32px !important; box-shadow:0 12px 40px rgba(16,48,36,0.06) !important;
+  text-align:right; position:relative; overflow:hidden;
 }
+.store-body.modern-green .st-head::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background: linear-gradient(90deg, #2E7D5E, transparent); opacity:.18;
+}
+.store-body.modern-green .st-head::after{ display:none !important; }
+.store-body.modern-green .st-head-inner{
+  justify-content:flex-start !important; text-align:right !important; align-items:flex-start !important;
+  flex-direction:column !important; gap:10px !important; position:relative; z-index:1;
+}
+.store-body.modern-green .st-head h1{
+  font-weight:900 !important; font-size:2.05rem !important; letter-spacing:-0.02em !important;
+  color:#0F2A1F !important; -webkit-text-fill-color:#0F2A1F !important; line-height:1.2 !important;
+  display:flex; align-items:center; gap:.6rem;
+}
+.store-body.modern-green .st-head h1::before{
+  content:''; width:10px; height:10px; background:#2E7D5E; border-radius:50%; box-shadow:0 0 0 6px rgba(46,125,94,0.12); flex-shrink:0;
+}
+.store-body.modern-green .st-head p{ color:#4A645C !important; font-size:1.0rem !important; max-width:560px; line-height:1.75 !important; margin-top:2px !important; }
+.store-body.modern-green .st-logo{ border-radius:12px !important; border:1px solid #DCE8DF !important; }
 
-/* ---------- Header / Hero ---------- */
-.store-body.modern-green .st-head,
-.modern-green .store-head {
-    background: #fff !important;
-    box-shadow: 0 2px 20px rgba(0,80,60,0.05) !important;
-    border-bottom: 2px solid #2E7D5E !important;
-    border: 1px solid #E5EDE8 !important;
-    border-bottom: 2px solid #2E7D5E !important;
-    border-radius: 20px !important;
-    margin: 16px auto !important;
-    max-width: 1120px;
-    padding: 42px 28px !important;
+/* Search — مستطيل نظيف بحدة 10 */
+.store-body.modern-green .st-search{ max-width:1120px; margin:0 auto; padding:0 1.2rem 1rem; }
+.store-body.modern-green .st-search form{
+  background:#FFFFFF !important; border:1.5px solid #C8D9CC !important; border-radius:10px !important;
+  padding:.38rem .38rem .38rem 1.2rem !important; box-shadow:0 4px 18px rgba(16,48,36,0.05) !important;
 }
-.store-body.modern-green .st-head::before { display:none !important; }
-.store-body.modern-green .st-head-inner { max-width:none; width:100%; display:flex; align-items:center; justify-content:center; text-align:center; flex-direction:column; gap:12px; }
-.store-body.modern-green .st-head h1,
-.modern-green .store-head .brand,
-.modern-green .hero-section .hero-text h1 {
-    color: #1A2E2A !important;
-    -webkit-text-fill-color: #1A2E2A !important;
-    background: none !important;
-    font-weight: 800 !important;
-    font-size: 2.05rem !important;
-    line-height: 1.25;
-}
-.store-body.modern-green .st-head h1 span,
-.modern-green .hero-section .hero-text h1 span,
-.modern-green .store-head .brand i { color: #2E7D5E !important; }
-.store-body.modern-green .st-head p,
-.modern-green .hero-section .hero-text p { color:#3A5A4E !important; font-size:1.02rem !important; margin-top:10px !important; line-height:1.7; }
-.store-body.modern-green .st-logo { border-radius:14px !important; box-shadow:0 4px 16px rgba(0,0,0,0.04) !important; }
-.store-body.modern-green .fashion-badge,
-.store-body.modern-green .classic-badge,
-.store-body.modern-green .natural-badge,
-.green-badge { background: rgba(46,125,94,0.10) !important; border:1px solid rgba(46,125,94,0.18) !important; color:#2E7D5E !important; padding:.32rem .85rem !important; border-radius:99px !important; font-weight:700 !important; font-size:.74rem !important; }
-
-/* ---------- Search ---------- */
-.store-body.modern-green .st-search { max-width:1120px; margin:0 auto; padding:0 1.2rem 1rem; }
-.store-body.modern-green .st-search form {
-    background: #F8FAF9 !important;
-    border: 1.5px solid #D0D9D4 !important;
-    border-radius: 12px !important;
-    padding: .32rem .32rem .32rem 1.2rem !important;
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.02) !important;
-}
-.store-body.modern-green .st-search input,
-.modern-green .store-search input {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 10px 18px !important;
-    font-size: .95rem !important;
-    color: #1A2E2A !important;
-}
-.store-body.modern-green .st-search input::placeholder { color:#8A9B92 !important; }
-.store-body.modern-green .st-search input:focus { outline:none; }
-.store-body.modern-green .st-search button,
-.modern-green .store-search button {
-    background: linear-gradient(135deg,#2E7D5E,#1F5E45) !important;
-    border-radius: 10px !important;
-    font-weight: 700 !important;
-    box-shadow: 0 4px 14px rgba(46,125,94,0.22) !important;
+.store-body.modern-green .st-search input{ color:#0F2A1F !important; font-size:.98rem !important; padding:11px 16px !important; }
+.store-body.modern-green .st-search input::placeholder{ color:#8FA99E !important; }
+.store-body.modern-green .st-search button{
+  background:#2E7D5E !important; color:#FFFFFF !important; border-radius:8px !important;
+  font-weight:800 !important; font-size:.92rem !important; letter-spacing:.02em;
+  box-shadow:0 6px 16px rgba(46,125,94,0.20) !important; padding:.62rem 1.6rem !important;
 }
 
-/* ---------- Nav ---------- */
-.store-body.modern-green .st-nav { gap:.5rem !important; }
-.store-body.modern-green .st-nav a {
-    background: #fff !important;
-    border: 1.5px solid #E5EDE8 !important;
-    color: #3A5A4E !important;
-    border-radius: 10px !important;
-    font-weight: 600 !important;
+/* Nav — حبوب بيضاء بحد أخضر عند التحويم */
+.store-body.modern-green .st-nav{ justify-content:flex-start !important; gap:.55rem !important; padding:1rem 1.2rem !important; }
+.store-body.modern-green .st-nav a{
+  background:#FFFFFF !important; border:1px solid #DCE8DF !important; color:#4A645C !important;
+  border-radius:10px !important; padding:.48rem 1.1rem !important; font-size:.84rem !important; font-weight:700 !important;
+  box-shadow:0 2px 8px rgba(16,48,36,0.03) !important;
 }
-.store-body.modern-green .st-nav a:hover { background:#F0F5F2 !important; border-color:#2E7D5E !important; color:#1A2E2A !important; }
-.store-body.modern-green .st-nav a.on { background:#2E7D5E !important; color:#fff !important; border-color:#2E7D5E !important; box-shadow:0 6px 16px rgba(46,125,94,0.25) !important; }
+.store-body.modern-green .st-nav a:hover{ border-color:#2E7D5E !important; color:#0F2A1F !important; background:#F2F7F3 !important; transform:translateY(-1px) !important; }
+.store-body.modern-green .st-nav a.on{ background:#2E7D5E !important; color:#FFFFFF !important; border-color:#2E7D5E !important; box-shadow:0 6px 16px rgba(46,125,94,0.20) !important; }
 
-/* ---------- Grid ---------- */
-.store-body.modern-green .st-grid,
-.modern-green .product-grid {
-    display:grid !important;
-    grid-template-columns: repeat(auto-fill,minmax(200px,1fr)) !important;
-    gap: 20px !important;
-    padding: 0 !important;
+/* Grid — 3 أعمدة متوازنة بمسافات تنفس */
+.store-body.modern-green .st-main{ padding:0 1.4rem 5rem !important; max-width:1120px; }
+.store-body.modern-green .st-grid{ grid-template-columns: repeat(3, 1fr) !important; gap:22px !important; }
+.store-body.modern-green .st-card{
+  background:#FFFFFF !important; border-radius:16px !important; padding:12px !important;
+  border:1px solid #E3EDE6 !important; box-shadow:0 6px 24px rgba(16,48,36,0.04) !important;
+  transition: all .28s !important;
 }
-.store-body.modern-green .st-main { padding: 0 1.2rem 4rem !important; }
+.store-body.modern-green .st-card:hover{ transform:translateY(-6px) !important; box-shadow:0 16px 40px rgba(16,48,36,0.08) !important; border-color:#C8D9CC !important; }
+.store-body.modern-green .st-img{
+  border-radius:12px !important; background:#F2F7F3 !important; aspect-ratio:1/1 !important;
+  overflow:hidden !important; border:1px solid #E8F0E8;
+}
+.store-body.modern-green .st-img img{ transition:transform .5s !important; }
+.store-body.modern-green .st-card:hover .st-img img{ transform:scale(1.05) !important; }
+.store-body.modern-green .st-card-body{ padding:.9rem .3rem .4rem !important; gap:.4rem !important; }
+.store-body.modern-green .st-name{ color:#0F2A1F !important; font-weight:800 !important; font-size:.95rem !important; line-height:1.45 !important; }
+.store-body.modern-green .st-price b{ color:#2E7D5E !important; font-size:1.18rem !important; font-weight:900 !important; }
+.store-body.modern-green .st-price del{ color:#8FA99E !important; }
+.store-body.modern-green .st-btn{
+  background:#2E7D5E !important; color:#FFFFFF !important; border-radius:8px !important;
+  font-weight:800 !important; font-size:.9rem !important; letter-spacing:.02em;
+  padding:.7rem 1rem !important; box-shadow:0 6px 16px rgba(46,125,94,0.16) !important; border:none !important;
+}
+.store-body.modern-green .st-btn:hover{ background:#1F5E45 !important; transform:translateY(-1px) !important; }
 
-/* ---------- Cards ---------- */
-.store-body.modern-green .st-card,
-.modern-green .product-card {
-    background: #fff !important;
-    border-radius: 16px !important;
-    padding: 14px !important;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.03) !important;
-    border: 1px solid #E5EDE8 !important;
-    transition: all .3s !important;
-}
-.store-body.modern-green .st-card:hover,
-.modern-green .product-card:hover {
-    transform: translateY(-4px) !important;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.06) !important;
-    border-color: #2E7D5E !important;
-}
-.store-body.modern-green .st-img,
-.modern-green .product-card .product-image {
-    border-radius: 12px !important;
-    background: #E8F0EC !important;
-    aspect-ratio: 1/1 !important;
-    overflow: hidden !important;
-}
-.store-body.modern-green .st-img::after { display:none !important; }
-.store-body.modern-green .st-img img,
-.modern-green .product-card .product-image img { transition: transform .42s !important; }
-.store-body.modern-green .st-card:hover .st-img img,
-.modern-green .product-card:hover .product-image img { transform: scale(1.04) !important; }
-.store-body.modern-green .st-card-body { padding: .85rem .2rem .3rem !important; }
-.store-body.modern-green .st-name,
-.modern-green .product-card .product-name { color:#1A2E2A !important; font-weight:700 !important; font-size:.92rem !important; }
-.store-body.modern-green .st-price b,
-.modern-green .product-card .product-price { color:#2E7D5E !important; font-weight:800 !important; font-size:1.12rem !important; }
-.store-body.modern-green .st-price del { color:#8A9B92 !important; }
-.store-body.modern-green .st-btn,
-.modern-green .product-card .btn-add,
-.modern-green .btn-green,
-.modern-green .btn-primary,
-.modern-green .btn-offer {
-    background: linear-gradient(135deg,#2E7D5E,#1F5E45) !important;
-    color:#fff !important;
-    border: none !important;
-    border-radius: 10px !important;
-    font-weight: 700 !important;
-    box-shadow: 0 4px 14px rgba(46,125,94,0.20) !important;
-    width: 100%;
-}
-.store-body.modern-green .st-btn:hover,
-.modern-green .product-card .btn-add:hover { background:#1F5E45 !important; transform:translateY(-1px) !important; }
+/* Product */
+.store-body.modern-green .st-product-info, .store-body.modern-green .st-gallery, .store-body.modern-green .st-checkout .card{ border-radius:16px !important; border-color:#E3EDE6 !important; }
 
-/* Offer banner alias */
-.modern-green .offer-banner {
-    background: linear-gradient(135deg,#2E7D5E,#1F5E45) !important;
-    color:#fff !important;
-    border-radius: 20px !important;
-    padding: 28px 24px !important;
-    margin: 0 0 20px !important;
-    text-align:center;
-    box-shadow: 0 8px 30px rgba(46,125,94,0.14) !important;
+/* Responsive */
+@media(max-width:1000px){ .store-body.modern-green .st-grid{ grid-template-columns: repeat(2, 1fr) !important; } }
+@media(max-width:640px){
+  .store-body.modern-green .st-head{ margin:14px 12px !important; padding:26px 18px !important; border-radius:14px !important; border-left-width:4px !important; }
+  .store-body.modern-green .st-head h1{ font-size:1.65rem !important; }
+  .store-body.modern-green .st-grid{ grid-template-columns: repeat(2, 1fr) !important; gap:14px !important; }
+  .store-body.modern-green .st-main{ padding:0 12px 5rem !important; }
 }
-.modern-green .offer-banner .discount { font-size:2.6rem !important; font-weight:800 !important; }
-.modern-green .offer-banner .timer { font-size:1.7rem !important; font-weight:800 !important; background:rgba(255,255,255,0.10) !important; padding:8px 24px !important; border-radius:99px !important; display:inline-block !important; }
-
-/* Bottom nav (جوال) — يظهر فقط على الجوال */
-.modern-green .bottom-nav { display:none; }
-.store-body.modern-green .bottom-nav { display:none; }
-
-/* ---------- Product / Checkout ---------- */
-.store-body.modern-green .st-product-info,
-.store-body.modern-green .st-gallery,
-.store-body.modern-green .st-checkout .card {
-    border-radius: 16px !important;
-    border-color: #E5EDE8 !important;
-    box-shadow: 0 2px 14px rgba(0,0,0,0.03) !important;
-}
-.store-body.modern-green .st-product-info h1 { color:#1A2E2A !important; }
-.store-body.modern-green .st-desc { color:#3A5A4E !important; }
-.store-body.modern-green .cart-fab,
-.store-body.modern-green .st-btn.big-btn,
-.store-body.modern-green #cartCheckout { background: linear-gradient(135deg,#2E7D5E,#1F5E45) !important; }
-
-/* ---------- Responsive ---------- */
-@media (max-width: 768px) {
-    .store-body.modern-green .bottom-nav { display:flex !important; position:fixed; bottom:0; left:0; width:100%; background:#fff; border-top:1px solid #E5EDE8; box-shadow:0 -2px 20px rgba(0,0,0,0.04); padding:6px 0 env(safe-area-inset-bottom,6px); justify-content:space-around; z-index:1000; }
-    .store-body.modern-green .bottom-nav .nav-item { display:flex; flex-direction:column; align-items:center; color:#8A9B92; font-size:.64rem; padding:4px 8px; }
-    .store-body.modern-green .bottom-nav .nav-item.active { color:#2E7D5E; }
-    body.store-body.modern-green { padding-bottom: 72px !important; }
-
-    .store-body.modern-green .st-head { padding:28px 16px !important; margin:12px !important; border-radius:16px !important; text-align:center; }
-    .store-body.modern-green .st-head h1 { font-size:1.65rem !important; }
-    .store-body.modern-green .st-head-inner { flex-direction:column; text-align:center; }
-    .store-body.modern-green .st-grid,
-    .modern-green .product-grid { grid-template-columns: repeat(2,1fr) !important; gap:12px !important; }
-    .store-body.modern-green .st-card { padding:10px !important; }
-    .store-body.modern-green .st-main { padding: 0 12px 5rem !important; }
-    .modern-green .offer-banner { padding:20px 16px !important; margin:0 12px 20px !important; border-radius:16px !important; }
-    .modern-green .offer-banner .discount { font-size:2.1rem !important; }
-    .modern-green .offer-banner .timer { font-size:1.45rem !important; padding:6px 20px !important; }
-}
-@media (max-width: 360px) {
-    .store-body.modern-green .st-grid { grid-template-columns: 1fr !important; }
-}
+@media(max-width:380px){ .store-body.modern-green .st-grid{ grid-template-columns: repeat(2,1fr) !important; } }

@@ -1,233 +1,88 @@
 /* ============================================================
-   BLACK GOLD EMPIRE — متجر فاخر جداً، أسود مع ذهبي معدني
-   Matajer adapted: body.store-body.black-gold + Matajer classes
+   BLACK GOLD — الليل المترف (توهج وتكثيف) — هوية جريئة
    ============================================================ */
-
-body.store-body.black-gold,
-body.black-gold {
-    background-color: #0A0A0A !important;
-    color: #E0D5C8 !important;
-    font-family: 'Cairo','Noto Kufi Arabic',sans-serif;
-}
-body.store-body.black-gold::before,
-body.black-gold::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-image: repeating-linear-gradient(45deg, rgba(201,169,110,0.015) 0px, rgba(201,169,110,0.015) 1px, transparent 1px, transparent 20px);
-    pointer-events: none;
-    z-index: 0;
-}
-.store-body.black-gold { position: relative; }
-
-/* ---------- Header / Hero ---------- */
-.store-body.black-gold .st-head,
-.black-gold .store-head {
-    background: rgba(10,10,10,0.92) !important;
-    border-bottom: 1px solid rgba(201,169,110,0.22) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 2px 30px rgba(0,0,0,0.6) !important;
-    border-radius: 24px !important;
-    margin: 16px auto !important;
-    max-width: 1120px;
-    padding: 44px 30px !important;
-    border: 1px solid rgba(201,169,110,0.14) !important;
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-}
-.store-body.black-gold .st-head::before { display:none; }
-.store-body.black-gold .st-head::after {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(circle at 30% 40%, rgba(201,169,110,0.04), transparent 62%);
-    pointer-events: none;
-    z-index: 0;
+body.store-body.black-gold{ background:#060608 !important; color:#E8DCC8; font-family:'Cairo','Noto Kufi Arabic',sans-serif; }
+body.store-body.black-gold::before{
+  content:''; position:fixed; inset:0;
+  background: radial-gradient(700px 400px at 50% -10%, rgba(201,169,110,0.10), transparent 60%), linear-gradient(180deg, rgba(201,169,110,0.02), transparent);
+  pointer-events:none; z-index:0;
 }
 
-.store-body.black-gold .st-head-inner { position: relative; z-index: 1; max-width:none; width:100%; display:flex; align-items:center; justify-content:center; text-align:center; flex-direction:column; gap:12px; }
-.store-body.black-gold .st-head h1,
-.black-gold .store-head .brand,
-.black-gold .hero-section .hero-text h1 {
-    color: #E0D5C8 !important;
-    -webkit-text-fill-color: #E0D5C8 !important;
-    background: none !important;
-    font-weight: 800 !important;
-    font-size: 2.15rem !important;
-    text-shadow: 0 0 30px rgba(201,169,110,0.15);
-    line-height: 1.25;
+/* Hero — شريط أسود كثيف بذهبي حاد، محاذاة يمين (RTL) مع خط ذهبي علوي */
+.store-body.black-gold .st-head{
+  background: linear-gradient(135deg, #0A0A0F 0%, #141318 55%, #0A0A0F 100%) !important;
+  border: 1px solid rgba(201,169,110,0.18) !important; border-top: 2px solid #C9A96E !important;
+  border-radius: 12px !important; margin:18px auto !important; max-width:1120px;
+  padding:38px 28px !important; box-shadow:0 20px 60px rgba(0,0,0,0.70) !important;
+  text-align:right; overflow:hidden; position:relative;
 }
-.store-body.black-gold .st-head h1 span,
-.black-gold .hero-section .hero-text h1 span,
-.black-gold .store-head .brand i { color: #C9A96E !important; text-shadow: 0 0 40px rgba(201,169,110,0.18); }
-.store-body.black-gold .st-head p,
-.black-gold .hero-section .hero-text p { color: #A09080 !important; font-size: 1.02rem !important; margin-top:10px !important; line-height:1.7; }
-.store-body.black-gold .st-logo { border-radius:14px !important; border:1px solid rgba(201,169,110,0.15); box-shadow:0 6px 24px rgba(0,0,0,0.5) !important; }
-.store-body.black-gold .fashion-badge,
-.store-body.black-gold .classic-badge,
-.black-gold-badge { background: rgba(201,169,110,0.12) !important; border:1px solid rgba(201,169,110,0.25) !important; color:#C9A96E !important; padding:.32rem .85rem !important; border-radius:99px !important; font-size:.74rem !important; font-weight:700 !important; }
+.store-body.black-gold .st-head::before{ display:none !important; }
+.store-body.black-gold .st-head::after{
+  content:''; position:absolute; top:-40px; left:-20px; width:220px; height:220px;
+  background: radial-gradient(circle, rgba(201,169,110,0.18), transparent 70%); filter:blur(18px); pointer-events:none;
+}
+.store-body.black-gold .st-head-inner{ justify-content:flex-start !important; text-align:right !important; align-items:flex-start !important; flex-direction:column !important; gap:10px !important; z-index:1; position:relative; }
+.store-body.black-gold .st-head h1{
+  font-weight:900 !important; font-size:2.35rem !important; letter-spacing:-0.03em !important;
+  color:#FFFFFF !important; -webkit-text-fill-color:#FFFFFF !important; line-height:1.1 !important;
+  text-shadow:0 2px 20px rgba(201,169,110,0.20);
+}
+.store-body.black-gold .st-head h1 span{ color:#C9A96E !important; }
+.store-body.black-gold .st-head p{ color:#A89A8A !important; font-size:.98rem !important; max-width:520px; line-height:1.7 !important; }
+.store-body.black-gold .st-logo{ border-radius:10px !important; border:1px solid rgba(201,169,110,0.20) !important; }
 
-/* ---------- Search ---------- */
-.store-body.black-gold .st-search { max-width:1120px; margin:0 auto; padding:0 1.2rem 1rem; }
-.store-body.black-gold .st-search form {
-    background: rgba(255,255,255,0.05) !important;
-    border: 1.5px solid rgba(201,169,110,0.15) !important;
-    border-radius: 30px !important;
-    padding: .32rem .32rem .32rem 1.2rem !important;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.35) !important;
-    backdrop-filter: blur(6px);
+/* Search — داكن بضباب ذهبي */
+.store-body.black-gold .st-search{ max-width:1120px; margin:0 auto; padding:0 1.2rem .9rem; }
+.store-body.black-gold .st-search form{
+  background:#111114 !important; border:1px solid rgba(201,169,110,0.14) !important; border-radius:12px !important;
+  padding:.35rem .35rem .35rem 1rem !important; box-shadow:0 8px 32px rgba(0,0,0,0.60) !important;
 }
-.store-body.black-gold .st-search input,
-.black-gold .store-search input {
-    background: transparent !important;
-    color: #E0D5C8 !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 10px 20px !important;
-    font-size: .95rem !important;
-}
-.store-body.black-gold .st-search input::placeholder,
-.black-gold .store-search input::placeholder { color: #6A5E52 !important; }
-.store-body.black-gold .st-search input:focus { outline:none; }
-.store-body.black-gold .st-search button,
-.black-gold .store-search button {
-    background: linear-gradient(135deg,#C9A96E,#A8894E) !important;
-    color: #0A0A0A !important;
-    border-radius: 30px !important;
-    font-weight: 800 !important;
-    box-shadow: 0 4px 18px rgba(201,169,110,0.28) !important;
+.store-body.black-gold .st-search input{ color:#E8DCC8 !important; font-size:.96rem !important; padding:11px 16px !important; }
+.store-body.black-gold .st-search input::placeholder{ color:#6B5E50 !important; letter-spacing:.02em; }
+.store-body.black-gold .st-search button{
+  background:#C9A96E !important; color:#080608 !important; border-radius:10px !important;
+  font-weight:900 !important; letter-spacing:.06em; text-transform:uppercase; font-size:.86rem !important;
+  box-shadow:0 6px 18px rgba(201,169,110,0.25) !important; padding:.6rem 1.5rem !important;
 }
 
-/* ---------- Nav ---------- */
-.store-body.black-gold .st-nav { gap:.55rem !important; }
-.store-body.black-gold .st-nav a {
-    background: #161616 !important;
-    border: 1px solid rgba(201,169,110,0.10) !important;
-    color: #A09080 !important;
-    border-radius: 12px !important;
+/* Nav — حبوب داكنة بأحرف كبيرة */
+.store-body.black-gold .st-nav{ justify-content:flex-start !important; gap:.5rem !important; padding:.9rem 1.2rem !important; }
+.store-body.black-gold .st-nav a{
+  background:#15151A !important; border:1px solid rgba(255,255,255,0.06) !important; color:#A89A8A !important;
+  border-radius:10px !important; padding:.45rem 1rem !important; font-size:.78rem !important; font-weight:800 !important;
+  letter-spacing:.08em; text-transform:uppercase;
 }
-.store-body.black-gold .st-nav a:hover {
-    background: rgba(201,169,110,0.08) !important;
-    border-color: rgba(201,169,110,0.20) !important;
-    color: #E0D5C8 !important;
-}
-.store-body.black-gold .st-nav a.on {
-    background: #C9A96E !important;
-    color: #0A0A0A !important;
-    border-color: #C9A96E !important;
-    box-shadow: 0 6px 18px rgba(201,169,110,0.25) !important;
-}
+.store-body.black-gold .st-nav a:hover{ border-color:rgba(201,169,110,0.30) !important; color:#E8DCC8 !important; background:#1C1C20 !important; }
+.store-body.black-gold .st-nav a.on{ background:#C9A96E !important; color:#080608 !important; border-color:#C9A96E !important; box-shadow:0 6px 18px rgba(201,169,110,0.30) !important; }
 
-/* ---------- Grid ---------- */
-.store-body.black-gold .st-grid,
-.black-gold .product-grid {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill,minmax(200px,1fr)) !important;
-    gap: 20px !important;
-    padding: 0 !important;
+/* Grid — كثافة عالية 4 أعمدة */
+.store-body.black-gold .st-main{ padding:0 1.1rem 5rem !important; max-width:1160px; }
+.store-body.black-gold .st-grid{ grid-template-columns: repeat(4, 1fr) !important; gap:14px !important; }
+.store-body.black-gold .st-card{
+  background:#111114 !important; border-radius:12px !important; padding:10px !important;
+  border:1px solid rgba(255,255,255,0.06) !important; border-top:1px solid rgba(201,169,110,0.10) !important;
+  box-shadow:0 8px 28px rgba(0,0,0,0.60) !important; transition:all .25s !important;
 }
-.store-body.black-gold .st-main { padding: 0 1.2rem 4rem !important; }
+.store-body.black-gold .st-card:hover{ transform:translateY(-5px) !important; border-color:rgba(201,169,110,0.26) !important; box-shadow:0 16px 40px rgba(0,0,0,0.75), 0 0 20px rgba(201,169,110,0.08) !important; }
+.store-body.black-gold .st-img{ border-radius:10px !important; background:#0A0A0F !important; aspect-ratio:1/1 !important; overflow:hidden !important; }
+.store-body.black-gold .st-img img{ filter:contrast(1.05) brightness(0.98); transition:transform .5s, filter .3s !important; }
+.store-body.black-gold .st-card:hover .st-img img{ transform:scale(1.05) !important; filter:brightness(1.05) !important; }
+.store-body.black-gold .st-card-body{ padding:.7rem .3rem .4rem !important; gap:.3rem !important; }
+.store-body.black-gold .st-name{ color:#E8DCC8 !important; font-weight:700 !important; font-size:.86rem !important; line-height:1.45 !important; letter-spacing:.01em; }
+.store-body.black-gold .st-price b{ color:#C9A96E !important; font-size:1.06rem !important; font-weight:900 !important; }
+.store-body.black-gold .st-price del{ color:#6B5E50 !important; font-size:.72rem !important; }
+.store-body.black-gold .st-btn{
+  background: transparent !important; color:#C9A96E !important; border:1.5px solid #C9A96E !important;
+  border-radius:10px !important; font-weight:800 !important; font-size:.82rem !important; letter-spacing:.06em; text-transform:uppercase;
+  padding:.6rem .9rem !important; box-shadow:none !important;
+}
+.store-body.black-gold .st-btn:hover{ background:#C9A96E !important; color:#080608 !important; transform:translateY(-1px) !important; box-shadow:0 8px 20px rgba(201,169,110,0.22) !important; }
 
-/* ---------- Cards ---------- */
-.store-body.black-gold .st-card,
-.black-gold .product-card {
-    background: #161616 !important;
-    border-radius: 20px !important;
-    padding: 14px !important;
-    box-shadow: 0 4px 30px rgba(0,0,0,0.55) !important;
-    border: 1px solid rgba(201,169,110,0.08) !important;
-    transition: all .32s !important;
-}
-.store-body.black-gold .st-card:hover,
-.black-gold .product-card:hover {
-    transform: translateY(-6px) !important;
-    box-shadow: 0 14px 50px rgba(0,0,0,0.75) !important;
-    border-color: rgba(201,169,110,0.22) !important;
-}
-.store-body.black-gold .st-img,
-.black-gold .product-card .product-image {
-    border-radius: 16px !important;
-    background: #111 !important;
-    aspect-ratio: 1/1 !important;
-    overflow: hidden !important;
-    padding: 6px !important;
-}
-.store-body.black-gold .st-img::after { display:none !important; }
-.store-body.black-gold .st-img img,
-.black-gold .product-card .product-image img {
-    border-radius: 12px !important;
-    filter: brightness(0.96);
-    transition: transform .45s, filter .3s !important;
-}
-.store-body.black-gold .st-card:hover .st-img img,
-.black-gold .product-card:hover .product-image img {
-    transform: scale(1.04) !important;
-    filter: brightness(1) !important;
-}
-.store-body.black-gold .st-card-body { padding: .85rem .2rem .3rem !important; }
-.store-body.black-gold .st-name,
-.black-gold .product-card .product-name { color: #E0D5C8 !important; font-weight:700 !important; font-size:.92rem !important; }
-.store-body.black-gold .st-price b,
-.black-gold .product-card .product-price { color: #C9A96E !important; font-weight:800 !important; font-size:1.12rem !important; }
-.store-body.black-gold .st-price del { color:#6A5E52 !important; }
-.store-body.black-gold .st-btn,
-.black-gold .product-card .btn-add,
-.black-gold .btn-gold,
-.black-gold .btn-primary,
-.black-gold .btn-offer {
-    background: linear-gradient(135deg,#C9A96E,#A8894E) !important;
-    color: #0A0A0A !important;
-    border: none !important;
-    border-radius: 30px !important;
-    font-weight: 800 !important;
-    box-shadow: 0 4px 18px rgba(201,169,110,0.22) !important;
-    width: 100%;
-}
-.store-body.black-gold .st-btn:hover,
-.black-gold .product-card .btn-add:hover { background:#B8944E !important; transform:translateY(-1px) !important; }
+/* Product */
+.store-body.black-gold .st-product-info, .store-body.black-gold .st-gallery, .store-body.black-gold .st-checkout .card{ background:#111114 !important; border-color:rgba(255,255,255,0.06) !important; border-radius:12px !important; }
 
-/* Off-grid offer card alias */
-.black-gold .offer-card { background:linear-gradient(135deg,#161616,#222) !important; border:1px solid rgba(201,169,110,0.18) !important; border-radius:20px !important; padding:24px 20px !important; text-align:center; margin:0 0 20px !important; }
-
-/* ---------- Product / Checkout dark ---------- */
-.store-body.black-gold .st-product-info,
-.store-body.black-gold .st-gallery,
-.store-body.black-gold .st-checkout .card,
-.store-body.black-gold .drawer-head,
-.store-body.black-gold .drawer-foot {
-    background: #161616 !important;
-    border-color: rgba(201,169,110,0.10) !important;
-    color: #E0D5C8 !important;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.45) !important;
-}
-.store-body.black-gold .st-product-info h1 { color:#E0D5C8 !important; }
-.store-body.black-gold .st-desc { color:#A09080 !important; }
-.store-body.black-gold .qty-row button { background:#0A0A0A !important; border-color:rgba(201,169,110,0.18) !important; color:#C9A96E !important; }
-.store-body.black-gold .qty-row input { background:#0A0A0A !important; border-color:rgba(201,169,110,0.14) !important; color:#E0D5C8 !important; }
-.store-body.black-gold .st-thumbs img { border-color:transparent !important; }
-.store-body.black-gold .st-thumbs img.active { border-color:#C9A96E !important; }
-.store-body.black-gold .cart-fab,
-.store-body.black-gold .st-btn.big-btn,
-.store-body.black-gold #cartCheckout { background: linear-gradient(135deg,#C9A96E,#A8894E) !important; color:#0A0A0A !important; }
-.store-body.black-gold .co-item { background:#111 !important; border-color:rgba(201,169,110,0.08) !important; }
-.store-body.black-gold .co-info span { color:#E0D5C8 !important; }
-.store-body.black-gold .st-brand { color:#6A5E52 !important; }
-.store-body.black-gold .st-brand a { color:#C9A96E !important; }
-
-/* ---------- Responsive ---------- */
-@media (max-width: 768px) {
-    .store-body.black-gold .st-head { padding:28px 16px !important; margin:12px !important; border-radius:20px !important; text-align:center; }
-    .store-body.black-gold .st-head h1 { font-size:1.65rem !important; }
-    .store-body.black-gold .st-head-inner { flex-direction:column; text-align:center; }
-    .store-body.black-gold .st-grid,
-    .black-gold .product-grid { grid-template-columns: repeat(2,1fr) !important; gap:12px !important; }
-    .store-body.black-gold .st-card { padding:10px !important; }
-    .store-body.black-gold .st-main { padding: 0 12px 5rem !important; }
-}
-@media (max-width: 360px) {
-    .store-body.black-gold .st-grid { grid-template-columns: 1fr !important; }
-}
+/* Responsive — يحافظ على الكثافة */
+@media(max-width:1100px){ .store-body.black-gold .st-grid{ grid-template-columns: repeat(3, 1fr) !important; } }
+@media(max-width:860px){ .store-body.black-gold .st-grid{ grid-template-columns: repeat(2, 1fr) !important; gap:12px !important; } .store-body.black-gold .st-head h1{ font-size:1.9rem !important; } }
+@media(max-width:640px){ .store-body.black-gold .st-head{ margin:12px !important; padding:28px 18px !important; border-radius:10px !important; } .store-body.black-gold .st-grid{ grid-template-columns: repeat(2,1fr) !important; gap:10px !important; } }
+@media(max-width:380px){ .store-body.black-gold .st-grid{ grid-template-columns: repeat(2,1fr) !important; } }

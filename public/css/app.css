@@ -342,3 +342,7 @@ textarea{resize:vertical}
   .card > table{ min-width:520px; }
   .card{ overflow-x:auto; }
 }
+/* v5.1 polish: breadcrumbs + sitemap + store product */
+.st-breadcrumb a{color:var(--brand);text-decoration:none}
+.st-breadcrumb a:hover{color:var(--brand-dark)}
+

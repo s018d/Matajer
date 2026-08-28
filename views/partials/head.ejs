@@ -9,6 +9,10 @@
 <meta property="og:title" content="<%= typeof title !== 'undefined' ? title : 'دُكّان — منصة المتاجر' %>">
 <meta property="og:description" content="<%= typeof desc !== 'undefined' && desc ? desc : 'دُكّان Dukkan — منصة عراقية لإنشاء متاجر إلكترونية جاهزة.' %>">
 <%- typeof ogImage !== 'undefined' ? '<meta property="og:image" content="' + ogImage + '">' : '' %>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<%= typeof title !== 'undefined' ? title : 'دُكّان — منصة المتاجر' %>">
+<meta name="twitter:description" content="<%= typeof desc !== 'undefined' && desc ? desc : 'دُكّان Dukkan — منصة عراقية لإنشاء متاجر إلكترونية جاهزة.' %>">
+<link rel="canonical" href="<%= typeof canonical !== 'undefined' ? canonical : '' %>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;600;700;800;900&family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">

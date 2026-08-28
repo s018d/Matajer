@@ -60,7 +60,7 @@ router.get('/', (req, res) => {
 router.get('/review', (req, res) => {
   const newStores = db.prepare("SELECT s.*, u.username owner_username FROM stores s LEFT JOIN users u ON u.store_id=s.id WHERE date(s.created_at) >= date('now','-7 days') ORDER BY s.id DESC").all();
   const pendingReviews = db.prepare("SELECT r.*, p.name product_name, s.name store_name, s.slug store_slug FROM reviews r JOIN products p ON p.id=r.product_id JOIN stores s ON s.id=p.store_id WHERE r.approved=0 ORDER BY r.id DESC LIMIT 30").all();
-  res.render('admin/review', { newStores, pendingReviews, user: req.user });
+  res.render('admin/review', { newStores, pendingReviews, user: req.user, ok: req.query.ok || '', err: req.query.err || '' });
 });
 
 router.get('/stores', (req, res) => {
@@ -105,6 +105,19 @@ router.post('/domains/:id/link', (req, res) => {
   res.redirect('/admin/domains?ok=' + encodeURIComponent(`تم ربط ${domain} بمتجر ${r.store_name}`));
 });
 
+router.post('/review/bulk-approve', (req, res) => {
+  let ids = req.body.ids;
+  if (!ids) return res.redirect('/admin/review?err=' + encodeURIComponent('لم يتم تحديد تقييمات'));
+  if (!Array.isArray(ids)) ids = [ids];
+  const valid = ids.map(v => Number(v)).filter(n => Number.isInteger(n) && n > 0);
+  if (valid.length === 0) return res.redirect('/admin/review?err=' + encodeURIComponent('لم يتم تحديد تقييمات'));
+  const stmt = db.prepare('UPDATE reviews SET approved=1 WHERE id=?');
+  const tx = db.transaction(list => { for (const id of list) stmt.run(id); });
+  tx(valid);
+  logActivity(req.user.id, req.user.username, 'موافقة جماعية', `وافق على ${valid.length} تقييم`);
+  appendLog(`المدير وافق على ${valid.length} تقييم دفعة واحدة`);
+  res.redirect('/admin/review?ok=' + encodeURIComponent(`تمت الموافقة على ${valid.length} تقييم`));
+});
 router.post('/review/:id/approve', (req, res) => {
   db.prepare('UPDATE reviews SET approved=1 WHERE id=?').run(req.params.id);
   res.redirect('/admin/review?ok=' + encodeURIComponent('تمت الموافقة على التقييم'));

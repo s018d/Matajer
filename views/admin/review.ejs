@@ -4,22 +4,27 @@
 <main class="main">
   <%- include('../partials/topbar', { pageTitle: '🛡️ المراجعة — متاجر جديدة وتقييمات' }) %>
   <div class="content">
+    <%- include('../partials/alerts', { ok: typeof ok !== 'undefined' ? ok : '', err: typeof err !== 'undefined' ? err : '' }) %>
     <div class="card">
-      <h2>🆕 متاجر جديدة (آخر 7 أيام — <%= newStores.length %>)</h2>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;margin-bottom:.6rem">
+        <h2 style="margin:0">🆕 متاجر جديدة (آخر 7 أيام — <%= newStores.length %>)</h2>
+        <input type="search" id="storeReviewSearch" placeholder="🔍 بحث متجر..." style="padding:.45rem .7rem;border-radius:10px;border:1.5px solid var(--line,#e2e8f0);min-width:200px" oninput="filterNewStores()">
+      </div>
       <% if (newStores.length === 0) { %><p class="muted">لا متاجر جديدة هذا الأسبوع</p><% } else { %>
-      <div class="table-wrap"><table>
-        <tr><th>المتجر</th><th>الرابط</th><th>المالك</th><th>الحالة</th><th>تاريخ الإنشاء</th><th>إجراءات</th></tr>
+      <div class="table-wrap"><table class="table" id="newStoresTable">
+        <thead><tr><th>المتجر</th><th>الرابط</th><th>المالك</th><th>الحالة</th><th>تاريخ الإنشاء</th><th>إجراءات</th></tr></thead>
+        <tbody>
         <% newStores.forEach(s=>{ %>
-          <tr>
-            <td><a href="/admin/stores/<%= s.id %>"><%= s.name %></a></td>
-            <td><a href="/s/<%= s.slug %>" target="_blank">/s/<%= s.slug %></a></td>
-            <td><%= s.owner_username || '—' %></td>
-            <td><span class="badge <%= s.status==='active'?'badge-ok':'badge-err' %>"><%= s.status==='active'?'نشط':'موقوف' %></span></td>
+          <tr data-search="<%= ((s.name||'')+' '+(s.slug||'')+' '+(s.owner_username||'')).toLowerCase() %>">
+            <td><a href="/admin/stores/<%= s.id %>" style="font-weight:600"><%= s.name %></a></td>
+            <td><a href="/s/<%= s.slug %>" target="_blank" dir="ltr">/s/<%= s.slug %></a></td>
+            <td><span dir="ltr"><%= s.owner_username || '—' %></span></td>
+            <td><% if(s.status==='active'){ %><span class="badge badge-ok" style="background:#dcfce7;color:#166534;border:1px solid #86efac">✅ نشط</span><% } else { %><span class="badge badge-err" style="background:#fee2e2;color:#991b1b;border:1px solid #fecaca">⛔ موقوف</span><% } %></td>
             <td><small><%= s.created_at %></small></td>
             <td>
               <a class="btn btn-sm" href="/admin/stores/<%= s.id %>">عرض</a>
               <% if(s.status==='active'){ %>
-                <form method="post" action="/admin/stores/<%= s.id %>" class="inline">
+                <form method="post" action="/admin/stores/<%= s.id %>" class="inline" style="display:inline">
                   <input type="hidden" name="status" value="suspended">
                   <input type="hidden" name="name" value="<%= s.name %>">
                   <input type="hidden" name="slug" value="<%= s.slug %>">
@@ -27,50 +32,139 @@
                   <button class="btn btn-sm btn-danger" onclick="return confirm('إيقاف المتجر؟')">إيقاف</button>
                 </form>
               <% } else { %>
-                <form method="post" action="/admin/stores/<%= s.id %>" class="inline">
+                <form method="post" action="/admin/stores/<%= s.id %>" class="inline" style="display:inline">
                   <input type="hidden" name="status" value="active">
                   <input type="hidden" name="name" value="<%= s.name %>">
                   <input type="hidden" name="slug" value="<%= s.slug %>">
                   <input type="hidden" name="_csrf" value="<%= csrf %>">
-                  <button class="btn btn-sm btn-ok">تفعيل</button>
+                  <button class="btn btn-sm btn-ok" style="background:#dcfce7;color:#166534;border:1px solid #86efac">تفعيل</button>
                 </form>
               <% } %>
             </td>
           </tr>
         <% }) %>
+        </tbody>
       </table></div>
+      <p id="newStoresNoResults" class="muted" style="display:none;text-align:center;padding:1rem">لا نتائج للبحث</p>
       <% } %>
     </div>
 
     <div class="card" style="margin-top:1rem">
-      <h2>⭐ تقييمات بانتظار الموافقة (<%= pendingReviews.length %>)</h2>
-      <% if(pendingReviews.length===0){ %><p class="muted">لا تقييمات معلقة — كل التقييمات موافق عليها</p><% } else { %>
-      <div class="table-wrap"><table>
-        <tr><th>المتجر</th><th>المنتج</th><th>الزبون</th><th>التقييم</th><th>التعليق</th><th>التاريخ</th><th>إجراءات</th></tr>
-        <% pendingReviews.forEach(r=>{ %>
-          <tr>
-            <td><a href="/s/<%= r.store_slug %>" target="_blank"><%= r.store_name %></a></td>
-            <td><%= r.product_name %></td>
-            <td><%= r.customer_name %></td>
-            <td><%= '★'.repeat(r.rating) %><span style="color:#cbd5e1"><%= '☆'.repeat(5-r.rating) %></span></td>
-            <td><%= r.comment || '—' %></td>
-            <td><small><%= r.created_at %></small></td>
-            <td>
-              <form method="post" action="/admin/review/<%= r.id %>/approve" class="inline">
-                <input type="hidden" name="_csrf" value="<%= csrf %>">
-                <button class="btn btn-sm btn-ok">موافقة</button>
-              </form>
-              <form method="post" action="/admin/review/<%= r.id %>/delete" class="inline" onsubmit="return confirm('حذف التقييم؟')">
-                <input type="hidden" name="_csrf" value="<%= csrf %>">
-                <button class="btn btn-sm btn-danger">حذف</button>
-              </form>
-            </td>
-          </tr>
-        <% }) %>
-      </table></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;margin-bottom:.6rem">
+        <h2 style="margin:0">⭐ تقييمات بانتظار الموافقة (<%= pendingReviews.length %>)</h2>
+        <span class="muted" id="reviewCount" style="font-size:.82rem"></span>
+      </div>
+      <% if(pendingReviews.length===0){ %><p class="muted">لا تقييمات معلقة — كل التقييمات موافق عليها ✅</p><% } else { %>
+      <form method="post" action="/admin/review/bulk-approve" id="bulkForm">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:.8rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:.6rem .8rem">
+          <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-weight:600"><input type="checkbox" id="selectAll" onchange="toggleAll(this)"> تحديد الكل</label>
+          <span class="muted" style="font-size:.82rem">|</span>
+          <input type="search" id="reviewSearch" placeholder="🔍 بحث: متجر / منتج / زبون..." style="flex:1;min-width:180px;max-width:320px;padding:.4rem .6rem;border-radius:8px;border:1.5px solid #cbd5e1" oninput="filterReviews()">
+          <button type="submit" id="bulkApproveBtn" class="btn btn-sm btn-ok" disabled style="opacity:.5;cursor:not-allowed;background:#16a34a;color:#fff;border:1px solid #15803d">✓ موافقة على المحدد (<span id="selCount">0</span>)</button>
+          <span class="muted" style="font-size:.78rem">اختر ثم اضغط للموافقة الجماعية</span>
+        </div>
+        <div class="table-wrap"><table class="table" id="reviewsTable">
+          <thead><tr><th style="width:36px"><input type="checkbox" id="selectAll2" onchange="toggleAll(this)"></th><th>المتجر</th><th>المنتج</th><th>الزبون</th><th>التقييم</th><th>التعليق</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+          <tbody>
+          <% pendingReviews.forEach(r=>{ %>
+            <tr data-search="<%= ((r.store_name||'')+' '+(r.product_name||'')+' '+(r.customer_name||'')+' '+(r.comment||'')).toLowerCase() %>">
+              <td><input type="checkbox" name="ids" value="<%= r.id %>" class="rowCheck" onchange="updateBulk()"></td>
+              <td><a href="/s/<%= r.store_slug %>" target="_blank" style="font-weight:600"><%= r.store_name %></a></td>
+              <td><%= r.product_name %></td>
+              <td><%= r.customer_name %></td>
+              <td style="white-space:nowrap"><%= '★'.repeat(r.rating) %><span style="color:#cbd5e1"><%= '☆'.repeat(5-r.rating) %></span> <small class="muted">(<%= r.rating %>/5)</small></td>
+              <td style="max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="<%= r.comment || '' %>"><%= r.comment || '—' %></td>
+              <td><small><%= r.created_at %></small></td>
+              <td style="white-space:nowrap">
+                <form method="post" action="/admin/review/<%= r.id %>/approve" class="inline" style="display:inline">
+                  <input type="hidden" name="_csrf" value="<%= csrf %>">
+                  <button class="btn btn-sm btn-ok" style="background:#dcfce7;color:#166534;border:1px solid #86efac">موافقة</button>
+                </form>
+                <form method="post" action="/admin/review/<%= r.id %>/delete" class="inline" style="display:inline" onsubmit="return confirm('حذف التقييم؟')">
+                  <input type="hidden" name="_csrf" value="<%= csrf %>">
+                  <button class="btn btn-sm btn-danger">حذف</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+          </tbody>
+        </table></div>
+      </form>
+      <p id="reviewNoResults" class="muted" style="display:none;text-align:center;padding:1rem">لا نتائج للبحث</p>
       <% } %>
     </div>
   </div>
 </main>
+<style>
+.muted{color:#64748b;font-size:.88rem}
+.badge{display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .5rem;border-radius:999px;font-size:.78rem;font-weight:600}
+.table-wrap{overflow:auto}
+</style>
+<script>
+function filterNewStores(){
+  const q=(document.getElementById('storeReviewSearch')?.value||'').toLowerCase().trim();
+  let vis=0;
+  document.querySelectorAll('#newStoresTable tbody tr[data-search]').forEach(tr=>{
+    const show=!q||tr.dataset.search.includes(q);
+    tr.style.display=show?'':'none';
+    if(show) vis++;
+  });
+  const no=document.getElementById('newStoresNoResults');
+  const total=document.querySelectorAll('#newStoresTable tbody tr').length;
+  if(no) no.style.display=vis===0&&total>0?'block':'none';
+}
+function filterReviews(){
+  const q=(document.getElementById('reviewSearch')?.value||'').toLowerCase().trim();
+  let vis=0;
+  document.querySelectorAll('#reviewsTable tbody tr[data-search]').forEach(tr=>{
+    const show=!q||tr.dataset.search.includes(q);
+    tr.style.display=show?'':'none';
+    if(show) vis++;
+  });
+  const no=document.getElementById('reviewNoResults');
+  const total=document.querySelectorAll('#reviewsTable tbody tr').length;
+  if(no) no.style.display=vis===0&&total>0?'block':'none';
+  const cnt=document.getElementById('reviewCount');
+  if(cnt) cnt.textContent = vis + ' / ' + total + ' ظاهر';
+}
+function updateBulk(){
+  const checks=[...document.querySelectorAll('.rowCheck')];
+  const sel=checks.filter(c=>c.checked).length;
+  document.getElementById('selCount').textContent=sel;
+  const btn=document.getElementById('bulkApproveBtn');
+  btn.disabled=sel===0;
+  btn.style.opacity=sel===0?'0.5':'1';
+  btn.style.cursor=sel===0?'not-allowed':'pointer';
+  const all=document.getElementById('selectAll');
+  const all2=document.getElementById('selectAll2');
+  const allChecked=sel>0 && sel===checks.length;
+  if(all) all.checked=allChecked;
+  if(all2) all2.checked=allChecked;
+}
+function toggleAll(el){
+  const checked=el.checked;
+  document.querySelectorAll('.rowCheck').forEach(c=>{
+    if(c.closest('tr').style.display!=='none') c.checked=checked;
+    else if(!checked) c.checked=false;
+  });
+  if(checked){
+    // if toggling on, also check hidden? only visible gave UX, but for bulk we want visible only
+  }
+  // when master unchecked, uncheck all
+  if(!checked) document.querySelectorAll('.rowCheck').forEach(c=>c.checked=false);
+  if(checked) document.querySelectorAll('#reviewsTable tbody tr:not([style*=\"none\"]) .rowCheck').forEach(c=>c.checked=true);
+  updateBulk();
+  // sync masters
+  document.getElementById('selectAll').checked=checked;
+  document.getElementById('selectAll2').checked=checked;
+}
+document.getElementById('bulkForm')?.addEventListener('submit', function(e){
+  const sel=[...document.querySelectorAll('.rowCheck:checked')].length;
+  if(sel===0){ e.preventDefault(); alert('اختر تقييماً واحداً على الأقل'); return false; }
+  if(!confirm('موافقة على '+sel+' تقييم؟')) e.preventDefault();
+});
+filterReviews();
+</script>
 </body>
 </html>

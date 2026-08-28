@@ -6,54 +6,80 @@
   <div class="content">
     <%- include('../partials/alerts', { ok: typeof ok !== 'undefined' ? ok : '', err: '' }) %>
     <div class="card">
-      <h2>طلبات الترقية المعلقة</h2>
-      <% if (rows.filter(r => r.status !== 'done').length === 0) { %><p class="muted">لا توجد طلبات معلقة</p><% } %>
-      <div class="table-wrap"><table class="table">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;margin-bottom:.6rem">
+        <h2 style="margin:0">طلبات الترقية <span class="badge" style="background:#f1f5f9;border:1px solid #e2e8f0"><%= rows.length %></span> <small class="muted" style="font-weight:400">• معلق: <%= rows.filter(r=>r.status!=='done').length %> • مفعّل: <%= rows.filter(r=>r.status==='done').length %></small></h2>
+        <span class="muted" id="payCount" style="font-size:.82rem"></span>
+      </div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem">
+        <input type="search" id="paySearch" placeholder="🔍 بحث: اسم المتجر / المالك / المرجع / المبلغ..." style="min-width:260px;flex:1;max-width:420px;padding:.5rem .8rem;border-radius:10px;border:1.5px solid var(--line,#e2e8f0)" oninput="filterPays()">
+        <select id="payStatus" onchange="filterPays()" style="padding:.5rem .7rem;border-radius:10px;border:1.5px solid var(--line,#e2e8f0)">
+          <option value="">كل الحالات</option>
+          <option value="pending">⏳ معلق فقط</option>
+          <option value="done">✅ مفعّل فقط</option>
+        </select>
+      </div>
+      <% if (rows.length === 0) { %><p class="muted">لا توجد طلبات حتى الآن</p><% } %>
+      <div class="table-wrap"><table class="table" id="payTable">
         <thead><tr><th>التاريخ</th><th>المتجر</th><th>المالك</th><th>المبلغ</th><th>المرجع</th><th>إثبات الدفع</th><th>الحالة</th><th></th></tr></thead>
         <tbody>
           <% rows.forEach(p => { %>
-          <tr>
-            <td><%= p.created_at %></td>
-            <td><a href="/s/<%= p.store_slug %>" target="_blank"><%= p.store_name %></a></td>
-            <td><%= p.owner_username || '-' %></td>
-            <td><%= money(p.amount) %></td>
+          <tr data-search="<%= ((p.store_name||'')+' '+(p.owner_username||'')+' '+(p.store_slug||'')+' '+(p.ref||'')+' '+(p.amount||'')).toLowerCase() %>" data-status="<%= p.status==='done' ? 'done' : 'pending' %>">
+            <td><small style="white-space:nowrap"><%= p.created_at %></small></td>
+            <td><a href="/s/<%= p.store_slug %>" target="_blank" style="font-weight:600"><%= p.store_name %></a><br><small class="muted">/s/<%= p.store_slug %></small></td>
+            <td><span dir="ltr"><%= p.owner_username || '-' %></span></td>
+            <td><b><%= money(p.amount) %></b></td>
             <td dir="ltr"><%= p.ref || '-' %><% if (p.note) { %><small style="display:block;color:#64748b">حوالة: <span dir="ltr"><%= p.note %></span></small><% } %></td>
             <td>
-              <% if (p.receipt_path) { %><a href="/admin/payments/receipt/<%= p.id %>" target="_blank" class="btn btn-sm">فتح الصورة</a><% } else { %>—<% } %>
+              <% if (p.receipt_path) { %><a href="/admin/payments/receipt/<%= p.id %>" target="_blank" class="btn btn-sm" style="white-space:nowrap">📎 فتح الصورة</a><% } else { %><span class="muted">—</span><% } %>
             </td>
             <td>
-              <span class="badge <%= p.status==='done' ? 'badge-ok' : 'badge-warn' %>"><%= p.status==='done' ? 'مفعّل' : 'معلق' %></span>
-              <% if (referred[p.store_id]) { %><span class="badge" title="هذا المتجر سجل عبر دعوة صديق — سيكسب داعيه شهراً مجانياً">🎁 إحالة</span><% } %>
+              <% if (p.status==='done') { %>
+                <span class="badge badge-ok" style="background:#dcfce7;color:#166534;border:1px solid #86efac;white-space:nowrap">✅ مفعّل</span>
+              <% } else { %>
+                <span class="badge badge-warn" style="background:#fef9c3;color:#854d0e;border:1px solid #fde68a;white-space:nowrap">⏳ معلق</span>
+              <% } %>
+              <% if (referred[p.store_id]) { %><span class="badge" style="background:#f5f3ff;color:#6d28d9;border:1px solid #ddd6fe;white-space:nowrap" title="هذا المتجر سجل عبر دعوة صديق — سيكسب داعيه شهراً مجانياً">🎁 إحالة</span><% } %>
             </td>
             <td>
               <% if (p.status !== 'done') { %>
               <form method="post" action="/admin/payments/<%= p.id %>/confirm" class="inline-form">
                 <input type="hidden" name="_csrf" value="<%= csrf %>">
                 <input type="number" name="months" value="1" min="1" max="24" title="عدد الأشهر" style="width:60px">
-                <button class="btn btn-sm">تأكيد الدفع</button>
+                <button class="btn btn-sm btn-primary" style="white-space:nowrap">تأكيد الدفع</button>
               </form>
+              <% } else { %><span class="muted" style="font-size:.82rem">تم ✓</span><% } %>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table></div>
+      <p id="payNoResults" class="muted" style="display:none;text-align:center;padding:1.2rem">لا نتائج — جرّب بحثاً آخر</p>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem;margin-bottom:.6rem">
+        <h2 style="margin:0">المتاجر الاحترافية حالياً <span class="badge" style="background:#fef3c7;border:1px solid #fde68a">⭐ <%= proStores.length %></span></h2>
+        <input type="search" id="proSearch" placeholder="🔍 بحث متاجر برو..." style="min-width:220px;padding:.45rem .7rem;border-radius:10px;border:1.5px solid var(--line,#e2e8f0)" oninput="filterPro()">
+      </div>
+      <% if (proStores.length === 0) { %><p class="muted">لا توجد متاجر احترافية بعد</p><% } %>
+      <div class="table-wrap"><table class="table" id="proTable">
+        <thead><tr><th>المتجر</th><th>ينتهي في</th><th>الحالة</th></tr></thead>
+        <tbody>
+          <% proStores.forEach(s => { %>
+          <tr data-search="<%= ((s.name||'')+' '+(s.slug||'')).toLowerCase() %>">
+            <td><a href="/admin/stores/<%= s.id %>" style="font-weight:600"><%= s.name %></a><br><small class="muted">/s/<%= s.slug %></small></td>
+            <td dir="ltr"><small><%= s.plan_expires %></small></td>
+            <td>
+              <% if (s.expired) { %>
+                <span class="badge badge-err" style="background:#fee2e2;color:#991b1b;border:1px solid #fecaca">⛔ منتهية</span>
+              <% } else { %>
+                <span class="badge badge-ok" style="background:#dcfce7;color:#166534;border:1px solid #86efac">✅ نشطة</span>
               <% } %>
             </td>
           </tr>
           <% }) %>
         </tbody>
       </table></div>
-    </div>
-    <div class="card">
-      <h2>المتاجر الاحترافية حالياً</h2>
-      <% if (proStores.length === 0) { %><p class="muted">لا توجد متاجر احترافية بعد</p><% } %>
-      <div class="table-wrap"><table class="table">
-        <thead><tr><th>المتجر</th><th>ينتهي في</th><th>الحالة</th></tr></thead>
-        <tbody>
-          <% proStores.forEach(s => { %>
-          <tr>
-            <td><a href="/admin/stores/<%= s.id %>"><%= s.name %></a></td>
-            <td dir="ltr"><%= s.plan_expires %></td>
-            <td><span class="badge <%= s.expired ? 'badge-err' : 'badge-ok' %>"><%= s.expired ? 'منتهية' : 'نشطة' %></span></td>
-          </tr>
-          <% }) %>
-        </tbody>
-      </table></div>
+      <p id="proNoResults" class="muted" style="display:none;text-align:center;padding:1rem">لا نتائج</p>
     </div>
     <p class="muted" style="font-size:.82rem">لتعديل باقة أي متجر يدوياً (مثل ترقية مباشرة أو إلغاء): ادخل صفحة المتجر من «المتاجر» وحدّد الباقة هناك.</p>
   </div>
@@ -62,6 +88,40 @@
 .inline-form { display: flex; gap: .4rem; align-items: center; }
 input[type=number] { padding: .3rem .5rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; }
 .muted { color: #64748b; font-size: .88rem; }
+.badge { display:inline-flex; align-items:center; gap:.25rem; padding:.18rem .5rem; border-radius:999px; font-size:.78rem; font-weight:600; }
+.table-wrap { overflow:auto; }
 </style>
+<script>
+function filterPays(){
+  const q = (document.getElementById('paySearch')?.value || '').toLowerCase().trim();
+  const st = document.getElementById('payStatus')?.value || '';
+  let vis = 0;
+  document.querySelectorAll('#payTable tbody tr[data-search]').forEach(tr=>{
+    const matchQ = !q || tr.dataset.search.includes(q);
+    const matchSt = !st || tr.dataset.status === st;
+    const show = matchQ && matchSt;
+    tr.style.display = show ? '' : 'none';
+    if(show) vis++;
+  });
+  const total = document.querySelectorAll('#payTable tbody tr').length;
+  const el = document.getElementById('payCount');
+  if(el) el.textContent = vis + ' / ' + total;
+  const no = document.getElementById('payNoResults');
+  if(no) no.style.display = vis===0 && total>0 ? 'block' : 'none';
+}
+function filterPro(){
+  const q = (document.getElementById('proSearch')?.value || '').toLowerCase().trim();
+  let vis=0;
+  document.querySelectorAll('#proTable tbody tr[data-search]').forEach(tr=>{
+    const show = !q || tr.dataset.search.includes(q);
+    tr.style.display = show ? '' : 'none';
+    if(show) vis++;
+  });
+  const no = document.getElementById('proNoResults');
+  const total = document.querySelectorAll('#proTable tbody tr').length;
+  if(no) no.style.display = vis===0 && total>0 ? 'block' : 'none';
+}
+filterPays();
+</script>
 </body>
 </html>

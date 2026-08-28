@@ -213,12 +213,28 @@
 <script>
 try {
   function countUp(el, target) {
-    if (!el) return;
-    var i = 0; var t = setInterval(function () { i += Math.max(1, Math.ceil(target / 40)); if (i >= target) { i = target; clearInterval(t); } el.textContent = i; }, 40);
+    if (!el || !target) return;
+    var duration = 900, start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(eased * target).toLocaleString('en-US');
+      if (p < 1) requestAnimationFrame(step);
+      else el.textContent = target.toLocaleString('en-US');
+    }
+    requestAnimationFrame(step);
   }
-  countUp(document.getElementById('statStores'), <%= stores.length %>);
-  countUp(document.getElementById('statToday'), <%= stats.storesToday %>);
-  countUp(document.getElementById('statOrders'), <%= stats.ordersDone %>);
+  function initStats() {
+    countUp(document.getElementById('statStores'), <%= stores.length %>);
+    countUp(document.getElementById('statToday'), <%= stats.storesToday %>);
+    countUp(document.getElementById('statOrders'), <%= stats.ordersDone %>);
+  }
+  var statsEl = document.querySelector('.hero-stats');
+  if (statsEl && 'IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function(entries){ if(entries[0].isIntersecting){ initStats(); obs.disconnect(); } }, {threshold:0.3});
+    obs.observe(statsEl);
+  } else { initStats(); }
 } catch (e) {}
 </script>
 </body>

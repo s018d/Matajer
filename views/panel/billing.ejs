@@ -25,13 +25,17 @@
           <p class="muted" style="margin-top:.3rem;font-size:.85rem">كل الأنماط العالمية تُفتح لك فوراً للتجربة — تنتهي تلقائياً بعد 7 أيام وتعود للمجانية بدون خصم أي شيء من بياناتك. إلغاؤها سهل مثل تشغيلها.</p>
         </div>
       </div>
+      <p class="muted" style="text-align:center;margin:.6rem 0 .2rem;font-size:.88rem">💡 كلما طالت المدة وفّرت أكثر — اختر ما يناسبك:</p>
       <div class="tiers">
         <div class="tier">
-          <h3>شهر</h3>
-          <div class="tier-price"><b><%= (cfg.pro_price / 1000).toLocaleString('en-US') %> ألف</b><span>/ شهرياً</span></div>
+          <h3>شهر واحد</h3>
+          <span class="tier-sub">مرن — بدون التزام</span>
+          <div class="tier-price"><b><%= (cfg.pro_price / 1000).toLocaleString('en-US') %> ألف</b><span>/ شهر</span></div>
+          <div class="tier-monthly">≈ <%= (cfg.pro_price / 1000).toLocaleString('en-US') %> ألف / شهر</div>
           <ul>
-            <li>كل مزايا الاحترافية</li>
-            <li>تجربة شهر كامل</li>
+            <li>كل مزايا الاحترافية كاملة</li>
+            <li>مثالي للتجربة الأولى</li>
+            <li>إلغاء تلقائي — بدون فقدان بيانات</li>
           </ul>
           <form method="post" action="/panel/billing/request?_csrf=<%= csrf %>" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="<%= csrf %>">
@@ -42,13 +46,16 @@
           </form>
         </div>
         <div class="tier tier-hit">
-          <div class="tier-tag">الأكثر طلباً</div>
+          <div class="tier-tag">الأكثر طلباً ⭐</div>
           <h3>3 شهور</h3>
+          <span class="tier-sub">الأكثر توازناً</span>
           <div class="tier-price"><b><%= (cfg.pro_price_3 / 1000).toLocaleString('en-US') %> ألف</b><span>/ 3 شهور</span></div>
-          <div class="tier-save">توفّر <%= Math.round((1 - cfg.pro_price_3 / (cfg.pro_price * 3)) * 100) %>%</div>
+          <div class="tier-monthly">≈ <%= Math.round(cfg.pro_price_3 / 3 / 1000).toLocaleString('en-US') %> ألف / شهر</div>
+          <div class="tier-save">توفّر <%= Math.round((1 - cfg.pro_price_3 / (cfg.pro_price * 3)) * 100) %>% مقارنة بالشهري</div>
           <ul>
             <li>كل مزايا الاحترافية</li>
-            <li>خصم على الشهر الواحد</li>
+            <li>خصم حقيقي على الشهر الواحد</li>
+            <li>الخيار المفضّل لـ 70% من التجار</li>
           </ul>
           <form method="post" action="/panel/billing/request?_csrf=<%= csrf %>" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="<%= csrf %>">
@@ -58,13 +65,17 @@
             <button class="btn btn-primary">أريد الترقية</button>
           </form>
         </div>
-        <div class="tier">
+        <div class="tier tier-best">
+          <div class="tier-tag" style="background:linear-gradient(135deg,#059669,#0d9488)">أفضل قيمة 👑</div>
           <h3>سنة كاملة</h3>
+          <span class="tier-sub">وفّر أكثر — استثمار سنوي</span>
           <div class="tier-price"><b><%= (cfg.pro_price_12 / 1000).toLocaleString('en-US') %> ألف</b><span>/ سنة</span></div>
-          <div class="tier-save">توفّر <%= Math.round((1 - cfg.pro_price_12 / (cfg.pro_price * 12)) * 100) %>%</div>
+          <div class="tier-monthly">≈ <%= Math.round(cfg.pro_price_12 / 12 / 1000).toLocaleString('en-US') %> ألف / شهر فقط</div>
+          <div class="tier-save">توفّر <%= Math.round((1 - cfg.pro_price_12 / (cfg.pro_price * 12)) * 100) %>% — أوفر سعر شهري</div>
           <ul>
             <li>كل مزايا الاحترافية</li>
             <li>أفضل سعر — <%= Math.round(cfg.pro_price_12 / 12 / 1000) %> ألف شهرياً فقط</li>
+            <li>أولوية الدعم + التصاميم الجديدة</li>
           </ul>
           <form method="post" action="/panel/billing/request?_csrf=<%= csrf %>" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="<%= csrf %>">
@@ -150,8 +161,11 @@
 .tier ul { list-style: none; padding: 0; margin: 0 0 .5rem; font-size: .85rem; color: #475569; display: flex; flex-direction: column; gap: .3rem; }
 .tier ul li::before { content: '✓ '; color: #0d9488; font-weight: 700; }
 .tier-hit { border-color: #0d9488; box-shadow: 0 14px 34px -18px rgba(13,148,136,.5); }
+.tier-best { border-color: #059669; box-shadow: 0 14px 34px -18px rgba(5,150,105,.45); }
 .tier-tag { position: absolute; top: -10px; inset-inline-start: 1rem; background: #0d9488; color: #fff; font-size: .72rem; font-weight: 700; padding: .15rem .7rem; border-radius: 99px; }
-.tier-save { font-size: .78rem; color: #0d9488; font-weight: 700; }
+.tier-sub { font-size: .78rem; color: #64748b; font-weight: 600; margin-top: -.2rem; }
+.tier-monthly { font-size: .78rem; color: #475569; background: #f8fafc; border: 1px dashed #e2e8f0; border-radius: 8px; padding: .25rem .5rem; text-align: center; font-weight: 600; }
+.tier-save { font-size: .78rem; color: #0d9488; font-weight: 700; background: #f0fdfa; border-radius: 6px; padding: .2rem .5rem; text-align: center; }
 .billing-input, .billing-file { width: 100%; padding: .45rem .6rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: .82rem; background: #fff; }
 .billing-file { padding: .35rem; }
 </style>

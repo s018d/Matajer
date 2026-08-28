@@ -20,7 +20,15 @@ html.dark{
   --line:#1d2a4d;--brand:#60a5fa;--brand-dark:#3b82f6;--brand-2:#a78bfa;--danger:#f87171;--warn:#fbbf24;--success:#34d399;
   --soft:#151f3d;--input-bg:#101a33;--hover-bg:#16224a
 }
-html{font-size:15px;scroll-behavior:smooth;overflow-x:hidden;max-width:100vw}
+/* dark mode: respects system preference when no explicit toggle class */
+@media (prefers-color-scheme: dark){
+  html:not(.light):not(.dark){
+    --bg:#0b1120;--card:#101a33;--ink:#e8edf7;--muted:#8b98b8;
+    --line:#1d2a4d;--brand:#60a5fa;--brand-dark:#3b82f6;--brand-2:#a78bfa;--danger:#f87171;--warn:#fbbf24;--success:#34d399;
+    --soft:#151f3d;--input-bg:#101a33;--hover-bg:#16224a
+  }
+}
+html{font-size:15px;scroll-behavior:smooth;overflow-x:hidden;max-width:100vw;color-scheme:light dark}
 body.app{font-family:'Noto Kufi Arabic','Cairo','Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;-webkit-font-smoothing:antialiased;overflow-x:hidden;max-width:100vw}
 a{color:var(--brand);text-decoration:none;transition:color .2s}
 a:hover{color:var(--brand-dark)}

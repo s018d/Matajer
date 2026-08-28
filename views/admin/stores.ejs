@@ -1,60 +1,83 @@
-<%- include('../partials/head', { title: 'المتاجر — المدير العام' }) %>
+<%- include('../partials/head', { title: 'المتاجر — مركز التحكم' }) %>
 <body class="app">
-<%- include('../partials/sidebar-admin', { active: 'stores' }) %>
+<%- include('../partials/sidebar-admin', { active: 'stores', user }) %>
 <main class="main">
-  <%- include('../partials/topbar', { pageTitle: 'المتاجر' }) %>
+  <%- include('../partials/topbar', { pageTitle: '🏪 المتاجر — تحكم كامل' }) %>
   <div class="content">
     <%- include('../partials/alerts') %>
-    <div class="card">
-      <h2>إنشاء متجر جديد</h2>
-      <form method="post" action="/admin/stores" class="grid-3">
+
+    <div class="card" style="background:linear-gradient(135deg,#f8faff,#eff6ff); border-color:#bfdbfe">
+      <h2>➕ إنشاء متجر جديد — بدون كود</h2>
+      <p class="muted" style="font-size:.82rem; margin:.3rem 0 1rem">ينشئ متجر + حساب تاجر تلقائياً — كلمة المرور تظهر مرة واحدة</p>
+      <form method="post" action="/admin/stores" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:.8rem">
         <input type="hidden" name="_csrf" value="<%= csrf %>">
-        <label>اسم المتجر *
-          <input type="text" name="name" required>
-        </label>
-        <label>اسم المستخدم (يوزر) *
-          <input type="text" name="username" required dir="ltr">
-        </label>
-        <label>كلمة المرور (اتركها فارغة للتوليد التلقائي)
-          <input type="text" name="password" dir="ltr">
-        </label>
-        <label>اسم صاحب المتجر
-          <input type="text" name="owner_name">
-        </label>
-        <label>رقم الهاتف
-          <input type="text" name="phone" dir="ltr">
-        </label>
-        <label>نبذة عن المتجر
-          <input type="text" name="description">
-        </label>
-        <div class="span-all">
-          <button type="submit" class="btn btn-primary">إنشاء المتجر</button>
-        </div>
+        <label>اسم المتجر *<input type="text" name="name" required placeholder="مثال: عطور بغداد"></label>
+        <label>اسم المستخدم *<input type="text" name="username" required dir="ltr" placeholder="baghdadscents"></label>
+        <label>كلمة المرور<input type="text" name="password" dir="ltr" placeholder="اتركها للتوليد"></label>
+        <label>اسم صاحب المتجر<input type="text" name="owner_name" placeholder="أحمد"></label>
+        <label>الهاتف<input type="text" name="phone" dir="ltr" placeholder="0770..."></label>
+        <label>نبذة<input type="text" name="description" placeholder="متجر عطور فاخرة"></label>
+        <div style="grid-column:1/-1"><button type="submit" class="btn btn-primary" style="padding:.7rem 1.4rem">🚀 إنشاء المتجر</button></div>
       </form>
     </div>
 
     <div class="card">
-      <h2>كل المتاجر (<%= list.length %>)</h2>
-      <div class="table-wrap"><table>
-        <tr><th>المتجر</th><th>مستخدم</th><th>منتجات</th><th>طلبات</th><th>مبيعات</th><th>الباقة</th><th>الحالة</th><th></th></tr>
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.8rem; margin-bottom:1rem">
+        <h2>📚 كل المتاجر (<%= list.length %>)</h2>
+        <div style="display:flex; gap:.5rem; flex-wrap:wrap; align-items:center">
+          <input type="search" id="storeSearch" placeholder="🔍 ابحث بالاسم/اليوزر/Slug..." style="min-width:240px; padding:.5rem .8rem; border-radius:10px; border:1.5px solid var(--line)">
+          <select id="planFilter" style="padding:.5rem; border-radius:10px; border:1.5px solid var(--line)" onchange="filterStores()">
+            <option value="">كل الباقات</option>
+            <option value="pro">⭐ برو فقط</option>
+            <option value="free">مجاني فقط</option>
+          </select>
+          <select id="statusFilter" style="padding:.5rem; border-radius:10px; border:1.5px solid var(--line)" onchange="filterStores()">
+            <option value="">كل الحالات</option>
+            <option value="active">نشط فقط</option>
+            <option value="suspended">موقوف فقط</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap"><table class="table" id="storesTable">
+        <tr><th>المتجر</th><th>مستخدم</th><th>منتجات</th><th>طلبات</th><th>مبيعات</th><th>الباقة</th><th>الحالة</th><th>إجراءات</th></tr>
         <% list.forEach(s => { %>
-          <tr>
-            <td><a href="/admin/stores/<%= s.id %>"><%= s.name %></a></td>
-            <td><%= s.owner_username || '—' %></td>
-            <td><%= s.products %></td>
-            <td><%= s.orders %></td>
-            <td><%= money(s.revenue) %></td>
-            <td><span class="badge <%= s.plan === 'pro' ? 'badge-ok' : 'badge-warn' %>"><%= s.plan === 'pro' ? 'احترافية' : 'مجانية' %></span></td>
+          <tr data-name="<%= (s.name + ' ' + (s.owner_username||'') + ' ' + s.slug).toLowerCase() %>" data-plan="<%= s.plan %>" data-status="<%= s.status %>">
+            <td><a href="/admin/stores/<%= s.id %>"><b><%= s.name %></b></a><br><small class="muted">/s/<%= s.slug %> • ID:<%= s.id %></small></td>
+            <td><span dir="ltr"><%= s.owner_username || '—' %></span></td>
+            <td><span class="badge"><%= s.products %></span></td>
+            <td><span class="badge"><%= s.orders %></span></td>
+            <td><b><%= money(s.revenue) %></b></td>
+            <td><span class="badge <%= s.plan === 'pro' ? 'badge-ok' : '' %>"><%= s.plan === 'pro' ? '⭐ برو' : 'مجانية' %></span></td>
             <td><span class="badge <%= s.status === 'active' ? 'badge-ok' : 'badge-err' %>"><%= s.status === 'active' ? 'نشط' : 'موقوف' %></span></td>
             <td class="row-actions">
-              <a class="btn btn-sm" href="/admin/stores/<%= s.id %>">إدارة</a>
-              <a class="btn btn-sm" href="/s/<%= s.slug %>" target="_blank">عرض</a>
+              <a class="btn btn-sm btn-primary" href="/admin/stores/<%= s.id %>">⚙️ إدارة</a>
+              <a class="btn btn-sm btn-ghost" href="/s/<%= s.slug %>" target="_blank">👁️ عرض</a>
             </td>
           </tr>
         <% }) %>
       </table></div>
+      <p id="noResults" class="muted" style="display:none; text-align:center; padding:1.5rem">لا نتائج للبحث — جرّب كلمة أخرى</p>
+      <p class="muted" style="font-size:.78rem; margin-top:.8rem">💡 اضغط "إدارة" لتعديل كل شيء: الاسم، القالب، اللون، التوصيل، SEO، الباقة — بدون كود</p>
     </div>
   </div>
 </main>
+<script>
+function filterStores(){
+  const q = document.getElementById('storeSearch').value.toLowerCase().trim();
+  const plan = document.getElementById('planFilter').value;
+  const status = document.getElementById('statusFilter').value;
+  let visible = 0;
+  document.querySelectorAll('#storesTable tr[data-name]').forEach(tr=>{
+    const matchQ = !q || tr.dataset.name.includes(q);
+    const matchPlan = !plan || tr.dataset.plan===plan;
+    const matchStatus = !status || tr.dataset.status===status;
+    const show = matchQ && matchPlan && matchStatus;
+    tr.style.display = show ? '' : 'none';
+    if(show) visible++;
+  });
+  document.getElementById('noResults').style.display = visible===0 ? 'block' : 'none';
+}
+document.getElementById('storeSearch')?.addEventListener('input', filterStores);
+</script>
 </body>
 </html>

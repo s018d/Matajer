@@ -22,18 +22,23 @@
         <a class="btn btn-primary" href="/panel/products/new" style="padding:.75rem 1.8rem;font-size:1rem;border-radius:12px">+ أضف أول منتج</a>
       </div>
     <% } else { %>
-    <table>
-      <tr><th>الصورة</th><th>المنتج</th><th>القسم</th><th>السعر</th><th>المشاهدات</th><th>الصور</th><th>الحالة</th><th>إجراءات</th></tr>
+    <div class="table-wrap"><table class="table">
+      <tr><th>الصورة</th><th>المنتج</th><th>القسم</th><th>السعر</th><th>المخزون</th><th>المشاهدات</th><th>الحالة</th><th>إجراءات</th></tr>
       <% rows.forEach(p => { %>
         <tr>
           <td>
-            <% if (p.img) { %><img src="<%= p.img %>" class="thumb" alt=""><% } else { %><span class="thumb thumb-empty">—</span><% } %>
+            <% if (p.img) { %><img src="<%= p.img %>" class="thumb" alt="" loading="lazy"><% } else { %><span class="thumb thumb-empty">—</span><% } %>
           </td>
-          <td><a href="/panel/products/<%= p.id %>/edit"><%= p.name %></a></td>
-          <td><%= p.cat || '—' %></td>
-          <td><%= money(p.price) %><% if (p.old_price) { %> <del><%= money(p.old_price) %></del><% } %></td>
+          <td><a href="/panel/products/<%= p.id %>/edit"><b><%= p.name %></b></a><% if(p.stock!=null && p.stock<=5 && p.stock>0){ %><br><span class="badge badge-warn" style="font-size:.65rem">⚡ <%= p.stock %> متبقي</span><% } else if(p.stock===0){ %><br><span class="badge badge-err" style="font-size:.65rem">نفد</span><% } %></td>
+          <td><small class="muted"><%= p.cat || '—' %></small></td>
+          <td><b><%= money(p.price) %></b><% if (p.old_price) { %><br><del style="font-size:.75rem" class="muted"><%= money(p.old_price) %></del><% } %></td>
+          <td>
+            <% if(p.stock==null){ %><span class="muted">∞</span>
+            <% } else if(p.stock===0){ %><span class="badge badge-err"><%= p.stock %></span>
+            <% } else if(p.stock<=5){ %><span class="badge badge-warn"><%= p.stock %></span>
+            <% } else { %><span class="badge badge-ok"><%= p.stock %></span><% } %>
+          </td>
           <td><%= p.views %></td>
-          <td><%= p.img_count %></td>
           <td><span class="badge <%= p.active ? 'badge-ok' : 'badge-warn' %>"><%= p.active ? 'ظاهر' : 'مخفي' %></span></td>
           <td class="row-actions">
             <a class="btn btn-sm" href="/panel/products/<%= p.id %>/edit">تعديل</a>
@@ -48,7 +53,7 @@
           </td>
         </tr>
       <% }) %>
-    </table>
+    </table></div>
     <% } %>
   </div>
 </main>

@@ -336,4 +336,10 @@ img{max-width:100%;display:block}
 @media(max-width:900px){.natural-grid{grid-template-columns:repeat(2,1fr) !important} .natural-grid .st-card:nth-child(3n+1), .natural-grid .st-card:nth-child(3n+2){transform:none}}
 @media(max-width:360px){.natural-grid{grid-template-columns:1fr !important}}
 
+/* ===== POLISH: hero centered for comfort (all templates) ===== */
+.store-body.tpl-c .st-head { text-align:center; }
+.store-body.tpl-c .st-head-inner { justify-content:center; text-align:center; flex-direction:column; }
+.store-body.tpl-c .st-head h1 { text-align:center; }
+.store-body.tpl-c .st-head p { text-align:center; margin-inline:auto; }
+
 /* FIX removed - existing 800/480/360 breakpoints handle mobile cleanly */

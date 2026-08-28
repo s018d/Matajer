@@ -44,14 +44,12 @@ body.black-gold::before {
     position: absolute;
     top: -50%; left: -50%;
     width: 200%; height: 200%;
-    background: radial-gradient(circle at 30% 40%, rgba(201,169,110,0.05), transparent 60%);
-    animation: rotateGold 28s linear infinite;
+    background: radial-gradient(circle at 30% 40%, rgba(201,169,110,0.04), transparent 62%);
     pointer-events: none;
     z-index: 0;
 }
-@keyframes rotateGold { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
 
-.store-body.black-gold .st-head-inner { position: relative; z-index: 1; max-width:none; width:100%; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:30px; }
+.store-body.black-gold .st-head-inner { position: relative; z-index: 1; max-width:none; width:100%; display:flex; align-items:center; justify-content:center; text-align:center; flex-direction:column; gap:12px; }
 .store-body.black-gold .st-head h1,
 .black-gold .store-head .brand,
 .black-gold .hero-section .hero-text h1 {

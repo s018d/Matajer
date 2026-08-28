@@ -169,11 +169,10 @@ img, video, iframe, table { max-width: 100%; }
   .site-nav nav::-webkit-scrollbar { display: none; }
   .site-nav nav a { white-space: nowrap; font-size: .84rem; }
 }
-@media (max-width: 560px) {
+@media (max-width: 640px) {
+  .site-nav nav { display: none; }
   .site-nav-inner { flex-wrap: wrap; gap: .7rem; padding: .7rem 1rem; }
-  .site-nav nav { display: flex; order: 3; width: 100%; gap: 1.1rem; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: .2rem; scrollbar-width: none; }
-  .site-nav nav::-webkit-scrollbar { display: none; }
-  .site-nav nav a { font-size: .84rem; white-space: nowrap; }
+  .site-cta { margin-inline-start: auto; }
   .hero-inner { padding: 2.2rem 1rem 3rem; gap: 2rem; }
   .hero-txt h1 { font-size: 1.5rem; }
   .hero-txt p { font-size: .95rem; }

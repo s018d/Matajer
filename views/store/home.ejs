@@ -40,9 +40,7 @@ const heroSub = heroCfg.sub || store.description;
         <div>
           <h1 style="<%= heroCfg.image||heroCfg.video ? `color:${heroCfg.textColor||'#fff'} !important;-webkit-text-fill-color:${heroCfg.textColor||'#fff'} !important` : '' %>"><%= heroTitle %></h1>
           <p style="<%= heroCfg.image||heroCfg.video ? 'color:rgba(255,255,255,.88)' : '' %>"><%= heroSub %></p>
-          <% if (store.template==='royal-ivory') { %><span class="fashion-badge" style="background:rgba(201,169,110,0.12);border:1px solid rgba(201,169,110,0.25);color:#C9A96E;padding:.32rem .85rem;border-radius:99px;font-size:.74rem;font-weight:700">✨ فاخر • Royal Ivory</span><% } %>
-          <% if (store.template==='black-gold') { %><span class="classic-badge" style="background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.30);color:#C9A96E;padding:.32rem .85rem;border-radius:99px;font-size:.74rem;font-weight:800">◆ Black Gold • الإمبراطورية</span><% } %>
-          <% if (store.template==='modern-green') { %><span class="natural-badge" style="background:rgba(46,125,94,0.10);border:1px solid rgba(46,125,94,0.18);color:#2E7D5E;padding:.32rem .85rem;border-radius:99px;font-size:.74rem;font-weight:700">🌿 Modern Green • عصري</span><% } %>
+
           <% if (store.template==='prem-fashion') { %><span class="fashion-badge">Lookbook • Editorial</span><% } %>
           <% if (store.template==='prem-outdoor') { %>
             <div class="outdoor-filters" style="margin-inline-start:0">

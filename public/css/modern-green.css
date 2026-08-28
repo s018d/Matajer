@@ -25,7 +25,7 @@ body.modern-green {
     padding: 42px 28px !important;
 }
 .store-body.modern-green .st-head::before { display:none !important; }
-.store-body.modern-green .st-head-inner { max-width:none; width:100%; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:28px; }
+.store-body.modern-green .st-head-inner { max-width:none; width:100%; display:flex; align-items:center; justify-content:center; text-align:center; flex-direction:column; gap:12px; }
 .store-body.modern-green .st-head h1,
 .modern-green .store-head .brand,
 .modern-green .hero-section .hero-text h1 {

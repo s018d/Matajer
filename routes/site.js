@@ -86,10 +86,11 @@ router.get('/terms', (req, res) => {
 
 router.get('/sitemap.xml', (req, res) => {
   const host = req.protocol + '://' + req.get('host');
-  const stores = db.prepare("SELECT slug FROM stores WHERE status='active'").all();
-  const urls = ['', '/faq', '/privacy', '/terms'].map(p => `<url><loc>${host}${p}</loc></url>`)
-    .concat(stores.map(s => `<url><loc>${host}/s/${s.slug}</loc></url>`)).join('\n');
-  res.type('application/xml').send('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + '\n</urlset>');
+  const stores = db.prepare("SELECT slug, updated_at FROM stores WHERE status='active'").all();
+  const now = new Date().toISOString().slice(0,10);
+  const staticUrls = ['', '/faq', '/privacy', '/terms'].map(p => `<url><loc>${host}${p}</loc><lastmod>${now}</lastmod><priority>0.8</priority></url>`).join('\n');
+  const storeUrls = stores.map(s => `<url><loc>${host}/s/${s.slug}</loc><lastmod>${(s.updated_at||now).slice(0,10)}</lastmod><priority>0.9</priority></url>`).join('\n');
+  res.type('application/xml').send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${staticUrls}\n${storeUrls}\n</urlset>`);
 });
 
 router.get('/robots.txt', (req, res) => {

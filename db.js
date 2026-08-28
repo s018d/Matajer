@@ -379,6 +379,7 @@ CREATE TABLE IF NOT EXISTS coupons (
 );
 `);
   try { db.exec("ALTER TABLE stores ADD COLUMN whatsapp TEXT DEFAULT ''"); } catch (e) {}
+  try { db.exec("ALTER TABLE stores ADD COLUMN updated_at TEXT DEFAULT (datetime('now','localtime'))"); } catch (e) {}
   try { db.exec("ALTER TABLE stores ADD COLUMN custom_domain TEXT DEFAULT ''"); } catch (e) {}
   try { db.exec("ALTER TABLE stores ADD COLUMN delivery_fee REAL DEFAULT 0"); } catch (e) {}
   try { db.exec("ALTER TABLE stores ADD COLUMN free_delivery_min REAL DEFAULT 0"); } catch (e) {}

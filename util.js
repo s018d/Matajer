@@ -78,12 +78,39 @@ function requireAuth(req, res, next) {
   next();
 }
 
+const ADMIN_ROLES = ['superadmin','admin','billing','support','viewer'];
+const ROLE_PERMISSIONS = {
+  superadmin: ['*'],
+  admin: ['stores.view','stores.edit','stores.delete','products.view','products.edit','orders.view','orders.edit','payments.view','payments.manage','templates.manage','settings.view','settings.manage','users.view','users.manage','activity.view','backup.create','reviews.manage'],
+  billing: ['stores.view','orders.view','payments.view','payments.manage','activity.view'],
+  support: ['stores.view','stores.edit','products.view','orders.view','orders.edit','reviews.manage','activity.view'],
+  viewer: ['stores.view','products.view','orders.view','payments.view','activity.view']
+};
+function hasPermission(user, perm) {
+  if (!user) return false;
+  if (user.role === 'superadmin') return true;
+  // custom permissions JSON overrides role defaults
+  let perms = [];
+  try { perms = user.permissions ? JSON.parse(user.permissions) : []; } catch {}
+  if (perms.length) return perms.includes(perm) || perms.includes('*');
+  const rolePerms = ROLE_PERMISSIONS[user.role] || [];
+  return rolePerms.includes(perm) || rolePerms.includes('*');
+}
 function requireAdmin(req, res, next) {
   const user = currentUser(req);
   if (!user) return res.redirect('/login');
-  if (user.role !== 'superadmin') return res.status(403).render('error', { msg: 'هذه الصفحة للمدير العام فقط', user });
+  if (!ADMIN_ROLES.includes(user.role)) return res.status(403).render('error', { msg: 'هذه الصفحة للإدارة فقط', user });
+  if (user.is_active === 0) return res.status(403).render('error', { msg: 'حسابك موقوف — تواصل مع المدير العام', user });
   req.user = user;
   next();
+}
+function requirePermission(perm) {
+  return (req, res, next) => {
+    const user = req.user || currentUser(req);
+    if (!user) return res.redirect('/login');
+    if (!hasPermission(user, perm)) return res.status(403).render('error', { msg: 'ليس لديك صلاحية: ' + perm, user });
+    next();
+  };
 }
 
 function requireOwner(req, res, next) {
@@ -288,7 +315,7 @@ function addCashFlowEntry(storeId, type, category, amount, referenceType, refere
 module.exports = {
   now, appendLog, hashPassword, checkPassword, genPassword, genSlug,
   createSession, destroySession, currentUser,
-  requireAuth, requireAdmin, requireOwner, money, logActivity, thumb,
+  requireAuth, requireAdmin, requirePermission, hasPermission, ADMIN_ROLES, ROLE_PERMISSIONS, requireOwner, money, logActivity, thumb,
   checkLimit, loginLocked, loginFail, loginOk, captchaNew, captchaCheck,
   sendTelegram, notifyNewOrder,
   getLoyaltyPoints, addLoyaltyPoints, redeemLoyaltyPoints, getLoyaltyConfig,

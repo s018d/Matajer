@@ -1,0 +1,107 @@
+<%- include('../partials/head', { title: 'فريق الإدارة — دُكّان' }) %>
+<body class="app">
+<%- include('../partials/sidebar-admin', { active: 'team', user }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: '👥 فريق الإدارة — نظام هرمي' }) %>
+  <div class="content">
+    <% if (typeof ok !== 'undefined' && ok) { %><div class="alert alert-ok"><%= ok %></div><% } %>
+    <% if (typeof err !== 'undefined' && err) { %><div class="alert alert-err">⚠️ <%= err %></div><% } %>
+
+    <div class="card" style="border:2px solid #e0e7ff; background:linear-gradient(135deg,#f8faff,#eff6ff)">
+      <h2 style="color:#1e40af">➕ إضافة مشرف جديد</h2>
+      <p class="muted" style="font-size:.85rem; margin:.3rem 0 1rem">اختر الدور بعناية — كل دور له صلاحيات محددة. السوبر أدمن فقط ينشئ سوبر أدمن.</p>
+      <form method="post" action="/admin/team?_csrf=<%= csrf %>" class="stack" style="max-width:700px">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:.8rem">
+          <label>اسم المستخدم *
+            <input type="text" name="username" required placeholder="مثال: ahmed_support" minlength="3" pattern="[a-zA-Z0-9_]+">
+            <small class="field-hint">إنجليزي وأرقام فقط، 3+ أحرف</small>
+          </label>
+          <label>الاسم الظاهر
+            <input type="text" name="display_name" placeholder="أحمد — الدعم الفني">
+          </label>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:.8rem">
+          <label>كلمة المرور *
+            <input type="text" name="password" required placeholder="6+ أحرف" minlength="6">
+            <small class="field-hint">ستظهر مرة واحدة فقط بعد الإنشاء</small>
+          </label>
+          <label>الدور *
+            <select name="role" required id="roleSelect" onchange="updateRoleDesc()">
+              <option value="viewer">👁️ مشاهد فقط — يرى ويحسب</option>
+              <option value="support">🛠️ دعم — يعدل متاجر/طلبات</option>
+              <option value="billing">💳 مالي — باقات + أسعار</option>
+              <option value="admin">👑 أدمن — كل شيء إلا إدارة الفريق العليا</option>
+              <% if (user.role === 'superadmin') { %><option value="superadmin">⭐ سوبر أدمن — كل شيء</option><% } %>
+            </select>
+          </label>
+        </div>
+        <div id="roleDesc" class="alert" style="background:#f0f9ff; border-color:#bae6fd; color:#0c4a6e; font-size:.84rem; margin:.5rem 0"></div>
+        <button class="btn btn-primary" type="submit">➕ إنشاء الحساب</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="card-head-row">
+        <h2>👥 الفريق الحالي (<%= team.length %>)</h2>
+        <span class="badge">أنت: <%= user.username %> (<%= user.role %>)</span>
+      </div>
+      <div class="table-wrap">
+      <table class="table">
+        <tr><th>المستخدم</th><th>الدور</th><th>الحالة</th><th>آخر دخول</th><th>إجراءات</th></tr>
+        <% team.forEach(m => { %>
+          <tr style="<%= m.id===user.id ? 'background:#f0f9ff' : '' %>">
+            <td>
+              <b><%= m.username %></b> <%= m.id===user.id ? '<span class="badge badge-ok">أنت</span>' : '' %>
+              <% if (m.display_name) { %><br><small class="muted"><%= m.display_name %></small><% } %>
+            </td>
+            <td>
+              <% const roleLabels = {superadmin:'⭐ سوبر أدمن', admin:'👑 أدمن', billing:'💳 مالي', support:'🛠️ دعم', viewer:'👁️ مشاهد'}; %>
+              <span class="badge <%= m.role==='superadmin' ? 'badge-err' : m.role==='admin' ? 'badge-warn' : m.role==='billing' ? 'badge-ok' : '' %>"><%= roleLabels[m.role] || m.role %></span>
+            </td>
+            <td><span class="badge <%= m.is_active ? 'badge-ok' : 'badge-err' %>"><%= m.is_active ? 'نشط' : 'موقوف' %></span></td>
+            <td><small class="muted"><%= m.last_login || '—' %></small><br><small class="muted" style="font-size:.7rem"><%= m.created_at ? m.created_at.slice(0,10) : '' %></small></td>
+            <td>
+              <div class="row-actions">
+                <% if (m.id !== user.id) { %>
+                  <form method="post" action="/admin/team/<%= m.id %>/toggle?_csrf=<%= csrf %>" class="inline"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn btn-sm <%= m.is_active ? 'btn-ghost' : 'btn-primary' %>"><%= m.is_active ? '⏸️ تعطيل' : '▶️ تفعيل' %></button></form>
+                  <form method="post" action="/admin/team/<%= m.id %>/resetpass?_csrf=<%= csrf %>" class="inline"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn btn-sm btn-ghost" onclick="return confirm('تصفير كلمة مرور <%= m.username %>؟')">🔑 تصفير</button></form>
+                  <% if (m.role !== 'superadmin') { %>
+                  <form method="post" action="/admin/team/<%= m.id %>/delete?_csrf=<%= csrf %>" class="inline" onsubmit="return confirm('حذف <%= m.username %> نهائياً؟')"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn btn-sm btn-danger">🗑️ حذف</button></form>
+                  <% } %>
+                <% } else { %>
+                  <span class="muted" style="font-size:.8rem">حسابك</span>
+                <% } %>
+              </div>
+            </td>
+          </tr>
+        <% }) %>
+      </table>
+      </div>
+      <div style="margin-top:1rem; padding:1rem; background:#fef3c7; border-radius:12px; border:1.5px solid #fde68a; font-size:.83rem; line-height:1.7">
+        <b>📌 شرح الأدوار:</b><br>
+        <b>👁️ مشاهد:</b> يرى المتاجر/الطلبات/الإحصائيات فقط — لا يعدل شيئاً — مثالي للمحاسب.<br>
+        <b>🛠️ دعم:</b> يعدل متاجر ومنتجات ويتابع طلبات ويوافق تقييمات — لا يمس الباقات ولا الإعدادات.<br>
+        <b>💳 مالي:</b> يفعل الباقات الاحترافية ويغير أسعار الباقات ويصادق المدفوعات — لا يحذف متاجر.<br>
+        <b>👑 أدمن:</b> كل شيء إلا إنشاء/حذف سوبر أدمن.<br>
+        <b>⭐ سوبر أدمن:</b> تحكم كامل حتى إدارة الفريق.
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+function updateRoleDesc(){
+  const v = document.getElementById('roleSelect').value;
+  const descs = {
+    viewer: '👁️ يرى كل شيء لكن لا يعدل — آمن للمحاسب/المراقب',
+    support: '🛠️ يعدل متاجر وطلبات ويرد على العملاء — لا يمس المال',
+    billing: '💳 يفعل الباقات ويغير الأسعار ويصادق الدفعات — لا يحذف',
+    admin: '👑 كل الصلاحيات إلا إدارة السوبر أدمن — نائبك',
+    superadmin: '⭐ تحكم مطلق — ينشئ أدمنز ويحذف أي شيء'
+  };
+  document.getElementById('roleDesc').textContent = descs[v] || '';
+}
+updateRoleDesc();
+</script>
+</body>
+</html>

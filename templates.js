@@ -22,15 +22,35 @@ const LIST = [FREE];
 
 const BY_ID = new Map(LIST.map(t => [t.id, t]));
 
+// ديناميكي من DB إن وجد — بدون كسر إذا لم تكن الجداول جاهزة بعد
+function dbTemplates() {
+  try {
+    const { db } = require('./db');
+    if (db.isPg) return []; // PG async — يُستخدم الهاردكود كـ fallback مبدئياً
+    const rows = db.prepare('SELECT * FROM templates WHERE is_active=1 ORDER BY position, id').all();
+    return rows;
+  } catch { return []; }
+}
+
 function valid(id) {
   if (!id) return false;
   if (BY_ID.has(id) || LEGACY.includes(id)) return true;
   if (PREMIUM_MAP.has(id)) return true;
+  try {
+    const rows = dbTemplates();
+    if (rows.find(r => r.id === id)) return true;
+  } catch {}
   return false;
 }
 
 function isPremium(id) {
-  return PREMIUM_MAP.has(id);
+  if (PREMIUM_MAP.has(id)) return true;
+  try {
+    const rows = dbTemplates();
+    const r = rows.find(x => x.id === id);
+    if (r) return !!r.is_premium;
+  } catch {}
+  return false;
 }
 
 function get(id) {
@@ -39,7 +59,23 @@ function get(id) {
   const free = BY_ID.get(id);
   if (free) return { ...free };
   if (LEGACY.includes(id)) return { ...FREE, id };
+  try {
+    const rows = dbTemplates();
+    const r = rows.find(x => x.id === id);
+    if (r) return { id: r.id, name: r.name, desc: r.description, classes: r.id, style: '', palette: { primary:'#0ea5e9', accent:'#0284c7', bg:'#ffffff', ink:'#0f172a', soft:'#f1f5f9' }, premium: !!r.is_premium, css: r.css_file };
+  } catch {}
   return null;
+}
+
+function allActive() {
+  const base = [...LIST, ...PREMIUM.filter(p => valid(p.id))];
+  try {
+    const rows = dbTemplates();
+    for (const r of rows) {
+      if (!base.find(b => b.id === r.id)) base.push({ id: r.id, name: r.name, desc: r.description, classes: r.id, palette: { primary:'#0ea5e9', accent:'#0284c7', bg:'#ffffff', ink:'#0f172a', soft:'#f1f5f9' }, premium: !!r.is_premium, css: r.css_file });
+    }
+  } catch {}
+  return base;
 }
 
 function cssVars(tpl, customColor) {
@@ -52,4 +88,4 @@ function describe(tpl) {
   return tpl.desc || tpl.name;
 }
 
-module.exports = { LIST, PREMIUM, LEGACY, valid, isPremium, get, cssVars, describe };
+module.exports = { LIST, PREMIUM, LEGACY, valid, isPremium, get, cssVars, describe, allActive };

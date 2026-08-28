@@ -1,76 +1,106 @@
-<%- include('../partials/head', { title: 'نظرة عامة — المدير العام' }) %>
+<%- include('../partials/head', { title: 'مركز التحكم — دُكّان' }) %>
 <body class="app">
-<%- include('../partials/sidebar-admin', { active: 'dash' }) %>
+<%- include('../partials/sidebar-admin', { active: 'dash', user }) %>
 <main class="main">
-  <%- include('../partials/topbar', { pageTitle: 'نظرة عامة' }) %>
+  <%- include('../partials/topbar', { pageTitle: '🎛️ مركز التحكم الشامل' }) %>
   <div class="content">
+    <!-- Hero Control Center -->
+    <div class="card" style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0f2b3d 100%); color:#fff; border:none; padding:1.8rem; position:relative; overflow:hidden">
+      <div style="position:absolute; inset:0; background:radial-gradient(circle at 30% 20%,rgba(99,102,241,.2),transparent 50%), radial-gradient(circle at 80% 80%,rgba(56,189,248,.15),transparent 50%)"></div>
+      <div style="position:relative; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem">
+        <div>
+          <h2 style="color:#fff; font-size:1.4rem; margin-bottom:.35rem">أهلاً <%= user.display_name || user.username %> 👋 — تحكم كامل</h2>
+          <p style="color:#cbd5e1; font-size:.88rem; margin:0">كل شيء من هنا: متاجر، قوالب، باقات، فريق — بدون كود</p>
+        </div>
+        <div style="display:flex; gap:.5rem; flex-wrap:wrap">
+          <a href="/admin/stores" class="btn btn-primary" style="background:#fff; color:#0f172a; border:none">🏪 إدارة المتاجر</a>
+          <a href="/admin/team" class="btn" style="background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.2)">👥 الفريق</a>
+          <a href="/admin/templates" class="btn" style="background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.2)">🎨 القوالب</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Grid Enhanced -->
     <div class="stat-grid">
-      <div class="stat"><span>المتاجر</span><b><%= totals.stores %></b></div>
-      <div class="stat"><span>المستخدمون</span><b><%= totals.users %></b></div>
-      <div class="stat"><span>المنتجات</span><b><%= totals.products %></b></div>
-      <div class="stat"><span>الطلبات</span><b><%= totals.orders %></b></div>
-      <div class="stat stat-strong"><span>إجمالي المبيعات</span><b><%= money(totals.revenue) %></b></div>
-      <div class="stat"><span>باقات احترافية</span><b><%= totals.pro %></b></div>
-      <div class="stat"><span>أكواد الخصم</span><b><%= totals.coupons %></b></div>
-      <div class="stat <%= totals.newOrders ? 'stat-strong' : '' %>"><span>طلبات جديدة</span><b><%= totals.newOrders %></b></div>
-      <div class="stat <%= totals.pendingPayments ? 'stat-strong' : '' %>"><span>ترقيات بانتظار التأكيد</span><b><%= totals.pendingPayments %></b></div>
+      <div class="stat" style="border-top:3px solid #2563eb"><span>🏪 المتاجر</span><b><%= totals.stores %></b><small class="muted" style="font-size:.7rem"><%= totals.pro %> برو • <%= totals.stores - totals.pro %> مجاني</small></div>
+      <div class="stat stat-strong" style="border-top:3px solid #10b981"><span>💰 إجمالي المبيعات</span><b><%= money(totals.revenue) %></b><small class="muted" style="font-size:.7rem"><%= totals.orders %> طلب</small></div>
+      <div class="stat <%= totals.newOrders ? 'stat-strong' : '' %>" style="border-top:3px solid #f59e0b"><span>🆕 طلبات جديدة</span><b><%= totals.newOrders %></b><small class="muted" style="font-size:.7rem">تحتاج متابعة</small></div>
+      <div class="stat <%= totals.pendingPayments ? 'stat-strong' : '' %>" style="border-top:3px solid #ef4444"><span>⏳ ترقيات معلقة</span><b><%= totals.pendingPayments %></b><small class="muted" style="font-size:.7rem">بانتظار تأكيدك</small></div>
+      <div class="stat"><span>📦 المنتجات</span><b><%= totals.products %></b></div>
+      <div class="stat"><span>🎟️ أكواد الخصم</span><b><%= totals.coupons %></b></div>
+      <div class="stat"><span>👥 المستخدمون</span><b><%= totals.users %></b></div>
+      <div class="stat"><span>⭐ برو</span><b><%= totals.pro %></b></div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card">
+      <h2>⚡ إجراءات سريعة</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.7rem; margin-top:.8rem">
+        <a href="/admin/stores" class="btn btn-ghost" style="justify-content:flex-start; padding:.8rem; border-radius:12px"><span style="font-size:1.3rem">🏪</span> <span><b>إدارة المتاجر</b><br><small class="muted">تعديل/توقيف/ترقية</small></span></a>
+        <a href="/admin/payments" class="btn btn-ghost" style="justify-content:flex-start; padding:.8rem; border-radius:12px"><span style="font-size:1.3rem">💳</span> <span><b>المدفوعات</b><br><small class="muted"><%= totals.pendingPayments %> بانتظار</small></span></a>
+        <a href="/admin/templates" class="btn btn-ghost" style="justify-content:flex-start; padding:.8rem; border-radius:12px"><span style="font-size:1.3rem">🎨</span> <span><b>القوالب</b><br><small class="muted">رفع/تفعيل/حذف</small></span></a>
+        <a href="/admin/team" class="btn btn-ghost" style="justify-content:flex-start; padding:.8rem; border-radius:12px"><span style="font-size:1.3rem">👥</span> <span><b>فريق الإدارة</b><br><small class="muted">أدوار هرمية</small></span></a>
+        <a href="/admin/site" class="btn btn-ghost" style="justify-content:flex-start; padding:.8rem; border-radius:12px"><span style="font-size:1.3rem">⚙️</span> <span><b>إعدادات المنصة</b><br><small class="muted">أسعار/تجربة/تواصل</small></span></a>
+        <a href="/admin/backup" class="btn btn-ghost" style="justify-content:flex-start; padding:.8rem; border-radius:12px"><span style="font-size:1.3rem">💾</span> <span><b>نسخة احتياطية</b><br><small class="muted">تحميل DB+صور</small></span></a>
+      </div>
     </div>
 
     <div class="two-col">
       <div class="card">
-        <h2>أعلى المتاجر مبيعاً</h2>
-        <table>
+        <div class="card-head-row"><h2>🏆 أعلى المتاجر مبيعاً</h2><a href="/admin/stores" class="btn btn-sm btn-ghost">عرض الكل</a></div>
+        <div class="table-wrap"><table class="table">
           <tr><th>المتجر</th><th>الطلبات</th><th>المبيعات</th><th>الباقة</th></tr>
           <% topStores.forEach(s => { %>
             <tr>
-              <td><a href="/admin/stores/<%= s.id %>"><%= s.name %></a></td>
-              <td><%= s.orders %></td>
+              <td><a href="/admin/stores/<%= s.id %>"><b><%= s.name %></b></a><br><small class="muted">/s/<%= s.slug %></small></td>
+              <td><span class="badge"><%= s.orders %></span></td>
               <td><b><%= money(s.revenue) %></b></td>
-              <td><span class="badge <%= s.plan === 'pro' ? 'badge-ok' : '' %>"><%= s.plan === 'pro' ? 'احترافية' : 'مجانية' %></span></td>
+              <td><span class="badge <%= s.plan === 'pro' ? 'badge-ok' : '' %>"><%= s.plan === 'pro' ? '⭐ برو' : 'مجانية' %></span></td>
             </tr>
           <% }) %>
           <% if (topStores.length === 0) { %><tr><td colspan="4" class="muted">لا مبيعات بعد</td></tr><% } %>
-        </table>
+        </table></div>
       </div>
       <div class="card">
-        <h2>آخر الطلبات</h2>
-        <table>
+        <div class="card-head-row"><h2>🆕 آخر الطلبات</h2><a href="/admin/activity" class="btn btn-sm btn-ghost">السجل</a></div>
+        <div class="table-wrap"><table class="table">
           <tr><th>#</th><th>المتجر</th><th>الزبون</th><th>المبلغ</th><th>الحالة</th></tr>
           <% recentOrders.forEach(o => { %>
             <tr>
-              <td><%= o.id %></td>
-              <td><%= o.store_name %></td>
+              <td><b>#<%= o.id %></b></td>
+              <td><small><%= o.store_name %></small></td>
               <td><%= o.customer_name %></td>
-              <td><%= money(o.total) %></td>
-              <td><span class="badge <%= o.status === 'new' ? 'badge-warn' : (o.status === 'completed' ? 'badge-ok' : '') %>"><%= { new: 'جديد', confirmed: 'مؤكد', completed: 'مكتمل', cancelled: 'ملغي' }[o.status] %></span></td>
+              <td><b><%= money(o.total) %></b></td>
+              <td><span class="badge <%= o.status === 'new' ? 'badge-warn' : (o.status === 'completed' ? 'badge-ok' : o.status==='cancelled' ? 'badge-err' : '') %>"><%= { new: 'جديد', confirmed: 'مؤكد', completed: 'مكتمل', cancelled: 'ملغي', pending_payment:'معلق' }[o.status] || o.status %></span></td>
             </tr>
           <% }) %>
           <% if (recentOrders.length === 0) { %><tr><td colspan="5" class="muted">لا طلبات بعد</td></tr><% } %>
-        </table>
+        </table></div>
       </div>
     </div>
 
     <div class="two-col">
       <div class="card">
-        <h2>آخر المتاجر</h2>
-        <table>
+        <div class="card-head-row"><h2>🏪 آخر المتاجر</h2><a href="/admin/stores" class="btn btn-sm btn-primary">إدارة</a></div>
+        <div class="table-wrap"><table class="table">
           <tr><th>المتجر</th><th>صاحب الحساب</th><th>الحالة</th><th></th></tr>
           <% stores.slice(0, 8).forEach(s => { %>
             <tr>
-              <td><a href="/admin/stores/<%= s.id %>"><%= s.name %></a></td>
-              <td><%= s.owner_username || '—' %></td>
+              <td><a href="/admin/stores/<%= s.id %>"><b><%= s.name %></b></a><br><small class="muted">/s/<%= s.slug %></small></td>
+              <td><small><%= s.owner_username || '—' %></small></td>
               <td><span class="badge <%= s.status === 'active' ? 'badge-ok' : 'badge-err' %>"><%= s.status === 'active' ? 'نشط' : 'موقوف' %></span></td>
-              <td><a class="btn btn-sm" href="/s/<%= s.slug %>" target="_blank">عرض</a></td>
+              <td><div class="row-actions"><a class="btn btn-sm btn-ghost" href="/s/<%= s.slug %>" target="_blank">عرض</a><a class="btn btn-sm" href="/admin/stores/<%= s.id %>">تعديل</a></div></td>
             </tr>
           <% }) %>
-        </table>
+        </table></div>
       </div>
       <div class="card">
-        <h2>آخر النشاطات</h2>
+        <div class="card-head-row"><h2>📋 آخر النشاطات</h2><a href="/admin/activity" class="btn btn-sm btn-ghost">عرض الكل</a></div>
         <ul class="feed">
           <% recent.forEach(r => { %>
             <li><span class="feed-act"><%= r.action %></span> <span class="feed-detail"><%= r.details %></span><small><%= r.username %> — <%= r.created_at %></small></li>
           <% }) %>
+          <% if (recent.length===0) { %><li class="muted">لا نشاط بعد</li><% } %>
         </ul>
       </div>
     </div>

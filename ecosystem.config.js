@@ -10,8 +10,7 @@ module.exports = {
       NODE_ENV: 'production',
       PORT: 3000,
       TRUST_PROXY: '1',
-      DISABLE_SAMPLES: '1',
-      ZAINCASH_ENABLED: 'false'
+      DISABLE_SAMPLES: '1'
     },
     out_file: './logs/pm2-out.log',
     error_file: './logs/pm2-error.log',

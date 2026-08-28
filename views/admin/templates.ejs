@@ -1,0 +1,58 @@
+<%- include('../partials/head', { title: 'إدارة القوالب — دُكّان' }) %>
+<body class="app">
+<%- include('../partials/sidebar-admin', { active: 'templates', user }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: '🎨 إدارة القوالب — تحكم كامل' }) %>
+  <div class="content">
+    <% if (ok) { %><div class="alert alert-ok"><%= ok %></div><% } %>
+    <% if (err) { %><div class="alert alert-err">⚠️ <%= err %></div><% } %>
+
+    <div class="card" style="border:2px solid #e0e7ff; background:linear-gradient(135deg,#f8faff,#eff6ff)">
+      <h2>➕ رفع قالب جديد</h2>
+      <p class="muted" style="font-size:.82rem; margin:.3rem 0 1rem">ارفع ملف CSS فقط — سيظهر فوراً في لوحة التاجر. المعرّف إنجليزي بدون مسافات (مثال: my-luxe)</p>
+      <form method="post" action="/admin/templates?_csrf=<%= csrf %>" enctype="multipart/form-data" class="stack" style="max-width:700px">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:.8rem">
+          <label>معرّف القالب *<input type="text" name="id" required placeholder="my-luxe" pattern="[a-z0-9_-]+" style="direction:ltr"></label>
+          <label>اسم القالب *<input type="text" name="name" required placeholder="الفاخر الذهبي"></label>
+        </div>
+        <label>الوصف<textarea name="description" rows="2" placeholder="فاخر هادئ: عاجي وذهبي..."></textarea></label>
+        <div style="display:grid; grid-template-columns:1fr auto; gap:.8rem; align-items:end">
+          <label>ملف CSS (اختياري — 500KB max)<input type="file" name="css_file" accept=".css"></label>
+          <label style="flex-direction:row; align-items:center; gap:.4rem"><input type="checkbox" name="is_premium" style="width:auto"> مميز (يحتاج برو)</label>
+        </div>
+        <button class="btn btn-primary" type="submit">📤 رفع القالب</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>📚 القوالب الحالية (<%= list.length %>)</h2>
+      <div class="table-wrap">
+      <table class="table">
+        <tr><th>المعرّف</th><th>الاسم</th><th>النوع</th><th>الحالة</th><th>ملف CSS</th><th>إجراءات</th></tr>
+        <% list.forEach(t => { %>
+          <tr>
+            <td><code dir="ltr"><%= t.id %></code></td>
+            <td><b><%= t.name %></b><% if (t.description) { %><br><small class="muted"><%= t.description.slice(0,60) %></small><% } %></td>
+            <td><span class="badge <%= t.is_premium ? 'badge-warn' : 'badge-ok' %>"><%= t.is_premium ? '⭐ مميز' : 'مجاني' %></span></td>
+            <td><span class="badge <%= t.is_active ? 'badge-ok' : 'badge-err' %>"><%= t.is_active ? 'نشط' : 'موقوف' %></span></td>
+            <td><small dir="ltr" style="font-size:.7rem"><%= t.css_file || '—' %></small></td>
+            <td>
+              <div class="row-actions">
+                <form method="post" action="/admin/templates/<%= t.id %>/toggle?_csrf=<%= csrf %>" class="inline"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn btn-sm btn-ghost"><%= t.is_active ? '⏸️ تعطيل' : '▶️ تفعيل' %></button></form>
+                <form method="post" action="/admin/templates/<%= t.id %>/premium?_csrf=<%= csrf %>" class="inline"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn btn-sm btn-ghost"><%= t.is_premium ? '→ مجاني' : '→ مميز' %></button></form>
+                <% if (t.id !== 'classic') { %>
+                <form method="post" action="/admin/templates/<%= t.id %>/delete?_csrf=<%= csrf %>" class="inline" onsubmit="return confirm('حذف قالب <%= t.id %>؟')"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="btn btn-sm btn-danger">🗑️ حذف</button></form>
+                <% } %>
+              </div>
+            </td>
+          </tr>
+        <% }) %>
+      </table>
+      </div>
+      <p class="muted" style="font-size:.82rem; margin-top:1rem">💡 التاجر يرى فقط القوالب <b>النشطة</b>. المجانية تظهر للجميع، المميزة للباقة الاحترافية فقط. تقدر ترفع CSS جديد وتحدد نوعه بدون كود.</p>
+    </div>
+  </div>
+</main>
+</body>
+</html>

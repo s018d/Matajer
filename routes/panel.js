@@ -1,4 +1,4 @@
-const express = require('express');
+﻿const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
@@ -31,12 +31,12 @@ function uploader(folderName) {
     limits: { fileSize: 12 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
       const ok = ['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(path.extname(file.originalname).toLowerCase());
-      cb(ok ? null : new Error('نوع الملف غير مقبول'), ok);
+      cb(ok ? null : new Error('Ù†ÙˆØ¹ Ø§Ù„Ù…Ù„Ù ØºÙŠØ± Ù…Ù‚Ø¨ÙˆÙ„'), ok);
     }
   });
 }
 
-/* التحقق من الهيكلية الحقيقية للملف عبر Magic Bytes بدلاً من الاعتماد على الامتداد فقط */
+/* Ø§Ù„ØªØ­Ù‚Ù‚ Ù…Ù† Ø§Ù„Ù‡ÙŠÙƒÙ„ÙŠØ© Ø§Ù„Ø­Ù‚ÙŠÙ‚ÙŠØ© Ù„Ù„Ù…Ù„Ù Ø¹Ø¨Ø± Magic Bytes Ø¨Ø¯Ù„Ø§Ù‹ Ù…Ù† Ø§Ù„Ø§Ø¹ØªÙ…Ø§Ø¯ Ø¹Ù„Ù‰ Ø§Ù„Ø§Ù…ØªØ¯Ø§Ø¯ ÙÙ‚Ø· */
 function isRealImage(filePath) {
   try {
     const fd = fs.openSync(filePath, 'r');
@@ -58,11 +58,11 @@ function isRealImage(filePath) {
   }
 }
 
-/* ضغط الصور تلقائياً: تصغير للعرض الأقصى + مصغرة للمعاينة السريعة */
+/* Ø¶ØºØ· Ø§Ù„ØµÙˆØ± ØªÙ„Ù‚Ø§Ø¦ÙŠØ§Ù‹: ØªØµØºÙŠØ± Ù„Ù„Ø¹Ø±Ø¶ Ø§Ù„Ø£Ù‚ØµÙ‰ + Ù…ØµØºØ±Ø© Ù„Ù„Ù…Ø¹Ø§ÙŠÙ†Ø© Ø§Ù„Ø³Ø±ÙŠØ¹Ø© */
 async function processImage(filePath) {
   if (!isRealImage(filePath)) {
     try { if (fs.existsSync(filePath)) fs.unlinkSync(filePath); } catch (e) {}
-    throw new Error('الملف المرفوع ليس صورة صالحة');
+    throw new Error('Ø§Ù„Ù…Ù„Ù Ø§Ù„Ù…Ø±ÙÙˆØ¹ Ù„ÙŠØ³ ØµÙˆØ±Ø© ØµØ§Ù„Ø­Ø©');
   }
   try {
     const sharp = require('sharp');
@@ -75,9 +75,9 @@ async function processImage(filePath) {
     if (!meta.width) return;
     if (meta.width > 1200) await img.clone().resize({ width: 1200, withoutEnlargement: true }).toFormat(fmt, opts).toFile(filePath);
     await sharp(filePath, { failOn: 'none' }).resize({ width: 400, withoutEnlargement: true }).toFormat(fmt, opts).toFile(thumbPath);
-  } catch (e) { /* نُبقي الصورة الأصلية عند أي خطأ */ }
+  } catch (e) { /* Ù†ÙØ¨Ù‚ÙŠ Ø§Ù„ØµÙˆØ±Ø© Ø§Ù„Ø£ØµÙ„ÙŠØ© Ø¹Ù†Ø¯ Ø£ÙŠ Ø®Ø·Ø£ */ }
 }
-// مولتر للمنتجات: مجلد مؤقت للإنشاء + مجلد المنتج للتعديل
+// Ù…ÙˆÙ„ØªØ± Ù„Ù„Ù…Ù†ØªØ¬Ø§Øª: Ù…Ø¬Ù„Ø¯ Ù…Ø¤Ù‚Øª Ù„Ù„Ø¥Ù†Ø´Ø§Ø¡ + Ù…Ø¬Ù„Ø¯ Ø§Ù„Ù…Ù†ØªØ¬ Ù„Ù„ØªØ¹Ø¯ÙŠÙ„
 const upPics = () => uploader(req => `product_${req.params.id}`);
 const upNewPics = () => uploader(() => `tmp_new`);
 
@@ -121,7 +121,7 @@ router.get('/', (req, res) => {
     GROUP BY dow ORDER BY cnt DESC LIMIT 7
   `).all(store.id);
   
-  const dowNames = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const dowNames = ['Ø§Ù„Ø£Ø­Ø¯','Ø§Ù„Ø¥Ø«Ù†ÙŠÙ†','Ø§Ù„Ø«Ù„Ø§Ø«Ø§Ø¡','Ø§Ù„Ø£Ø±Ø¨Ø¹Ø§Ø¡','Ø§Ù„Ø®Ù…ÙŠØ³','Ø§Ù„Ø¬Ù…Ø¹Ø©','Ø§Ù„Ø³Ø¨Øª'];
   
   const recent = db.prepare('SELECT * FROM orders WHERE store_id=? ORDER BY id DESC LIMIT 6').all(store.id);
   const chart = [];
@@ -199,23 +199,23 @@ router.get('/products/new', (req, res) => {
 router.post('/products', upNewPics().array('images', 20), asyncHandler(async (req, res) => {
   const store = getStore(req.user.store_id);
   const { name, category_id, price, old_price, description, active, stock, options, addons } = req.body;
-  if (!name || isNaN(Number(price))) return res.redirect('/panel/products/new?err=' + encodeURIComponent('اسم المنتج وسعره مطلوبان'));
+  if (!name || isNaN(Number(price))) return res.redirect('/panel/products/new?err=' + encodeURIComponent('Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬ ÙˆØ³Ø¹Ø±Ù‡ Ù…Ø·Ù„ÙˆØ¨Ø§Ù†'));
   if (containsForbidden(name) || containsForbidden(description)) {
-    const w = getForbiddenWord(name + ' ' + (description||'')) || 'ممنوعة';
-    return res.redirect('/panel/products/new?err=' + encodeURIComponent(`المنتج يحتوي على كلمة غير مسموحة: "${w}" — يرجى تعديل الاسم/الوصف`));
+    const w = getForbiddenWord(name + ' ' + (description||'')) || 'Ù…Ù…Ù†ÙˆØ¹Ø©';
+    return res.redirect('/panel/products/new?err=' + encodeURIComponent(`Ø§Ù„Ù…Ù†ØªØ¬ ÙŠØ­ØªÙˆÙŠ Ø¹Ù„Ù‰ ÙƒÙ„Ù…Ø© ØºÙŠØ± Ù…Ø³Ù…ÙˆØ­Ø©: "${w}" â€” ÙŠØ±Ø¬Ù‰ ØªØ¹Ø¯ÙŠÙ„ Ø§Ù„Ø§Ø³Ù…/Ø§Ù„ÙˆØµÙ`));
   }
   if (!isPro(store)) {
     const maxP = Number(siteSettings().free_products || 10);
     const cnt = db.prepare('SELECT COUNT(*) c FROM products WHERE store_id=?').get(store.id).c;
     if (cnt >= maxP)
-      return res.redirect('/panel/products/new?err=' + encodeURIComponent(`باقتك المجانية تسمح بـ ${maxP} منتج فقط — رقِّ باقتك من صفحة «الباقات» لإضافة المزيد`));
+      return res.redirect('/panel/products/new?err=' + encodeURIComponent(`Ø¨Ø§Ù‚ØªÙƒ Ø§Ù„Ù…Ø¬Ø§Ù†ÙŠØ© ØªØ³Ù…Ø­ Ø¨Ù€ ${maxP} Ù…Ù†ØªØ¬ ÙÙ‚Ø· â€” Ø±Ù‚ÙÙ‘ Ø¨Ø§Ù‚ØªÙƒ Ù…Ù† ØµÙØ­Ø© Â«Ø§Ù„Ø¨Ø§Ù‚Ø§ØªÂ» Ù„Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ù…Ø²ÙŠØ¯`));
   }
   const stockVal = stock === '' || stock == null ? null : Math.max(0, Math.floor(Number(stock) || 0));
   const optsJson = sanitizeOptions(options);
   const addonsJson = sanitizeAddons(addons);
   const info = db.prepare('INSERT INTO products (store_id, category_id, name, description, price, old_price, active, stock, options, addons) VALUES (?,?,?,?,?,?,?,?,?,?)')
     .run(store.id, category_id ? Number(category_id) : null, String(name), String(description || ''), Number(price), old_price && !isNaN(Number(old_price)) ? Number(old_price) : null, active === 'on' ? 1 : 0, stockVal, optsJson, addonsJson);
-  // حفظ الصور مباشرة إن رُفعت مع الإنشاء (خطوة واحدة) — نقل من tmp_new إلى مجلد المنتج الصحيح
+  // Ø­ÙØ¸ Ø§Ù„ØµÙˆØ± Ù…Ø¨Ø§Ø´Ø±Ø© Ø¥Ù† Ø±ÙÙØ¹Øª Ù…Ø¹ Ø§Ù„Ø¥Ù†Ø´Ø§Ø¡ (Ø®Ø·ÙˆØ© ÙˆØ§Ø­Ø¯Ø©) â€” Ù†Ù‚Ù„ Ù…Ù† tmp_new Ø¥Ù„Ù‰ Ù…Ø¬Ù„Ø¯ Ø§Ù„Ù…Ù†ØªØ¬ Ø§Ù„ØµØ­ÙŠØ­
   if (req.files && req.files.length) {
     let pos = 0;
     const destDir = path.join(UPLOADS_DIR, `store_${store.id}`, `product_${info.lastInsertRowid}`);
@@ -230,9 +230,9 @@ router.post('/products', upNewPics().array('images', 20), asyncHandler(async (re
       db.prepare('INSERT INTO product_images (product_id, path, position) VALUES (?,?,?)').run(info.lastInsertRowid, '/uploads/store_' + store.id + `/product_${info.lastInsertRowid}/` + f.filename, pos++);
     }
   }
-  logActivity(req.user.id, req.user.username, 'إضافة منتج', `أضاف منتج «${name}»`);
-  appendLog(`مستخدم «${req.user.username}» أضاف منتج «${name}» في متجر «${store.name}»`);
-  const msg = req.files && req.files.length ? `تم إضافة المنتج مع ${req.files.length} صورة` : 'تم إضافة المنتج — يمكنك إضافة صوره الآن';
+  logActivity(req.user.id, req.user.username, 'Ø¥Ø¶Ø§ÙØ© Ù…Ù†ØªØ¬', `Ø£Ø¶Ø§Ù Ù…Ù†ØªØ¬ Â«${name}Â»`);
+  appendLog(`Ù…Ø³ØªØ®Ø¯Ù… Â«${req.user.username}Â» Ø£Ø¶Ø§Ù Ù…Ù†ØªØ¬ Â«${name}Â» ÙÙŠ Ù…ØªØ¬Ø± Â«${store.name}Â»`);
+  const msg = req.files && req.files.length ? `ØªÙ… Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ù…Ù†ØªØ¬ Ù…Ø¹ ${req.files.length} ØµÙˆØ±Ø©` : 'ØªÙ… Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ù…Ù†ØªØ¬ â€” ÙŠÙ…ÙƒÙ†Ùƒ Ø¥Ø¶Ø§ÙØ© ØµÙˆØ±Ù‡ Ø§Ù„Ø¢Ù†';
   res.redirect('/panel/products/' + info.lastInsertRowid + '/edit?ok=' + encodeURIComponent(msg));
 }));
 
@@ -249,14 +249,14 @@ router.post('/products/:id', (req, res) => {
   const p = db.prepare('SELECT * FROM products WHERE id=? AND store_id=?').get(req.params.id, store.id);
   if (!p) return res.redirect('/panel/products');
   if (containsForbidden(name) || containsForbidden(description)) {
-    const w = getForbiddenWord(name + ' ' + (description||'')) || 'ممنوعة';
-    return res.redirect('/panel/products/' + p.id + '/edit?err=' + encodeURIComponent(`المنتج يحتوي على كلمة غير مسموحة: "${w}"`));
+    const w = getForbiddenWord(name + ' ' + (description||'')) || 'Ù…Ù…Ù†ÙˆØ¹Ø©';
+    return res.redirect('/panel/products/' + p.id + '/edit?err=' + encodeURIComponent(`Ø§Ù„Ù…Ù†ØªØ¬ ÙŠØ­ØªÙˆÙŠ Ø¹Ù„Ù‰ ÙƒÙ„Ù…Ø© ØºÙŠØ± Ù…Ø³Ù…ÙˆØ­Ø©: "${w}"`));
   }
   const stockVal = stock === '' || stock == null ? null : Math.max(0, Math.floor(Number(stock) || 0));
   db.prepare('UPDATE products SET name=?, category_id=?, description=?, price=?, old_price=?, active=?, stock=?, options=?, addons=? WHERE id=?')
     .run(String(name || p.name), category_id ? Number(category_id) : null, String(description ?? ''), Number(price), old_price && !isNaN(Number(old_price)) ? Number(old_price) : null, active === 'on' ? 1 : 0, stockVal, sanitizeOptions(options), sanitizeAddons(addons), p.id);
-  logActivity(req.user.id, req.user.username, 'تعديل منتج', `عدّل منتج «${name}»`);
-  res.redirect('/panel/products/' + p.id + '/edit?ok=' + encodeURIComponent('تم حفظ التعديلات'));
+  logActivity(req.user.id, req.user.username, 'ØªØ¹Ø¯ÙŠÙ„ Ù…Ù†ØªØ¬', `Ø¹Ø¯Ù‘Ù„ Ù…Ù†ØªØ¬ Â«${name}Â»`);
+  res.redirect('/panel/products/' + p.id + '/edit?ok=' + encodeURIComponent('ØªÙ… Ø­ÙØ¸ Ø§Ù„ØªØ¹Ø¯ÙŠÙ„Ø§Øª'));
 });
 
 router.post('/products/:id/images', upPics().array('images', 20), asyncHandler(async (req, res) => {
@@ -270,13 +270,13 @@ router.post('/products/:id/images', upPics().array('images', 20), asyncHandler(a
       await processImage(f.path);
       db.prepare('INSERT INTO product_images (product_id, path, position, variant) VALUES (?,?,?,?)').run(p.id, '/uploads/store_' + req.user.store_id + `/product_${p.id}/` + f.filename, pos++, variant);
     }
-    logActivity(req.user.id, req.user.username, 'رفع صور', `رفع ${req.files.length} صورة لمنتج «${p.name}»`);
-    appendLog(`مستخدم «${req.user.username}» رفع ${req.files.length} صورة لمنتج «${p.name}»`);
-    return res.redirect('/panel/products/' + p.id + '/edit?ok=' + encodeURIComponent(`تم رفع ${req.files.length} صورة`));
+    logActivity(req.user.id, req.user.username, 'Ø±ÙØ¹ ØµÙˆØ±', `Ø±ÙØ¹ ${req.files.length} ØµÙˆØ±Ø© Ù„Ù…Ù†ØªØ¬ Â«${p.name}Â»`);
+    appendLog(`Ù…Ø³ØªØ®Ø¯Ù… Â«${req.user.username}Â» Ø±ÙØ¹ ${req.files.length} ØµÙˆØ±Ø© Ù„Ù…Ù†ØªØ¬ Â«${p.name}Â»`);
+    return res.redirect('/panel/products/' + p.id + '/edit?ok=' + encodeURIComponent(`ØªÙ… Ø±ÙØ¹ ${req.files.length} ØµÙˆØ±Ø©`));
   }
-  res.redirect('/panel/products/' + p.id + '/edit?err=' + encodeURIComponent('لم يتم اختيار أي صورة'));
+  res.redirect('/panel/products/' + p.id + '/edit?err=' + encodeURIComponent('Ù„Ù… ÙŠØªÙ… Ø§Ø®ØªÙŠØ§Ø± Ø£ÙŠ ØµÙˆØ±Ø©'));
 }), (err, req, res, next) => {
-  res.redirect('/panel/products/' + req.params.id + '/edit?err=' + encodeURIComponent(err.message || 'فشل رفع الصور'));
+  res.redirect('/panel/products/' + req.params.id + '/edit?err=' + encodeURIComponent(err.message || 'ÙØ´Ù„ Ø±ÙØ¹ Ø§Ù„ØµÙˆØ±'));
 });
 
 router.post('/products/:id/images/:imgid/setmain', (req, res) => {
@@ -285,7 +285,7 @@ router.post('/products/:id/images/:imgid/setmain', (req, res) => {
   if (!img || !p) return res.redirect('/panel/products');
   db.prepare('UPDATE product_images SET position = 999999 WHERE product_id=?').run(p.id);
   db.prepare('UPDATE product_images SET position = 0 WHERE id=?').run(img.id);
-  res.redirect('/panel/products/' + p.id + '/edit?ok=تم تعيين الصورة الرئيسية');
+  res.redirect('/panel/products/' + p.id + '/edit?ok=ØªÙ… ØªØ¹ÙŠÙŠÙ† Ø§Ù„ØµÙˆØ±Ø© Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©');
 });
 
 router.post('/products/:id/images/:imgid/delete', (req, res) => {
@@ -297,7 +297,7 @@ router.post('/products/:id/images/:imgid/delete', (req, res) => {
   const thumbAbs = abs.replace(/(\.[^.]+)$/, '_t$1');
   if (fs.existsSync(thumbAbs)) fs.unlinkSync(thumbAbs);
   db.prepare('DELETE FROM product_images WHERE id=?').run(img.id);
-  res.redirect('/panel/products/' + p.id + '/edit?ok=تم حذف الصورة');
+  res.redirect('/panel/products/' + p.id + '/edit?ok=ØªÙ… Ø­Ø°Ù Ø§Ù„ØµÙˆØ±Ø©');
 });
 
 router.post('/products/:id/images/:imgid/variant', (req, res) => {
@@ -306,14 +306,14 @@ router.post('/products/:id/images/:imgid/variant', (req, res) => {
   if (!img || !p) return res.redirect('/panel/products');
   const variant = String(req.body.variant || '').trim().slice(0,30);
   db.prepare('UPDATE product_images SET variant=? WHERE id=?').run(variant, img.id);
-  res.redirect('/panel/products/' + p.id + '/edit?ok=' + encodeURIComponent(variant ? `تم ربط الصورة باللون «${variant}»` : 'تم إزالة ربط اللون'));
+  res.redirect('/panel/products/' + p.id + '/edit?ok=' + encodeURIComponent(variant ? `ØªÙ… Ø±Ø¨Ø· Ø§Ù„ØµÙˆØ±Ø© Ø¨Ø§Ù„Ù„ÙˆÙ† Â«${variant}Â»` : 'ØªÙ… Ø¥Ø²Ø§Ù„Ø© Ø±Ø¨Ø· Ø§Ù„Ù„ÙˆÙ†'));
 });
 
 router.post('/products/:id/toggle', (req, res) => {
   const p = db.prepare('SELECT * FROM products WHERE id=? AND store_id=?').get(req.params.id, req.user.store_id);
   if (!p) return res.redirect('/panel/products');
   db.prepare('UPDATE products SET active = ? WHERE id=?').run(p.active ? 0 : 1, p.id);
-  res.redirect('/panel/products?ok=' + encodeURIComponent(p.active ? 'تم إخفاء المنتج' : 'تم إظهار المنتج'));
+  res.redirect('/panel/products?ok=' + encodeURIComponent(p.active ? 'ØªÙ… Ø¥Ø®ÙØ§Ø¡ Ø§Ù„Ù…Ù†ØªØ¬' : 'ØªÙ… Ø¥Ø¸Ù‡Ø§Ø± Ø§Ù„Ù…Ù†ØªØ¬'));
 });
 
 router.post('/products/:id/delete', (req, res) => {
@@ -330,8 +330,8 @@ router.post('/products/:id/delete', (req, res) => {
   db.prepare('DELETE FROM products WHERE id=?').run(p.id);
   const dir = path.join(UPLOADS_DIR, `store_${req.user.store_id}`, `product_${p.id}`);
   if (fs.existsSync(dir)) fs.rmSync(dir, { recursive: true, force: true });
-  logActivity(req.user.id, req.user.username, 'حذف منتج', `حذف منتج «${p.name}»`);
-  res.redirect('/panel/products?ok=' + encodeURIComponent('تم حذف المنتج'));
+  logActivity(req.user.id, req.user.username, 'Ø­Ø°Ù Ù…Ù†ØªØ¬', `Ø­Ø°Ù Ù…Ù†ØªØ¬ Â«${p.name}Â»`);
+  res.redirect('/panel/products?ok=' + encodeURIComponent('ØªÙ… Ø­Ø°Ù Ø§Ù„Ù…Ù†ØªØ¬'));
 });
 
 router.get('/categories', (req, res) => {
@@ -343,19 +343,19 @@ router.get('/categories', (req, res) => {
 router.post('/categories', (req, res) => {
   const store = getStore(req.user.store_id);
   const { name } = req.body;
-  if (!String(name || '').trim()) return res.redirect('/panel/categories?err=' + encodeURIComponent('اكتب اسم القسم'));
+  if (!String(name || '').trim()) return res.redirect('/panel/categories?err=' + encodeURIComponent('Ø§ÙƒØªØ¨ Ø§Ø³Ù… Ø§Ù„Ù‚Ø³Ù…'));
   if (containsForbidden(name)) {
-    const w = getForbiddenWord(name) || 'ممنوعة';
-    return res.redirect('/panel/categories?err=' + encodeURIComponent(`القسم يحتوي على كلمة غير مسموحة: "${w}"`));
+    const w = getForbiddenWord(name) || 'Ù…Ù…Ù†ÙˆØ¹Ø©';
+    return res.redirect('/panel/categories?err=' + encodeURIComponent(`Ø§Ù„Ù‚Ø³Ù… ÙŠØ­ØªÙˆÙŠ Ø¹Ù„Ù‰ ÙƒÙ„Ù…Ø© ØºÙŠØ± Ù…Ø³Ù…ÙˆØ­Ø©: "${w}"`));
   }
   const maxPos = db.prepare('SELECT COALESCE(MAX(position),0) m FROM categories WHERE store_id=?').get(store.id).m;
   db.prepare('INSERT INTO categories (store_id, name, position) VALUES (?,?,?)').run(store.id, String(name).trim(), maxPos + 1);
-  res.redirect('/panel/categories?ok=' + encodeURIComponent('تمت إضافة القسم'));
+  res.redirect('/panel/categories?ok=' + encodeURIComponent('ØªÙ…Øª Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ù‚Ø³Ù…'));
 });
 
 router.post('/categories/:id/delete', (req, res) => {
   db.prepare('DELETE FROM categories WHERE id=? AND store_id=?').run(req.params.id, req.user.store_id);
-  res.redirect('/panel/categories?ok=' + encodeURIComponent('تم حذف القسم'));
+  res.redirect('/panel/categories?ok=' + encodeURIComponent('ØªÙ… Ø­Ø°Ù Ø§Ù„Ù‚Ø³Ù…'));
 });
 
 router.get('/orders', (req, res) => {
@@ -373,7 +373,7 @@ router.get('/orders', (req, res) => {
   const total = db.prepare(`SELECT COUNT(*) c FROM orders WHERE ${where}`).get(...params).c;
   const totalPages = Math.max(1, Math.ceil(total / perPage));
   const rows = db.prepare(`
-    SELECT o.*, (SELECT GROUP_CONCAT(oi.product_name || ' ×' || oi.qty || ' — ' || oi.product_price || ' د.ع', ' ⏺ ') FROM order_items oi WHERE oi.order_id=o.id) items_txt
+    SELECT o.*, (SELECT GROUP_CONCAT(oi.product_name || ' Ã—' || oi.qty || ' â€” ' || oi.product_price || ' Ø¯.Ø¹', ' âº ') FROM order_items oi WHERE oi.order_id=o.id) items_txt
     FROM orders o WHERE ${where} ORDER BY o.id DESC LIMIT ? OFFSET ?`).all(...params, perPage, (page - 1) * perPage);
   const withItems = rows.map(o => {
     const items = db.prepare('SELECT * FROM order_items WHERE order_id=?').all(o.id);
@@ -403,11 +403,11 @@ router.get('/orders/export', (req, res) => {
     SELECT o.*, (SELECT GROUP_CONCAT(oi.product_name || ' x' || oi.qty || ' - ' || oi.product_price || ' IQD', ' | ') FROM order_items oi WHERE oi.order_id=o.id) items_txt
     FROM orders o WHERE ${where} ORDER BY o.id DESC`).all(...params);
 
-  const csvHeader = 'رقم الطلب,الحالة,العميل,الهاتف,العنوان,ملاحظة,المنتجات,المجموع الفرعي,الخصم,كود الكوبون,التوصيل,الإجمالي,التاريخ\n';
+  const csvHeader = 'Ø±Ù‚Ù… Ø§Ù„Ø·Ù„Ø¨,Ø§Ù„Ø­Ø§Ù„Ø©,Ø§Ù„Ø¹Ù…ÙŠÙ„,Ø§Ù„Ù‡Ø§ØªÙ,Ø§Ù„Ø¹Ù†ÙˆØ§Ù†,Ù…Ù„Ø§Ø­Ø¸Ø©,Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª,Ø§Ù„Ù…Ø¬Ù…ÙˆØ¹ Ø§Ù„ÙØ±Ø¹ÙŠ,Ø§Ù„Ø®ØµÙ…,ÙƒÙˆØ¯ Ø§Ù„ÙƒÙˆØ¨ÙˆÙ†,Ø§Ù„ØªÙˆØµÙŠÙ„,Ø§Ù„Ø¥Ø¬Ù…Ø§Ù„ÙŠ,Ø§Ù„ØªØ§Ø±ÙŠØ®\n';
   const csvRows = orders.map(o => {
     const escape = (val) => '"' + String(val || '').replace(/"/g, '""') + '"';
     const items = escape(o.items_txt || '');
-    const statusMap = { new: 'جديد', confirmed: 'مؤكد', completed: 'مكتمل', cancelled: 'ملغي' };
+    const statusMap = { new: 'Ø¬Ø¯ÙŠØ¯', confirmed: 'Ù…Ø¤ÙƒØ¯', completed: 'Ù…ÙƒØªÙ…Ù„', cancelled: 'Ù…Ù„ØºÙŠ' };
     return [
       escape(o.id),
       escape(statusMap[o.status] || o.status),
@@ -442,17 +442,17 @@ router.get('/abandoned-carts', (req, res) => {
 router.post('/abandoned-carts/:id/remind', (req, res) => {
   const store = getStore(req.user.store_id);
   const cart = db.prepare('SELECT * FROM abandoned_carts WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (!cart) return res.redirect('/panel/abandoned-carts?err=' + encodeURIComponent('السلة غير موجودة'));
-  if (!cart.customer_phone) return res.redirect('/panel/abandoned-carts?err=' + encodeURIComponent('لا يوجد رقم هاتف للزبون'));
+  if (!cart) return res.redirect('/panel/abandoned-carts?err=' + encodeURIComponent('Ø§Ù„Ø³Ù„Ø© ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯Ø©'));
+  if (!cart.customer_phone) return res.redirect('/panel/abandoned-carts?err=' + encodeURIComponent('Ù„Ø§ ÙŠÙˆØ¬Ø¯ Ø±Ù‚Ù… Ù‡Ø§ØªÙ Ù„Ù„Ø²Ø¨ÙˆÙ†'));
   
   const cartData = JSON.parse(cart.cart_data);
-  const items = cartData.map(item => `${item.name} x${item.qty}`).join('، ');
+  const items = cartData.map(item => `${item.name} x${item.qty}`).join('ØŒ ');
   const waPhone = cart.customer_phone.replace(/^0/, '964');
-  const msg = `مرحباً ${cart.customer_name || 'زبوننا الكريم'}، لاحظنا أن لديك سلة معلقه في ${store.name}:\n${items}\nالمجموع: ${money(cart.subtotal)}\n\nأكمل طلبك الآن: ${cart.store_base || '/s/' + store.slug}/checkout`;
+  const msg = `Ù…Ø±Ø­Ø¨Ø§Ù‹ ${cart.customer_name || 'Ø²Ø¨ÙˆÙ†Ù†Ø§ Ø§Ù„ÙƒØ±ÙŠÙ…'}ØŒ Ù„Ø§Ø­Ø¸Ù†Ø§ Ø£Ù† Ù„Ø¯ÙŠÙƒ Ø³Ù„Ø© Ù…Ø¹Ù„Ù‚Ù‡ ÙÙŠ ${store.name}:\n${items}\nØ§Ù„Ù…Ø¬Ù…ÙˆØ¹: ${money(cart.subtotal)}\n\nØ£ÙƒÙ…Ù„ Ø·Ù„Ø¨Ùƒ Ø§Ù„Ø¢Ù†: ${cart.store_base || '/s/' + store.slug}/checkout`;
   const waUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(msg)}`;
   
   db.prepare("UPDATE abandoned_carts SET reminded_at=datetime(\'now\',\'localtime\') WHERE id=?").run(cart.id);
-  res.redirect(`/panel/abandoned-carts?ok=` + encodeURIComponent('تم إرسال تذكير واتساب'));
+  res.redirect(`/panel/abandoned-carts?ok=` + encodeURIComponent('ØªÙ… Ø¥Ø±Ø³Ø§Ù„ ØªØ°ÙƒÙŠØ± ÙˆØ§ØªØ³Ø§Ø¨'));
 });
 
 router.get('/domain/buy', (req, res) => {
@@ -467,23 +467,23 @@ router.post('/domain/buy', (req, res) => {
   const domain = String(req.body.domain || '').trim().toLowerCase().replace(/^https?:\/\//,'').replace(/\/.*$/,'');
   const type = req.body.type === 'premium' ? 'premium' : 'normal';
   if (!/^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)+$/.test(domain))
-    return res.redirect('/panel/domain/buy?err=' + encodeURIComponent('صيغة الدومين غير صحيحة — مثال: my-shop.com'));
+    return res.redirect('/panel/domain/buy?err=' + encodeURIComponent('ØµÙŠØºØ© Ø§Ù„Ø¯ÙˆÙ…ÙŠÙ† ØºÙŠØ± ØµØ­ÙŠØ­Ø© â€” Ù…Ø«Ø§Ù„: my-shop.com'));
   const price = type === 'normal' ? Number(siteSettings().domain_price || 20000) : null;
   db.prepare(`INSERT INTO domain_requests (store_id, domain, type, price, note) VALUES (?,?,?,?,?)`)
     .run(store.id, domain, type, price, String(req.body.note || '').slice(0,200));
-  appendLog(`متجر «${store.name}» طلب شراء دومين ${domain} (${type === 'normal' ? 'عادي ' + price + ' د.ع' : 'مميز — سعر خاص'})`);
-  logActivity(req.user.id, req.user.username, 'طلب دومين', `${domain} (${type})`);
-  res.redirect('/panel/domain/buy?ok=' + encodeURIComponent('وصل طلبك! راح نتواصل وياك لتأكيد الدفع والربط خلال 24 ساعة'));
+  appendLog(`Ù…ØªØ¬Ø± Â«${store.name}Â» Ø·Ù„Ø¨ Ø´Ø±Ø§Ø¡ Ø¯ÙˆÙ…ÙŠÙ† ${domain} (${type === 'normal' ? 'Ø¹Ø§Ø¯ÙŠ ' + price + ' Ø¯.Ø¹' : 'Ù…Ù…ÙŠØ² â€” Ø³Ø¹Ø± Ø®Ø§Øµ'})`);
+  logActivity(req.user.id, req.user.username, 'Ø·Ù„Ø¨ Ø¯ÙˆÙ…ÙŠÙ†', `${domain} (${type})`);
+  res.redirect('/panel/domain/buy?ok=' + encodeURIComponent('ÙˆØµÙ„ Ø·Ù„Ø¨Ùƒ! Ø±Ø§Ø­ Ù†ØªÙˆØ§ØµÙ„ ÙˆÙŠØ§Ùƒ Ù„ØªØ£ÙƒÙŠØ¯ Ø§Ù„Ø¯ÙØ¹ ÙˆØ§Ù„Ø±Ø¨Ø· Ø®Ù„Ø§Ù„ 24 Ø³Ø§Ø¹Ø©'));
 });
 
 router.get('/domain', (req, res) => {
   const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('الدومين المخصص متاح للباقة الاحترافية فقط'));
+  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('Ø§Ù„Ø¯ÙˆÙ…ÙŠÙ† Ø§Ù„Ù…Ø®ØµØµ Ù…ØªØ§Ø­ Ù„Ù„Ø¨Ø§Ù‚Ø© Ø§Ù„Ø§Ø­ØªØ±Ø§ÙÙŠØ© ÙÙ‚Ø·'));
   res.render('panel/domain', { store, host: req.headers.host, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
 });
 
 router.post('/domain', (req, res) => {
-  // التاجر لا يعدل الدومين يدوياً — الطلب عبر /panel/domain/buy والربط من لوحة الأدمن
+  // Ø§Ù„ØªØ§Ø¬Ø± Ù„Ø§ ÙŠØ¹Ø¯Ù„ Ø§Ù„Ø¯ÙˆÙ…ÙŠÙ† ÙŠØ¯ÙˆÙŠØ§Ù‹ â€” Ø§Ù„Ø·Ù„Ø¨ Ø¹Ø¨Ø± /panel/domain/buy ÙˆØ§Ù„Ø±Ø¨Ø· Ù…Ù† Ù„ÙˆØ­Ø© Ø§Ù„Ø£Ø¯Ù…Ù†
   return res.redirect('/panel/domain');
 });
 
@@ -513,7 +513,7 @@ router.get('/api/neworders', (req, res) => {
   res.json({ count });
 });
 
-/* إثباتات الدفع تُحفظ خارج uploads العام في مجلد خاص — لا تُخدَّم إلا عبر route محمي */
+/* Ø¥Ø«Ø¨Ø§ØªØ§Øª Ø§Ù„Ø¯ÙØ¹ ØªÙØ­ÙØ¸ Ø®Ø§Ø±Ø¬ uploads Ø§Ù„Ø¹Ø§Ù… ÙÙŠ Ù…Ø¬Ù„Ø¯ Ø®Ø§Øµ â€” Ù„Ø§ ØªÙØ®Ø¯ÙŽÙ‘Ù… Ø¥Ù„Ø§ Ø¹Ø¨Ø± route Ù…Ø­Ù…ÙŠ */
 const upReceipt = () => {
   const disk = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -531,12 +531,12 @@ const upReceipt = () => {
     limits: { fileSize: 12 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
       const ok = ['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(path.extname(file.originalname).toLowerCase());
-      cb(ok ? null : new Error('نوع الملف غير مقبول'), ok);
+      cb(ok ? null : new Error('Ù†ÙˆØ¹ Ø§Ù„Ù…Ù„Ù ØºÙŠØ± Ù…Ù‚Ø¨ÙˆÙ„'), ok);
     }
   });
 };
  
-// ===== رفع خلفية المتجر =====
+// ===== Ø±ÙØ¹ Ø®Ù„ÙÙŠØ© Ø§Ù„Ù…ØªØ¬Ø± =====
 const upStoreBg = () => {
   const disk = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -551,10 +551,10 @@ const upStoreBg = () => {
   });
   return multer({
     storage: disk,
-    limits: { fileSize: 20 * 1024 * 1024 }, // 20MB للفيديو
+    limits: { fileSize: 20 * 1024 * 1024 }, // 20MB Ù„Ù„ÙÙŠØ¯ÙŠÙˆ
     fileFilter: (req, file, cb) => {
       const ok = ['.jpg', '.jpeg', '.png', '.webp', '.mp4', '.webm'].includes(path.extname(file.originalname).toLowerCase());
-      cb(ok ? null : new Error('نوع الملف غير مقبول - صور/فيديو فقط'), ok);
+      cb(ok ? null : new Error('Ù†ÙˆØ¹ Ø§Ù„Ù…Ù„Ù ØºÙŠØ± Ù…Ù‚Ø¨ÙˆÙ„ - ØµÙˆØ±/ÙÙŠØ¯ÙŠÙˆ ÙÙ‚Ø·'), ok);
     }
   });
 };
@@ -580,13 +580,13 @@ router.post('/templates/store-bg', upStoreBg().fields([{name:'store_bg_image', m
     params.push(store.id);
     db.prepare(`UPDATE stores SET ${updates.join(', ')} WHERE id=?`).run(...params);
   }
-  res.redirect('/panel/templates/customize?ok=' + encodeURIComponent('تم حفظ خلفية المتجر'));
+  res.redirect('/panel/templates/customize?ok=' + encodeURIComponent('ØªÙ… Ø­ÙØ¸ Ø®Ù„ÙÙŠØ© Ø§Ù„Ù…ØªØ¬Ø±'));
 });
  
 router.post('/billing/request', upReceipt().single('receipt'), (req, res) => {
   const store = getStore(req.user.store_id);
   const cfg = siteSettings();
-  if (isPro(store)) return res.redirect('/panel/billing?err=' + encodeURIComponent('متجرك احترافي بالفعل'));
+  if (isPro(store)) return res.redirect('/panel/billing?err=' + encodeURIComponent('Ù…ØªØ¬Ø±Ùƒ Ø§Ø­ØªØ±Ø§ÙÙŠ Ø¨Ø§Ù„ÙØ¹Ù„'));
   const months = [1, 3, 12].includes(Number(req.body.months)) ? Number(req.body.months) : 1;
   const priceMap = { 1: Number(cfg.pro_price || 12000), 3: Number(cfg.pro_price_3 || 30000), 12: Number(cfg.pro_price_12 || 72000) };
   const amount = priceMap[months];
@@ -595,19 +595,19 @@ router.post('/billing/request', upReceipt().single('receipt'), (req, res) => {
   const transferRef = String(req.body.transfer_ref || '').trim().slice(0, 80);
   db.prepare('INSERT INTO payments (store_id, plan, amount, status, months, ref, receipt_path, note) VALUES (?,?,?,?,?,?,?,?)')
     .run(store.id, 'pro', amount, receiptPath ? 'reported' : 'pending', months, ref, receiptPath, transferRef);
-  logActivity(req.user.id, req.user.username, 'طلب ترقية', `طلب باقة احترافية (${months} شهراً) — مرجع ${ref}`);
-  appendLog(`**طلب ترقية جديد** — مستخدم «${req.user.username}» طلب الباقة الاحترافية لمتجر «${store.name}» (${months} شهراً — المبلغ ${money(amount)})${receiptPath ? ' — مرفق إثبات الدفع' : ''} — المرجع ${ref}`);
-  res.redirect('/panel/billing?ok=' + encodeURIComponent('تم إرسال طلب الترقية' + (receiptPath ? ' مع إثبات الدفع' : '') + ' — مرجعك: ' + ref + ' — سنفعّل باقتك فور تأكيدنا'));
+  logActivity(req.user.id, req.user.username, 'Ø·Ù„Ø¨ ØªØ±Ù‚ÙŠØ©', `Ø·Ù„Ø¨ Ø¨Ø§Ù‚Ø© Ø§Ø­ØªØ±Ø§ÙÙŠØ© (${months} Ø´Ù‡Ø±Ø§Ù‹) â€” Ù…Ø±Ø¬Ø¹ ${ref}`);
+  appendLog(`**Ø·Ù„Ø¨ ØªØ±Ù‚ÙŠØ© Ø¬Ø¯ÙŠØ¯** â€” Ù…Ø³ØªØ®Ø¯Ù… Â«${req.user.username}Â» Ø·Ù„Ø¨ Ø§Ù„Ø¨Ø§Ù‚Ø© Ø§Ù„Ø§Ø­ØªØ±Ø§ÙÙŠØ© Ù„Ù…ØªØ¬Ø± Â«${store.name}Â» (${months} Ø´Ù‡Ø±Ø§Ù‹ â€” Ø§Ù„Ù…Ø¨Ù„Øº ${money(amount)})${receiptPath ? ' â€” Ù…Ø±ÙÙ‚ Ø¥Ø«Ø¨Ø§Øª Ø§Ù„Ø¯ÙØ¹' : ''} â€” Ø§Ù„Ù…Ø±Ø¬Ø¹ ${ref}`);
+  res.redirect('/panel/billing?ok=' + encodeURIComponent('ØªÙ… Ø¥Ø±Ø³Ø§Ù„ Ø·Ù„Ø¨ Ø§Ù„ØªØ±Ù‚ÙŠØ©' + (receiptPath ? ' Ù…Ø¹ Ø¥Ø«Ø¨Ø§Øª Ø§Ù„Ø¯ÙØ¹' : '') + ' â€” Ù…Ø±Ø¬Ø¹Ùƒ: ' + ref + ' â€” Ø³Ù†ÙØ¹Ù‘Ù„ Ø¨Ø§Ù‚ØªÙƒ ÙÙˆØ± ØªØ£ÙƒÙŠØ¯Ù†Ø§'));
 }, (err, req, res, next) => {
-  res.redirect('/panel/billing?err=' + encodeURIComponent(err.message || 'فشل رفع الإثبات'));
+  res.redirect('/panel/billing?err=' + encodeURIComponent(err.message || 'ÙØ´Ù„ Ø±ÙØ¹ Ø§Ù„Ø¥Ø«Ø¨Ø§Øª'));
 });
 
-/* عرض إثبات الدفع — لصاحب المتجر فقط، ومن متجره فقط */
+/* Ø¹Ø±Ø¶ Ø¥Ø«Ø¨Ø§Øª Ø§Ù„Ø¯ÙØ¹ â€” Ù„ØµØ§Ø­Ø¨ Ø§Ù„Ù…ØªØ¬Ø± ÙÙ‚Ø·ØŒ ÙˆÙ…Ù† Ù…ØªØ¬Ø±Ù‡ ÙÙ‚Ø· */
 router.get('/billing/receipt/:paymentId', (req, res) => {
   const p = db.prepare('SELECT * FROM payments WHERE id=? AND store_id=?').get(req.params.paymentId, req.user.store_id);
-  if (!p || !p.receipt_path) return res.redirect('/panel/billing?err=' + encodeURIComponent('الإثبات غير موجود'));
+  if (!p || !p.receipt_path) return res.redirect('/panel/billing?err=' + encodeURIComponent('Ø§Ù„Ø¥Ø«Ø¨Ø§Øª ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯'));
   const abs = path.join(__dirname, '..', p.receipt_path);
-  if (!fs.existsSync(abs)) return res.redirect('/panel/billing?err=' + encodeURIComponent('ملف الإثبات غير موجود'));
+  if (!fs.existsSync(abs)) return res.redirect('/panel/billing?err=' + encodeURIComponent('Ù…Ù„Ù Ø§Ù„Ø¥Ø«Ø¨Ø§Øª ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯'));
   res.sendFile(abs);
 });
 
@@ -616,7 +616,7 @@ router.get('/templates', (req, res) => {
   const list = [
     ...TPL.LIST.map(t => ({ id: t.id, name: t.name, desc: TPL.describe(t), classes: t.classes, palette: t.palette })),
     ...TPL.PREMIUM.map(t => ({ id: t.id, name: t.name, desc: t.desc, classes: t.id, palette: t.palette, premium: true })),
-    ...TPL.LEGACY.map(id => ({ id, name: 'الماركت', desc: 'نمط المتاجر السوقية: شريط عروض متحرك وهيرو ضخم وبطاقات عرض كبيرة — مثالي للمنتجات كثيرة العرض', classes: 'tpl-c', palette: { primary: '#e11d48', accent: '#f59e0b', bg: '#fff7ed', ink: '#3f2d16', soft: '#ffe4e6' }, legacy: true }))
+    ...TPL.LEGACY.map(id => ({ id, name: 'Ø§Ù„Ù…Ø§Ø±ÙƒØª', desc: 'Ù†Ù…Ø· Ø§Ù„Ù…ØªØ§Ø¬Ø± Ø§Ù„Ø³ÙˆÙ‚ÙŠØ©: Ø´Ø±ÙŠØ· Ø¹Ø±ÙˆØ¶ Ù…ØªØ­Ø±Ùƒ ÙˆÙ‡ÙŠØ±Ùˆ Ø¶Ø®Ù… ÙˆØ¨Ø·Ø§Ù‚Ø§Øª Ø¹Ø±Ø¶ ÙƒØ¨ÙŠØ±Ø© â€” Ù…Ø«Ø§Ù„ÙŠ Ù„Ù„Ù…Ù†ØªØ¬Ø§Øª ÙƒØ«ÙŠØ±Ø© Ø§Ù„Ø¹Ø±Ø¶', classes: 'tpl-c', palette: { primary: '#e11d48', accent: '#f59e0b', bg: '#fff7ed', ink: '#3f2d16', soft: '#ffe4e6' }, legacy: true }))
   ];
   res.render('panel/templates', { store, list, count: list.length, current: store.template, pro: isPro(store), ok: req.query.ok || '', err: req.query.err || '', user: req.user });
 });
@@ -626,17 +626,17 @@ router.get('/preview/:id', (req, res) => {
   const t = TPL.get(req.params.id);
   if (!t) return res.status(404).render('store/notfound', {});
   const store = {
-    id: 0, name: 'متجر تجريبي', slug: 'preview', base: '/s/preview', description: 'هكذا سيظهر متجرك عند الزائر — معاينة حية للقالب',
+    id: 0, name: 'Ù…ØªØ¬Ø± ØªØ¬Ø±ÙŠØ¨ÙŠ', slug: 'preview', base: '/s/preview', description: 'Ù‡ÙƒØ°Ø§ Ø³ÙŠØ¸Ù‡Ø± Ù…ØªØ¬Ø±Ùƒ Ø¹Ù†Ø¯ Ø§Ù„Ø²Ø§Ø¦Ø± â€” Ù…Ø¹Ø§ÙŠÙ†Ø© Ø­ÙŠØ© Ù„Ù„Ù‚Ø§Ù„Ø¨',
     logo_path: '', template: t.id, color: '#0ea5e9', whatsapp: '', plan: 'pro', plan_expires: '2099-12-31'
   };
   const cats = [];
   const sample = [
-    { id: 101, name: 'ساعة ذكية برو', description: 'شاشة أموليد — جودة عالية', price: 55000, old_price: 75000, img: '/img/placeholder.svg' },
-    { id: 102, name: 'سماعة لاسلكية', description: 'صوت نقي مع علبة شحن', price: 28000, old_price: 35000, img: '/img/placeholder.svg' },
-    { id: 103, name: 'حقيبة جلدية فاخرة', description: 'خامة طبيعية متينة', price: 42000, old_price: 0, img: '/img/placeholder.svg' },
-    { id: 104, name: 'نظارة شمسية رياضية', description: 'حماية UV400 كاملة', price: 15000, old_price: 0, img: '/img/placeholder.svg' },
-    { id: 105, name: 'شاحن سريع 65 واط', description: 'شحن سريع لأجهزتك كلها', price: 19000, old_price: 24000, img: '/img/placeholder.svg' },
-    { id: 106, name: 'مصباح مكتبي LED', description: 'إضاءة مريحة للعين', price: 12500, old_price: 0, img: '/img/placeholder.svg' }
+    { id: 101, name: 'Ø³Ø§Ø¹Ø© Ø°ÙƒÙŠØ© Ø¨Ø±Ùˆ', description: 'Ø´Ø§Ø´Ø© Ø£Ù…ÙˆÙ„ÙŠØ¯ â€” Ø¬ÙˆØ¯Ø© Ø¹Ø§Ù„ÙŠØ©', price: 55000, old_price: 75000, img: '/img/placeholder.svg' },
+    { id: 102, name: 'Ø³Ù…Ø§Ø¹Ø© Ù„Ø§Ø³Ù„ÙƒÙŠØ©', description: 'ØµÙˆØª Ù†Ù‚ÙŠ Ù…Ø¹ Ø¹Ù„Ø¨Ø© Ø´Ø­Ù†', price: 28000, old_price: 35000, img: '/img/placeholder.svg' },
+    { id: 103, name: 'Ø­Ù‚ÙŠØ¨Ø© Ø¬Ù„Ø¯ÙŠØ© ÙØ§Ø®Ø±Ø©', description: 'Ø®Ø§Ù…Ø© Ø·Ø¨ÙŠØ¹ÙŠØ© Ù…ØªÙŠÙ†Ø©', price: 42000, old_price: 0, img: '/img/placeholder.svg' },
+    { id: 104, name: 'Ù†Ø¸Ø§Ø±Ø© Ø´Ù…Ø³ÙŠØ© Ø±ÙŠØ§Ø¶ÙŠØ©', description: 'Ø­Ù…Ø§ÙŠØ© UV400 ÙƒØ§Ù…Ù„Ø©', price: 15000, old_price: 0, img: '/img/placeholder.svg' },
+    { id: 105, name: 'Ø´Ø§Ø­Ù† Ø³Ø±ÙŠØ¹ 65 ÙˆØ§Ø·', description: 'Ø´Ø­Ù† Ø³Ø±ÙŠØ¹ Ù„Ø£Ø¬Ù‡Ø²ØªÙƒ ÙƒÙ„Ù‡Ø§', price: 19000, old_price: 24000, img: '/img/placeholder.svg' },
+    { id: 106, name: 'Ù…ØµØ¨Ø§Ø­ Ù…ÙƒØªØ¨ÙŠ LED', description: 'Ø¥Ø¶Ø§Ø¡Ø© Ù…Ø±ÙŠØ­Ø© Ù„Ù„Ø¹ÙŠÙ†', price: 12500, old_price: 0, img: '/img/placeholder.svg' }
   ];
   res.render('store/home', { store, cats, cat: 0, q: '', rows: sample, tpl: tplFor(store) });
 });
@@ -645,12 +645,12 @@ router.post('/templates/apply', (req, res) => {
   const store = getStore(req.user.store_id);
   const tpl = TPL.valid(req.body.template) ? req.body.template : store.template;
   if (TPL.isPremium(tpl) && !isPro(store)) {
-    return res.redirect('/panel/templates?err=' + encodeURIComponent('هذا التصميم احترافي — فعّل باقتك أولاً من صفحة الباقات'));
+    return res.redirect('/panel/templates?err=' + encodeURIComponent('Ù‡Ø°Ø§ Ø§Ù„ØªØµÙ…ÙŠÙ… Ø§Ø­ØªØ±Ø§ÙÙŠ â€” ÙØ¹Ù‘Ù„ Ø¨Ø§Ù‚ØªÙƒ Ø£ÙˆÙ„Ø§Ù‹ Ù…Ù† ØµÙØ­Ø© Ø§Ù„Ø¨Ø§Ù‚Ø§Øª'));
   }
   db.prepare('UPDATE stores SET template=? WHERE id=?').run(tpl, store.id);
-  logActivity(req.user.id, req.user.username, 'تغيير القالب', `اعتمد القالب «${tpl}»`);
-  appendLog(`مستخدم «${req.user.username}» اعتمد قالب المتجر «${tpl}» لمتجر «${store.name}»`);
-  res.redirect('/panel/templates?ok=' + encodeURIComponent('تم اعتماد القالب — اسمه: ' + tpl));
+  logActivity(req.user.id, req.user.username, 'ØªØºÙŠÙŠØ± Ø§Ù„Ù‚Ø§Ù„Ø¨', `Ø§Ø¹ØªÙ…Ø¯ Ø§Ù„Ù‚Ø§Ù„Ø¨ Â«${tpl}Â»`);
+  appendLog(`Ù…Ø³ØªØ®Ø¯Ù… Â«${req.user.username}Â» Ø§Ø¹ØªÙ…Ø¯ Ù‚Ø§Ù„Ø¨ Ø§Ù„Ù…ØªØ¬Ø± Â«${tpl}Â» Ù„Ù…ØªØ¬Ø± Â«${store.name}Â»`);
+  res.redirect('/panel/templates?ok=' + encodeURIComponent('ØªÙ… Ø§Ø¹ØªÙ…Ø§Ø¯ Ø§Ù„Ù‚Ø§Ù„Ø¨ â€” Ø§Ø³Ù…Ù‡: ' + tpl));
 });
 
 router.get('/templates/customize', (req, res) => {
@@ -660,17 +660,17 @@ router.get('/templates/customize', (req, res) => {
   let layout = {};
   try { layout = JSON.parse(store.layout_json || '{}'); } catch {}
   
-  // الأقسام حسب ترتيب التخزين أو الافتراضي
+  // Ø§Ù„Ø£Ù‚Ø³Ø§Ù… Ø­Ø³Ø¨ ØªØ±ØªÙŠØ¨ Ø§Ù„ØªØ®Ø²ÙŠÙ† Ø£Ùˆ Ø§Ù„Ø§ÙØªØ±Ø§Ø¶ÙŠ
   const defs = [
-    { key:'hero',    icon:'🖼️', name:'الهيرو (الواجهة)', desc:'العنوان الرئيسي + صورة/فيديو خلفية' },
-    { key:'search',  icon:'🔍', name:'البحث', desc:'شريط البحث عن المنتجات' },
-    { key:'cats',    icon:'🗂️', name:'الأقسام', desc:'أزرار تصنيفات المنتجات' },
-    { key:'announce',icon:'📢', name:'شريط الإعلانات', desc:'شريط إعلانات علوي قابل للتخصيص' },
-    { key:'grid',    icon:'🛍️', name:'شبكة المنتجات', desc:'بطاقات المنتجات' },
-    { key:'brand',   icon:'🏷️', name:'توقيع المنصة', desc:'«صُنع بواسطة دُكّان» (مجاني فقط)' }
+    { key:'hero',    icon:'ðŸ–¼ï¸', name:'Ø§Ù„Ù‡ÙŠØ±Ùˆ (Ø§Ù„ÙˆØ§Ø¬Ù‡Ø©)', desc:'Ø§Ù„Ø¹Ù†ÙˆØ§Ù† Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠ + ØµÙˆØ±Ø©/ÙÙŠØ¯ÙŠÙˆ Ø®Ù„ÙÙŠØ©' },
+    { key:'search',  icon:'ðŸ”', name:'Ø§Ù„Ø¨Ø­Ø«', desc:'Ø´Ø±ÙŠØ· Ø§Ù„Ø¨Ø­Ø« Ø¹Ù† Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª' },
+    { key:'cats',    icon:'ðŸ—‚ï¸', name:'Ø§Ù„Ø£Ù‚Ø³Ø§Ù…', desc:'Ø£Ø²Ø±Ø§Ø± ØªØµÙ†ÙŠÙØ§Øª Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª' },
+    { key:'announce',icon:'ðŸ“¢', name:'Ø´Ø±ÙŠØ· Ø§Ù„Ø¥Ø¹Ù„Ø§Ù†Ø§Øª', desc:'Ø´Ø±ÙŠØ· Ø¥Ø¹Ù„Ø§Ù†Ø§Øª Ø¹Ù„ÙˆÙŠ Ù‚Ø§Ø¨Ù„ Ù„Ù„ØªØ®ØµÙŠØµ' },
+    { key:'grid',    icon:'ðŸ›ï¸', name:'Ø´Ø¨ÙƒØ© Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª', desc:'Ø¨Ø·Ø§Ù‚Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª' },
+    { key:'brand',   icon:'ðŸ·ï¸', name:'ØªÙˆÙ‚ÙŠØ¹ Ø§Ù„Ù…Ù†ØµØ©', desc:'Â«ØµÙÙ†Ø¹ Ø¨ÙˆØ§Ø³Ø·Ø© Ø¯ÙÙƒÙ‘Ø§Ù†Â» (Ù…Ø¬Ø§Ù†ÙŠ ÙÙ‚Ø·)' }
   ];
   const order = Array.isArray(layout.order) && layout.order.length ? layout.order : ['hero','search','cats','announce','grid','brand'];
-  // دمج الأقسام الجديدة غير الموجودة في الترتيب المحفوظ (مثل announce للمتاجر القديمة)
+  // Ø¯Ù…Ø¬ Ø§Ù„Ø£Ù‚Ø³Ø§Ù… Ø§Ù„Ø¬Ø¯ÙŠØ¯Ø© ØºÙŠØ± Ø§Ù„Ù…ÙˆØ¬ÙˆØ¯Ø© ÙÙŠ Ø§Ù„ØªØ±ØªÙŠØ¨ Ø§Ù„Ù…Ø­ÙÙˆØ¸ (Ù…Ø«Ù„ announce Ù„Ù„Ù…ØªØ§Ø¬Ø± Ø§Ù„Ù‚Ø¯ÙŠÙ…Ø©)
   const DEFAULT_ORDER = ['hero','search','cats','announce','grid','brand'];
   const merged = [...order];
   for (const k of DEFAULT_ORDER) if (!merged.includes(k)) merged.splice(merged.indexOf('grid') >= 0 ? Math.max(merged.indexOf('grid'), 0) : merged.length, 0, k);
@@ -683,7 +683,7 @@ router.get('/templates/customize', (req, res) => {
   res.render('panel/template-customize', { store, cfg, layout, sections, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
 });
 
-// حفظ التخطيط من المحرر المرئي (multipart) — استخراج layout_json من req.body
+// Ø­ÙØ¸ Ø§Ù„ØªØ®Ø·ÙŠØ· Ù…Ù† Ø§Ù„Ù…Ø­Ø±Ø± Ø§Ù„Ù…Ø±Ø¦ÙŠ (multipart) â€” Ø§Ø³ØªØ®Ø±Ø§Ø¬ layout_json Ù…Ù† req.body
 router.post('/templates/layout', (req, res) => {
   try {
     const store = getStore(req.user.store_id);
@@ -691,17 +691,17 @@ router.post('/templates/layout', (req, res) => {
     if (!raw) return res.status(400).json({ error: 'layout_json missing' });
     JSON.parse(raw); // validate
     db.prepare(`UPDATE stores SET layout_json=? WHERE id=?`).run(raw, store.id);
-    logActivity(req.user.id, req.user.username, 'تحديث تصميم المتجر', 'ترتيب وتخصيص الأقسام');
+    logActivity(req.user.id, req.user.username, 'ØªØ­Ø¯ÙŠØ« ØªØµÙ…ÙŠÙ… Ø§Ù„Ù…ØªØ¬Ø±', 'ØªØ±ØªÙŠØ¨ ÙˆØªØ®ØµÙŠØµ Ø§Ù„Ø£Ù‚Ø³Ø§Ù…');
     res.json({ ok: true });
   } catch(e){ res.status(400).json({error:e.message}); }
 });
 
 router.post('/templates/customize', (req, res) => {
   const store = getStore(req.user.store_id);
-  // دعم النموذج المبسط (heroTitle/heroSub/heroImage...) + النموذج القديم
+  // Ø¯Ø¹Ù… Ø§Ù„Ù†Ù…ÙˆØ°Ø¬ Ø§Ù„Ù…Ø¨Ø³Ø· (heroTitle/heroSub/heroImage...) + Ø§Ù„Ù†Ù…ÙˆØ°Ø¬ Ø§Ù„Ù‚Ø¯ÙŠÙ…
   let layout = {};
   try { layout = JSON.parse(store.layout_json || '{}'); } catch {}
-  // إذا جاءت حقول مبسطة من النموذج الجديد، حدث الـ layout
+  // Ø¥Ø°Ø§ Ø¬Ø§Ø¡Øª Ø­Ù‚ÙˆÙ„ Ù…Ø¨Ø³Ø·Ø© Ù…Ù† Ø§Ù„Ù†Ù…ÙˆØ°Ø¬ Ø§Ù„Ø¬Ø¯ÙŠØ¯ØŒ Ø­Ø¯Ø« Ø§Ù„Ù€ layout
   if (req.body.heroTitle !== undefined || req.body.heroSub !== undefined || req.body.heroImage !== undefined) {
     layout.hero = {
       title: String(req.body.heroTitle || store.name),
@@ -715,7 +715,7 @@ router.post('/templates/customize', (req, res) => {
   if (req.body.announce !== undefined && !req.body.layout_json) {
     layout.announce = String(req.body.announce || '').slice(0,120);
   }
-  // حفظ الـ layout إذا تغير عبر النموذج المبسط
+  // Ø­ÙØ¸ Ø§Ù„Ù€ layout Ø¥Ø°Ø§ ØªØºÙŠØ± Ø¹Ø¨Ø± Ø§Ù„Ù†Ù…ÙˆØ°Ø¬ Ø§Ù„Ù…Ø¨Ø³Ø·
   if (req.body.heroTitle !== undefined || (req.body.announce !== undefined && !req.body.layout_json)) {
     db.prepare(`UPDATE stores SET layout_json=? WHERE id=?`).run(JSON.stringify(layout), store.id);
   }
@@ -743,8 +743,8 @@ router.post('/templates/customize', (req, res) => {
   const shadowVal = cfg.shadow==='none' ? 'none' : cfg.shadow==='medium' ? '0 10px 28px rgba(15,23,42,.09)' : cfg.shadow==='strong' ? '0 22px 54px rgba(15,23,42,.15)' : '0 2px 8px rgba(15,23,42,.05)';
   const customCss = `:root{--primary:${cfg.primary};--accent:${cfg.accent};--bg:${cfg.bg};--ink:${cfg.ink};--soft:${cfg.soft};--radius:${cfg.radius}px;--btn:${cfg.btnColor};--shadow:${shadowVal}} body{font-family:'${cfg.font}', sans-serif; font-size:${cfg.fontSize}px} .st-card{${cfg.cardStyle==='sharp'?'border-radius:2px':cfg.cardStyle==='rounded'?'border-radius:18px':cfg.cardStyle==='soft'?'border-radius:24px':''}} .st-btn{${cfg.btnStyle==='square'?'border-radius:2px':cfg.btnStyle==='rounded'?'border-radius:10px':cfg.btnStyle==='soft'?'border-radius:14px':'border-radius:99px'};background:${cfg.btnColor}} ${cfg.anim==='off'?'*{animation:none !important;transition:none !important}':''} ${cfg.announce ? `.announce-bar{display:block}` : ''}`;
   db.prepare(`UPDATE stores SET template_config=?, custom_css=?, color=? WHERE id=?`).run(JSON.stringify(cfg), customCss, cfg.primary, store.id);
-  logActivity(req.user.id, req.user.username, 'تخصيص القالب', `ألوان وتصميم`);
-  res.redirect('/panel/templates/customize?ok=' + encodeURIComponent('تم حفظ التخصيص — شوف متجرك الآن'));
+  logActivity(req.user.id, req.user.username, 'ØªØ®ØµÙŠØµ Ø§Ù„Ù‚Ø§Ù„Ø¨', `Ø£Ù„ÙˆØ§Ù† ÙˆØªØµÙ…ÙŠÙ…`);
+  res.redirect('/panel/templates/customize?ok=' + encodeURIComponent('ØªÙ… Ø­ÙØ¸ Ø§Ù„ØªØ®ØµÙŠØµ â€” Ø´ÙˆÙ Ù…ØªØ¬Ø±Ùƒ Ø§Ù„Ø¢Ù†'));
 });
 
 router.post('/settings', (req, res) => {
@@ -756,29 +756,29 @@ router.post('/settings', (req, res) => {
     if (d) {
       if (/^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)+$/.test(d) && !d.endsWith('.local') && !/^(\d+\.){3}\d+$/.test(d) && d !== 'localhost') {
         const clash = db.prepare('SELECT id FROM stores WHERE lower(custom_domain)=? AND id!=?').get(d, store.id);
-        if (clash) return res.redirect('/panel/settings?err=' + encodeURIComponent('هذا الدومين مربوط بمتجر آخر'));
+        if (clash) return res.redirect('/panel/settings?err=' + encodeURIComponent('Ù‡Ø°Ø§ Ø§Ù„Ø¯ÙˆÙ…ÙŠÙ† Ù…Ø±Ø¨ÙˆØ· Ø¨Ù…ØªØ¬Ø± Ø¢Ø®Ø±'));
         domain = d;
-      } else return res.redirect('/panel/settings?err=' + encodeURIComponent('صيغة الدومين غير صحيحة — مثال: my-shop.example.com'));
+      } else return res.redirect('/panel/settings?err=' + encodeURIComponent('ØµÙŠØºØ© Ø§Ù„Ø¯ÙˆÙ…ÙŠÙ† ØºÙŠØ± ØµØ­ÙŠØ­Ø© â€” Ù…Ø«Ø§Ù„: my-shop.example.com'));
     } else domain = '';
   }
   if (containsForbidden(name) || containsForbidden(description)) {
-    const w = getForbiddenWord(name + ' ' + (description||'')) || 'ممنوعة';
-    return res.redirect('/panel/settings?err=' + encodeURIComponent(`الاسم/الوصف يحتوي على كلمة غير مسموحة: "${w}"`));
+    const w = getForbiddenWord(name + ' ' + (description||'')) || 'Ù…Ù…Ù†ÙˆØ¹Ø©';
+    return res.redirect('/panel/settings?err=' + encodeURIComponent(`Ø§Ù„Ø§Ø³Ù…/Ø§Ù„ÙˆØµÙ ÙŠØ­ØªÙˆÙŠ Ø¹Ù„Ù‰ ÙƒÙ„Ù…Ø© ØºÙŠØ± Ù…Ø³Ù…ÙˆØ­Ø©: "${w}"`));
   }
   let tpl = TPL.valid(template) ? template : store.template;
   if (TPL.isPremium(tpl) && !isPro(store)) tpl = store.template;
   db.prepare('UPDATE stores SET name=?, description=?, owner_name=?, phone=?, whatsapp=?, template=?, color=?, custom_domain=?, delivery_fee=?, free_delivery_min=?, meta_desc=? WHERE id=?')
     .run(String(name || store.name), String(description || ''), String(owner_name || ''), String(phone || ''), String(whatsapp || ''), tpl, /^#[0-9a-fA-F]{6}$/.test(color || '') ? color : store.color, domain,
       Math.max(0, Number(delivery_fee) || 0), Math.max(0, Number(free_delivery_min) || 0), String(meta_desc || '').slice(0, 200), store.id);
-  logActivity(req.user.id, req.user.username, 'إعدادات المتجر', 'عدّل إعدادات متجره' + (domain ? ' — الدومين: ' + domain : ''));
-  res.redirect('/panel/settings?ok=' + encodeURIComponent('تم حفظ الإعدادات'));
+  logActivity(req.user.id, req.user.username, 'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ù…ØªØ¬Ø±', 'Ø¹Ø¯Ù‘Ù„ Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ù…ØªØ¬Ø±Ù‡' + (domain ? ' â€” Ø§Ù„Ø¯ÙˆÙ…ÙŠÙ†: ' + domain : ''));
+  res.redirect('/panel/settings?ok=' + encodeURIComponent('ØªÙ… Ø­ÙØ¸ Ø§Ù„Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª'));
 });
 
 const upLogo = () => uploader(() => '.');
 
 router.post('/settings/logo', upLogo().single('logo'), asyncHandler(async (req, res) => {
   const store = getStore(req.user.store_id);
-  if (!req.file) return res.redirect('/panel/settings?err=' + encodeURIComponent('لم يتم اختيار صورة'));
+  if (!req.file) return res.redirect('/panel/settings?err=' + encodeURIComponent('Ù„Ù… ÙŠØªÙ… Ø§Ø®ØªÙŠØ§Ø± ØµÙˆØ±Ø©'));
   if (store.logo_path) {
     const oldAbs = path.join(__dirname, '..', store.logo_path);
     if (fs.existsSync(oldAbs)) fs.unlinkSync(oldAbs);
@@ -789,15 +789,15 @@ router.post('/settings/logo', upLogo().single('logo'), asyncHandler(async (req, 
   await processImage(req.file.path);
   fs.renameSync(req.file.path, path.join(__dirname, '..', newPath));
   db.prepare('UPDATE stores SET logo_path=? WHERE id=?').run(newPath, store.id);
-  appendLog(`مستخدم «${req.user.username}» غيّر شعار متجر «${store.name}»`);
-  res.redirect('/panel/settings?ok=' + encodeURIComponent('تم تحديث الشعار'));
+  appendLog(`Ù…Ø³ØªØ®Ø¯Ù… Â«${req.user.username}Â» ØºÙŠÙ‘Ø± Ø´Ø¹Ø§Ø± Ù…ØªØ¬Ø± Â«${store.name}Â»`);
+  res.redirect('/panel/settings?ok=' + encodeURIComponent('ØªÙ… ØªØ­Ø¯ÙŠØ« Ø§Ù„Ø´Ø¹Ø§Ø±'));
 }), (err, req, res, next) => {
-  res.redirect('/panel/settings?err=' + encodeURIComponent(err.message || 'فشل رفع الشعار'));
+  res.redirect('/panel/settings?err=' + encodeURIComponent(err.message || 'ÙØ´Ù„ Ø±ÙØ¹ Ø§Ù„Ø´Ø¹Ø§Ø±'));
 });
 
-/* ====== العروض المجمعة (Bundles) - محذوفة بطلب سجاد ====== */
+/* ====== Ø§Ù„Ø¹Ø±ÙˆØ¶ Ø§Ù„Ù…Ø¬Ù…Ø¹Ø© (Bundles) - Ù…Ø­Ø°ÙˆÙØ© Ø¨Ø·Ù„Ø¨ Ø³Ø¬Ø§Ø¯ ====== */
 
-/* ====== أكواد الخصم ====== */
+/* ====== Ø£ÙƒÙˆØ§Ø¯ Ø§Ù„Ø®ØµÙ… ====== */
 router.get('/coupons', (req, res) => {
   const store = getStore(req.user.store_id);
   const rows = db.prepare('SELECT * FROM coupons WHERE store_id=? ORDER BY id DESC').all(store.id);
@@ -808,35 +808,35 @@ router.post('/coupons', (req, res) => {
   const store = getStore(req.user.store_id);
   const { code, type, value, min_total, max_uses, expires } = req.body;
   const c = String(code || '').trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 20);
-  if (c.length < 3) return res.redirect('/panel/coupons?err=' + encodeURIComponent('الكود: 3 أحرف/أرقام على الأقل (لاتيني وأرقام فقط)'));
+  if (c.length < 3) return res.redirect('/panel/coupons?err=' + encodeURIComponent('Ø§Ù„ÙƒÙˆØ¯: 3 Ø£Ø­Ø±Ù/Ø£Ø±Ù‚Ø§Ù… Ø¹Ù„Ù‰ Ø§Ù„Ø£Ù‚Ù„ (Ù„Ø§ØªÙŠÙ†ÙŠ ÙˆØ£Ø±Ù‚Ø§Ù… ÙÙ‚Ø·)'));
   const t = type === 'amount' ? 'amount' : 'percent';
   const v = Number(value);
-  if (isNaN(v) || v <= 0 || (t === 'percent' && v > 100)) return res.redirect('/panel/coupons?err=' + encodeURIComponent('قيمة الخصم غير صحيحة'));
+  if (isNaN(v) || v <= 0 || (t === 'percent' && v > 100)) return res.redirect('/panel/coupons?err=' + encodeURIComponent('Ù‚ÙŠÙ…Ø© Ø§Ù„Ø®ØµÙ… ØºÙŠØ± ØµØ­ÙŠØ­Ø©'));
   if (!isPro(store)) {
     const cnt = db.prepare('SELECT COUNT(*) c FROM coupons WHERE store_id=?').get(store.id).c;
-    if (cnt >= 5) return res.redirect('/panel/coupons?err=' + encodeURIComponent('الباقة المجانية تسمح بـ 5 أكواد فقط — رقِّ باقتك من صفحة «الباقات» لبلا حدود'));
+    if (cnt >= 5) return res.redirect('/panel/coupons?err=' + encodeURIComponent('Ø§Ù„Ø¨Ø§Ù‚Ø© Ø§Ù„Ù…Ø¬Ø§Ù†ÙŠØ© ØªØ³Ù…Ø­ Ø¨Ù€ 5 Ø£ÙƒÙˆØ§Ø¯ ÙÙ‚Ø· â€” Ø±Ù‚ÙÙ‘ Ø¨Ø§Ù‚ØªÙƒ Ù…Ù† ØµÙØ­Ø© Â«Ø§Ù„Ø¨Ø§Ù‚Ø§ØªÂ» Ù„Ø¨Ù„Ø§ Ø­Ø¯ÙˆØ¯'));
   }
   const clash = db.prepare('SELECT id FROM coupons WHERE store_id=? AND code=?').get(store.id, c);
-  if (clash) return res.redirect('/panel/coupons?err=' + encodeURIComponent('يوجد كود بنفس الاسم بالفعل'));
+  if (clash) return res.redirect('/panel/coupons?err=' + encodeURIComponent('ÙŠÙˆØ¬Ø¯ ÙƒÙˆØ¯ Ø¨Ù†ÙØ³ Ø§Ù„Ø§Ø³Ù… Ø¨Ø§Ù„ÙØ¹Ù„'));
   db.prepare('INSERT INTO coupons (store_id, code, type, value, min_total, max_uses, expires) VALUES (?,?,?,?,?,?,?)')
     .run(store.id, c, t, v, Math.max(0, Number(min_total) || 0), Math.max(0, Math.floor(Number(max_uses) || 0)),
       /^\d{4}-\d{2}-\d{2}$/.test(String(expires || '')) ? String(expires) : '');
-  logActivity(req.user.id, req.user.username, 'كود خصم', `أنشأ كود «${c}»`);
-  appendLog(`مستخدم «${req.user.username}» أنشأ كود خصم «${c}» (${t === 'percent' ? v + '%' : money(v)}) في متجر «${store.name}»`);
-  res.redirect('/panel/coupons?ok=' + encodeURIComponent('تم إنشاء الكود — شاركه مع زبائنك'));
+  logActivity(req.user.id, req.user.username, 'ÙƒÙˆØ¯ Ø®ØµÙ…', `Ø£Ù†Ø´Ø£ ÙƒÙˆØ¯ Â«${c}Â»`);
+  appendLog(`Ù…Ø³ØªØ®Ø¯Ù… Â«${req.user.username}Â» Ø£Ù†Ø´Ø£ ÙƒÙˆØ¯ Ø®ØµÙ… Â«${c}Â» (${t === 'percent' ? v + '%' : money(v)}) ÙÙŠ Ù…ØªØ¬Ø± Â«${store.name}Â»`);
+  res.redirect('/panel/coupons?ok=' + encodeURIComponent('ØªÙ… Ø¥Ù†Ø´Ø§Ø¡ Ø§Ù„ÙƒÙˆØ¯ â€” Ø´Ø§Ø±ÙƒÙ‡ Ù…Ø¹ Ø²Ø¨Ø§Ø¦Ù†Ùƒ'));
 });
 
 router.post('/coupons/:id/toggle', (req, res) => {
   const store = getStore(req.user.store_id);
   const c = db.prepare('SELECT * FROM coupons WHERE id=? AND store_id=?').get(req.params.id, store.id);
   if (c) db.prepare('UPDATE coupons SET active=? WHERE id=?').run(c.active ? 0 : 1, c.id);
-  res.redirect('/panel/coupons?ok=' + encodeURIComponent('تم التحديث'));
+  res.redirect('/panel/coupons?ok=' + encodeURIComponent('ØªÙ… Ø§Ù„ØªØ­Ø¯ÙŠØ«'));
 });
 
 router.post('/coupons/:id/delete', (req, res) => {
   const store = getStore(req.user.store_id);
   db.prepare('DELETE FROM coupons WHERE id=? AND store_id=?').run(req.params.id, store.id);
-  res.redirect('/panel/coupons?ok=' + encodeURIComponent('تم حذف الكود'));
+  res.redirect('/panel/coupons?ok=' + encodeURIComponent('ØªÙ… Ø­Ø°Ù Ø§Ù„ÙƒÙˆØ¯'));
 });
 
 router.get('/password', (req, res) => {
@@ -847,14 +847,14 @@ router.post('/password', (req, res) => {
   const { oldpass, newpass } = req.body;
   const u = db.prepare('SELECT * FROM users WHERE id=?').get(req.user.id);
   if (!checkPassword(String(oldpass || ''), u.password_hash))
-    return res.redirect('/panel/password?err=' + encodeURIComponent('كلمة المرور الحالية غير صحيحة'));
+    return res.redirect('/panel/password?err=' + encodeURIComponent('ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ± Ø§Ù„Ø­Ø§Ù„ÙŠØ© ØºÙŠØ± ØµØ­ÙŠØ­Ø©'));
   if (!/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(String(newpass || '')))
-    return res.redirect('/panel/password?err=' + encodeURIComponent('كلمة المرور الجديدة: 8 أحرف على الأقل مع رقم وحرف'));
+    return res.redirect('/panel/password?err=' + encodeURIComponent('ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ± Ø§Ù„Ø¬Ø¯ÙŠØ¯Ø©: 8 Ø£Ø­Ø±Ù Ø¹Ù„Ù‰ Ø§Ù„Ø£Ù‚Ù„ Ù…Ø¹ Ø±Ù‚Ù… ÙˆØ­Ø±Ù'));
   db.prepare('UPDATE users SET password_hash=? WHERE id=?').run(hashPassword(String(newpass)), req.user.id);
-  res.redirect('/panel/password?ok=' + encodeURIComponent('تم تغيير كلمة المرور'));
+  res.redirect('/panel/password?ok=' + encodeURIComponent('ØªÙ… ØªØºÙŠÙŠØ± ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ±'));
 });
 
-/* ====== التقييمات — إدارة تقييمات الزبائن ====== */
+/* ====== Ø§Ù„ØªÙ‚ÙŠÙŠÙ…Ø§Øª â€” Ø¥Ø¯Ø§Ø±Ø© ØªÙ‚ÙŠÙŠÙ…Ø§Øª Ø§Ù„Ø²Ø¨Ø§Ø¦Ù† ====== */
 router.get('/reviews', (req, res) => {
   const store = getStore(req.user.store_id);
   const reviews = db.prepare(`
@@ -867,657 +867,18 @@ router.get('/reviews', (req, res) => {
 router.post('/reviews/:id/approve', (req, res) => {
   const store = getStore(req.user.store_id);
   const r = db.prepare('SELECT r.* FROM reviews r JOIN products p ON p.id=r.product_id WHERE r.id=? AND p.store_id=?').get(req.params.id, store.id);
-  if (!r) return res.redirect('/panel/reviews?err=' + encodeURIComponent('التقييم غير موجود'));
+  if (!r) return res.redirect('/panel/reviews?err=' + encodeURIComponent('Ø§Ù„ØªÙ‚ÙŠÙŠÙ… ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯'));
   db.prepare('UPDATE reviews SET approved=1 WHERE id=?').run(r.id);
-  // نقاط ولاء للمراجع
-  try{ const cfg=require('../util').getLoyaltyConfig(); require('../util').addLoyaltyPoints(store.id, r.customer_phone||'review-'+r.id, cfg.points_per_review, 'review', r.id, 'تقييم منتج'); }catch(e){}
-  res.redirect('/panel/reviews?ok=' + encodeURIComponent('تمت الموافقة — يظهر الآن للزوار'));
+  // Ù†Ù‚Ø§Ø· ÙˆÙ„Ø§Ø¡ Ù„Ù„Ù…Ø±Ø§Ø¬Ø¹
+  try{ const cfg=require('../util').getLoyaltyConfig(); require('../util').addLoyaltyPoints(store.id, r.customer_phone||'review-'+r.id, cfg.points_per_review, 'review', r.id, 'ØªÙ‚ÙŠÙŠÙ… Ù…Ù†ØªØ¬'); }catch(e){}
+  res.redirect('/panel/reviews?ok=' + encodeURIComponent('ØªÙ…Øª Ø§Ù„Ù…ÙˆØ§ÙÙ‚Ø© â€” ÙŠØ¸Ù‡Ø± Ø§Ù„Ø¢Ù† Ù„Ù„Ø²ÙˆØ§Ø±'));
 });
 router.post('/reviews/:id/delete', (req, res) => {
   const store = getStore(req.user.store_id);
   const r = db.prepare('SELECT r.* FROM reviews r JOIN products p ON p.id=r.product_id WHERE r.id=? AND p.store_id=?').get(req.params.id, store.id);
-  if (!r) return res.redirect('/panel/reviews?err=' + encodeURIComponent('التقييم غير موجود'));
+  if (!r) return res.redirect('/panel/reviews?err=' + encodeURIComponent('Ø§Ù„ØªÙ‚ÙŠÙŠÙ… ØºÙŠØ± Ù…ÙˆØ¬ÙˆØ¯'));
   db.prepare('DELETE FROM reviews WHERE id=?').run(r.id);
-  res.redirect('/panel/reviews?ok=' + encodeURIComponent('تم حذف التقييم'));
-});
-
-/* ====== إدارة التوصيل (Shipping) ====== */
-const shipping = require('../shipping');
-
-router.get('/shipping', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const companies = shipping.getActiveShippingCompanies(store.id);
-  const shipments = db.prepare(`
-    SELECT s.*, sc.name as company_name, o.customer_name
-    FROM shipments s
-    JOIN shipping_companies sc ON sc.id = s.shipping_company_id
-    LEFT JOIN orders o ON o.id = s.order_id
-    WHERE s.store_id = ? ORDER BY s.created_at DESC LIMIT 50
-  `).all(store.id);
-  res.render('panel/shipping', { store, companies, shipments, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
-});
-
-router.get('/shipping/companies', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const companies = shipping.getActiveShippingCompanies(store.id);
-  res.render('panel/shipping-companies', { store, companies, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
-});
-
-router.post('/shipping/companies/:id/toggle', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const { is_enabled } = req.body;
-  db.prepare('UPDATE store_shipping_config SET is_enabled=? WHERE store_id=? AND shipping_company_id=?')
-    .run(is_enabled === 'on' ? 1 : 0, store.id, req.params.id);
-  res.redirect('/panel/shipping/companies?ok=' + encodeURIComponent('تم التحديث'));
-});
-
-router.post('/shipping/companies/:id/settings', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const { cod_fee, free_shipping_min, default_weight, api_credentials, settings } = req.body;
-  db.prepare('UPDATE store_shipping_config SET cod_fee=?, free_shipping_min=?, default_weight=?, api_credentials=?, settings=? WHERE store_id=? AND shipping_company_id=?')
-    .run(
-      Math.max(0, Number(cod_fee) || 0),
-      Math.max(0, Number(free_shipping_min) || 0),
-      Math.max(0.1, Number(default_weight) || 0.5),
-      api_credentials ? api_credentials : '',
-      settings ? settings : '',
-      store.id, req.params.id
-    );
-  res.redirect('/panel/shipping/companies?ok=' + encodeURIComponent('تم حفظ الإعدادات'));
-});
-
-router.get('/shipments', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const filter = req.query.status || 'all';
-  const q = String(req.query.q || '').trim();
-  const page = Math.max(1, Number(req.query.page) || 1);
-  const perPage = 20;
-  
-  let where = 's.store_id=?';
-  const params = [store.id];
-  if (filter !== 'all') {
-    where += ' AND s.status=?';
-    params.push(filter);
-  }
-  if (q) {
-    where += ' AND (s.tracking_number LIKE ? OR o.customer_name LIKE ? OR o.customer_phone LIKE ?)';
-    params.push(`%${q}%`, `%${q}%`, `%${q}%`);
-  }
-  
-  const total = db.prepare(`SELECT COUNT(*) c FROM shipments s LEFT JOIN orders o ON o.id=s.order_id WHERE ${where}`).get(...params).c;
-  const totalPages = Math.max(1, Math.ceil(total / perPage));
-  
-  const shipments = db.prepare(`
-    SELECT s.*, sc.name as company_name, o.customer_name, o.customer_phone
-    FROM shipments s
-    JOIN shipping_companies sc ON sc.id = s.shipping_company_id
-    LEFT JOIN orders o ON o.id = s.order_id
-    WHERE ${where} ORDER BY s.created_at DESC LIMIT ? OFFSET ?
-  `).all(...params, perPage, (page - 1) * perPage);
-  
-  res.render('panel/shipments', { store, shipments, filter, q, page, totalPages, total, money, user: req.user });
-});
-
-router.get('/shipments/:id', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const shipment = db.prepare(`
-    SELECT s.*, sc.name as company_name, sc.code as company_code, o.*
-    FROM shipments s
-    JOIN shipping_companies sc ON sc.id = s.shipping_company_id
-    LEFT JOIN orders o ON o.id = s.order_id
-    WHERE s.id=? AND s.store_id=?
-  `).get(req.params.id, store.id);
-  
-  if (!shipment) return res.redirect('/panel/shipments?err=' + encodeURIComponent('الشحنة غير موجودة'));
-  
-  const tracking = db.prepare('SELECT * FROM shipment_tracking WHERE shipment_id=? ORDER BY timestamp DESC').all(shipment.id);
-  const orderItems = db.prepare('SELECT * FROM order_items WHERE order_id=?').all(shipment.order_id);
-  
-  res.render('panel/shipment-detail', { store, shipment, tracking, orderItems, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
-});
-
-router.post('/shipments/:id/update-status', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const { status, notes, location } = req.body;
-  const shipment = db.prepare('SELECT * FROM shipments WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (!shipment) return res.redirect('/panel/shipments?err=' + encodeURIComponent('الشحنة غير موجودة'));
-  
-  const validStatuses = ['pending', 'pickup_scheduled', 'picked_up', 'in_transit', 'out_for_delivery', 'delivered', 'failed', 'returned', 'cancelled'];
-  if (!validStatuses.includes(status)) return res.redirect('/panel/shipments/' + req.params.id + '?err=' + encodeURIComponent('حالة غير صالحة'));
-  
-  const trackingData = {
-    status,
-    notes: notes || '',
-    location: req.body.location || '',
-    description: req.body.description || `تم تحديث الحالة إلى ${status}`
-  };
-  
-  // Update shipment status
-  shipping.updateShipmentStatus(req.params.id, status, trackingData);
-  
-  // Log tracking
-  if (trackingData.description) {
-    db.prepare('INSERT INTO shipment_tracking (shipment_id, status, location, description) VALUES (?,?,?,?)')
-      .run(req.params.id, status, trackingData.location || '', trackingData.description);
-  }
-  
-  // If delivered, update order status
-  if (status === 'delivered') {
-    db.prepare('UPDATE orders SET status=? WHERE id=?').run('completed', shipment.order_id);
-  }
-  
-  res.redirect('/panel/shipments/' + req.params.id + '?ok=' + encodeURIComponent('تم تحديث الحالة'));
-});
-
-router.get('/shipments/:id/label', asyncHandler(async (req, res) => {
-  const store = getStore(req.user.store_id);
-  const shipment = db.prepare('SELECT * FROM shipments WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (!shipment) return res.redirect('/panel/shipments?err=' + encodeURIComponent('الشحنة غير موجودة'));
-  
-  try {
-    const pdf = await require('../shipping').generateShippingLabel(req.params.id);
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `inline; filename="label-${req.params.id}.pdf"`);
-    res.send(pdf);
-  } catch (e) {
-    res.redirect('/panel/shipments/' + req.params.id + '?err=' + encodeURIComponent('فشل إنشاء البوليصة'));
-  }
-}));
-
-/* ====== إدارة المرتجعات والاستبدال (Returns & Exchanges) ====== */
-router.get('/returns', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const filter = req.query.status || 'all';
-  const q = String(req.query.q || '').trim();
-  const page = Math.max(1, Number(req.query.page) || 1);
-  const perPage = 20;
-  
-  let where = 're.store_id=?';
-  const params = [store.id];
-  if (filter !== 'all') {
-    where += ' AND re.status=?';
-    params.push(filter);
-  }
-  if (q) {
-    where += ' AND (re.customer_name LIKE ? OR re.customer_phone LIKE ? OR o.id LIKE ?)';
-    params.push(`%${q}%`, `%${q}%`, `%${q}%`);
-  }
-  
-  const total = db.prepare(`SELECT COUNT(*) c FROM returns_exchanges re JOIN orders o ON o.id=re.order_id WHERE ${where}`).get(...params).c;
-  const totalPages = Math.max(1, Math.ceil(total / perPage));
-  
-  const returns = db.prepare(`
-    SELECT re.*, o.customer_name, o.customer_phone, p.name as product_name
-    FROM returns_exchanges re
-    JOIN orders o ON o.id=re.order_id
-    JOIN order_items oi ON oi.id=re.order_item_id
-    JOIN products p ON p.id=oi.product_id
-    WHERE ${where} ORDER BY re.created_at DESC LIMIT ? OFFSET ?
-  `).all(...params, perPage, (page - 1) * perPage);
-  
-  res.render('panel/returns', { store, returns, filter, q, page, totalPages, total, money, user: req.user });
-});
-
-router.get('/returns/:id', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const ret = db.prepare(`
-    SELECT re.*, o.customer_name, o.customer_phone, o.customer_address, oi.product_name
-    FROM returns_exchanges re
-    JOIN orders o ON o.id=re.order_id
-    JOIN order_items oi ON oi.id=re.order_item_id
-    WHERE re.id=? AND re.store_id=?
-  `).get(req.params.id, store.id);
-  
-  if (!ret) return res.redirect('/panel/returns?err=' + encodeURIComponent('طلب الإرجاع/الاستبدال غير موجود'));
-  
-  const orderItems = db.prepare('SELECT * FROM order_items WHERE order_id=?').all(ret.order_id);
-  
-  res.render('panel/return-detail', { store, ret, orderItems, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
-});
-
-router.post('/returns/:id/update-status', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const { status, notes, refund_amount } = req.body;
-  const ret = db.prepare('SELECT * FROM returns_exchanges WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (!ret) return res.redirect('/panel/returns?err=' + encodeURIComponent('طلب الإرجاع غير موجود'));
-  
-  const validStatuses = ['requested', 'approved', 'rejected', 'pickup_scheduled', 'picked_up', 'received', 'inspected', 'refunded', 'exchanged', 'rejected_by_customer', 'completed', 'cancelled'];
-  if (!validStatuses.includes(status)) return res.redirect('/panel/returns/' + req.params.id + '?err=' + encodeURIComponent('حالة غير صالحة'));
-  
-  db.prepare('UPDATE returns_exchanges SET status=?, inspection_notes=?, refund_amount=?, updated_at=datetime(\'now\',\'localtime\') WHERE id=?')
-    .run(status, req.body.notes || '', Math.max(0, Number(refund_amount) || 0), ret.id);
-  
-  // If approved and type is return, create cash flow entry for refund
-  if (status === 'approved' && ret.type === 'return' && Number(refund_amount) > 0) {
-    const { addCashFlowEntry } = require('../util');
-    addCashFlowEntry(store.id, 'expense', 'refund', Number(refund_amount), 'return', ret.id, `استرداد طلب إرجاع #${ret.id}`);
-  }
-  
-  // If completed exchange, update order status
-  if (status === 'completed' && ret.type === 'exchange') {
-    db.prepare('UPDATE orders SET status=? WHERE id=?').run('completed', ret.order_id);
-  }
-  
-  res.redirect('/panel/returns/' + req.params.id + '?ok=' + encodeURIComponent('تم تحديث الحالة'));
-});
-
-/* ====== إدارة المندوبين (Drivers) ====== */
-router.get('/drivers', (req, res) => {
-  const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('إدارة المندوبين متاحة للباقة الاحترافية فقط'));
-  
-  const drivers = db.prepare('SELECT * FROM drivers WHERE store_id=? ORDER BY created_at DESC').all(store.id);
-  res.render('panel/drivers', { store, drivers, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
-});
-
-router.post('/drivers', (req, res) => {
-  const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/drivers?err=' + encodeURIComponent('إدارة المندوبين متاحة للباقة الاحترافية فقط'));
-  
-  const { name, phone, email, vehicle_type, vehicle_plate, license_number, commission_type, commission_value } = req.body;
-  if (!name || !phone) return res.redirect('/panel/drivers?err=' + encodeURIComponent('الاسم والهاتف مطلوبان'));
-  
-  const info = db.prepare('INSERT INTO drivers (store_id, name, phone, email, vehicle_type, vehicle_plate, license_number, commission_type, commission_value) VALUES (?,?,?,?,?,?,?,?,?)')
-    .run(store.id, name.trim(), phone.trim(), email?.trim() || '', vehicle_type || 'motorcycle', vehicle_plate?.trim() || '', license_number?.trim() || '', commission_type || 'per_order', Number(commission_value) || 0);
-  
-  logActivity(req.user.id, req.user.username, 'إضافة مندوب', `أضاف المندوب «${name}»`);
-  res.redirect('/panel/drivers?ok=' + encodeURIComponent('تم إضافة المندوب'));
-});
-
-router.post('/drivers/:id/toggle', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const driver = db.prepare('SELECT * FROM drivers WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (!driver) return res.redirect('/panel/drivers?err=' + encodeURIComponent('المندوب غير موجود'));
-  
-  db.prepare('UPDATE drivers SET is_active=? WHERE id=?').run(driver.is_active ? 0 : 1, driver.id);
-  res.redirect('/panel/drivers?ok=' + encodeURIComponent('تم التحديث'));
-});
-
-router.post('/drivers/:id/delete', (req, res) => {
-  const store = getStore(req.user.store_id);
-  db.prepare('DELETE FROM drivers WHERE id=? AND store_id=?').run(req.params.id, store.id);
-  res.redirect('/panel/drivers?ok=' + encodeURIComponent('تم حذف المندوب'));
-});
-
-router.get('/drivers/:id', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const driver = db.prepare('SELECT * FROM drivers WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (!driver) return res.redirect('/panel/drivers?err=' + encodeURIComponent('المندوب غير موجود'));
-  
-  const assignments = db.prepare(`
-    SELECT da.*, s.tracking_number, o.customer_name, o.customer_phone
-    FROM driver_assignments da
-    JOIN shipments s ON s.id = da.shipment_id
-    LEFT JOIN orders o ON o.id = s.order_id
-    WHERE da.driver_id = ? ORDER BY da.assigned_at DESC
-  `).all(driver.id);
-  
-  const settlements = db.prepare('SELECT * FROM driver_settlements WHERE driver_id=? ORDER BY period_start DESC').all(driver.id);
-  
-  res.render('panel/driver-detail', { store, driver, assignments, settlements, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
-});
-
-router.post('/drivers/:id/commission', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const { commission_type, commission_value } = req.body;
-  const driver = db.prepare('SELECT * FROM drivers WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (!driver) return res.redirect('/panel/drivers?err=' + encodeURIComponent('المندوب غير موجود'));
-  
-  const ct = commission_type === 'percentage' ? 'percentage' : (commission_type === 'fixed_monthly' ? 'fixed_monthly' : 'per_order');
-  const cv = Math.max(0, Number(commission_value) || 0);
-  
-  db.prepare('UPDATE drivers SET commission_type=?, commission_value=? WHERE id=?').run(ct, cv, driver.id);
-  res.redirect('/panel/drivers/' + driver.id + '?ok=' + encodeURIComponent('تم تحديث العمولة'));
-});
-
-router.post('/shipments/:id/assign-driver', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const { driver_id } = req.body;
-  const shipment = db.prepare('SELECT * FROM shipments WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (!shipment) return res.redirect('/panel/shipments?err=' + encodeURIComponent('الشحنة غير موجودة'));
-  
-  const driver = db.prepare('SELECT * FROM drivers WHERE id=? AND store_id=? AND is_active=1').get(driver_id, store.id);
-  if (!driver) return res.redirect('/panel/shipments/' + req.params.id + '?err=' + encodeURIComponent('المندوب غير موجود أو غير نشط'));
-  
-  db.prepare('INSERT INTO driver_assignments (driver_id, shipment_id) VALUES (?,?)').run(driver_id, req.params.id);
-  res.redirect('/panel/shipments/' + req.params.id + '?ok=' + encodeURIComponent('تم تعيين المندوب'));
-});
-
-router.post('/driver-assignments/:id/update-status', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const { status } = req.body;
-  const assignment = db.prepare(`
-    SELECT da.* FROM driver_assignments da
-    JOIN shipments s ON s.id = da.shipment_id
-    WHERE da.id=? AND s.store_id=?
-  `).get(req.params.id, store.id);
-  
-  if (!assignment) return res.redirect('/panel/shipments?err=' + encodeURIComponent('التعيين غير موجود'));
-  
-  const validStatuses = ['assigned', 'accepted', 'picked_up', 'delivered', 'returned', 'cancelled'];
-  if (!validStatuses.includes(status)) return res.redirect('/panel/shipments/' + assignment.shipment_id + '?err=' + encodeURIComponent('حالة غير صالحة'));
-  
-  const updates = ['status = ?'];
-  const params = [status];
-  if (status === 'accepted') { updates.push('accepted_at = datetime(\'now\',\'localtime\')'); }
-  if (status === 'picked_up') { updates.push('picked_up_at = datetime(\'now\',\'localtime\')'); }
-  if (status === 'delivered') { updates.push('delivered_at = datetime(\'now\',\'localtime\')'); }
-  if (status === 'returned') { updates.push('delivered_at = datetime(\'now\',\'localtime\')'); }
-  updates.push('updated_at = datetime(\'now\',\'localtime\')');
-  params.push(req.params.id);
-  
-  db.prepare(`UPDATE driver_assignments SET ${updates.join(', ')} WHERE id=?`).run(...params);
-  res.redirect('/panel/drivers/' + assignment.driver_id + '?ok=' + encodeURIComponent('تم تحديث حالة التعيين'));
-});
-
-/* ====== تسوية المندوبين (Driver Settlements) ====== */
-router.get('/driver-settlements', (req, res) => {
-  const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('تسوية المندوبين متاحة للباقة الاحترافية فقط'));
-  
-  const drivers = db.prepare('SELECT * FROM drivers WHERE store_id=? AND is_active=1').all(store.id);
-  const settlements = db.prepare('SELECT ds.*, d.name as driver_name FROM driver_settlements ds JOIN drivers d ON d.id=ds.driver_id WHERE ds.store_id=? ORDER BY ds.period_start DESC').all(store.id);
-  
-  res.render('panel/driver-settlements', { store, drivers, settlements, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
-});
-
-router.post('/driver-settlements', (req, res) => {
-  const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/driver-settlements?err=' + encodeURIComponent('تسوية المندوبين متاحة للباقة الاحترافية فقط'));
-  
-  const { driver_id, period_start, period_end } = req.body;
-  if (!driver_id || !period_start || !period_end) return res.redirect('/panel/driver-settlements?err=' + encodeURIComponent('جميع الحقول مطلوبة'));
-  
-  const driver = db.prepare('SELECT * FROM drivers WHERE id=? AND store_id=?').get(driver_id, store.id);
-  if (!driver) return res.redirect('/panel/driver-settlements?err=' + encodeURIComponent('المندوب غير موجود'));
-  
-  // Calculate settlement
-  const assignments = db.prepare(`
-    SELECT da.*, s.cod_amount, s.shipping_fee
-    FROM driver_assignments da
-    JOIN shipments s ON s.id = da.shipment_id
-    WHERE da.driver_id = ? AND da.status IN ('delivered') AND date(da.delivered_at) BETWEEN ? AND ?
-  `).all(driver_id, period_start, period_end);
-  
-  const totalOrders = assignments.length;
-  let totalCommission = 0;
-  let totalCodCollected = 0;
-  
-  for (const a of assignments) {
-    if (driver.commission_type === 'per_order') {
-      totalCommission += driver.commission_value;
-    } else if (driver.commission_type === 'percentage') {
-      totalCommission += (a.cod_amount + a.shipping_fee) * driver.commission_value / 100;
-    } else if (driver.commission_type === 'fixed_monthly') {
-      totalCommission = driver.commission_value;
-    }
-    totalCodCollected += a.cod_amount || 0;
-  }
-  
-  const advances = db.prepare("SELECT COALESCE(SUM(amount),0) as total FROM cash_flow_entries WHERE store_id=? AND category='driver_advance' AND reference_id=? AND date(created_at) BETWEEN ? AND ?").get(store.id, driver_id, period_start, period_end).total || 0;
-  
-  const netPayable = totalCommission - advances;
-  
-  db.prepare('INSERT INTO driver_settlements (driver_id, store_id, period_start, period_end, total_orders, total_commission, total_cod_collected, advances_paid, net_payable) VALUES (?,?,?,?,?,?,?,?,?)')
-    .run(driver_id, store.id, period_start, period_end, totalOrders, totalCommission, totalCodCollected, advances, netPayable);
-  
-  res.redirect('/panel/driver-settlements?ok=' + encodeURIComponent('تم إنشاء التسوية'));
-});
-
-router.post('/driver-settlements/:id/pay', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const settlement = db.prepare('SELECT * FROM driver_settlements WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (!settlement) return res.redirect('/panel/driver-settlements?err=' + encodeURIComponent('التسوية غير موجودة'));
-  
-  db.prepare('UPDATE driver_settlements SET status=?, paid_at=datetime(\'now\',\'localtime\') WHERE id=?').run('paid', req.params.id);
-  
-  // Record cash flow
-  const { addCashFlowEntry } = require('../util');
-  addCashFlowEntry(store.id, 'expense', 'driver_settlement', settlement.net_payable, 'driver_settlement', settlement.id, `تسوية المندوب #${settlement.driver_id}`);
-  
-  res.redirect('/panel/driver-settlements?ok=' + encodeURIComponent('تم تسجيل الدفع'));
-});
-
-/* ====== كاش فلو داشبورد (Cash Flow Dashboard) ====== */
-router.get('/cashflow', (req, res) => {
-  const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('الكاش فلو متاح للباقة الاحترافية فقط'));
-  
-  const period = req.query.period || '30d'; // '7d', '30d', '90d', 'custom'
-  const customStart = req.query.start_date;
-  const customEnd = req.query.end_date;
-  
-  let dateFilter = '';
-  const params = [store.id];
-  
-  if (period === 'custom' && customStart && customEnd) {
-    dateFilter = 'AND date(created_at) BETWEEN ? AND ?';
-    params.push(customStart, customEnd);
-  } else {
-    const days = period === '7d' ? 7 : period === '30d' ? 30 : 90;
-    dateFilter = `AND date(created_at) >= date('now', '-${days} days')`;
-  }
-  
-  // Summary stats
-  const income = db.prepare(`SELECT COALESCE(SUM(amount),0) as total FROM cash_flow_entries WHERE store_id=? AND type='income' ${dateFilter}`).get(...params).total || 0;
-  const expense = db.prepare(`SELECT COALESCE(SUM(amount),0) as total FROM cash_flow_entries WHERE store_id=? AND type='expense' ${dateFilter}`).get(...params).total || 0;
-  const netFlow = income - expense;
-  
-  // Category breakdown
-  const incomeByCategory = db.prepare(`SELECT category, COALESCE(SUM(amount),0) as total FROM cash_flow_entries WHERE store_id=? AND type='income' ${dateFilter} GROUP BY category ORDER BY total DESC`).all(...params);
-  const expenseByCategory = db.prepare(`SELECT category, COALESCE(SUM(amount),0) as total FROM cash_flow_entries WHERE store_id=? AND type='expense' ${dateFilter} GROUP BY category ORDER BY total DESC`).all(...params);
-  
-  // Daily flow for chart
-  const dailyFlow = [];
-  const days = period === '7d' ? 7 : period === '30d' ? 30 : 90;
-  for (let i = days - 1; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    const dayIncome = db.prepare(`SELECT COALESCE(SUM(amount),0) as total FROM cash_flow_entries WHERE store_id=? AND type='income' AND date(created_at)=?`).get(store.id, dateStr).total || 0;
-    const dayExpense = db.prepare(`SELECT COALESCE(SUM(amount),0) as total FROM cash_flow_entries WHERE store_id=? AND type='expense' AND date(created_at)=?`).get(store.id, dateStr).total || 0;
-    dailyFlow.push({ d: dateStr.slice(5), income: dayIncome, expense: dayExpense, net: dayIncome - dayExpense });
-  }
-  
-  // Recent transactions
-  const recent = db.prepare(`SELECT * FROM cash_flow_entries WHERE store_id=? ${dateFilter} ORDER BY created_at DESC LIMIT 20`).all(...params);
-  
-  // Pending receivables (COD not collected, shipping settlements pending)
-  const pendingCod = db.prepare(`SELECT COALESCE(SUM(cod_amount),0) as total FROM shipments WHERE store_id=? AND status IN ('picked_up','in_transit','out_for_delivery')`).get(store.id).total || 0;
-  const pendingShipping = db.prepare(`SELECT COALESCE(SUM(net_receivable),0) as total FROM shipping_settlements WHERE store_id=? AND status IN ('pending','partial')`).get(store.id).total || 0;
-  const pendingDriver = db.prepare(`SELECT COALESCE(SUM(net_payable),0) as total FROM driver_settlements WHERE store_id=? AND status IN ('pending','partial')`).get(store.id).total || 0;
-  
-  res.render('panel/cashflow', { store, period, customStart, customEnd, income, expense, netFlow, incomeByCategory, expenseByCategory, dailyFlow, recent, pendingCod, pendingShipping, pendingDriver, money, user: req.user });
-});
-
-router.get('/cashflow/export', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const period = req.query.period || '30d';
-  
-  let dateFilter = '';
-  const params = [store.id];
-  
-  if (period === 'custom' && req.query.start_date && req.query.end_date) {
-    dateFilter = 'AND date(created_at) BETWEEN ? AND ?';
-    params.push(req.query.start_date, req.query.end_date);
-  } else {
-    const days = period === '7d' ? 7 : period === '30d' ? 30 : 90;
-    dateFilter = `AND date(created_at) >= date('now', '-${days} days')`;
-  }
-  
-  const entries = db.prepare(`SELECT * FROM cash_flow_entries WHERE store_id=? ${dateFilter} ORDER BY created_at DESC`).all(...params);
-  
-  const csvHeader = 'النوع,الفئة,المبلغ (د.ع),الوصف,المرجع,التاريخ\n';
-  const csvRows = entries.map(e => {
-    const escape = (val) => '"' + String(val || '').replace(/"/g, '""') + '"';
-    return [
-      escape(e.type === 'income' ? 'إيراد' : 'مصروف'),
-      escape(e.category),
-      escape(e.amount),
-      escape(e.description || ''),
-      escape(e.reference_type || ''),
-      escape(e.created_at)
-    ].join(',');
-  }).join('\n');
-  
-  const csv = csvHeader + csvRows;
-  const filename = `cashflow_${store.slug}_${new Date().toISOString().slice(0,10)}.csv`;
-  
-  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-  res.send('\uFEFF' + csv);
-});
-
-/* ====== إدارة المستودعات والمخزون المتعدد (Multi-location Inventory) ====== */
-router.get('/warehouses', (req, res) => {
-  const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('إدارة المستودعات متاحة للباقة الاحترافية فقط'));
-  
-  const warehouses = db.prepare('SELECT w.*, (SELECT COUNT(*) FROM product_warehouse_stock WHERE warehouse_id=w.id) as product_count FROM warehouses w WHERE w.store_id=? ORDER BY w.is_default DESC, w.created_at').all(store.id);
-  res.render('panel/warehouses', { store, warehouses, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
-});
-
-router.post('/warehouses', (req, res) => {
-  const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('إدارة المستودعات متاحة للباقة الاحترافية فقط'));
-  
-  const { name, code, address, city, manager_name, manager_phone, is_default } = req.body;
-  if (!name || !code) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('اسم المستودع والكود مطلوبان'));
-  
-  const newCode = String(code).trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 10);
-  const clash = db.prepare('SELECT id FROM warehouses WHERE code=? AND store_id=?').get(newCode, store.id);
-  if (clash) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('كود المستودع مستخدم سابقاً'));
-  
-  let isDefault = is_default === 'on' ? 1 : 0;
-  if (isDefault) {
-    db.prepare('UPDATE warehouses SET is_default=0 WHERE store_id=?').run(store.id);
-  }
-  
-  const info = db.prepare('INSERT INTO warehouses (store_id, name, code, address, city, manager_name, manager_phone, is_default) VALUES (?,?,?,?,?,?,?,?)')
-    .run(store.id, name.trim(), newCode, address?.trim() || '', city?.trim() || '', manager_name?.trim() || '', manager_phone?.trim() || '', isDefault);
-  
-  logActivity(req.user.id, req.user.username, 'إضافة مستودع', `أضاف المستودع «${name}»`);
-  res.redirect('/panel/warehouses?ok=' + encodeURIComponent('تم إضافة المستودع'));
-});
-
-router.post('/warehouses/:id/toggle', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const warehouse = db.prepare('SELECT * FROM warehouses WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (!warehouse) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('المستودع غير موجود'));
-  
-  if (!warehouse.is_default) {
-    db.prepare('UPDATE warehouses SET is_default=0 WHERE store_id=?').run(store.id);
-    db.prepare('UPDATE warehouses SET is_default=1 WHERE id=?').run(warehouse.id);
-  }
-  res.redirect('/panel/warehouses?ok=' + encodeURIComponent('تم التحديث'));
-});
-
-router.post('/warehouses/:id/delete', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const warehouse = db.prepare('SELECT * FROM warehouses WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (!warehouse) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('المستودع غير موجود'));
-  if (warehouse.is_default) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('لا يمكن حذف المستودع الافتراضي'));
-  
-  db.prepare('DELETE FROM product_warehouse_stock WHERE warehouse_id=?').run(warehouse.id);
-  db.prepare('DELETE FROM warehouses WHERE id=?').run(warehouse.id);
-  res.redirect('/panel/warehouses?ok=' + encodeURIComponent('تم حذف المستودع'));
-});
-
-router.get('/warehouses/:id/stock', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const warehouse = db.prepare('SELECT * FROM warehouses WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (!warehouse) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('المستودع غير موجود'));
-  
-  const q = String(req.query.q || '').trim();
-  const stocks = db.prepare(`
-    SELECT pws.*, p.name, p.price,
-      CASE WHEN pws.quantity <= pws.min_threshold THEN 'low'
-           WHEN pws.quantity = 0 THEN 'out'
-           ELSE 'ok' END as stock_status
-    FROM product_warehouse_stock pws
-    JOIN products p ON p.id = pws.product_id
-    WHERE pws.warehouse_id = ? AND p.store_id = ? AND p.active = 1
-      AND (? = '' OR p.name LIKE ?)
-    ORDER BY p.name
-  `).all(req.params.id, store.id, q, `%${q}%`);
-  
-  res.render('panel/warehouse-stock', { store, warehouse, stocks, money, q, ok: req.query.ok || '', err: req.query.err || '', user: req.user, csrf: req.csrfToken ? req.csrfToken() : '' });
-});
-
-router.post('/warehouses/:id/stock/adjust', (req, res) => {
-  const store = getStore(req.user.store_id);
-  const { product_id, quantity, operation } = req.body; // operation: 'set' | 'add' | 'subtract'
-  const warehouse = db.prepare('SELECT * FROM warehouses WHERE id=? AND store_id=?').get(req.params.id, store.id);
-  if (!warehouse) return res.redirect('/panel/warehouses?err=' + encodeURIComponent('المستودع غير موجود'));
-  
-  const stock = db.prepare('SELECT * FROM product_warehouse_stock WHERE product_id=? AND warehouse_id=?').get(product_id, warehouse.id);
-  let newQty = 0;
-  if (operation === 'set') newQty = Math.max(0, Math.floor(Number(quantity) || 0));
-  else if (operation === 'add') newQty = (stock?.quantity || 0) + Math.max(0, Math.floor(Number(quantity) || 0));
-  else if (operation === 'subtract') newQty = Math.max(0, (stock?.quantity || 0) - Math.max(0, Math.floor(Number(quantity) || 0)));
-  
-  if (stock) {
-    db.prepare("UPDATE product_warehouse_stock SET quantity=?, last_restocked_at=datetime('now','localtime') WHERE product_id=? AND warehouse_id=?").run(newQty, product_id, req.params.id);
-  } else {
-    db.prepare('INSERT INTO product_warehouse_stock (product_id, warehouse_id, quantity) VALUES (?,?,?)').run(product_id, req.params.id, newQty);
-  }
-  
-  res.redirect('/panel/warehouses/' + req.params.id + '/stock?ok=' + encodeURIComponent('تم تحديث المخزون'));
-});
-
-/* ====== دعم اللغة الكردية (Kurdish Language Support) ====== */
-router.get('/kurdish', (req, res) => {
-  const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('دعم اللغة الكردية متاح للباقة الاحترافية فقط'));
-  
-  const q = String(req.query.q || '').trim();
-  let where = '';
-  const params = [];
-  if (q) {
-    where = 'WHERE key LIKE ? OR arabic LIKE ? OR kurdish_sorani LIKE ? OR kurdish_kurmanji LIKE ?';
-    params.push(`%${q}%`, `%${q}%`, `%${q}%`, `%${q}%`);
-  }
-  
-  const translations = db.prepare(`SELECT * FROM kurdish_translations ${where} ORDER BY key`).all(...params);
-  res.render('panel/kurdish', { store, translations, q, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
-});
-
-router.get('/kurdish/new', (req, res) => {
-  const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('دعم اللغة الكردية متاح للباقة الاحترافية فقط'));
-  
-  res.render('panel/kurdish-form', { store, translation: null, isNew: true, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
-});
-
-router.get('/kurdish/:key', (req, res) => {
-  const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/settings?err=' + encodeURIComponent('دعم اللغة الكردية متاح للباقة الاحترافية فقط'));
-  
-  const translation = db.prepare('SELECT * FROM kurdish_translations WHERE key=?').get(req.params.key);
-  if (!translation) return res.redirect('/panel/kurdish?err=' + encodeURIComponent('الترجمة غير موجودة'));
-  
-  res.render('panel/kurdish-form', { store, translation, isNew: false, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
-});
-
-router.post('/kurdish', (req, res) => {
-  const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/kurdish?err=' + encodeURIComponent('دعم اللغة الكردية متاح للباقة الاحترافية فقط'));
-  
-  const { key, arabic, kurdish_sorani, kurdish_kurmanji, context } = req.body;
-  if (!key || !arabic || !kurdish_sorani || !kurdish_kurmanji) return res.redirect('/panel/kurdish/new?err=' + encodeURIComponent('جميع الحقول مطلوبة'));
-  
-  db.prepare('INSERT INTO kurdish_translations (key, arabic, kurdish_sorani, kurdish_kurmanji, context) VALUES (?,?,?,?,?) ON CONFLICT(key) DO UPDATE SET arabic=excluded.arabic, kurdish_sorani=excluded.kurdish_sorani, kurdish_kurmanji=excluded.kurdish_kurmanji, context=excluded.context')
-    .run(key.trim(), arabic.trim(), kurdish_sorani?.trim() || '', kurdish_kurmanji?.trim() || '', context?.trim() || '');
-  
-  res.redirect('/panel/kurdish?ok=' + encodeURIComponent('تم حفظ الترجمة'));
-});
-
-router.post('/kurdish/:key/delete', (req, res) => {
-  const store = getStore(req.user.store_id);
-  if (!isPro(store)) return res.redirect('/panel/kurdish?err=' + encodeURIComponent('دعم اللغة الكردية متاح للباقة الاحترافية فقط'));
-  
-  db.prepare('DELETE FROM kurdish_translations WHERE key=?').run(req.params.key);
-  res.redirect('/panel/kurdish?ok=' + encodeURIComponent('تم حذف الترجمة'));
+  res.redirect('/panel/reviews?ok=' + encodeURIComponent('ØªÙ… Ø­Ø°Ù Ø§Ù„ØªÙ‚ÙŠÙŠÙ…'));
 });
 
 module.exports = router;

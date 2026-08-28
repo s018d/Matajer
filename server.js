@@ -150,6 +150,24 @@ function seed() {
 }
 
 seed();
+// زرع القوالب الافتراضية إن لم تكن موجودة
+(function seedTemplates(){
+  try {
+    const c = db.prepare('SELECT COUNT(*) c FROM templates').get().c;
+    if (c === 0) {
+      const defaults = [
+        ['classic','الواضح','مجاني وصاروخي: أبيض نضيف وسريع','', '', 0, 1, 0],
+        ['royal-ivory','الذهب العاجي (Royal Ivory)','فاخر هادئ: عاجي وذهبي','/css/royal-ivory.css','', 1, 1, 1],
+        ['black-gold','الإمبراطورية السوداء (Black Gold)','فاخر جداً: أسود مع ذهبي','/css/black-gold.css','', 1, 1, 2],
+        ['modern-green','السوق العصري (Modern Green)','عصري ونظيف: أخضر زمردي','/css/modern-green.css','', 1, 1, 3]
+      ];
+      for (const [id,name,desc,css,preview,prem,active,pos] of defaults) {
+        try { db.prepare('INSERT INTO templates (id,name,description,css_file,preview_image,is_premium,is_active,position) VALUES (?,?,?,?,?,?,?,?)').run(id,name,desc,css,preview,prem,active,pos); } catch {}
+      }
+      console.log('🎨 Templates seeded (4)');
+    }
+  } catch(e) { console.log('templates seed skip', e.message); }
+})();
 if (process.env.DISABLE_SAMPLES !== '1') require('./seed').seedSamples();
 appendLog(`تم تشغيل الخادم — المنصة جاهزة على http://localhost:${PORT} — الوقت: ${now()}`);
 

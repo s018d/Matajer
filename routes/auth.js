@@ -23,11 +23,15 @@ router.post('/login', (req, res) => {
     const locked = loginFail(ip);
     return res.redirect('/login?err=' + encodeURIComponent(locked ? 'محاولات كثيرة — تم قفل الدخول 15 دقيقة' : 'اسم المستخدم أو كلمة المرور غير صحيحة'));
   }
+  if (user.is_active === 0) return res.redirect('/login?err=' + encodeURIComponent('حسابك موقوف — تواصل مع المدير العام'));
   loginOk(ip);
   const token = createSession(user.id);
+  try { db.prepare("UPDATE users SET last_login=datetime('now','localtime') WHERE id=?").run(user.id); } catch {}
   res.cookie('sid', token, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production' });
-  appendLog(`دخول ناجح للمستخدم «${user.username}» بتصريح ${user.role === 'superadmin' ? 'مدير عام' : 'صاحب متجر'}`);
-  res.redirect(user.role === 'superadmin' ? '/admin' : '/panel');
+  const ADMIN_ROLES = ['superadmin','admin','billing','support','viewer'];
+  const isAdmin = ADMIN_ROLES.includes(user.role);
+  appendLog(`دخول ناجح للمستخدم «${user.username}» بتصريح ${isAdmin ? 'إدارة ('+user.role+')' : 'صاحب متجر'}`);
+  res.redirect(isAdmin ? '/admin' : '/panel');
 });
 
 router.post('/logout', (req, res) => {

@@ -1,40 +1,114 @@
-<%- include('partials/head', { title: 'دخول — دُكّان', css: '/css/app.css' }) %>
+<%- include('partials/head', { title: 'دخول — دُكّان Dukkan', css: '/css/app.css' }) %>
 <body class="auth-body">
-  <div class="auth-card">
-    <a href="/" class="auth-back">→ رجوع للرئيسية</a>
-    <div class="brand big">
-      <span>🛍️</span>
-      <b class="grad">Dukkan</b>
-      <small>منصة المتاجر العراقية</small>
-    </div>
-    <% if (error) { %><div class="alert alert-err">⚠️ <%= error %></div><% } %>
-    <form method="post" action="/login" class="stack">
-      <input type="hidden" name="_csrf" value="<%= csrf %>">
-      <label>اسم المستخدم
-        <input type="text" name="username" required autofocus placeholder="أدخل اسم المستخدم">
-      </label>
-      <label>كلمة المرور
-        <div style="position:relative">
-          <input type="password" name="password" id="loginPass" required placeholder="أدخل كلمة المرور" style="padding-left:2.6rem">
-          <button type="button" onclick="togglePass('loginPass',this)" style="position:absolute;left:.5rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem" title="إظهار/إخفاء">👁️</button>
+  <div class="auth-split">
+    <!-- Left: Branding -->
+    <div class="auth-hero">
+      <div class="auth-hero-inner">
+        <div class="auth-logo">🛍️ Dukkan</div>
+        <h1>مرحباً بعودتك</h1>
+        <p>منصة المتاجر العراقية — أدِر متجرك، تابع طلباتك، وكبّر مبيعاتك من مكان واحد.</p>
+        <ul class="auth-features">
+          <li><span>⚡</span> لوحة تاجر سريعة وخفيفة</li>
+          <li><span>📦</span> طلبات فورية مع تنبيه واتساب</li>
+          <li><span>🎨</span> 4 قوالب + رفع قوالبك الخاصة</li>
+          <li><span>👥</span> فريق إدارة هرمي بصلاحيات دقيقة</li>
+        </ul>
+        <div class="auth-stats">
+          <div><b>500+</b><span>متجر نشط</span></div>
+          <div><b>99.9%</b><span>استقرار</span></div>
+          <div><b>24/7</b><span>دعم</span></div>
         </div>
-      </label>
-      <button type="submit" class="btn btn-primary btn-block" style="margin-top:.5rem;padding:.75rem;font-size:1rem;border-radius:12px">
-        🔐 تسجيل الدخول
-      </button>
-    </form>
-    <div class="auth-divider"><span>أو</span></div>
-    <a href="/signup" class="btn btn-ghost btn-block" style="border-radius:12px;padding:.7rem;font-size:.92rem">
-      🚀 أنشئ متجرك مجاناً
-    </a>
-    <p class="auth-hint">_Callback المتاجر يدخلون من روابطهم مباشرة<br>هذه الصفحة للوحات التحكم فقط</p>
+      </div>
+      <div class="auth-hero-bg"></div>
+    </div>
+
+    <!-- Right: Form -->
+    <div class="auth-form-wrap">
+      <a href="/" class="auth-back">→ رجوع للرئيسية</a>
+      <div class="auth-card" style="animation:none; box-shadow:none; border:none; padding:0; background:transparent; max-width:420px; width:100%">
+        <div class="brand big" style="margin-bottom:1.4rem">
+          <span style="font-size:2rem">🛍️</span>
+          <b class="grad" style="font-size:1.6rem">Dukkan</b>
+          <small>منصة المتاجر العراقية</small>
+        </div>
+        <h2 style="font-size:1.3rem; font-weight:900; color:#0f172a; margin-bottom:.3rem">تسجيل الدخول</h2>
+        <p class="muted" style="font-size:.85rem; margin-bottom:1.2rem">أدخل بياناتك للوصول إلى لوحتك — التجار والإدارة من نفس الصفحة</p>
+
+        <% if (error) { %><div class="alert alert-err" style="margin-bottom:1rem">⚠️ <%= error %></div><% } %>
+
+        <form method="post" action="/login" class="stack" id="loginForm">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <label>اسم المستخدم
+            <div style="position:relative">
+              <input type="text" name="username" required autofocus placeholder="مثال: baghdadscents أو admin" style="padding-inline-start:2.4rem">
+              <span style="position:absolute;inset-inline-start:.7rem;top:50%;transform:translateY(-50%);color:#94a3b8">👤</span>
+            </div>
+          </label>
+          <label>كلمة المرور
+            <div style="position:relative">
+              <input type="password" name="password" id="loginPass" required placeholder="أدخل كلمة المرور" style="padding-inline-start:2.4rem; padding-inline-end:2.6rem">
+              <span style="position:absolute;inset-inline-start:.7rem;top:50%;transform:translateY(-50%);color:#94a3b8">🔒</span>
+              <button type="button" onclick="togglePass('loginPass',this)" style="position:absolute;inset-inline-end:.5rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem" title="إظهار/إخفاء">👁️</button>
+            </div>
+          </label>
+          <div style="display:flex; align-items:center; justify-content:space-between; font-size:.82rem; margin-top:.2rem">
+            <label style="flex-direction:row; align-items:center; gap:.4rem; font-weight:500; cursor:pointer"><input type="checkbox" name="remember" style="width:auto"> تذكرني</label>
+            <a href="https://wa.me/9647831020026?text=نسيت%20كلمة%20مرور%20دكان" target="_blank" style="color:#0ea5e9; font-weight:700">نسيت كلمة المرور؟ واتساب الدعم</a>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" id="loginBtn" style="margin-top:.6rem; padding:.85rem; font-size:1.05rem; border-radius:14px; box-shadow:0 8px 24px rgba(37,99,235,.35)">
+            <span id="loginBtnText">🔐 تسجيل الدخول</span>
+            <span id="loginSpinner" style="display:none">⏳ جارٍ الدخول...</span>
+          </button>
+        </form>
+
+        <div class="auth-divider"><span>أو</span></div>
+        <a href="/signup" class="btn btn-ghost btn-block" style="border-radius:14px; padding:.8rem; font-size:.95rem; border-width:1.5px">
+          🚀 أنشئ متجرك مجاناً — خلال دقيقة
+        </a>
+        <p class="auth-hint" style="margin-top:1.2rem; text-align:center">المتاجر يدخلون من روابطهم مباشرة — هذه الصفحة للوحات التحكم فقط<br><small style="color:#94a3b8">آمن بـ CSRF + قفل دخول + تشفير bcrypt</small></p>
+      </div>
+      <div class="auth-footer">© 2026 Dukkan — صنع في العراق 🇮🇶</div>
+    </div>
   </div>
 </body>
 <style>
+.auth-split{display:flex; min-height:100vh; width:100%; max-width:100vw}
+.auth-hero{flex:1.1; background:linear-gradient(135deg,#0b1120 0%,#1e1b4b 45%,#0f2b3d 100%); color:#e2e8f0; display:flex; align-items:center; justify-content:center; padding:2.5rem; position:relative; overflow:hidden}
+.auth-hero-inner{position:relative; z-index:1; max-width:440px}
+.auth-logo{font-size:1.4rem; font-weight:900; color:#fff; margin-bottom:1.5rem; display:flex; align-items:center; gap:.5rem}
+.auth-logo::before{content:''; width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,#818cf8,#38bdf8); display:inline-block}
+.auth-hero h1{font-size:2rem; font-weight:900; color:#fff; line-height:1.3; margin-bottom:.6rem}
+.auth-hero p{color:#cbd5e1; font-size:.95rem; line-height:1.7; margin-bottom:1.5rem}
+.auth-features{list-style:none; display:flex; flex-direction:column; gap:.7rem; margin-bottom:2rem}
+.auth-features li{display:flex; align-items:center; gap:.7rem; font-size:.9rem; color:#e2e8f0}
+.auth-features li span{width:32px; height:32px; border-radius:8px; background:rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,.12)}
+.auth-stats{display:flex; gap:1.5rem; border-top:1px solid rgba(255,255,255,.12); padding-top:1.2rem}
+.auth-stats div{display:flex; flex-direction:column; gap:.15rem}
+.auth-stats b{font-size:1.3rem; font-weight:900; color:#fff}
+.auth-stats span{font-size:.75rem; color:#94a3b8}
+.auth-hero-bg{position:absolute; inset:0; background:radial-gradient(circle at 30% 20%,rgba(99,102,241,.25),transparent 50%), radial-gradient(circle at 80% 80%,rgba(56,189,248,.18),transparent 50%)}
+.auth-form-wrap{flex:.9; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem 2rem 1rem; position:relative; min-width:380px}
+.auth-form-wrap .auth-back{position:absolute; top:1rem; inset-inline-start:1rem}
+.auth-footer{margin-top:auto; padding-top:1.5rem; font-size:.75rem; color:#94a3b8; text-align:center}
+.auth-split .auth-card{max-width:100%}
+@media(max-width:900px){
+  .auth-split{flex-direction:column}
+  .auth-hero{padding:2rem 1.5rem}
+  .auth-hero h1{font-size:1.6rem}
+  .auth-form-wrap{min-width:0; padding:1.5rem}
+  .auth-form-wrap .auth-back{position:static; align-self:flex-start; margin-bottom:1rem}
+}
 .auth-divider{display:flex;align-items:center;gap:1rem;margin:1.2rem 0;color:#94a3b8;font-size:.82rem}
 .auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,#e2e8f0,transparent)}
-.auth-back{display:inline-flex;align-items:center;gap:.35rem;color:#0ea5e9;font-size:.85rem;font-weight:700;text-decoration:none;margin-bottom:1rem;padding:.35rem .6rem;border-radius:8px;background:#eff6ff;border:1px solid #bfdbfe;transition:all .2s}
+.auth-back{display:inline-flex;align-items:center;gap:.35rem;color:#0ea5e9;font-size:.85rem;font-weight:700;text-decoration:none;padding:.35rem .6rem;border-radius:8px;background:#eff6ff;border:1px solid #bfdbfe;transition:all .2s}
 .auth-back:hover{background:#dbeafe;transform:translateX(2px)}
 </style>
-<script>function togglePass(id,btn){const i=document.getElementById(id);const s=i.type==='password';i.type=s?'text':'password';btn.textContent=s?'🙈':'👁️'}</script>
+<script>
+function togglePass(id,btn){const i=document.getElementById(id);const s=i.type==='password';i.type=s?'text':'password';btn.textContent=s?'🙈':'👁️'}
+document.getElementById('loginForm')?.addEventListener('submit', function(){
+  const b=document.getElementById('loginBtn'); b.disabled=true; b.style.opacity='.7';
+  document.getElementById('loginBtnText').style.display='none';
+  document.getElementById('loginSpinner').style.display='inline';
+});
+</script>
 </html>

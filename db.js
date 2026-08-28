@@ -207,37 +207,26 @@ if (process.env.DATABASE_URL) {
         "ALTER TABLE payments ADD COLUMN IF NOT EXISTS months INTEGER DEFAULT 1",
         "ALTER TABLE payments ADD COLUMN IF NOT EXISTS ref TEXT DEFAULT ''",
         "ALTER TABLE payments ADD COLUMN IF NOT EXISTS receipt_path TEXT DEFAULT ''",
-        "CREATE UNIQUE INDEX IF NOT EXISTS idx_coupons_store_code ON coupons(store_id, code)"
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_coupons_store_code ON coupons(store_id, code)",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS display_name TEXT DEFAULT ''",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS permissions TEXT DEFAULT ''",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active INTEGER DEFAULT 1",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS created_by INTEGER",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login TEXT DEFAULT ''",
+        "CREATE TABLE IF NOT EXISTS templates (id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT DEFAULT '', css_file TEXT DEFAULT '', preview_image TEXT DEFAULT '', is_premium INTEGER DEFAULT 0, is_active INTEGER DEFAULT 1, position INTEGER DEFAULT 0, created_at TEXT DEFAULT NOW())"
       ];
       for (const q of alters) { try { await pool.query(q); } catch(e) {} }
 
       // Additional tables (same as SQLite, PG will convert)
       const extraTables = [
-        `CREATE TABLE IF NOT EXISTS bundles (id SERIAL PRIMARY KEY, store_id INTEGER NOT NULL, name TEXT NOT NULL, description TEXT DEFAULT '', discount_type TEXT NOT NULL DEFAULT 'percent', discount_value DOUBLE PRECISION NOT NULL DEFAULT 0, min_products INTEGER NOT NULL DEFAULT 2, active INTEGER NOT NULL DEFAULT 1, created_at TEXT DEFAULT NOW())`,
-        `CREATE TABLE IF NOT EXISTS bundle_products (bundle_id INTEGER NOT NULL, product_id INTEGER NOT NULL, PRIMARY KEY (bundle_id, product_id))`,
         `CREATE TABLE IF NOT EXISTS abandoned_carts (id SERIAL PRIMARY KEY, store_id INTEGER NOT NULL, session_id TEXT NOT NULL, cart_data TEXT NOT NULL, customer_phone TEXT, customer_name TEXT, subtotal DOUBLE PRECISION DEFAULT 0, created_at TEXT DEFAULT NOW(), reminded_at TEXT DEFAULT '', converted_at TEXT DEFAULT '')`,
         `CREATE TABLE IF NOT EXISTS reviews (id SERIAL PRIMARY KEY, product_id INTEGER NOT NULL, customer_name TEXT NOT NULL, customer_phone TEXT, rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5), comment TEXT DEFAULT '', approved INTEGER NOT NULL DEFAULT 0, created_at TEXT DEFAULT NOW())`,
         `CREATE TABLE IF NOT EXISTS loyalty_points (id SERIAL PRIMARY KEY, store_id INTEGER NOT NULL, customer_phone TEXT NOT NULL, points INTEGER NOT NULL DEFAULT 0, total_earned INTEGER NOT NULL DEFAULT 0, total_redeemed INTEGER NOT NULL DEFAULT 0, last_activity TEXT DEFAULT NOW(), UNIQUE(store_id, customer_phone))`,
         `CREATE TABLE IF NOT EXISTS loyalty_transactions (id SERIAL PRIMARY KEY, store_id INTEGER NOT NULL, customer_phone TEXT NOT NULL, type TEXT NOT NULL, points INTEGER NOT NULL, reference_type TEXT, reference_id INTEGER, description TEXT, created_at TEXT DEFAULT NOW())`,
-        `CREATE TABLE IF NOT EXISTS shipping_companies (id SERIAL PRIMARY KEY, name TEXT NOT NULL, code TEXT NOT NULL UNIQUE, api_base_url TEXT, api_key TEXT, api_secret TEXT, merchant_id TEXT, callback_url TEXT, supports_cod INTEGER DEFAULT 1, supports_prepaid INTEGER DEFAULT 1, supports_tracking INTEGER DEFAULT 1, supports_pickup INTEGER DEFAULT 1, api_docs_url TEXT, is_active INTEGER DEFAULT 1, created_at TEXT DEFAULT NOW())`,
-        `CREATE TABLE IF NOT EXISTS store_shipping_config (id SERIAL PRIMARY KEY, store_id INTEGER NOT NULL, shipping_company_id INTEGER NOT NULL, is_enabled INTEGER DEFAULT 1, cod_fee INTEGER DEFAULT 0, free_shipping_min INTEGER DEFAULT 0, default_weight DOUBLE PRECISION DEFAULT 0.5, default_dimensions TEXT, api_credentials TEXT, settings TEXT, created_at TEXT DEFAULT NOW(), UNIQUE(store_id, shipping_company_id))`,
-        `CREATE TABLE IF NOT EXISTS shipments (id SERIAL PRIMARY KEY, store_id INTEGER NOT NULL, order_id INTEGER NOT NULL, shipping_company_id INTEGER NOT NULL, tracking_number TEXT, shipping_company_order_id TEXT, status TEXT DEFAULT 'pending', cod_amount INTEGER DEFAULT 0, shipping_fee INTEGER DEFAULT 0, weight DOUBLE PRECISION, dimensions TEXT, pickup_address TEXT, delivery_address TEXT, customer_phone TEXT, customer_name TEXT, notes TEXT, pickup_scheduled_at TEXT, picked_up_at TEXT, delivered_at TEXT, returned_at TEXT, created_at TEXT DEFAULT NOW(), updated_at TEXT DEFAULT NOW())`,
-        `CREATE TABLE IF NOT EXISTS shipment_tracking (id SERIAL PRIMARY KEY, shipment_id INTEGER NOT NULL, status TEXT NOT NULL, location TEXT, description TEXT, timestamp TEXT DEFAULT NOW())`,
-        `CREATE TABLE IF NOT EXISTS drivers (id SERIAL PRIMARY KEY, store_id INTEGER NOT NULL, name TEXT NOT NULL, phone TEXT NOT NULL, email TEXT, vehicle_type TEXT, vehicle_plate TEXT, license_number TEXT, is_active INTEGER DEFAULT 1, commission_type TEXT DEFAULT 'per_order', commission_value DOUBLE PRECISION DEFAULT 0, current_lat DOUBLE PRECISION, current_lng DOUBLE PRECISION, last_location_update TEXT, created_at TEXT DEFAULT NOW())`,
-        `CREATE TABLE IF NOT EXISTS driver_assignments (id SERIAL PRIMARY KEY, driver_id INTEGER NOT NULL, shipment_id INTEGER NOT NULL, assigned_at TEXT DEFAULT NOW(), accepted_at TEXT, picked_up_at TEXT, delivered_at TEXT, status TEXT DEFAULT 'assigned', notes TEXT)`,
-        `CREATE TABLE IF NOT EXISTS driver_settlements (id SERIAL PRIMARY KEY, driver_id INTEGER NOT NULL, store_id INTEGER NOT NULL, period_start TEXT NOT NULL, period_end TEXT NOT NULL, total_orders INTEGER DEFAULT 0, total_commission DOUBLE PRECISION DEFAULT 0, total_cod_collected INTEGER DEFAULT 0, advances_paid INTEGER DEFAULT 0, net_payable DOUBLE PRECISION DEFAULT 0, status TEXT DEFAULT 'pending', paid_at TEXT, notes TEXT, created_at TEXT DEFAULT NOW())`,
-        `CREATE TABLE IF NOT EXISTS returns_exchanges (id SERIAL PRIMARY KEY, store_id INTEGER NOT NULL, order_id INTEGER NOT NULL, order_item_id INTEGER NOT NULL, type TEXT NOT NULL, reason TEXT NOT NULL, reason_details TEXT, status TEXT DEFAULT 'requested', refund_amount INTEGER DEFAULT 0, exchange_product_id INTEGER, exchange_quantity INTEGER DEFAULT 1, pickup_address TEXT, pickup_scheduled_at TEXT, picked_up_at TEXT, received_at TEXT, inspected_at TEXT, inspected_by INTEGER, inspection_notes TEXT, refund_method TEXT, refunded_at TEXT, exchange_shipment_id INTEGER, created_at TEXT DEFAULT NOW(), updated_at TEXT DEFAULT NOW())`,
-        `CREATE TABLE IF NOT EXISTS warehouses (id SERIAL PRIMARY KEY, store_id INTEGER NOT NULL, name TEXT NOT NULL, code TEXT NOT NULL, address TEXT, city TEXT, manager_name TEXT, manager_phone TEXT, is_default INTEGER DEFAULT 0, is_active INTEGER DEFAULT 1, created_at TEXT DEFAULT NOW())`,
-        `CREATE TABLE IF NOT EXISTS product_warehouse_stock (id SERIAL PRIMARY KEY, product_id INTEGER NOT NULL, warehouse_id INTEGER NOT NULL, quantity INTEGER NOT NULL DEFAULT 0, reserved_quantity INTEGER DEFAULT 0, min_threshold INTEGER DEFAULT 5, max_threshold INTEGER DEFAULT 1000, last_restocked_at TEXT, UNIQUE(product_id, warehouse_id))`,
-        `CREATE TABLE IF NOT EXISTS cash_flow_entries (id SERIAL PRIMARY KEY, store_id INTEGER NOT NULL, type TEXT NOT NULL, category TEXT NOT NULL, amount INTEGER NOT NULL, reference_type TEXT, reference_id INTEGER, description TEXT, status TEXT DEFAULT 'completed', created_at TEXT DEFAULT NOW())`,
-        `CREATE TABLE IF NOT EXISTS shipping_settlements (id SERIAL PRIMARY KEY, store_id INTEGER NOT NULL, shipping_company_id INTEGER NOT NULL, period_start TEXT NOT NULL, period_end TEXT NOT NULL, total_orders INTEGER DEFAULT 0, total_cod_amount INTEGER DEFAULT 0, total_shipping_fees INTEGER DEFAULT 0, platform_commission INTEGER DEFAULT 0, net_receivable INTEGER DEFAULT 0, received_amount INTEGER DEFAULT 0, status TEXT DEFAULT 'pending', received_at TEXT, notes TEXT, created_at TEXT DEFAULT NOW())`,
+        `CREATE TABLE IF NOT EXISTS templates (id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT DEFAULT '', css_file TEXT DEFAULT '', preview_image TEXT DEFAULT '', is_premium INTEGER DEFAULT 0, is_active INTEGER DEFAULT 1, position INTEGER DEFAULT 0, created_at TEXT DEFAULT NOW())`,
         `CREATE TABLE IF NOT EXISTS support_tickets (id SERIAL PRIMARY KEY, store_id INTEGER, customer_name TEXT, customer_phone TEXT, customer_email TEXT, subject TEXT NOT NULL, category TEXT NOT NULL, priority TEXT DEFAULT 'normal', status TEXT DEFAULT 'open', assigned_to INTEGER, created_at TEXT DEFAULT NOW(), updated_at TEXT DEFAULT NOW(), resolved_at TEXT)`,
         `CREATE TABLE IF NOT EXISTS support_messages (id SERIAL PRIMARY KEY, ticket_id INTEGER NOT NULL, sender_type TEXT NOT NULL, sender_id INTEGER, message TEXT NOT NULL, attachments TEXT, is_internal INTEGER DEFAULT 0, created_at TEXT DEFAULT NOW())`,
-        `CREATE TABLE IF NOT EXISTS instagram_imports (id SERIAL PRIMARY KEY, store_id INTEGER NOT NULL, instagram_username TEXT NOT NULL, status TEXT DEFAULT 'pending', total_posts INTEGER DEFAULT 0, imported_products INTEGER DEFAULT 0, failed_products INTEGER DEFAULT 0, error_log TEXT, created_at TEXT DEFAULT NOW(), completed_at TEXT)`,
-        `CREATE TABLE IF NOT EXISTS whatsapp_catalogs (id SERIAL PRIMARY KEY, store_id INTEGER NOT NULL, name TEXT NOT NULL, status TEXT DEFAULT 'draft', product_count INTEGER DEFAULT 0, file_path TEXT, sent_to TEXT, sent_at TEXT, created_at TEXT DEFAULT NOW())`,
-        `CREATE TABLE IF NOT EXISTS sms_logs (id SERIAL PRIMARY KEY, store_id INTEGER, phone TEXT NOT NULL, message TEXT NOT NULL, type TEXT NOT NULL, status TEXT DEFAULT 'pending', provider TEXT, provider_message_id TEXT, error_message TEXT, cost INTEGER DEFAULT 0, sent_at TEXT, delivered_at TEXT, created_at TEXT DEFAULT NOW())`,
-        `CREATE TABLE IF NOT EXISTS kurdish_translations (id SERIAL PRIMARY KEY, key TEXT NOT NULL UNIQUE, arabic TEXT NOT NULL, kurdish_sorani TEXT, kurdish_kurmanji TEXT, context TEXT, updated_at TEXT DEFAULT NOW())`,
-        `CREATE TABLE IF NOT EXISTS zaincash_payments (id SERIAL PRIMARY KEY, store_id INTEGER NOT NULL, order_id INTEGER NOT NULL, transaction_id TEXT, amount INTEGER NOT NULL, status TEXT DEFAULT 'pending', zaincash_transaction_id TEXT, zaincash_order_id TEXT, response_code TEXT, response_message TEXT, paid_at TEXT, created_at TEXT DEFAULT NOW())`
+        `CREATE TABLE IF NOT EXISTS sms_logs (id SERIAL PRIMARY KEY, store_id INTEGER, phone TEXT NOT NULL, message TEXT NOT NULL, type TEXT NOT NULL, status TEXT DEFAULT 'pending', provider TEXT, provider_message_id TEXT, error_message TEXT, cost INTEGER DEFAULT 0, sent_at TEXT, delivered_at TEXT, created_at TEXT DEFAULT NOW())`
       ];
       for (const q of extraTables) { try { await pool.query(q); } catch(e) {} }
       console.log('🐘 PostgreSQL tables ready (38)');
@@ -411,17 +400,19 @@ CREATE TABLE IF NOT EXISTS coupons (
   try { db.exec("ALTER TABLE payments ADD COLUMN receipt_path TEXT DEFAULT ''"); } catch (e) {}
   try { db.exec("ALTER TABLE product_images ADD COLUMN variant TEXT DEFAULT ''"); } catch (e) {}
   try { db.exec("CREATE UNIQUE INDEX IF NOT EXISTS idx_coupons_store_code ON coupons(store_id, code)"); } catch (e) {}
-  try { db.exec(`CREATE TABLE IF NOT EXISTS bundles (id INTEGER PRIMARY KEY AUTOINCREMENT, store_id INTEGER NOT NULL, name TEXT NOT NULL, description TEXT DEFAULT '', discount_type TEXT NOT NULL DEFAULT 'percent', discount_value REAL NOT NULL DEFAULT 0, min_products INTEGER NOT NULL DEFAULT 2, active INTEGER NOT NULL DEFAULT 1, created_at TEXT DEFAULT (datetime('now','localtime')))`); } catch (e) {}
-  try { db.exec(`CREATE TABLE IF NOT EXISTS bundle_products (bundle_id INTEGER NOT NULL, product_id INTEGER NOT NULL, PRIMARY KEY (bundle_id, product_id))`); } catch (e) {}
   try { db.exec(`CREATE TABLE IF NOT EXISTS abandoned_carts (id INTEGER PRIMARY KEY AUTOINCREMENT, store_id INTEGER NOT NULL, session_id TEXT NOT NULL, cart_data TEXT NOT NULL, customer_phone TEXT, customer_name TEXT, subtotal REAL DEFAULT 0, created_at TEXT DEFAULT (datetime('now','localtime')), reminded_at TEXT DEFAULT '', converted_at TEXT DEFAULT '')`); } catch (e) {}
   try { db.exec(`CREATE TABLE IF NOT EXISTS reviews (id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER NOT NULL, customer_name TEXT NOT NULL, customer_phone TEXT, rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5), comment TEXT DEFAULT '', approved INTEGER NOT NULL DEFAULT 0, created_at TEXT DEFAULT (datetime('now','localtime')))`); } catch (e) {}
+  try { db.exec(`CREATE TABLE IF NOT EXISTS loyalty_points (id INTEGER PRIMARY KEY AUTOINCREMENT, store_id INTEGER NOT NULL, customer_phone TEXT NOT NULL, points INTEGER NOT NULL DEFAULT 0, total_earned INTEGER NOT NULL DEFAULT 0, total_redeemed INTEGER NOT NULL DEFAULT 0, last_activity TEXT DEFAULT (datetime('now','localtime')), UNIQUE(store_id, customer_phone))`); } catch (e) {}
+  try { db.exec(`CREATE TABLE IF NOT EXISTS loyalty_transactions (id INTEGER PRIMARY KEY AUTOINCREMENT, store_id INTEGER NOT NULL, customer_phone TEXT NOT NULL, type TEXT NOT NULL, points INTEGER NOT NULL, reference_type TEXT, reference_id INTEGER, description TEXT, created_at TEXT DEFAULT (datetime('now','localtime')))`); } catch (e) {}
   try { db.exec(`CREATE INDEX IF NOT EXISTS idx_products_store ON products(store_id); CREATE INDEX IF NOT EXISTS idx_orders_store ON orders(store_id); CREATE INDEX IF NOT EXISTS idx_images_product ON product_images(product_id); CREATE INDEX IF NOT EXISTS idx_cats_store ON categories(store_id);`); } catch (e) {}
-  // ... remaining tables (loyalty, shipping, etc.) — نفس كود SQLite الأصلي (38 جدول) — تم اختصارها هنا للوضوح، لكنها موجودة بالكامل في النسخة الكاملة
-  // لإبقاء الملف قابل للقراءة، نستدعي الملف الأصلي للجداول الإضافية
-  try {
-    const extraSql = fs.readFileSync(path.join(__dirname, 'db.extra.sql'), 'utf8');
-    if (extraSql) db.exec(extraSql);
-  } catch(e) {}
+  // RBAC — أعمدة جديدة للمشرفين
+  try { db.exec("ALTER TABLE users ADD COLUMN display_name TEXT DEFAULT ''"); } catch (e) {}
+  try { db.exec("ALTER TABLE users ADD COLUMN permissions TEXT DEFAULT ''"); } catch (e) {}
+  try { db.exec("ALTER TABLE users ADD COLUMN is_active INTEGER DEFAULT 1"); } catch (e) {}
+  try { db.exec("ALTER TABLE users ADD COLUMN created_by INTEGER"); } catch (e) {}
+  try { db.exec("ALTER TABLE users ADD COLUMN last_login TEXT DEFAULT ''"); } catch (e) {}
+  // جدول القوالب الديناميكي
+  try { db.exec(`CREATE TABLE IF NOT EXISTS templates (id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT DEFAULT '', css_file TEXT DEFAULT '', preview_image TEXT DEFAULT '', is_premium INTEGER DEFAULT 0, is_active INTEGER DEFAULT 1, position INTEGER DEFAULT 0, created_at TEXT DEFAULT (datetime('now','localtime')))`); } catch (e) {}
 }
 
 function logActivity(userId, username, action, details = '') {
@@ -449,11 +440,6 @@ function siteSettings() {
     trial_days: Number(map.trial_days || 7),
     telegram_bot_token: map.telegram_bot_token || '',
     telegram_admin_chat_id: map.telegram_admin_chat_id || '',
-    zaincash_merchant_id: map.zaincash_merchant_id || '',
-    zaincash_service_type: map.zaincash_service_type || '',
-    zaincash_password: map.zaincash_password || '',
-    zaincash_callback_url: map.zaincash_callback_url || '',
-    zaincash_mode: map.zaincash_mode || 'sandbox',
     ...map
   };
 }
@@ -476,38 +462,6 @@ async function siteSettingsAsync() {
     trial_days: Number(map.trial_days || 7),
     telegram_bot_token: map.telegram_bot_token || '',
     telegram_admin_chat_id: map.telegram_admin_chat_id || '',
-    zaincash_merchant_id: map.zaincash_merchant_id || '',
-    zaincash_service_type: map.zaincash_service_type || '',
-    zaincash_password: map.zaincash_password || '',
-    zaincash_callback_url: map.zaincash_callback_url || '',
-    zaincash_mode: map.zaincash_mode || 'sandbox',
-    ...map
-  };
-}
-async function siteSettingsAsync() {
-  const map = {};
-  const rows = await db.prepare('SELECT key, value FROM settings').all();
-  for (const row of rows) map[row.key] = row.value;
-  return {
-    site_name: map.site_name || 'دُكّان Dukkan',
-    site_whatsapp: map.site_whatsapp || '9647831020026',
-    pay_account: map.pay_account || '',
-    free_products: Number(map.free_products || 10),
-    pro_price: Number(map.pro_price || 12000),
-    pro_price_3: Number(map.pro_price_3 || 30000),
-    pro_price_12: Number(map.pro_price_12 || 72000),
-    tagline: map.tagline || 'أنشئ متجرك الإلكتروني خلال دقائق وابدأ البيع فوراً',
-    site_telegram: map.site_telegram || '@s018d',
-    site_instagram: map.site_instagram || '@s018d',
-    site_tiktok: map.site_tiktok || '@s018a',
-    trial_days: Number(map.trial_days || 7),
-    telegram_bot_token: map.telegram_bot_token || '',
-    telegram_admin_chat_id: map.telegram_admin_chat_id || '',
-    zaincash_merchant_id: map.zaincash_merchant_id || '',
-    zaincash_service_type: map.zaincash_service_type || '',
-    zaincash_password: map.zaincash_password || '',
-    zaincash_callback_url: map.zaincash_callback_url || '',
-    zaincash_mode: map.zaincash_mode || 'sandbox',
     ...map
   };
 }

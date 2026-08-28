@@ -1,15 +1,17 @@
 <aside class="sidebar">
   <div class="brand">Dukkan.<span>دُكّان</span></div>
   <nav>
-    <a href="/admin" class="<%= typeof active !== 'undefined' && active==='dash' ? 'on' : '' %>">نظرة عامة</a>
-    <a href="/admin/review" class="<%= typeof active !== 'undefined' && active==='review' ? 'on' : '' %>">🛡️ المراجعة</a>
-    <a href="/admin/stores" class="<%= typeof active !== 'undefined' && active==='stores' ? 'on' : '' %>">المتاجر</a>
-    <a href="/admin/payments" class="<%= typeof active !== 'undefined' && active==='payments' ? 'on' : '' %>">المدفوعات والباقات</a>
+    <a href="/admin" class="<%= typeof active !== 'undefined' && active==='dash' ? 'on' : '' %>">📊 نظرة عامة</a>
+    <a href="/admin/stores" class="<%= typeof active !== 'undefined' && active==='stores' ? 'on' : '' %>">🏪 المتاجر</a>
+    <a href="/admin/payments" class="<%= typeof active !== 'undefined' && active==='payments' ? 'on' : '' %>">💳 المدفوعات والباقات</a>
     <a href="/admin/domains" class="<%= typeof active !== 'undefined' && active==='domains' ? 'on' : '' %>">🌐 طلبات الدومينات</a>
-    <a href="/admin/site" class="<%= typeof active !== 'undefined' && active==='site' ? 'on' : '' %>">إعدادات المنصة</a>
-    <a href="/admin/activity" class="<%= typeof active !== 'undefined' && active==='activity' ? 'on' : '' %>">سجل النشاط</a>
-    <a href="/admin/backup">نسخة احتياطية</a>
-    <a href="/admin/password">تغيير كلمة المرور</a>
+    <a href="/admin/templates" class="<%= typeof active !== 'undefined' && active==='templates' ? 'on' : '' %>">🎨 القوالب</a>
+    <a href="/admin/review" class="<%= typeof active !== 'undefined' && active==='review' ? 'on' : '' %>">🛡️ المراجعة</a>
+    <a href="/admin/team" class="<%= typeof active !== 'undefined' && active==='team' ? 'on' : '' %>">👥 فريق الإدارة</a>
+    <a href="/admin/site" class="<%= typeof active !== 'undefined' && active==='site' ? 'on' : '' %>">⚙️ إعدادات المنصة</a>
+    <a href="/admin/activity" class="<%= typeof active !== 'undefined' && active==='activity' ? 'on' : '' %>">📋 سجل النشاط</a>
+    <a href="/admin/backup">💾 نسخة احتياطية</a>
+    <a href="/admin/password">🔑 كلمة المرور</a>
   </nav>
-  <div class="side-note">أنت: المدير العام</div>
+  <div class="side-note">أنت: <%= typeof user !== 'undefined' && user ? (user.display_name || user.username) + ' — ' + user.role : 'المدير' %></div>
 </aside>

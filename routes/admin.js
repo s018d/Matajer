@@ -319,6 +319,142 @@ router.post('/stores/:id/plan', (req, res) => {
   res.redirect('/admin/stores/' + store.id + '?ok=' + encodeURIComponent('تم تحديث الباقة'));
 });
 
+/* ====== فريق الإدارة (RBAC) ====== */
+router.get('/team', (req, res) => {
+  const { hasPermission } = require('../util');
+  if (!hasPermission(req.user, 'users.view')) return res.status(403).render('error', { msg: 'ليس لديك صلاحية إدارة الفريق', user: req.user });
+  const team = db.prepare("SELECT id, username, display_name, role, is_active, created_at, last_login FROM users WHERE role IN ('superadmin','admin','billing','support','viewer') ORDER BY CASE role WHEN 'superadmin' THEN 0 WHEN 'admin' THEN 1 WHEN 'billing' THEN 2 WHEN 'support' THEN 3 ELSE 4 END, id").all();
+  res.render('admin/team', { team, ok: req.query.ok || takeFlash(req,res), err: req.query.err || '', user: req.user });
+});
+
+router.post('/team', (req, res) => {
+  const { hasPermission, ADMIN_ROLES } = require('../util');
+  if (!hasPermission(req.user, 'users.manage')) return res.redirect('/admin/team?err=' + encodeURIComponent('ليس لديك صلاحية'));
+  const { username, display_name, password, role, permissions } = req.body;
+  const u = String(username||'').trim();
+  const p = String(password||'');
+  const r = String(role||'viewer');
+  if (!u || u.length < 3) return res.redirect('/admin/team?err=' + encodeURIComponent('اسم المستخدم 3 أحرف على الأقل'));
+  if (p.length < 6) return res.redirect('/admin/team?err=' + encodeURIComponent('كلمة المرور 6 أحرف على الأقل'));
+  if (!ADMIN_ROLES.includes(r)) return res.redirect('/admin/team?err=' + encodeURIComponent('دور غير صحيح'));
+  if (r === 'superadmin' && req.user.role !== 'superadmin') return res.redirect('/admin/team?err=' + encodeURIComponent('فقط السوبر أدمن ينشئ سوبر أدمن'));
+  if (db.prepare('SELECT id FROM users WHERE username=?').get(u)) return res.redirect('/admin/team?err=' + encodeURIComponent('اسم المستخدم مستعمل'));
+  let perms = '';
+  if (permissions) {
+    try { const arr = Array.isArray(permissions) ? permissions : [permissions]; perms = JSON.stringify(arr); } catch {}
+  }
+  db.prepare('INSERT INTO users (username, password_hash, role, display_name, permissions, is_active, created_by) VALUES (?,?,?,?,?,?,?)')
+    .run(u, hashPassword(p), r, String(display_name||'').trim(), perms, 1, req.user.id);
+  logActivity(req.user.id, req.user.username, 'إضافة مشرف', `أضاف ${u} بدور ${r}`);
+  appendLog(`المدير ${req.user.username} أضاف مشرف ${u} (${r})`);
+  setFlash(res, `تم إنشاء حساب ${u} بدور ${r} — كلمة المرور: ${p} (مرة واحدة)`);
+  res.redirect('/admin/team');
+});
+
+router.post('/team/:id/toggle', (req, res) => {
+  const { hasPermission } = require('../util');
+  if (!hasPermission(req.user, 'users.manage')) return res.redirect('/admin/team?err=' + encodeURIComponent('ليس لديك صلاحية'));
+  const t = db.prepare("SELECT * FROM users WHERE id=? AND role IN ('superadmin','admin','billing','support','viewer')").get(req.params.id);
+  if (!t) return res.redirect('/admin/team?err=' + encodeURIComponent('المستخدم غير موجود'));
+  if (t.id === req.user.id) return res.redirect('/admin/team?err=' + encodeURIComponent('لا يمكنك تعطيل نفسك'));
+  if (t.role === 'superadmin' && req.user.role !== 'superadmin') return res.redirect('/admin/team?err=' + encodeURIComponent('لا يمكنك تعديل سوبر أدمن'));
+  db.prepare('UPDATE users SET is_active=? WHERE id=?').run(t.is_active ? 0 : 1, t.id);
+  res.redirect('/admin/team?ok=' + encodeURIComponent(t.is_active ? 'تم تعطيل الحساب' : 'تم تفعيل الحساب'));
+});
+
+router.post('/team/:id/delete', (req, res) => {
+  const { hasPermission } = require('../util');
+  if (!hasPermission(req.user, 'users.manage')) return res.redirect('/admin/team?err=' + encodeURIComponent('ليس لديك صلاحية'));
+  const t = db.prepare("SELECT * FROM users WHERE id=? AND role IN ('superadmin','admin','billing','support','viewer')").get(req.params.id);
+  if (!t) return res.redirect('/admin/team?err=' + encodeURIComponent('المستخدم غير موجود'));
+  if (t.id === req.user.id) return res.redirect('/admin/team?err=' + encodeURIComponent('لا يمكنك حذف نفسك'));
+  if (t.role === 'superadmin') return res.redirect('/admin/team?err=' + encodeURIComponent('لا يمكن حذف السوبر أدمن'));
+  db.prepare('DELETE FROM users WHERE id=?').run(t.id);
+  db.prepare('DELETE FROM sessions WHERE user_id=?').run(t.id);
+  appendLog(`المدير ${req.user.username} حذف مشرف ${t.username}`);
+  res.redirect('/admin/team?ok=' + encodeURIComponent('تم حذف الحساب'));
+});
+
+router.post('/team/:id/resetpass', (req, res) => {
+  const { hasPermission } = require('../util');
+  if (!hasPermission(req.user, 'users.manage')) return res.redirect('/admin/team?err=' + encodeURIComponent('ليس لديك صلاحية'));
+  const t = db.prepare("SELECT * FROM users WHERE id=? AND role IN ('superadmin','admin','billing','support','viewer')").get(req.params.id);
+  if (!t) return res.redirect('/admin/team?err=' + encodeURIComponent('المستخدم غير موجود'));
+  const pass = genPassword();
+  db.prepare('UPDATE users SET password_hash=? WHERE id=?').run(hashPassword(pass), t.id);
+  setFlash(res, `كلمة المرور الجديدة لـ ${t.username}: ${pass} (مرة واحدة)`);
+  res.redirect('/admin/team');
+});
+
+/* ====== إدارة القوالب الديناميكية ====== */
+const tplUpload = multer({
+  storage: multer.diskStorage({
+    destination: (req,file,cb) => {
+      const dir = path.join(__dirname,'..','public','css');
+      fs.mkdirSync(dir,{recursive:true});
+      cb(null, dir);
+    },
+    filename: (req,file,cb) => {
+      const ext = path.extname(file.originalname).toLowerCase();
+      const safe = String(req.body.id||'tpl').toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,20) || 'tpl';
+      cb(null, safe + ext);
+    }
+  }),
+  limits:{fileSize: 500*1024},
+  fileFilter:(req,file,cb)=>{
+    const ok = ['.css'].includes(path.extname(file.originalname).toLowerCase());
+    cb(ok ? null : new Error('فقط ملفات CSS'), ok);
+  }
+});
+
+router.get('/templates', (req,res)=>{
+  const { hasPermission } = require('../util');
+  if (!hasPermission(req.user,'templates.manage') && !hasPermission(req.user,'settings.view')) return res.status(403).render('error',{msg:'ليس لديك صلاحية إدارة القوالب', user:req.user});
+  const list = db.prepare('SELECT * FROM templates ORDER BY position, id').all();
+  res.render('admin/templates', { list, ok:req.query.ok||'', err:req.query.err||'', user:req.user });
+});
+
+router.post('/templates', tplUpload.single('css_file'), (req,res)=>{
+  const { hasPermission } = require('../util');
+  if (!hasPermission(req.user,'templates.manage')) return res.redirect('/admin/templates?err=' + encodeURIComponent('ليس لديك صلاحية'));
+  const { id, name, description, is_premium } = req.body;
+  const tid = String(id||'').toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,20);
+  if (!tid || !name) return res.redirect('/admin/templates?err=' + encodeURIComponent('المعرّف والاسم مطلوبان'));
+  if (db.prepare('SELECT id FROM templates WHERE id=?').get(tid)) return res.redirect('/admin/templates?err=' + encodeURIComponent('المعرّف موجود سابقاً'));
+  const cssPath = req.file ? '/css/' + req.file.filename : '';
+  const maxPos = db.prepare('SELECT COALESCE(MAX(position),0) m FROM templates').get().m;
+  db.prepare('INSERT INTO templates (id,name,description,css_file,is_premium,is_active,position) VALUES (?,?,?,?,?,?,?)')
+    .run(tid, String(name).trim(), String(description||'').trim(), cssPath, is_premium==='on'?1:0, 1, maxPos+1);
+  logActivity(req.user.id, req.user.username, 'إضافة قالب', `أضاف قالب ${tid}`);
+  res.redirect('/admin/templates?ok=' + encodeURIComponent('تم إضافة القالب ' + tid));
+}, (err,req,res,next)=> res.redirect('/admin/templates?err=' + encodeURIComponent(err.message||'فشل الرفع')));
+
+router.post('/templates/:id/toggle', (req,res)=>{
+  const t = db.prepare('SELECT * FROM templates WHERE id=?').get(req.params.id);
+  if (!t) return res.redirect('/admin/templates?err=' + encodeURIComponent('القالب غير موجود'));
+  db.prepare('UPDATE templates SET is_active=? WHERE id=?').run(t.is_active?0:1, t.id);
+  res.redirect('/admin/templates?ok=' + encodeURIComponent(t.is_active ? 'تم تعطيل القالب' : 'تم تفعيل القالب'));
+});
+
+router.post('/templates/:id/premium', (req,res)=>{
+  const t = db.prepare('SELECT * FROM templates WHERE id=?').get(req.params.id);
+  if (!t) return res.redirect('/admin/templates?err=' + encodeURIComponent('القالب غير موجود'));
+  db.prepare('UPDATE templates SET is_premium=? WHERE id=?').run(t.is_premium?0:1, t.id);
+  res.redirect('/admin/templates?ok=' + encodeURIComponent(t.is_premium ? 'أصبح مجاني' : 'أصبح مميز'));
+});
+
+router.post('/templates/:id/delete', (req,res)=>{
+  const t = db.prepare('SELECT * FROM templates WHERE id=?').get(req.params.id);
+  if (!t) return res.redirect('/admin/templates?err=' + encodeURIComponent('القالب غير موجود'));
+  if (t.id==='classic') return res.redirect('/admin/templates?err=' + encodeURIComponent('لا يمكن حذف القالب الأساسي'));
+  if (t.css_file) {
+    const abs = path.join(__dirname,'..', t.css_file);
+    if (fs.existsSync(abs)) try{ fs.unlinkSync(abs); }catch{}
+  }
+  db.prepare('DELETE FROM templates WHERE id=?').run(t.id);
+  res.redirect('/admin/templates?ok=' + encodeURIComponent('تم حذف القالب'));
+});
+
 router.post('/password', (req, res) => {
   const { oldpass, newpass } = req.body;
   const { checkPassword } = require('../util');

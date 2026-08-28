@@ -2,8 +2,6 @@ const express = require('express');
 const crypto = require('crypto');
 const { db, isPro } = require('../db');
 const { appendLog, checkLimit, thumb, notifyNewOrder, getLoyaltyConfig, addLoyaltyPoints, asyncHandler } = require('../util');
-const zaincash = require('../zaincash');
-const shipping = require('../shipping');
 const TPL = require('../templates');
 const router = express.Router();
 
@@ -37,24 +35,7 @@ function withBase(store, req) {
   return store;
 }
 
-/* H7: إنقاص المخزون بعد تأكيد الدفع فقط (وليس عند إنشاء طلب زين كاش المعلق) */
-function decrementOrderStock(orderId) {
-  const items = db.prepare('SELECT product_id, qty FROM order_items WHERE order_id=? AND product_id IS NOT NULL').all(orderId);
-  for (const it of items) {
-    const p = db.prepare('SELECT stock FROM products WHERE id=?').get(it.product_id);
-    if (p && p.stock != null) db.prepare('UPDATE products SET stock = stock - ? WHERE id=?').run(it.qty, it.product_id);
-  }
-}
 
-/* H7: إلغاء طلبات زين كاش المعلقة التي مضى عليها أكثر من 15 دقيقة دون دفع */
-function cancelExpiredPendingOrders() {
-  const expired = db.prepare(`SELECT id, store_id FROM orders WHERE status='pending_payment' AND created_at <= datetime('now','localtime','-15 minutes')`).all();
-  for (const o of expired) {
-    db.prepare(`UPDATE orders SET status='cancelled' WHERE id=? AND status='pending_payment'`).run(o.id);
-    appendLog(`تم إلغاء طلب زين كاش المعلق #${o.id} — انتهت 15 دقيقة دون تأكيد الدفع`);
-  }
-  return expired.length;
-}
 
 router.get('/s/:slug', (req, res) => {
   const store = getStoreBySlug(req.params.slug);
@@ -151,121 +132,30 @@ router.post('/s/:slug/checkout', asyncHandler(async (req, res) => {
     }
   }
   
-  // Bundle discounts
-  let bundleDiscount = 0;
-  let bundleCode = '';
-  const activeBundles = db.prepare('SELECT * FROM bundles WHERE store_id=? AND active=1').all(store.id);
-  for (const bundle of activeBundles) {
-    // Count how many products from this bundle are in the cart
-    const bundleProductIds = db.prepare('SELECT product_id FROM bundle_products WHERE bundle_id=?').all(bundle.id).map(r => r.product_id);
-    const bundleItemsInCart = rows.filter(r => bundleProductIds.includes(r.p.id));
-    const bundleQty = bundleItemsInCart.reduce((sum, r) => sum + r.qty, 0);
-    
-    if (bundleQty >= bundle.min_products) {
-      const bundleSubtotal = bundleItemsInCart.reduce((sum, r) => sum + (r.price + r.addonsTotal) * r.qty, 0);
-      let bDiscount = 0;
-      if (bundle.discount_type === 'amount') {
-        bDiscount = Math.min(bundle.discount_value, bundleSubtotal);
-      } else {
-        bDiscount = Math.round(bundleSubtotal * bundle.discount_value / 100);
-      }
-      if (bDiscount > bundleDiscount) {
-        bundleDiscount = bDiscount;
-        bundleCode = 'BUNDLE:' + bundle.id;
-      }
-    }
-  }
-  
-  // Apply the better discount (coupon or bundle, not both)
-  let finalDiscount = discount;
-  let finalCode = couponCode;
-  if (bundleDiscount > discount) {
-    finalDiscount = bundleDiscount;
-    finalCode = bundleCode;
-  }
-  discount = finalDiscount;
-  couponCode = finalCode;
-  
   const df = Number(store.delivery_fee) || 0;
   const freeMin = Number(store.free_delivery_min) || 0;
   const deliveryFee = df > 0 && (freeMin <= 0 || subtotal - discount < freeMin) ? df : 0;
   const total = Math.max(0, subtotal - discount) + deliveryFee;
-  let paymentMethod = req.body.payment_method || 'cod'; // 'cod' or 'zaincash'
-  // v4.3: زين كاش معطّل افتراضياً — أي طلب zaincash يُعامل كدفع عند الاستلام
-  if (process.env.ZAINCASH_ENABLED === 'false' && paymentMethod === 'zaincash') paymentMethod = 'cod';
-  
-  // For Zain Cash, create order with pending status and redirect to payment
-  let orderStatus = 'new';
-  if (paymentMethod === 'zaincash') {
-    orderStatus = 'pending_payment';
-  }
-  
-  /* H7: إلغاء الطلبات المعلقة المنتهية (أكثر من 15 دقيقة) عند كل طلب جديد */
-  cancelExpiredPendingOrders();
   
   const doneToken = crypto.randomBytes(16).toString('hex');
   const info = db.prepare('INSERT INTO orders (store_id, customer_name, customer_phone, customer_address, note, subtotal, discount, coupon_code, delivery_fee, total, status, done_token) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)')
-    .run(store.id, String(customer_name).trim(), String(customer_phone).trim(), String(customer_address || ''), String(note || ''), subtotal, discount, couponCode, deliveryFee, total, orderStatus, doneToken);
+    .run(store.id, String(customer_name).trim(), String(customer_phone).trim(), String(customer_address || ''), String(note || ''), subtotal, discount, couponCode, deliveryFee, total, 'new', doneToken);
   const orderId = info.lastInsertRowid;
   const orderItems = [];
   for (const r of rows) {
     db.prepare('INSERT INTO order_items (order_id, product_id, product_name, product_price, qty, options, addons_price) VALUES (?,?,?,?,?,?,?)')
       .run(orderId, r.p.id, r.p.name, r.price, r.qty, r.opts, r.addonsTotal);
     orderItems.push({ product_name: r.p.name, qty: r.qty, product_price: r.price, addons_price: r.addonsTotal });
-    /* H7: لا يُنقص المخزون لطلبات زين كاش المعلقة — يُنقص فقط عند تأكيد الدفع (callback) أو لطلبات الدفع عند الاستلام */
-    if (orderStatus !== 'pending_payment' && r.p.stock != null) db.prepare('UPDATE products SET stock = stock - ? WHERE id=?').run(r.qty, r.p.id);
+    if (r.p.stock != null) db.prepare('UPDATE products SET stock = stock - ? WHERE id=?').run(r.qty, r.p.id);
   }
-  appendLog(`وصول طلب جديد (#${orderId}) إلى متجر «${store.name}» بمبلغ ${total.toLocaleString('en-US')} د.ع من «${customer_name}»`);
+  appendLog(`وصول طلب جديد (#${orderId}) إلى متجر «${store.name}» بمبلغ ${total.toLocaleString('en-US')} د.ع من «${customer_name}» — دفع عند الاستلام`);
   // Loyalty points
   const loyalty = getLoyaltyConfig();
   const earnedPoints = Math.floor(total / 1000) * loyalty.points_per_1000;
   addLoyaltyPoints(store.id, customer_phone, earnedPoints, 'order', orderId, `طلب #${orderId}`);
   
-  // Handle Zain Cash payment
-  if (paymentMethod === 'zaincash') {
-    const callbackUrl = `${req.protocol}://${req.get('host')}/s/${store.slug}/zaincash/callback`;
-    try {
-      const paymentResult = await zaincash.initiatePayment(orderId, total, customer_phone, customer_name, callbackUrl, `طلب #${orderId} من ${store.name}`);
-      if (paymentResult && paymentResult.redirectUrl) {
-        // Save payment record
-        db.prepare('INSERT INTO zaincash_payments (store_id, order_id, amount, status, zaincash_order_id) VALUES (?,?,?,?,?)')
-          .run(store.id, orderId, total, 'pending', paymentResult.orderId || paymentResult.zaincashOrderId);
-        return res.redirect(paymentResult.redirectUrl);
-      } else {
-        // Payment initiation failed, fallback to COD
-        db.prepare('UPDATE orders SET status=? WHERE id=?').run('new', orderId);
-        /* H7: الطلب أصبح عند الاستلام — يُنقص المخزون الآن */
-        decrementOrderStock(orderId);
-      }
-    } catch (e) {
-      appendLog(`فشل بدء دفع زين كاش للطلب #${orderId}: ${e.message}`);
-      db.prepare('UPDATE orders SET status=? WHERE id=?').run('new', orderId);
-      /* H7: الطلب أصبح عند الاستلام — يُنقص المخزون الآن */
-      decrementOrderStock(orderId);
-    }
-  }
   // Telegram notification
   notifyNewOrder(store, { id: orderId, customer_name, customer_phone, customer_address, note, total, created_at: new Date().toISOString() }, orderItems);
-  // Auto-create shipment if store has enabled shipping company
-  try {
-    const activeCompany = shipping.getActiveShippingCompanies(store.id);
-    if (activeCompany && activeCompany.length > 0 && customer_address) {
-      const comp = activeCompany[0];
-      shipping.createShipmentRecord(store.id, orderId, comp.id, {
-        shipping_company_id: comp.id,
-        tracking_number: null,
-        cod_amount: paymentMethod === 'cod' ? total : 0,
-        shipping_fee: Number(deliveryFee) || 0,
-        weight: 0.5,
-        pickup_address: store.address || '',
-        delivery_address: String(customer_address || ''),
-        customer_phone: String(customer_phone || ''),
-        customer_name: String(customer_name || '')
-      });
-    }
-  } catch (e) {
-    appendLog(`فشل إنشاء شحنة تلقائية للطلب #${orderId}: ${e.message}`);
-  }
   res.render('store/done', { store, orderId, doneToken, subtotal, discount, deliveryFee, total, couponCode, tpl: tplFor(store), earnedPoints, paid: false });
 }));
 
@@ -405,35 +295,6 @@ router.get('/s/:slug/product/:id/reviews', (req, res) => {
   
   res.json({ ok: true, reviews, avg: stats.avg ? Number(stats.avg).toFixed(1) : 0, count: stats.count || 0 });
 });
-
-router.get('/s/:slug/zaincash/callback', asyncHandler(async (req, res) => {
-  const store = getStoreBySlug(req.params.slug);
-  if (!store) return res.redirect('/s/' + req.params.slug + '?err=' + encodeURIComponent('متجر غير موجود'));
-  
-  /* H7: سجل الحالة قبل المعالجة — لننقص المخزون مرة واحدة فقط عند تأكيد الدفع */
-  const rawOrderId = Number(req.query.orderId || 0);
-  const before = rawOrderId ? db.prepare("SELECT status FROM orders WHERE id=? AND store_id=?").get(rawOrderId, store.id) : null;
-  const wasPending = !!(before && before.status === 'pending_payment');
-  
-  const result = zaincash.processCallback(req.query);
-  
-  if (!result.valid) {
-    appendLog(`فشل تحقق زين كاش للطلب #${req.query.orderId}: ${result.error}`);
-    return res.redirect('/s/' + store.slug + '/checkout?err=' + encodeURIComponent('فشل التحقق من الدفع'));
-  }
-  
-  if (result.status === 'paid') {
-    /* H7: تأكيد الدفع — يُنقص المخزون الآن فقط (لم يُنقص عند إنشاء الطلب المعلق) */
-    if (wasPending) {
-      decrementOrderStock(result.orderId);
-      appendLog(`تم تأكيد دفع زين كاش للطلب #${result.orderId} — نُقص المخزون`);
-    }
-    const order = db.prepare('SELECT done_token FROM orders WHERE id=? AND store_id=?').get(result.orderId, store.id);
-    return res.redirect('/s/' + store.slug + '/done?order=' + result.orderId + '&paid=1&t=' + ((order && order.done_token) || ''));
-  } else {
-    return res.redirect('/s/' + store.slug + '/checkout?err=' + encodeURIComponent('فشل الدفع — ' + (result.error || 'حالة غير معروفة')));
-  }
-}));
 
 router.get('/s/:slug/done', (req, res) => {
   const store = getStoreBySlug(req.params.slug);

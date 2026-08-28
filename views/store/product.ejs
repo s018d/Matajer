@@ -46,7 +46,7 @@
         <% if (product.old_price) { %><del><%= Number(product.old_price).toLocaleString('en-US') %> د.ع</del><% } %>
       </div>
       <% if (out) { %>
-        <div class="st-badge-soldout">eneged elمخزون</div>
+        <div class="st-badge-soldout">🚫 نفد المخزون — تواصل واتساب للطلب المسبق</div>
       <% } else if (lowStock) { %>
         <div class="st-badge-lowstock">⚡ كمية محدودة: <%= product.stock %> قطع متبقية</div>
       <% } %>
@@ -78,19 +78,25 @@
         </div>
       <% } %>
       <% if (!out) { %>
-        <div class="qty-row">
-          <button onclick="qty(-1)">−</button>
-          <input id="qty" value="1" readonly>
-          <button onclick="qty(1)">+</button>
+        <div class="qty-row" style="display:flex; align-items:center; gap:.6rem; margin:.8rem 0; justify-content:center; background:var(--soft); padding:.5rem; border-radius:12px; width:fit-content">
+          <button onclick="qty(-1)" style="width:36px; height:36px; border-radius:8px; border:1.5px solid var(--line); background:#fff; font-size:1.2rem; cursor:pointer">−</button>
+          <input id="qty" value="1" readonly style="width:50px; text-align:center; font-weight:800; font-size:1rem; border:none; background:transparent">
+          <button onclick="qty(1)" style="width:36px; height:36px; border-radius:8px; border:1.5px solid var(--line); background:#fff; font-size:1.2rem; cursor:pointer">+</button>
+          <span class="muted" style="font-size:.8rem; margin-inline-start:.5rem">الكمية</span>
         </div>
-        <button class="add-cart st-btn big-btn" data-id="<%= product.id %>" data-name="<%= product.name.replace(/"/g,'&quot;') %>" data-price="<%= product.price %>" data-img="<%= images.length ? images[0].path : '' %>" onclick="productAddToCart(this)">
-          🛒 أضف للسلة
+        <button class="add-cart st-btn big-btn" data-id="<%= product.id %>" data-name="<%= product.name.replace(/"/g,'&quot;') %>" data-price="<%= product.price %>" data-img="<%= images.length ? images[0].path : '' %>" onclick="productAddToCart(this)" style="width:100%; padding:1rem; font-size:1.05rem; border-radius:14px">
+          🛒 أضف للسلة — <%= Number(product.price).toLocaleString('en-US') %> د.ع
         </button>
         <% if (store.whatsapp) { %>
-        <a class="st-btn big-btn wa-order" href="https://wa.me/<%= store.whatsapp.replace(/^0/, '964') %>?text=<%= encodeURIComponent('أريد طلب: ' + product.name + ' - السعر: ' + Number(product.price).toLocaleString('en-US') + ' د.ع - الكمية: 1') %>" target="_blank" rel="noopener">
+        <a class="st-btn big-btn wa-order" href="https://wa.me/<%= store.whatsapp.replace(/^0/, '964') %>?text=<%= encodeURIComponent('أريد طلب: ' + product.name + ' - السعر: ' + Number(product.price).toLocaleString('en-US') + ' د.ع - الكمية: 1') %>" target="_blank" rel="noopener" style="width:100%; margin-top:.6rem; justify-content:center">
           💬 اطلب عبر واتساب
         </a>
         <% } %>
+        <div style="display:flex; gap:.5rem; margin-top:.8rem; flex-wrap:wrap; justify-content:center; font-size:.75rem; color:var(--muted)">
+          <span style="display:flex; align-items:center; gap:.3rem; background:#f0fdf4; padding:.3rem .6rem; border-radius:99px; border:1px solid #bbf7d0">✓ دفع عند الاستلام</span>
+          <span style="display:flex; align-items:center; gap:.3rem; background:#eff6ff; padding:.3rem .6rem; border-radius:99px; border:1px solid #bfdbfe">✓ توصيل سريع</span>
+          <span style="display:flex; align-items:center; gap:.3rem; background:#fef3c7; padding:.3rem .6rem; border-radius:99px; border:1px solid #fde68a">✓ ضمان الاستبدال</span>
+        </div>
         <% if (product.stock != null) { %><p class="st-stock">المتبقي: <%= product.stock %> قطعة</p><% } %>
       <% } %>
     </div>

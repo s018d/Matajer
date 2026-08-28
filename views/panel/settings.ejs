@@ -1,91 +1,123 @@
-<%- include('../partials/head', { title: 'إعدادات المتجر' }) %>
+<%- include('../partials/head', { title: 'إعدادات المتجر — متجري' }) %>
 <body class="app">
 <%- include('../partials/sidebar-panel', { active: 'settings', store }) %>
 <main class="main">
-  <%- include('../partials/topbar', { pageTitle: 'إعدادات المتجر' }) %>
+  <%- include('../partials/topbar', { pageTitle: '⚙️ إعدادات المتجر' }) %>
   <div class="content">
     <%- include('../partials/alerts') %>
-    <div class="two-col">
-      <div class="card">
-        <h2>بيانات المتجر</h2>
-        <form method="post" action="/panel/settings" class="stack">
-          <input type="hidden" name="_csrf" value="<%= csrf %>">
-          <label>اسم المتجر
-            <input type="text" name="name" value="<%= store.name %>" required>
-          </label>
-          <label>وصف المتجر (يظهر في صفحة المتجر ومحركات البحث)
-            <textarea name="description" rows="3"><%= store.description %></textarea>
-          </label>
-          <label>وصف محركات البحث (اختياري — حتى 200 حرف)
-            <input type="text" name="meta_desc" value="<%= store.meta_desc || '' %>" maxlength="200">
-          </label>
-          <label>اسمك
-            <input type="text" name="owner_name" value="<%= store.owner_name %>">
-          </label>
-          <label>رقم الهاتف
-            <input type="text" name="phone" value="<%= store.phone %>" dir="ltr">
-          </label>
-          <label>رقم الواتساب (يظهر زر اتصال أخضر في متجرك)
-            <input type="text" name="whatsapp" value="<%= store.whatsapp %>" dir="ltr" placeholder="مثال: 9647701234567">
-          </label>
-          <label>قالب التصميم
-            <select name="template">
-              <option value="classic" <%= store.template==='classic' ? 'selected' : '' %>>الكلاسيكي النظيف</option>
-              <option value="market" <%= store.template==='market' ? 'selected' : '' %>>الماركت</option>
-              <% if (store.template.match(/^t\d+$/)) { %><option value="<%= store.template %>" selected>مولّد (<%= store.template %>)</option><% } %>
-              <% premiumTpls.forEach(pt => { %>
-                <option value="<%= pt.id %>" <%= store.template===pt.id ? 'selected' : '' %> <%= !store.ispro ? 'disabled' : '' %>><%= pt.name %> — احترافي <%= !store.ispro ? '(مقفل)' : '' %></option>
-              <% }) %>
-            </select>
-            <small class="field-hint"><a href="/panel/templates">افتح معرض القوالب</a> للمعاينة الحية والاعتماد<% if (!store.ispro) { %> — التصاميم الاحترافية الأربعة للباقة المدفوعة<% } %></small>
-          </label>
-          <label>اللون الأساسي
-            <input type="color" name="color" value="<%= store.color %>" class="color-input">
-          </label>
-          <details class="adv-box">
-            <summary>إعدادات التوصيل (يظهر للزبون في صفحة إتمام الطلب)</summary>
-            <div class="grid-2">
-              <label>رسوم التوصيل (د.ع)
-                <input type="number" name="delivery_fee" min="0" step="500" value="<%= store.delivery_fee || 0 %>">
-              </label>
-              <label>توصيل مجاني فوق هذا المبلغ (0 = لا يوجد)
-                <input type="number" name="free_delivery_min" min="0" step="500" value="<%= store.free_delivery_min || 0 %>" placeholder="مثال: 50000">
-              </label>
-            </div>
-            <small class="muted">مثال: رسوم 3000 وتوصيل مجاني للطلبات فوق 50000 — سيرى الزبون «التوصيل مجاني» مع المبالغة تدريجياً أثناء إتمام الطلب.</small>
-          </details>
-          <label>دومينك الخاص (للباقة الاحترافية)
-            <input type="text" name="custom_domain" value="<%= store.custom_domain || '' %>" dir="ltr" placeholder="مثال: shop.mybrand.com" <%= store.ispro ? '' : 'disabled' %>>
-            <% if (store.ispro) { %><small class="field-hint">أشر إلى دومينك بهذه المنصة (CNAME أو A) وسيفتح متجرك عليه مباشرة — اتركه فارغاً لإلغائه.</small><% } else { %><small class="field-hint">ميزة حصرية للباقة الاحترافية — <a href="/panel/billing">رقِّ بضغطة واحدة</a></small><% } %>
-          </label>
-          <button type="submit" class="btn btn-primary">حفظ</button>
-        </form>
+
+    <div class="card" style="padding:0; overflow:hidden">
+      <div class="site-tabs" style="display:flex; gap:0; border-bottom:2px solid var(--line); background:var(--soft); overflow-x:auto">
+        <button class="site-tab on" data-tab="general" onclick="switchMTab('general')">📝 عام</button>
+        <button class="site-tab" data-tab="design" onclick="switchMTab('design')">🎨 تصميم</button>
+        <button class="site-tab" data-tab="delivery" onclick="switchMTab('delivery')">🚚 توصيل</button>
+        <button class="site-tab" data-tab="domain" onclick="switchMTab('domain')">🌐 دومين</button>
+        <button class="site-tab" data-tab="logo" onclick="switchMTab('logo')">🖼️ شعار</button>
       </div>
-      <div class="card">
-        <h2>الشعار</h2>
-        <% if (store.logo_path) { %>
-          <img src="<%= store.logo_path %>" class="logo-preview" alt="">
-        <% } %>
-        <form method="post" action="/panel/settings/logo?_csrf=<%= csrf %>" enctype="multipart/form-data" class="stack upload-box">
-          <input type="hidden" name="_csrf" value="<%= csrf %>">
-          <input type="file" name="logo" accept="image/*" required>
-          <button type="submit" class="btn btn-primary">تحديث الشعار</button>
-          <small>الصورة المرفوعة تحل محل الشعار الحالي</small>
-        </form>
-        <h2 style="margin-top:2rem">كلمة المرور</h2>
-        <form method="post" action="/panel/password" class="stack">
-          <input type="hidden" name="_csrf" value="<%= csrf %>">
-          <label>الحالية
-            <input type="password" name="oldpass" required>
+
+      <form method="post" action="/panel/settings" class="stack" style="padding:1.6rem" id="mForm">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+
+        <div class="tab-panel on" id="mtab-general">
+          <h2>📝 معلومات المتجر</h2>
+          <label>اسم المتجر *<input type="text" name="name" value="<%= store.name %>" required placeholder="مثال: عطور بغداد"></label>
+          <label>وصف المتجر<textarea name="description" rows="2" placeholder="وصف قصير يظهر في المتجر"><%= store.description %></textarea></label>
+          <label>وصف محركات البحث (SEO — 200 حرف)<input type="text" name="meta_desc" value="<%= store.meta_desc || '' %>" maxlength="200" placeholder="يظهر في جوجل"><small class="field-hint"><span id="mMetaLen">0</span>/200</small></label>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem">
+            <label>اسمك<input type="text" name="owner_name" value="<%= store.owner_name %>" placeholder="أحمد"></label>
+            <label>الهاتف<input type="text" name="phone" value="<%= store.phone %>" dir="ltr" placeholder="0770..."></label>
+          </div>
+          <label>واتساب (زر أخضر في متجرك)<input type="text" name="whatsapp" value="<%= store.whatsapp %>" dir="ltr" placeholder="964770..."><small class="field-hint">مثال: 9647701234567 — يظهر زر واتساب للزبون</small></label>
+        </div>
+
+        <div class="tab-panel" id="mtab-design">
+          <h2>🎨 التصميم</h2>
+          <div style="display:grid; grid-template-columns:1fr auto; gap:1rem; align-items:end">
+            <label>القالب
+              <select name="template">
+                <option value="classic" <%= store.template==='classic'?'selected':'' %>>الواضح — مجاني</option>
+                <% premiumTpls.forEach(pt=>{ %>
+                  <option value="<%= pt.id %>" <%= store.template===pt.id?'selected':'' %> <%= !store.ispro?'disabled':'' %>><%= pt.name %> <%= !store.ispro?'(مقفل — برو)':'(مميز)' %></option>
+                <% }) %>
+              </select>
+              <small class="field-hint"><a href="/panel/templates">معرض القوالب</a> للمعاينة الحية</small>
+            </label>
+            <label>اللون<input type="color" name="color" value="<%= store.color %>" class="color-input" style="width:80px; height:44px"></label>
+          </div>
+          <% if(!store.ispro){ %><div class="alert" style="background:#fffbeb; border-color:#fde68a; color:#92400e; font-size:.82rem">🔒 القوالب المميزة للباقة الاحترافية — <a href="/panel/billing">رقِّ الآن</a></div><% } %>
+        </div>
+
+        <div class="tab-panel" id="mtab-delivery">
+          <h2>🚚 التوصيل</h2>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem">
+            <label>رسوم التوصيل (د.ع)<input type="number" name="delivery_fee" min="0" step="500" value="<%= store.delivery_fee || 0 %>"></label>
+            <label>مجاني فوق (د.ع)<input type="number" name="free_delivery_min" min="0" step="500" value="<%= store.free_delivery_min || 0 %>" placeholder="50000"><small class="field-hint">0 = لا يوجد</small></label>
+          </div>
+          <p class="muted" style="font-size:.82rem">الزبون يرى "التوصيل مجاني" عند تجاوز المبلغ في السلة</p>
+        </div>
+
+        <div class="tab-panel" id="mtab-domain">
+          <h2>🌐 الدومين الخاص</h2>
+          <label>دومينك<input type="text" name="custom_domain" value="<%= store.custom_domain || '' %>" dir="ltr" placeholder="shop.mybrand.com" <%= store.ispro?'':'disabled' %>>
+            <% if(store.ispro){ %><small class="field-hint">أشر CNAME إلى المنصة وسيفتح متجرك عليه — اتركه فارغاً للإلغاء</small><% } else { %><small class="field-hint">للباقة الاحترافية فقط — <a href="/panel/billing">رقِّ</a></small><% } %>
           </label>
-          <label>الجديدة
-            <input type="password" name="newpass" required>
-          </label>
-          <button type="submit" class="btn btn-warn">تغيير كلمة المرور</button>
-        </form>
-      </div>
+          <input type="hidden" name="description" value="<%= store.description %>">
+          <input type="hidden" name="meta_desc" value="<%= store.meta_desc || '' %>">
+        </div>
+
+        <div style="display:flex; gap:.6rem; margin-top:.5rem">
+          <button type="submit" class="btn btn-primary" style="padding:.7rem 1.4rem">💾 حفظ الإعدادات</button>
+          <span class="muted" style="font-size:.78rem; align-self:center">كل التبويبات تُحفظ معاً</span>
+        </div>
+      </form>
+    </div>
+
+    <div class="card" id="mtab-logo" style="display:none">
+      <h2>🖼️ الشعار</h2>
+      <% if(store.logo_path){ %><img src="<%= store.logo_path %>" class="logo-preview" alt="" style="max-width:180px; border-radius:12px; border:1.5px solid var(--line); margin-bottom:1rem"><% } %>
+      <form method="post" action="/panel/settings/logo?_csrf=<%= csrf %>" enctype="multipart/form-data" class="stack upload-box" style="border:2px dashed var(--line); padding:1.2rem; border-radius:12px">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <input type="file" name="logo" accept="image/*" required>
+        <button type="submit" class="btn btn-primary">📤 تحديث الشعار</button>
+        <small class="muted">الصورة تحل محل الحالية — تُضغط تلقائياً 1200px</small>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>🔑 كلمة المرور</h2>
+      <form method="post" action="/panel/password" class="stack" style="max-width:400px">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <label>الحالية<input type="password" name="oldpass" required></label>
+        <label>الجديدة<input type="password" name="newpass" required></label>
+        <button type="submit" class="btn btn-warn">تغيير كلمة المرور</button>
+      </form>
     </div>
   </div>
 </main>
+<style>
+.site-tab{flex:1; min-width:100px; padding:.75rem .8rem; background:transparent; border:none; border-bottom:3px solid transparent; font-weight:700; font-size:.82rem; color:var(--muted); cursor:pointer; transition:all .2s; white-space:nowrap}
+.site-tab.on{color:var(--brand); border-bottom-color:var(--brand); background:var(--card)}
+.tab-panel{display:none; flex-direction:column; gap:1rem}
+.tab-panel.on{display:flex}
+</style>
+<script>
+function switchMTab(id){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.style.display='none');
+  document.querySelectorAll('.site-tab').forEach(b=>b.classList.remove('on'));
+  const el=document.getElementById('mtab-'+id);
+  if(el){ el.style.display='flex'; el.classList.add('on'); }
+  // logo is separate card
+  const logoCard=document.querySelector('#mtab-logo');
+  if(id==='logo'){ if(logoCard) logoCard.style.display='block'; } else { if(logoCard) logoCard.style.display='none'; }
+  document.querySelector(`[data-tab="${id}"]`)?.classList.add('on');
+  localStorage.setItem('m_settings_tab', id);
+}
+(function(){
+  const s=localStorage.getItem('m_settings_tab');
+  if(s && document.getElementById('mtab-'+s)) switchMTab(s);
+  const ta=document.querySelector('[name="meta_desc"]'); const len=document.getElementById('mMetaLen');
+  if(ta&&len){ const u=()=>len.textContent=ta.value.length; ta.addEventListener('input',u); u(); }
+})();
+</script>
 </body>
 </html>

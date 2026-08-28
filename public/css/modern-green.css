@@ -1,0 +1,201 @@
+/* ============================================================
+   MODERN GREEN MARKET — تصميم عصري بأخضر زمردي وأبيض
+   Matajer adapted: body.store-body.modern-green + Matajer classes
+   ============================================================ */
+
+body.store-body.modern-green,
+body.modern-green {
+    background-color: #F5F7F6 !important;
+    color: #1A2E2A !important;
+    font-family: 'Cairo','Noto Kufi Arabic',sans-serif;
+    padding-bottom: 0 !important;
+}
+
+/* ---------- Header / Hero ---------- */
+.store-body.modern-green .st-head,
+.modern-green .store-head {
+    background: #fff !important;
+    box-shadow: 0 2px 20px rgba(0,80,60,0.05) !important;
+    border-bottom: 2px solid #2E7D5E !important;
+    border: 1px solid #E5EDE8 !important;
+    border-bottom: 2px solid #2E7D5E !important;
+    border-radius: 20px !important;
+    margin: 16px auto !important;
+    max-width: 1120px;
+    padding: 42px 28px !important;
+}
+.store-body.modern-green .st-head::before { display:none !important; }
+.store-body.modern-green .st-head-inner { max-width:none; width:100%; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:28px; }
+.store-body.modern-green .st-head h1,
+.modern-green .store-head .brand,
+.modern-green .hero-section .hero-text h1 {
+    color: #1A2E2A !important;
+    -webkit-text-fill-color: #1A2E2A !important;
+    background: none !important;
+    font-weight: 800 !important;
+    font-size: 2.05rem !important;
+    line-height: 1.25;
+}
+.store-body.modern-green .st-head h1 span,
+.modern-green .hero-section .hero-text h1 span,
+.modern-green .store-head .brand i { color: #2E7D5E !important; }
+.store-body.modern-green .st-head p,
+.modern-green .hero-section .hero-text p { color:#3A5A4E !important; font-size:1.02rem !important; margin-top:10px !important; line-height:1.7; }
+.store-body.modern-green .st-logo { border-radius:14px !important; box-shadow:0 4px 16px rgba(0,0,0,0.04) !important; }
+.store-body.modern-green .fashion-badge,
+.store-body.modern-green .classic-badge,
+.store-body.modern-green .natural-badge,
+.green-badge { background: rgba(46,125,94,0.10) !important; border:1px solid rgba(46,125,94,0.18) !important; color:#2E7D5E !important; padding:.32rem .85rem !important; border-radius:99px !important; font-weight:700 !important; font-size:.74rem !important; }
+
+/* ---------- Search ---------- */
+.store-body.modern-green .st-search { max-width:1120px; margin:0 auto; padding:0 1.2rem 1rem; }
+.store-body.modern-green .st-search form {
+    background: #F8FAF9 !important;
+    border: 1.5px solid #D0D9D4 !important;
+    border-radius: 12px !important;
+    padding: .32rem .32rem .32rem 1.2rem !important;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.02) !important;
+}
+.store-body.modern-green .st-search input,
+.modern-green .store-search input {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 10px 18px !important;
+    font-size: .95rem !important;
+    color: #1A2E2A !important;
+}
+.store-body.modern-green .st-search input::placeholder { color:#8A9B92 !important; }
+.store-body.modern-green .st-search input:focus { outline:none; }
+.store-body.modern-green .st-search button,
+.modern-green .store-search button {
+    background: linear-gradient(135deg,#2E7D5E,#1F5E45) !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 14px rgba(46,125,94,0.22) !important;
+}
+
+/* ---------- Nav ---------- */
+.store-body.modern-green .st-nav { gap:.5rem !important; }
+.store-body.modern-green .st-nav a {
+    background: #fff !important;
+    border: 1.5px solid #E5EDE8 !important;
+    color: #3A5A4E !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+}
+.store-body.modern-green .st-nav a:hover { background:#F0F5F2 !important; border-color:#2E7D5E !important; color:#1A2E2A !important; }
+.store-body.modern-green .st-nav a.on { background:#2E7D5E !important; color:#fff !important; border-color:#2E7D5E !important; box-shadow:0 6px 16px rgba(46,125,94,0.25) !important; }
+
+/* ---------- Grid ---------- */
+.store-body.modern-green .st-grid,
+.modern-green .product-grid {
+    display:grid !important;
+    grid-template-columns: repeat(auto-fill,minmax(200px,1fr)) !important;
+    gap: 20px !important;
+    padding: 0 !important;
+}
+.store-body.modern-green .st-main { padding: 0 1.2rem 4rem !important; }
+
+/* ---------- Cards ---------- */
+.store-body.modern-green .st-card,
+.modern-green .product-card {
+    background: #fff !important;
+    border-radius: 16px !important;
+    padding: 14px !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.03) !important;
+    border: 1px solid #E5EDE8 !important;
+    transition: all .3s !important;
+}
+.store-body.modern-green .st-card:hover,
+.modern-green .product-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06) !important;
+    border-color: #2E7D5E !important;
+}
+.store-body.modern-green .st-img,
+.modern-green .product-card .product-image {
+    border-radius: 12px !important;
+    background: #E8F0EC !important;
+    aspect-ratio: 1/1 !important;
+    overflow: hidden !important;
+}
+.store-body.modern-green .st-img::after { display:none !important; }
+.store-body.modern-green .st-img img,
+.modern-green .product-card .product-image img { transition: transform .42s !important; }
+.store-body.modern-green .st-card:hover .st-img img,
+.modern-green .product-card:hover .product-image img { transform: scale(1.04) !important; }
+.store-body.modern-green .st-card-body { padding: .85rem .2rem .3rem !important; }
+.store-body.modern-green .st-name,
+.modern-green .product-card .product-name { color:#1A2E2A !important; font-weight:700 !important; font-size:.92rem !important; }
+.store-body.modern-green .st-price b,
+.modern-green .product-card .product-price { color:#2E7D5E !important; font-weight:800 !important; font-size:1.12rem !important; }
+.store-body.modern-green .st-price del { color:#8A9B92 !important; }
+.store-body.modern-green .st-btn,
+.modern-green .product-card .btn-add,
+.modern-green .btn-green,
+.modern-green .btn-primary,
+.modern-green .btn-offer {
+    background: linear-gradient(135deg,#2E7D5E,#1F5E45) !important;
+    color:#fff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 14px rgba(46,125,94,0.20) !important;
+    width: 100%;
+}
+.store-body.modern-green .st-btn:hover,
+.modern-green .product-card .btn-add:hover { background:#1F5E45 !important; transform:translateY(-1px) !important; }
+
+/* Offer banner alias */
+.modern-green .offer-banner {
+    background: linear-gradient(135deg,#2E7D5E,#1F5E45) !important;
+    color:#fff !important;
+    border-radius: 20px !important;
+    padding: 28px 24px !important;
+    margin: 0 0 20px !important;
+    text-align:center;
+    box-shadow: 0 8px 30px rgba(46,125,94,0.14) !important;
+}
+.modern-green .offer-banner .discount { font-size:2.6rem !important; font-weight:800 !important; }
+.modern-green .offer-banner .timer { font-size:1.7rem !important; font-weight:800 !important; background:rgba(255,255,255,0.10) !important; padding:8px 24px !important; border-radius:99px !important; display:inline-block !important; }
+
+/* Bottom nav (جوال) — يظهر فقط على الجوال */
+.modern-green .bottom-nav { display:none; }
+.store-body.modern-green .bottom-nav { display:none; }
+
+/* ---------- Product / Checkout ---------- */
+.store-body.modern-green .st-product-info,
+.store-body.modern-green .st-gallery,
+.store-body.modern-green .st-checkout .card {
+    border-radius: 16px !important;
+    border-color: #E5EDE8 !important;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.03) !important;
+}
+.store-body.modern-green .st-product-info h1 { color:#1A2E2A !important; }
+.store-body.modern-green .st-desc { color:#3A5A4E !important; }
+.store-body.modern-green .cart-fab,
+.store-body.modern-green .st-btn.big-btn,
+.store-body.modern-green #cartCheckout { background: linear-gradient(135deg,#2E7D5E,#1F5E45) !important; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .store-body.modern-green .bottom-nav { display:flex !important; position:fixed; bottom:0; left:0; width:100%; background:#fff; border-top:1px solid #E5EDE8; box-shadow:0 -2px 20px rgba(0,0,0,0.04); padding:6px 0 env(safe-area-inset-bottom,6px); justify-content:space-around; z-index:1000; }
+    .store-body.modern-green .bottom-nav .nav-item { display:flex; flex-direction:column; align-items:center; color:#8A9B92; font-size:.64rem; padding:4px 8px; }
+    .store-body.modern-green .bottom-nav .nav-item.active { color:#2E7D5E; }
+    body.store-body.modern-green { padding-bottom: 72px !important; }
+
+    .store-body.modern-green .st-head { padding:28px 16px !important; margin:12px !important; border-radius:16px !important; text-align:center; }
+    .store-body.modern-green .st-head h1 { font-size:1.65rem !important; }
+    .store-body.modern-green .st-head-inner { flex-direction:column; text-align:center; }
+    .store-body.modern-green .st-grid,
+    .modern-green .product-grid { grid-template-columns: repeat(2,1fr) !important; gap:12px !important; }
+    .store-body.modern-green .st-card { padding:10px !important; }
+    .store-body.modern-green .st-main { padding: 0 12px 5rem !important; }
+    .modern-green .offer-banner { padding:20px 16px !important; margin:0 12px 20px !important; border-radius:16px !important; }
+    .modern-green .offer-banner .discount { font-size:2.1rem !important; }
+    .modern-green .offer-banner .timer { font-size:1.45rem !important; padding:6px 20px !important; }
+}
+@media (max-width: 360px) {
+    .store-body.modern-green .st-grid { grid-template-columns: 1fr !important; }
+}

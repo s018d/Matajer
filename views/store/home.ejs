@@ -30,7 +30,7 @@ const heroSub = heroCfg.sub || store.description;
   <% if (store.template === 'market') { %>
     <%- include('../partials/market-hero') %>
   <% } else { const hStyle = `position:relative;${heroCfg.image ? `background:url('${heroCfg.image}') center/cover;` : ''}` ; const overlay = heroCfg.overlay != null ? Number(heroCfg.overlay) : (heroCfg.image ? 40 : 0); %>
-    <header class="st-head <%= store.template==='prem-fashion'?'fashion-hero':store.template==='prem-outdoor'?'outdoor-hero':store.template==='prem-classic'?'classic-hero':store.template==='prem-natural'?'natural-hero':'' %>" style="<%= hStyle %>">
+    <header class="st-head <%= store.template==='royal-ivory'?'royal-hero':store.template==='black-gold'?'black-hero':store.template==='modern-green'?'green-hero':store.template==='prem-fashion'?'fashion-hero':store.template==='prem-outdoor'?'outdoor-hero':store.template==='prem-classic'?'classic-hero':store.template==='prem-natural'?'natural-hero':'' %>" style="<%= hStyle %>">
       <% if (heroCfg.video) { %>
         <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0" src="<%= heroCfg.video %>"></video>
       <% } %>
@@ -40,6 +40,9 @@ const heroSub = heroCfg.sub || store.description;
         <div>
           <h1 style="<%= heroCfg.image||heroCfg.video ? `color:${heroCfg.textColor||'#fff'} !important;-webkit-text-fill-color:${heroCfg.textColor||'#fff'} !important` : '' %>"><%= heroTitle %></h1>
           <p style="<%= heroCfg.image||heroCfg.video ? 'color:rgba(255,255,255,.88)' : '' %>"><%= heroSub %></p>
+          <% if (store.template==='royal-ivory') { %><span class="fashion-badge" style="background:rgba(201,169,110,0.12);border:1px solid rgba(201,169,110,0.25);color:#C9A96E;padding:.32rem .85rem;border-radius:99px;font-size:.74rem;font-weight:700">✨ فاخر • Royal Ivory</span><% } %>
+          <% if (store.template==='black-gold') { %><span class="classic-badge" style="background:rgba(201,169,110,0.15);border:1px solid rgba(201,169,110,0.30);color:#C9A96E;padding:.32rem .85rem;border-radius:99px;font-size:.74rem;font-weight:800">◆ Black Gold • الإمبراطورية</span><% } %>
+          <% if (store.template==='modern-green') { %><span class="natural-badge" style="background:rgba(46,125,94,0.10);border:1px solid rgba(46,125,94,0.18);color:#2E7D5E;padding:.32rem .85rem;border-radius:99px;font-size:.74rem;font-weight:700">🌿 Modern Green • عصري</span><% } %>
           <% if (store.template==='prem-fashion') { %><span class="fashion-badge">Lookbook • Editorial</span><% } %>
           <% if (store.template==='prem-outdoor') { %>
             <div class="outdoor-filters" style="margin-inline-start:0">
@@ -65,7 +68,7 @@ const heroSub = heroCfg.sub || store.description;
 </nav>
 <% } %>
 
-<% function renderGrid(){ const cols = gridCfg.cols; const gap = gridCfg.gap || 16; const cls = store.template==='prem-fashion'?'fashion-grid':store.template==='prem-outdoor'?'outdoor-grid':store.template==='prem-classic'?'classic-grid':store.template==='prem-natural'?'natural-grid':''; %>
+<% function renderGrid(){ const cols = gridCfg.cols; const gap = gridCfg.gap || 16; const cls = store.template==='royal-ivory'?'royal-grid':store.template==='black-gold'?'black-grid':store.template==='modern-green'?'green-grid':store.template==='prem-fashion'?'fashion-grid':store.template==='prem-outdoor'?'outdoor-grid':store.template==='prem-classic'?'classic-grid':store.template==='prem-natural'?'natural-grid':''; %>
 <main class="st-main">
   <div class="st-grid <%= cls %>" style="<%= cols&&cols!=='auto' ? `grid-template-columns:repeat(${cols},1fr) !important;` : '' %>gap:<%= gap %>px">
     <% rows.forEach((p, i) => { %>

@@ -9,14 +9,14 @@ const FREE = {
 };
 
 const PREMIUM = [
-  { id: 'prem-fashion', name: 'الأتيلييه', palette: { primary: '#191a1b', accent: '#d4a574', bg: '#f2f3f5', ink: '#191a1b', soft: '#e9eaeb' }, desc: 'للأزياء والعطور والجمال — Editorial فاخر: هيرو 3/4 + عمودين + لقطة ثانية عند المرور. يبيع بالصور.', layout: 'editorial', hero: 'fashion', grid: '2col', feature: 'lookbook' },
-  { id: 'prem-classic', name: 'التقني', palette: { primary: '#0f172a', accent: '#06b6d4', bg: '#f8fafc', ink: '#0f172a', soft: '#e2e8f0' }, desc: 'للإلكترونيات والموبايلات — Dark Tech: هيدر داكن + شبكة كثيفة + شارة مواصفات. يبيع بالثقة.', layout: 'dense', hero: 'tech', grid: '4col', feature: 'specs' },
-  { id: 'prem-natural', name: 'الدافئ', palette: { primary: '#92400e', accent: '#f59e0b', bg: '#fffbeb', ink: '#451a03', soft: '#fef3c7' }, desc: 'للحلويات والأكل والعطارة — دافئ مستدير: ألوان ترابية + مسافات حنينة + قصة المنتج. يبيع بالدفء.', layout: 'masonry', hero: 'warm', grid: 'masonry', feature: 'story' }
+  { id: 'royal-ivory', name: 'الذهب العاجي (Royal Ivory)', palette: { primary: '#C9A96E', accent: '#B8944E', bg: '#F8F5EF', ink: '#4A3F3A', soft: '#EFE9E0' }, desc: 'فاخر هادئ: أبيض عاجي وذهبي، هيدر زجاجي + شبكة 2-أعمدة. يبيع بالفخامة.', layout: 'editorial', hero: 'royal', grid: '2col', feature: 'lookbook' },
+  { id: 'black-gold', name: 'الإمبراطورية السوداء (Black Gold)', palette: { primary: '#C9A96E', accent: '#A8894E', bg: '#0A0A0A', ink: '#E0D5C8', soft: '#161616' }, desc: 'فاخر جداً: أسود مع ذهبي معدني، توهج دوراني + كروت معتمة. يبيع بالهيبة.', layout: 'dense', hero: 'gold', grid: '4col', feature: 'specs' },
+  { id: 'modern-green', name: 'السوق العصري (Modern Green)', palette: { primary: '#2E7D5E', accent: '#1F5E45', bg: '#F5F7F6', ink: '#1A2E2A', soft: '#E8F0EC' }, desc: 'عصري ونظيف: أخضر زمردي وأبيض، شريط أخضر + عداد عروض. يبيع بالثقة اليومية.', layout: 'market', hero: 'green', grid: '4col', feature: 'story' }
 ];
 
 const PREMIUM_MAP = new Map(PREMIUM.map(p => [p.id, p]));
 
-const LEGACY = [];
+const LEGACY = ['prem-fashion','prem-classic','prem-natural','prem-outdoor'];
 
 const LIST = [FREE];
 
@@ -35,7 +35,7 @@ function isPremium(id) {
 
 function get(id) {
   const prem = PREMIUM_MAP.get(id);
-  if (prem) return { ...prem, premium: true, classes: 'prem-' + id.slice(5), style: '' };
+  if (prem) return { ...prem, premium: true, classes: prem.id, style: '' };
   const free = BY_ID.get(id);
   if (free) return { ...free };
   if (LEGACY.includes(id)) return { ...FREE, id };

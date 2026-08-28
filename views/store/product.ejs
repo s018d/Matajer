@@ -50,7 +50,7 @@
       <% } else if (lowStock) { %>
         <div class="st-badge-lowstock">⚡ كمية محدودة: <%= product.stock %> قطع متبقية</div>
       <% } %>
-      <% const isTech = store.template === 'prem-classic'; const descLines = String(product.description||'').split('\n').map(s=>s.trim()).filter(Boolean); const hasSpecs = descLines.some(l=>l.includes(':')); %>
+      <% const isTech = store.template === 'black-gold' || store.template === 'prem-classic'; const descLines = String(product.description||'').split('\n').map(s=>s.trim()).filter(Boolean); const hasSpecs = descLines.some(l=>l.includes(':')); %>
       <% if (isTech && hasSpecs) { %>
         <table class="st-specs" style="width:100%;border-collapse:collapse;margin:.8rem 0;font-size:.85rem">
           <% descLines.forEach(line=>{ const [k,v]=line.split(':'); if(v!==undefined){ %>

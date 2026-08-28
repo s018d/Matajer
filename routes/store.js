@@ -21,7 +21,7 @@ function tplFor(store) {
   const t = TPL.get(store.template);
   if (!t) return null;
   if (t.premium && !isPro(store)) return null;
-  if (t.premium) return { classes: t.classes, style: '', css: '/css/prem-' + store.template.slice(5) + '.css' };
+  if (t.premium) return { classes: t.classes, style: '', css: '/css/' + store.template + '.css' };
   return { classes: t.classes, style: TPL.cssVars(t, store.color) };
 }
 

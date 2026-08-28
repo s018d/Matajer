@@ -1,0 +1,284 @@
+/* ============================================================
+   ROYAL IVORY — متجر فاخر بألوان عاجية وذهبية هادئة
+   Matajer adapted: body.store-body.royal-ivory + Matajer classes
+   ============================================================ */
+
+/* ---------- Body ---------- */
+body.store-body.royal-ivory,
+body.royal-ivory {
+    background-color: #F8F5EF !important;
+    color: #4A3F3A;
+    font-family: 'Cairo','Noto Kufi Arabic',sans-serif;
+}
+
+/* ---------- Header / Hero — يغطي st-head و hero-section ---------- */
+.store-body.royal-ivory .st-head,
+.royal-ivory .store-head,
+.royal-ivory .hero-section {
+    background: rgba(255,255,255,0.85) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.04) !important;
+    border-bottom: 1px solid rgba(200,180,160,0.2) !important;
+    border: none;
+    border-radius: 0;
+}
+.store-body.royal-ivory .st-head {
+    background: linear-gradient(135deg, #F8F5EF, #EFE9E0) !important;
+    border-radius: 24px !important;
+    margin: 16px auto !important;
+    max-width: 1120px;
+    padding: 42px 30px !important;
+    border: 1px solid rgba(200,180,160,0.15) !important;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.04) !important;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+.store-body.royal-ivory .st-head::before { display: none !important; }
+.store-body.royal-ivory .st-head-inner {
+    max-width: none;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+.store-body.royal-ivory .st-head h1,
+.royal-ivory .store-head .brand,
+.royal-ivory .hero-section .hero-text h1 {
+    color: #4A3F3A !important;
+    -webkit-text-fill-color: #4A3F3A !important;
+    background: none !important;
+    font-weight: 800 !important;
+    font-size: 2.1rem !important;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+}
+.store-body.royal-ivory .st-head h1 span,
+.royal-ivory .hero-section .hero-text h1 span,
+.royal-ivory .store-head .brand i {
+    color: #C9A96E !important;
+}
+.store-body.royal-ivory .st-head p,
+.royal-ivory .hero-section .hero-text p {
+    color: #7A6B62 !important;
+    font-size: 1.02rem !important;
+    margin-top: 10px !important;
+    line-height: 1.7;
+}
+.store-body.royal-ivory .st-logo {
+    border-radius: 16px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
+}
+.royal-ivory-badge,
+.store-body.royal-ivory .fashion-badge {
+    display: inline-block;
+    margin-top: .7rem;
+    background: rgba(201,169,110,0.12) !important;
+    border: 1px solid rgba(201,169,110,0.25) !important;
+    color: #8B7A6B !important;
+    padding: .32rem .85rem !important;
+    border-radius: 99px !important;
+    font-size: .74rem !important;
+    font-weight: 700 !important;
+    letter-spacing: .04em;
+}
+
+/* ---------- Search ---------- */
+.store-body.royal-ivory .st-search,
+.royal-ivory .store-search {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.2rem 1rem;
+}
+.store-body.royal-ivory .st-search form,
+.royal-ivory .store-search {
+    display: flex;
+    gap: 8px;
+}
+.store-body.royal-ivory .st-search form,
+.royal-ivory .store-search input {
+    border-radius: 30px !important;
+    border: 1.5px solid #e0d6cc !important;
+    background: #fff !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02) !important;
+}
+.store-body.royal-ivory .st-search form {
+    padding: .32rem .32rem .32rem 1.2rem !important;
+}
+.store-body.royal-ivory .st-search input,
+.royal-ivory .store-search input {
+    padding: 10px 20px !important;
+    font-size: .95rem !important;
+    transition: all .3s;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+.store-body.royal-ivory .st-search input:focus,
+.royal-ivory .store-search input:focus {
+    border-color: #C9A96E !important;
+    box-shadow: 0 0 0 3px rgba(201,169,110,0.15) !important;
+    outline: none;
+}
+.store-body.royal-ivory .st-search button,
+.royal-ivory .store-search button {
+    background: linear-gradient(135deg,#C9A96E,#B8944E) !important;
+    border-radius: 30px !important;
+    padding: .65rem 1.6rem !important;
+    box-shadow: 0 4px 15px rgba(201,169,110,0.25) !important;
+    font-weight: 700 !important;
+}
+
+/* ---------- Category Nav ---------- */
+.store-body.royal-ivory .st-nav,
+.royal-ivory .st-nav { gap: .55rem !important; }
+.store-body.royal-ivory .st-nav a {
+    background: #fff !important;
+    border: 1.5px solid #f0ebe5 !important;
+    color: #4A3F3A !important;
+    border-radius: 12px !important;
+    padding: .55rem 1.15rem !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02) !important;
+}
+.store-body.royal-ivory .st-nav a:hover {
+    background: #F8F5EF !important;
+    border-color: #C9A96E !important;
+    color: #4A3F3A !important;
+    transform: translateY(-2px) !important;
+}
+.store-body.royal-ivory .st-nav a.on {
+    background: #C9A96E !important;
+    border-color: #C9A96E !important;
+    color: #fff !important;
+    box-shadow: 0 6px 18px rgba(201,169,110,0.3) !important;
+}
+
+/* ---------- Grid ---------- */
+.store-body.royal-ivory .st-grid,
+.royal-ivory .product-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill,minmax(200px,1fr)) !important;
+    gap: 22px !important;
+    padding: 0 !important;
+}
+.store-body.royal-ivory .st-main {
+    padding: 0 1.2rem 4rem !important;
+}
+
+/* ---------- Cards ---------- */
+.store-body.royal-ivory .st-card,
+.royal-ivory .product-card {
+    background: #fff !important;
+    border-radius: 20px !important;
+    padding: 14px !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.03) !important;
+    border: 1px solid rgba(200,180,160,0.1) !important;
+    transition: all .3s !important;
+    overflow: hidden;
+}
+.store-body.royal-ivory .st-card:hover,
+.royal-ivory .product-card:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.07) !important;
+    border-color: rgba(201,169,110,0.18) !important;
+}
+.store-body.royal-ivory .st-img,
+.royal-ivory .product-card .product-image {
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    background: #f5f0ea !important;
+    aspect-ratio: 1/1 !important;
+}
+.store-body.royal-ivory .st-img::after { display: none !important; }
+.store-body.royal-ivory .st-img img,
+.royal-ivory .product-card .product-image img {
+    transition: transform .45s !important;
+}
+.store-body.royal-ivory .st-card:hover .st-img img,
+.royal-ivory .product-card:hover .product-image img {
+    transform: scale(1.04) !important;
+}
+.store-body.royal-ivory .st-card-body {
+    padding: .85rem .2rem .3rem !important;
+    gap: .35rem !important;
+}
+.store-body.royal-ivory .st-name,
+.royal-ivory .product-card .product-name {
+    color: #4A3F3A !important;
+    font-weight: 700 !important;
+    font-size: .92rem !important;
+    line-height: 1.45 !important;
+}
+.store-body.royal-ivory .st-price b,
+.royal-ivory .product-card .product-price {
+    color: #C9A96E !important;
+    font-weight: 800 !important;
+    font-size: 1.12rem !important;
+}
+.store-body.royal-ivory .st-price del { color: #b8a99c !important; }
+.store-body.royal-ivory .st-btn,
+.royal-ivory .product-card .btn-add,
+.royal-ivory .btn-gold,
+.royal-ivory .btn-primary {
+    background: linear-gradient(135deg,#C9A96E,#B8944E) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 30px !important;
+    padding: .72rem 1rem !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 15px rgba(201,169,110,0.25) !important;
+    width: 100%;
+}
+.store-body.royal-ivory .st-btn:hover,
+.royal-ivory .product-card .btn-add:hover {
+    background: #B8944E !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 8px 22px rgba(201,169,110,0.32) !important;
+}
+
+/* Features grid alias — لو أضيف مستقبلاً */
+.royal-ivory .features-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap:20px; padding:0 20px 30px; }
+.royal-ivory .features-grid .feature-item { background:#fff; padding:20px 16px; border-radius:16px; text-align:center; box-shadow:0 4px 12px rgba(0,0,0,0.02); border:1px solid #f0ebe5; }
+
+/* ---------- Product page / Checkout overrides ---------- */
+.store-body.royal-ivory .st-product-info,
+.store-body.royal-ivory .st-gallery,
+.store-body.royal-ivory .st-checkout .card {
+    border-radius: 20px !important;
+    border-color: rgba(200,180,160,0.12) !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03) !important;
+}
+.store-body.royal-ivory .st-product-info h1 { color: #4A3F3A !important; }
+.store-body.royal-ivory .cart-fab,
+.store-body.royal-ivory .cart-drawer #cartCheckout,
+.store-body.royal-ivory .st-btn.big-btn {
+    background: linear-gradient(135deg,#C9A96E,#B8944E) !important;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .store-body.royal-ivory .st-head {
+        padding: 26px 16px !important;
+        margin: 12px 12px !important;
+        border-radius: 20px !important;
+        text-align: center;
+    }
+    .store-body.royal-ivory .st-head h1 { font-size: 1.6rem !important; }
+    .store-body.royal-ivory .st-head-inner { flex-direction: column; text-align: center; }
+    .store-body.royal-ivory .st-grid,
+    .royal-ivory .product-grid {
+        grid-template-columns: repeat(2,1fr) !important;
+        gap: 12px !important;
+    }
+    .store-body.royal-ivory .st-card { padding: 10px !important; }
+    .store-body.royal-ivory .st-name { font-size: .84rem !important; }
+    .store-body.royal-ivory .st-price b { font-size: 1rem !important; }
+    .store-body.royal-ivory .st-main { padding: 0 12px 5rem !important; }
+}
+@media (max-width: 360px) {
+    .store-body.royal-ivory .st-grid { grid-template-columns: 1fr !important; }
+}

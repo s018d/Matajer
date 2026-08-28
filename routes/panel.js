@@ -615,7 +615,7 @@ router.get('/templates', (req, res) => {
   const store = getStore(req.user.store_id);
   const list = [
     ...TPL.LIST.map(t => ({ id: t.id, name: t.name, desc: TPL.describe(t), classes: t.classes, palette: t.palette })),
-    ...TPL.PREMIUM.map(t => ({ id: t.id, name: t.name, desc: t.desc, classes: 'prem-' + t.id.slice(5), palette: t.palette, premium: true })),
+    ...TPL.PREMIUM.map(t => ({ id: t.id, name: t.name, desc: t.desc, classes: t.id, palette: t.palette, premium: true })),
     ...TPL.LEGACY.map(id => ({ id, name: 'الماركت', desc: 'نمط المتاجر السوقية: شريط عروض متحرك وهيرو ضخم وبطاقات عرض كبيرة — مثالي للمنتجات كثيرة العرض', classes: 'tpl-c', palette: { primary: '#e11d48', accent: '#f59e0b', bg: '#fff7ed', ink: '#3f2d16', soft: '#ffe4e6' }, legacy: true }))
   ];
   res.render('panel/templates', { store, list, count: list.length, current: store.template, pro: isPro(store), ok: req.query.ok || '', err: req.query.err || '', user: req.user });

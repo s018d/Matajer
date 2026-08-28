@@ -1,0 +1,235 @@
+/* ============================================================
+   BLACK GOLD EMPIRE — متجر فاخر جداً، أسود مع ذهبي معدني
+   Matajer adapted: body.store-body.black-gold + Matajer classes
+   ============================================================ */
+
+body.store-body.black-gold,
+body.black-gold {
+    background-color: #0A0A0A !important;
+    color: #E0D5C8 !important;
+    font-family: 'Cairo','Noto Kufi Arabic',sans-serif;
+}
+body.store-body.black-gold::before,
+body.black-gold::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image: repeating-linear-gradient(45deg, rgba(201,169,110,0.015) 0px, rgba(201,169,110,0.015) 1px, transparent 1px, transparent 20px);
+    pointer-events: none;
+    z-index: 0;
+}
+.store-body.black-gold { position: relative; }
+
+/* ---------- Header / Hero ---------- */
+.store-body.black-gold .st-head,
+.black-gold .store-head {
+    background: rgba(10,10,10,0.92) !important;
+    border-bottom: 1px solid rgba(201,169,110,0.22) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 30px rgba(0,0,0,0.6) !important;
+    border-radius: 24px !important;
+    margin: 16px auto !important;
+    max-width: 1120px;
+    padding: 44px 30px !important;
+    border: 1px solid rgba(201,169,110,0.14) !important;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+.store-body.black-gold .st-head::before { display:none; }
+.store-body.black-gold .st-head::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 40%, rgba(201,169,110,0.05), transparent 60%);
+    animation: rotateGold 28s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+@keyframes rotateGold { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
+
+.store-body.black-gold .st-head-inner { position: relative; z-index: 1; max-width:none; width:100%; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:30px; }
+.store-body.black-gold .st-head h1,
+.black-gold .store-head .brand,
+.black-gold .hero-section .hero-text h1 {
+    color: #E0D5C8 !important;
+    -webkit-text-fill-color: #E0D5C8 !important;
+    background: none !important;
+    font-weight: 800 !important;
+    font-size: 2.15rem !important;
+    text-shadow: 0 0 30px rgba(201,169,110,0.15);
+    line-height: 1.25;
+}
+.store-body.black-gold .st-head h1 span,
+.black-gold .hero-section .hero-text h1 span,
+.black-gold .store-head .brand i { color: #C9A96E !important; text-shadow: 0 0 40px rgba(201,169,110,0.18); }
+.store-body.black-gold .st-head p,
+.black-gold .hero-section .hero-text p { color: #A09080 !important; font-size: 1.02rem !important; margin-top:10px !important; line-height:1.7; }
+.store-body.black-gold .st-logo { border-radius:14px !important; border:1px solid rgba(201,169,110,0.15); box-shadow:0 6px 24px rgba(0,0,0,0.5) !important; }
+.store-body.black-gold .fashion-badge,
+.store-body.black-gold .classic-badge,
+.black-gold-badge { background: rgba(201,169,110,0.12) !important; border:1px solid rgba(201,169,110,0.25) !important; color:#C9A96E !important; padding:.32rem .85rem !important; border-radius:99px !important; font-size:.74rem !important; font-weight:700 !important; }
+
+/* ---------- Search ---------- */
+.store-body.black-gold .st-search { max-width:1120px; margin:0 auto; padding:0 1.2rem 1rem; }
+.store-body.black-gold .st-search form {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1.5px solid rgba(201,169,110,0.15) !important;
+    border-radius: 30px !important;
+    padding: .32rem .32rem .32rem 1.2rem !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.35) !important;
+    backdrop-filter: blur(6px);
+}
+.store-body.black-gold .st-search input,
+.black-gold .store-search input {
+    background: transparent !important;
+    color: #E0D5C8 !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 10px 20px !important;
+    font-size: .95rem !important;
+}
+.store-body.black-gold .st-search input::placeholder,
+.black-gold .store-search input::placeholder { color: #6A5E52 !important; }
+.store-body.black-gold .st-search input:focus { outline:none; }
+.store-body.black-gold .st-search button,
+.black-gold .store-search button {
+    background: linear-gradient(135deg,#C9A96E,#A8894E) !important;
+    color: #0A0A0A !important;
+    border-radius: 30px !important;
+    font-weight: 800 !important;
+    box-shadow: 0 4px 18px rgba(201,169,110,0.28) !important;
+}
+
+/* ---------- Nav ---------- */
+.store-body.black-gold .st-nav { gap:.55rem !important; }
+.store-body.black-gold .st-nav a {
+    background: #161616 !important;
+    border: 1px solid rgba(201,169,110,0.10) !important;
+    color: #A09080 !important;
+    border-radius: 12px !important;
+}
+.store-body.black-gold .st-nav a:hover {
+    background: rgba(201,169,110,0.08) !important;
+    border-color: rgba(201,169,110,0.20) !important;
+    color: #E0D5C8 !important;
+}
+.store-body.black-gold .st-nav a.on {
+    background: #C9A96E !important;
+    color: #0A0A0A !important;
+    border-color: #C9A96E !important;
+    box-shadow: 0 6px 18px rgba(201,169,110,0.25) !important;
+}
+
+/* ---------- Grid ---------- */
+.store-body.black-gold .st-grid,
+.black-gold .product-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill,minmax(200px,1fr)) !important;
+    gap: 20px !important;
+    padding: 0 !important;
+}
+.store-body.black-gold .st-main { padding: 0 1.2rem 4rem !important; }
+
+/* ---------- Cards ---------- */
+.store-body.black-gold .st-card,
+.black-gold .product-card {
+    background: #161616 !important;
+    border-radius: 20px !important;
+    padding: 14px !important;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.55) !important;
+    border: 1px solid rgba(201,169,110,0.08) !important;
+    transition: all .32s !important;
+}
+.store-body.black-gold .st-card:hover,
+.black-gold .product-card:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: 0 14px 50px rgba(0,0,0,0.75) !important;
+    border-color: rgba(201,169,110,0.22) !important;
+}
+.store-body.black-gold .st-img,
+.black-gold .product-card .product-image {
+    border-radius: 16px !important;
+    background: #111 !important;
+    aspect-ratio: 1/1 !important;
+    overflow: hidden !important;
+    padding: 6px !important;
+}
+.store-body.black-gold .st-img::after { display:none !important; }
+.store-body.black-gold .st-img img,
+.black-gold .product-card .product-image img {
+    border-radius: 12px !important;
+    filter: brightness(0.96);
+    transition: transform .45s, filter .3s !important;
+}
+.store-body.black-gold .st-card:hover .st-img img,
+.black-gold .product-card:hover .product-image img {
+    transform: scale(1.04) !important;
+    filter: brightness(1) !important;
+}
+.store-body.black-gold .st-card-body { padding: .85rem .2rem .3rem !important; }
+.store-body.black-gold .st-name,
+.black-gold .product-card .product-name { color: #E0D5C8 !important; font-weight:700 !important; font-size:.92rem !important; }
+.store-body.black-gold .st-price b,
+.black-gold .product-card .product-price { color: #C9A96E !important; font-weight:800 !important; font-size:1.12rem !important; }
+.store-body.black-gold .st-price del { color:#6A5E52 !important; }
+.store-body.black-gold .st-btn,
+.black-gold .product-card .btn-add,
+.black-gold .btn-gold,
+.black-gold .btn-primary,
+.black-gold .btn-offer {
+    background: linear-gradient(135deg,#C9A96E,#A8894E) !important;
+    color: #0A0A0A !important;
+    border: none !important;
+    border-radius: 30px !important;
+    font-weight: 800 !important;
+    box-shadow: 0 4px 18px rgba(201,169,110,0.22) !important;
+    width: 100%;
+}
+.store-body.black-gold .st-btn:hover,
+.black-gold .product-card .btn-add:hover { background:#B8944E !important; transform:translateY(-1px) !important; }
+
+/* Off-grid offer card alias */
+.black-gold .offer-card { background:linear-gradient(135deg,#161616,#222) !important; border:1px solid rgba(201,169,110,0.18) !important; border-radius:20px !important; padding:24px 20px !important; text-align:center; margin:0 0 20px !important; }
+
+/* ---------- Product / Checkout dark ---------- */
+.store-body.black-gold .st-product-info,
+.store-body.black-gold .st-gallery,
+.store-body.black-gold .st-checkout .card,
+.store-body.black-gold .drawer-head,
+.store-body.black-gold .drawer-foot {
+    background: #161616 !important;
+    border-color: rgba(201,169,110,0.10) !important;
+    color: #E0D5C8 !important;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.45) !important;
+}
+.store-body.black-gold .st-product-info h1 { color:#E0D5C8 !important; }
+.store-body.black-gold .st-desc { color:#A09080 !important; }
+.store-body.black-gold .qty-row button { background:#0A0A0A !important; border-color:rgba(201,169,110,0.18) !important; color:#C9A96E !important; }
+.store-body.black-gold .qty-row input { background:#0A0A0A !important; border-color:rgba(201,169,110,0.14) !important; color:#E0D5C8 !important; }
+.store-body.black-gold .st-thumbs img { border-color:transparent !important; }
+.store-body.black-gold .st-thumbs img.active { border-color:#C9A96E !important; }
+.store-body.black-gold .cart-fab,
+.store-body.black-gold .st-btn.big-btn,
+.store-body.black-gold #cartCheckout { background: linear-gradient(135deg,#C9A96E,#A8894E) !important; color:#0A0A0A !important; }
+.store-body.black-gold .co-item { background:#111 !important; border-color:rgba(201,169,110,0.08) !important; }
+.store-body.black-gold .co-info span { color:#E0D5C8 !important; }
+.store-body.black-gold .st-brand { color:#6A5E52 !important; }
+.store-body.black-gold .st-brand a { color:#C9A96E !important; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .store-body.black-gold .st-head { padding:28px 16px !important; margin:12px !important; border-radius:20px !important; text-align:center; }
+    .store-body.black-gold .st-head h1 { font-size:1.65rem !important; }
+    .store-body.black-gold .st-head-inner { flex-direction:column; text-align:center; }
+    .store-body.black-gold .st-grid,
+    .black-gold .product-grid { grid-template-columns: repeat(2,1fr) !important; gap:12px !important; }
+    .store-body.black-gold .st-card { padding:10px !important; }
+    .store-body.black-gold .st-main { padding: 0 12px 5rem !important; }
+}
+@media (max-width: 360px) {
+    .store-body.black-gold .st-grid { grid-template-columns: 1fr !important; }
+}

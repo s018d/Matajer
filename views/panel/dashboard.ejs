@@ -29,11 +29,17 @@
     </div>
     <% } %>
     <div class="stat-grid">
-      <div class="stat"><span>المنتجات</span><b><%= stats.products %></b></div>
-      <div class="stat"><span>الطلبات</span><b><%= stats.orders %></b></div>
-      <div class="stat stat-strong"><span>طلبات جديدة</span><b><%= stats.newOrders %></b></div>
-      <div class="stat"><span>مشاهدات المنتجات</span><b><%= stats.views %></b></div>
-      <div class="stat stat-strong"><span>إجمالي المبيعات</span><b><%= money(stats.revenue) %></b></div>
+      <div class="stat" style="border-top:3px solid #0ea5e9"><span>📦 المنتجات</span><b><%= stats.products %></b><small class="muted" style="font-size:.7rem"><%= stats.products===0 ? 'أضف أول منتج' : 'نشط' %></small></div>
+      <div class="stat <%= stats.newOrders ? 'stat-strong' : '' %>" style="border-top:3px solid #f59e0b"><span>🆕 طلبات جديدة</span><b><%= stats.newOrders %></b><small class="muted" style="font-size:.7rem"><%= stats.newOrders ? 'تحتاج متابعة' : 'لا جديد' %></small></div>
+      <div class="stat" style="border-top:3px solid #64748b"><span>🧾 كل الطلبات</span><b><%= stats.orders %></b></div>
+      <div class="stat" style="border-top:3px solid #8b5cf6"><span>👁️ المشاهدات</span><b><%= stats.views %></b></div>
+      <div class="stat stat-strong" style="border-top:3px solid #10b981"><span>💰 المبيعات</span><b><%= money(stats.revenue) %></b><small class="muted" style="font-size:.7rem">إجمالي</small></div>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.6rem; margin-top:1rem">
+      <a href="/panel/products/new" class="btn btn-primary" style="justify-content:center; padding:.7rem; border-radius:12px">➕ منتج جديد</a>
+      <a href="/panel/orders" class="btn btn-ghost" style="justify-content:center; padding:.7rem; border-radius:12px">🧾 الطلبات <% if(stats.newOrders){ %><span class="nav-badge" style="margin-inline-start:.3rem"><%= stats.newOrders %></span><% } %></a>
+      <a href="/panel/templates" class="btn btn-ghost" style="justify-content:center; padding:.7rem; border-radius:12px">🎨 القوالب</a>
+      <a href="/s/<%= store.slug %>" target="_blank" class="btn btn-ghost" style="justify-content:center; padding:.7rem; border-radius:12px">👁️ عرض المتجر</a>
     </div>
 
     <div class="card" style="margin-top:1rem">

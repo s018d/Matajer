@@ -1,115 +1,169 @@
 <%- include('../partials/head', { title: 'إدارة المتجر — ' + store.name }) %>
 <body class="app">
-<%- include('../partials/sidebar-admin', { active: 'stores' }) %>
+<%- include('../partials/sidebar-admin', { active: 'stores', user }) %>
 <main class="main">
-  <%- include('../partials/topbar', { pageTitle: 'إدارة المتجر: ' + store.name }) %>
+  <%- include('../partials/topbar', { pageTitle: '🏪 إدارة المتجر: ' + store.name }) %>
   <div class="content">
     <%- include('../partials/alerts') %>
-    <div class="two-col">
-      <div class="card">
-        <h2>بيانات المتجر</h2>
-        <form method="post" action="/admin/stores/<%= store.id %>" class="stack">
-          <input type="hidden" name="_csrf" value="<%= csrf %>">
-          <label>اسم المتجر
-            <input type="text" name="name" value="<%= store.name %>" required>
-          </label>
-          <label>الرابط الخاص (slug)
-            <div class="ltr"><input type="text" name="slug" value="<%= store.slug %>" dir="ltr"></div>
-          </label>
-          <label>وصف
-            <input type="text" name="description" value="<%= store.description %>">
-          </label>
-          <label>اسم صاحب المتجر
-            <input type="text" name="owner_name" value="<%= store.owner_name %>">
-          </label>
-          <label>الهاتف
-            <input type="text" name="phone" value="<%= store.phone %>" dir="ltr">
-          </label>
-          <label>القالب
-            <select name="template">
-              <option value="classic" <%= store.template==='classic' ? 'selected' : '' %>>الكلاسيكي</option>
-              <option value="market" <%= store.template==='market' ? 'selected' : '' %>>الأسواقي (نمط الماركت)</option>
-              <% if (store.template.match(/^t\d+$/)) { %><option value="<%= store.template %>" selected>مولّد (<%= store.template %>)</option><% } %>
-              <% TPL_PREMIUM.forEach(pt => { %>
-                <option value="<%= pt.id %>" <%= store.template===pt.id ? 'selected' : '' %>><%= pt.name %> — احترافي</option>
-              <% }) %>
-            </select>
-            <small class="field-hint">التصاميم الاحترافية تبقى سارية فقط إذا كانت الباقة pro (يُرفض الحفظ إن لم تكن).</small>
-          </label>
-          <label>اللون الأساسي
-            <input type="color" name="color" value="<%= store.color %>" class="color-input">
-          </label>
-          <label>حالة المتجر
-            <select name="status">
-              <option value="active" <%= store.status==='active' ? 'selected' : '' %>>نشط</option>
-              <option value="suspended" <%= store.status==='suspended' ? 'selected' : '' %>>موقوف</option>
-            </select>
-          </label>
-          <label>الدومين الخاص (اختياري)
-            <input type="text" name="custom_domain" value="<%= store.custom_domain || '' %>" dir="ltr" placeholder="مثال: shop.mybrand.com">
-            <small class="field-hint">عند ربط الدومين سيفتح المتجر عليه مباشرة — اتركه فارغاً لإلغائه.</small>
-          </label>
-          <label>رسوم التوصيل (د.ع)
-            <input type="number" name="delivery_fee" min="0" step="500" value="<%= store.delivery_fee || 0 %>">
-          </label>
-          <label>توصيل مجاني فوق (د.ع، 0 = لا يوجد)
-            <input type="number" name="free_delivery_min" min="0" step="500" value="<%= store.free_delivery_min || 0 %>">
-          </label>
-          <label>وصف محركات البحث (حتى 200 حرف)
-            <input type="text" name="meta_desc" value="<%= store.meta_desc || '' %>" maxlength="200">
-          </label>
-          <button type="submit" class="btn btn-primary">حفظ</button>
-        </form>
+    <% if (typeof err !== 'undefined' && err) { %><div class="alert alert-err">⚠️ <%= err %></div><% } %>
+    <% if (typeof ok !== 'undefined' && ok) { %><div class="alert alert-ok"><%= ok %></div><% } %>
+
+    <!-- Header with quick actions -->
+    <div class="card" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; background:linear-gradient(135deg,#f8faff,#eff6ff); border-color:#bfdbfe">
+      <div>
+        <h2 style="margin:0; color:#1e40af">🔗 /s/<%= store.slug %> — <%= store.name %></h2>
+        <small class="muted">ID: <%= store.id %> • أنشئ: <%= store.created_at ? store.created_at.slice(0,10) : '' %> • الباقة: <%= store.plan==='pro' ? '⭐ برو حتى '+(store.plan_expires||'') : 'مجانية' %></small>
+      </div>
+      <div style="display:flex; gap:.5rem">
+        <a href="/s/<%= store.slug %>" target="_blank" class="btn btn-primary">🔗 عرض المتجر</a>
+        <a href="/admin/stores" class="btn btn-ghost">← رجوع</a>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:220px 1fr; gap:1.2rem; align-items:start">
+      <!-- Tabs -->
+      <div class="card" style="padding:.6rem; position:sticky; top:70px">
+        <div style="display:flex; flex-direction:column; gap:.2rem" id="storeTabs">
+          <button class="site-tab on" data-tab="general" onclick="switchStoreTab('general')" style="text-align:right; justify-content:flex-start">📝 عام</button>
+          <button class="site-tab" data-tab="design" onclick="switchStoreTab('design')" style="text-align:right; justify-content:flex-start">🎨 التصميم</button>
+          <button class="site-tab" data-tab="delivery" onclick="switchStoreTab('delivery')" style="text-align:right; justify-content:flex-start">🚚 التوصيل</button>
+          <button class="site-tab" data-tab="seo" onclick="switchStoreTab('seo')" style="text-align:right; justify-content:flex-start">🔍 SEO</button>
+          <button class="site-tab" data-tab="billing" onclick="switchStoreTab('billing')" style="text-align:right; justify-content:flex-start">💳 الباقة</button>
+          <button class="site-tab" data-tab="stats" onclick="switchStoreTab('stats')" style="text-align:right; justify-content:flex-start">📊 إحصائيات</button>
+          <button class="site-tab" data-tab="danger" onclick="switchStoreTab('danger')" style="text-align:right; justify-content:flex-start; color:#dc2626">⚠️ خطر</button>
+        </div>
       </div>
 
-      <div class="card">
-        <h2>الباقة والاشتراك</h2>
-        <form method="post" action="/admin/stores/<%= store.id %>/plan" class="stack">
+      <div>
+        <form method="post" action="/admin/stores/<%= store.id %>" class="stack" id="storeForm">
           <input type="hidden" name="_csrf" value="<%= csrf %>">
-          <label>الباقة
-            <select name="plan">
-              <option value="free" <%= store.plan==='free' ? 'selected' : '' %>>مجانية</option>
-              <option value="pro" <%= store.plan==='pro' ? 'selected' : '' %>>احترافية</option>
-            </select>
-          </label>
-          <label>عدد الأشهر (عند تفعيل / تجديد)
-            <input type="number" name="months" value="1" min="1" max="24">
-          </label>
-          <p class="muted" style="font-size:.82rem">تنتهي حالياً: <b dir="ltr"><%= store.plan_expires || '—' %></b></p>
-          <button type="submit" class="btn btn-primary">حفظ الباقة</button>
+
+          <div class="tab-panel on card" id="stab-general">
+            <h2>📝 البيانات العامة</h2>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem">
+              <label>اسم المتجر *<input type="text" name="name" value="<%= store.name %>" required></label>
+              <label>الرابط (slug) *<div class="ltr"><input type="text" name="slug" value="<%= store.slug %>" dir="ltr" pattern="[a-z0-9-]+"></div><small class="field-hint">/s/<%= store.slug %></small></label>
+            </div>
+            <label>وصف المتجر<textarea name="description" rows="2" placeholder="وصف قصير يظهر في الهبوط"><%= store.description %></textarea></label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem">
+              <label>اسم صاحب المتجر<input type="text" name="owner_name" value="<%= store.owner_name %>"></label>
+              <label>الهاتف<input type="text" name="phone" value="<%= store.phone %>" dir="ltr" placeholder="07XX..."></label>
+            </div>
+            <label>حالة المتجر<select name="status"><option value="active" <%= store.status==='active'?'selected':'' %>>✅ نشط</option><option value="suspended" <%= store.status==='suspended'?'selected':'' %>>⏸️ موقوف</option></select></label>
+            <label>الدومين الخاص<input type="text" name="custom_domain" value="<%= store.custom_domain || '' %>" dir="ltr" placeholder="shop.mybrand.com"><small class="field-hint">اتركه فارغاً لإلغاء الربط</small></label>
+          </div>
+
+          <div class="tab-panel card" id="stab-design">
+            <h2>🎨 التصميم والهوية</h2>
+            <div style="display:grid; grid-template-columns:1fr auto; gap:1rem; align-items:end">
+              <label>القالب
+                <select name="template">
+                  <% (typeof allTemplates !== 'undefined' ? allTemplates : []).forEach(t => { %>
+                    <option value="<%= t.id %>" <%= store.template===t.id?'selected':'' %>><%= t.name %> <%= t.is_premium ? '⭐' : '' %></option>
+                  <% }) %>
+                  <% if (!allTemplates || !allTemplates.find(t=>t.id===store.template)) { %>
+                    <option value="<%= store.template %>" selected><%= store.template %> (حالي)</option>
+                  <% } %>
+                </select>
+              </label>
+              <label>اللون الأساسي<input type="color" name="color" value="<%= store.color %>" class="color-input" style="width:80px; height:44px"></label>
+            </div>
+            <div class="alert" style="background:#eff6ff; border-color:#bfdbfe; color:#1e40af; font-size:.82rem">💡 القوالب المميزة تبقى سارية فقط إذا كانت الباقة برو — إن كانت مجانية سيُحول للكلاسيكي تلقائياً</div>
+            <div style="display:flex; gap:.5rem; margin-top:.5rem">
+              <a href="/s/<%= store.slug %>" target="_blank" class="btn btn-sm btn-ghost">👁️ معاينة المتجر</a>
+              <a href="/admin/templates" class="btn btn-sm btn-ghost">🎨 إدارة القوالب</a>
+            </div>
+          </div>
+
+          <div class="tab-panel card" id="stab-delivery">
+            <h2>🚚 التوصيل</h2>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem">
+              <label>رسوم التوصيل (د.ع)<input type="number" name="delivery_fee" min="0" step="500" value="<%= store.delivery_fee || 0 %>"></label>
+              <label>توصيل مجاني فوق (د.ع)<input type="number" name="free_delivery_min" min="0" step="500" value="<%= store.free_delivery_min || 0 %>"><small class="field-hint">0 = لا يوجد</small></label>
+            </div>
+            <p class="muted" style="font-size:.82rem">الزبون يرى الرسوم في السلة وصفحة إتمام الطلب — حسابها في <code>routes/store.js:170</code></p>
+          </div>
+
+          <div class="tab-panel card" id="stab-seo">
+            <h2>🔍 SEO والظهور</h2>
+            <label>وصف محركات البحث (meta description — حتى 200 حرف)
+              <textarea name="meta_desc" rows="2" maxlength="200" placeholder="وصف يظهر في جوجل..."><%= store.meta_desc || '' %></textarea>
+              <small class="field-hint"><span id="metaLen">0</span>/200</small>
+            </label>
+          </div>
+
+          <div style="display:flex; gap:.6rem; margin:1rem 0">
+            <button type="submit" class="btn btn-primary" style="padding:.7rem 1.6rem">💾 حفظ كل التغييرات</button>
+            <span class="muted" style="font-size:.78rem; align-self:center">كل التبويبات تُحفظ معاً</span>
+          </div>
         </form>
-        <p class="muted" style="font-size:.8rem;margin-top:.6rem">طلبات الترقية من العملاء تظهر في «المدفوعات والباقات» لتأكيدها بضغطة واحدة.</p>
 
-      <div class="card">
-        <h2>الحساب المرافق</h2>
-        <% if (owner) { %>
-          <p>اسم المستخدم: <b dir="ltr"><%= owner.username %></b></p>
-          <form method="post" action="/admin/stores/<%= store.id %>/resetpass">
+        <div class="tab-panel card" id="stab-billing">
+          <h2>💳 الباقة والاشتراك</h2>
+          <form method="post" action="/admin/stores/<%= store.id %>/plan" class="stack">
             <input type="hidden" name="_csrf" value="<%= csrf %>">
-            <button type="submit" class="btn btn-warn">تصفير كلمة المرور (توليد جديدة)</button>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem">
+              <label>الباقة<select name="plan"><option value="free" <%= store.plan==='free'?'selected':'' %>>مجانية</option><option value="pro" <%= store.plan==='pro'?'selected':'' %>>⭐ احترافية</option></select></label>
+              <label>عدد الأشهر (عند التفعيل)<input type="number" name="months" value="1" min="1" max="24"></label>
+            </div>
+            <p class="muted" style="font-size:.82rem">تنتهي حالياً: <b dir="ltr"><%= store.plan_expires || '—' %></b> • <span class="badge <%= store.plan==='pro'?'badge-ok':'' %>"><%= store.plan==='pro'?'برو':'مجاني' %></span></p>
+            <button type="submit" class="btn btn-primary">💳 حفظ الباقة</button>
           </form>
-        <% } else { %>
-          <p>لا يوجد حساب مرافق</p>
-        <% } %>
-
-        <h2 style="margin-top:2rem">إحصائيات</h2>
-        <div class="stat-grid">
-          <div class="stat"><span>منتجات</span><b><%= stats.products %></b></div>
-          <div class="stat"><span>صور</span><b><%= stats.images %></b></div>
-          <div class="stat"><span>طلبات</span><b><%= stats.orders %></b></div>
-          <div class="stat"><span>مبيعات</span><b><%= money(stats.revenue) %></b></div>
-          <div class="stat"><span>دعواته</span><b><%= referrals %></b></div>
-          <div class="stat"><span>مكافآته</span><b><%= rewarded %></b></div>
+          <p class="muted" style="font-size:.8rem; margin-top:.6rem">طلبات الترقية من العملاء في <a href="/admin/payments">المدفوعات والباقات</a></p>
         </div>
 
-        <h2 style="margin-top:2rem">منطقة الخطر</h2>
-        <form method="post" action="/admin/stores/<%= store.id %>/delete" onsubmit="return confirm('حذف المتجر نهائياً يمسح كل منتجاته وصوره؟')">
-          <input type="hidden" name="_csrf" value="<%= csrf %>">
-          <button type="submit" class="btn btn-danger">حذف المتجر نهائياً</button>
-        </form>
+        <div class="tab-panel card" id="stab-stats">
+          <h2>📊 إحصائيات المتجر</h2>
+          <div class="stat-grid">
+            <div class="stat"><span>منتجات</span><b><%= stats.products %></b></div>
+            <div class="stat"><span>صور</span><b><%= stats.images %></b></div>
+            <div class="stat"><span>طلبات</span><b><%= stats.orders %></b></div>
+            <div class="stat stat-strong"><span>مبيعات</span><b><%= money(stats.revenue) %></b></div>
+            <div class="stat"><span>دعواته</span><b><%= referrals %></b></div>
+            <div class="stat"><span>مكافآته</span><b><%= rewarded %></b></div>
+          </div>
+          <div class="card" style="margin-top:1rem; background:#f8fafc">
+            <h2 style="font-size:.95rem">👤 الحساب المرافق</h2>
+            <% if (owner) { %>
+              <p>اسم المستخدم: <b dir="ltr"><%= owner.username %></b></p>
+              <form method="post" action="/admin/stores/<%= store.id %>/resetpass" style="display:inline"><input type="hidden" name="_csrf" value="<%= csrf %>"><button type="submit" class="btn btn-warn">🔑 تصفير كلمة المرور</button></form>
+            <% } else { %><p class="muted">لا يوجد حساب مرافق</p><% } %>
+          </div>
+        </div>
+
+        <div class="tab-panel card" id="stab-danger" style="border-color:#fecaca; background:#fef2f2">
+          <h2 style="color:#dc2626">⚠️ منطقة الخطر</h2>
+          <p class="muted" style="font-size:.82rem">حذف المتجر يمسح كل منتجاته وصوره وطلباته نهائياً — لا يمكن التراجع</p>
+          <form method="post" action="/admin/stores/<%= store.id %>/delete" onsubmit="return confirm('حذف <%= store.name %> نهائياً؟')">
+            <input type="hidden" name="_csrf" value="<%= csrf %>">
+            <button type="submit" class="btn btn-danger">🗑️ حذف المتجر نهائياً</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 </main>
+<style>
+.site-tab{padding:.6rem .9rem; background:var(--soft); border:1.5px solid var(--line); border-radius:10px; font-weight:700; font-size:.85rem; color:var(--muted); cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:.4rem}
+.site-tab.on{background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#fff; border-color:transparent; box-shadow:0 4px 12px rgba(37,99,235,.3)}
+.tab-panel{display:none}
+.tab-panel.on{display:flex; flex-direction:column; gap:1rem}
+</style>
+<script>
+function switchStoreTab(id){
+  document.querySelectorAll('[id^="stab-"]').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('#storeTabs .site-tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('stab-'+id).classList.add('on');
+  document.querySelector(`[data-tab="${id}"]`).classList.add('on');
+  localStorage.setItem('store_edit_tab', id);
+}
+(function(){
+  const s = localStorage.getItem('store_edit_tab');
+  if(s && document.getElementById('stab-'+s)) switchStoreTab(s);
+  const ta = document.querySelector('[name="meta_desc"]');
+  const len = document.getElementById('metaLen');
+  if(ta && len){ const upd=()=>len.textContent=ta.value.length; ta.addEventListener('input',upd); upd(); }
+})();
+</script>
 </body>
 </html>

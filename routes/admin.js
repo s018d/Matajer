@@ -142,7 +142,9 @@ router.get('/stores/:id', (req, res) => {
   const stats = storeStats(store.id);
   const referrals = db.prepare('SELECT COUNT(*) c FROM referrals WHERE referrer_store_id=?').get(store.id).c;
   const rewarded = db.prepare("SELECT COUNT(*) c FROM referrals WHERE referrer_store_id=? AND status='done'").get(store.id).c;
-  res.render('admin/store-edit', { store, owner, stats, referrals, rewarded, TPL_PREMIUM: TPL.PREMIUM, money, ok: req.query.ok || takeFlash(req, res), user: req.user });
+  let allTemplates = [];
+  try { allTemplates = db.prepare('SELECT * FROM templates WHERE is_active=1 ORDER BY is_premium, position').all(); } catch { allTemplates = TPL.PREMIUM.map(p=>({id:p.id, name:p.name, is_premium:1})); allTemplates.unshift({id:'classic', name:'الواضح (مجاني)', is_premium:0}); }
+  res.render('admin/store-edit', { store, owner, stats, referrals, rewarded, TPL_PREMIUM: TPL.PREMIUM, allTemplates, money, ok: req.query.ok || takeFlash(req, res), err: req.query.err || '', user: req.user });
 });
 
 router.post('/stores/:id', (req, res) => {

@@ -354,6 +354,7 @@ img{max-width:100%;display:block}
 .st-main{padding-block-start:1.6rem}
 .st-grid{row-gap:1.15rem}
 .st-head::after{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(15,23,42,.035) 1px,transparent 1px);background-size:14px 14px;opacity:.35;pointer-events:none;mix-blend-mode:soft-light}
+.st-btn:focus-visible, .st-nav a:focus-visible, .cart-fab:focus-visible{outline:3px solid var(--primary); outline-offset:2px; box-shadow:0 0 0 6px rgba(14,165,233,.18)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.st-card:hover{transform:none}}
 
 /* ===== POLISH: hero centered for comfort (all templates) ===== */

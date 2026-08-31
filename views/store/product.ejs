@@ -113,6 +113,16 @@
     </div>
   <% } %>
 
+  <% if (!out) { %>
+  <div id="stickyATC" style="position:fixed; inset-inline:0; bottom:0; background:rgba(255,255,255,.96); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-top:1.5px solid var(--line); padding:.7rem 1rem .85rem; display:none; align-items:center; gap:.7rem; z-index:85; box-shadow:0 -10px 30px rgba(15,23,42,.12); transform:translateY(100%); transition:transform .28s cubic-bezier(.4,0,.2,1)">
+    <div style="flex:1; min-width:0">
+      <div style="font-weight:900; color:var(--primary); font-size:1rem; line-height:1.2"><%= Number(product.price).toLocaleString('en-US') %> د.ع</div>
+      <div style="font-size:.74rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis"><%= product.name %></div>
+    </div>
+    <button onclick="document.querySelector('.add-cart.big-btn')?.click()" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff; border:none; border-radius:14px; padding:.8rem 1.35rem; font-weight:800; font-size:.92rem; cursor:pointer; white-space:nowrap; box-shadow:0 8px 20px rgba(14,165,233,.35)">🛒 أضف للسلة</button>
+  </div>
+  <% } %>
+
   <section class="st-reviews">
     <h2 class="st-rel-title">تقييمات الزبائن (<span id="reviewCount">0</span>)</h2>
     <div class="st-rating-summary">
@@ -302,6 +312,9 @@
       });
     });
   });
+
+  // sticky ATC — يظهر عند تجاوز زر السلة الرئيسي (فوق الطي)
+  (function(){ const bar=document.getElementById('stickyATC'); const btn=document.querySelector('.add-cart.big-btn'); if(!bar||!btn) return; const io=new IntersectionObserver(ents=>{ const v=ents[0]; const show=!v.isIntersecting && window.scrollY>320; bar.style.display='flex'; requestAnimationFrame(()=> bar.style.transform= show ? 'translateY(0)' : 'translateY(100%)'); }, {threshold:0}); io.observe(btn); })();
 
   document.getElementById('reviewForm')?.addEventListener('submit', function(e) {
     e.preventDefault();

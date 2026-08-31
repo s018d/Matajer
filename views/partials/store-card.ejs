@@ -1,7 +1,7 @@
 <%
   const out = p.stock != null && Number(p.stock) <= 0;
 %>
-<div class="st-card">
+<div class="st-card" style="animation:fadeInUp .45s ease both; animation-delay:<%= (typeof idx !== 'undefined' ? idx % 8 : 0) * 55 %>ms">
   <a href="<%= store.base %>/p/<%= p.id %>">
     <div class="st-img">
       <% if (p.img) { %><img src="<%= p.img %>" alt="<%= p.name %>" width="400" height="400" loading="<%= (typeof idx !== 'undefined' && idx < 2) ? 'eager' : 'lazy' %>" <%= (typeof idx !== 'undefined' && idx < 2) ? 'fetchpriority="high"' : '' %>><% } else { %><span class="st-img-empty">لا صورة</span><% } %>

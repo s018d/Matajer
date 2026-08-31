@@ -14,7 +14,7 @@
 @keyframes glow { 0%,100% { box-shadow:0 0 20px rgba(14,165,233,.25); } 50% { box-shadow:0 0 40px rgba(14,165,233,.5); } }
 
 *{box-sizing:border-box;margin:0;padding:0;overflow-wrap:break-word;word-break:break-word}
-:root{--primary:#0ea5e9;--primary-dark:#0284c7;--ink:#0f172a;--muted:#64748b;--soft:#f4f7fb;--line:#e8ecf4;--danger:#dc2626;--success:#16a34a;--warn:#f59e0b;--gold:#d97706;--radius:14px;--radius-lg:18px;--radius-xl:24px;--shadow:0 2px 8px rgba(15,23,42,.05);--shadow-md:0 10px 28px rgba(15,23,42,.09);--shadow-lg:0 22px 54px rgba(15,23,42,.15);--shadow-xl:0 34px 90px rgba(15,23,42,.22);--transition:all .25s cubic-bezier(.4,0,.2,1)}
+:root{--primary:#0ea5e9;--primary-dark:#0284c7;--ink:#0f172a;--muted:#64748b;--soft:#f4f7fb;--line:#e8ecf4;--danger:#dc2626;--success:#16a34a;--warn:#f59e0b;--gold:#d97706;--radius:14px;--radius-lg:18px;--radius-xl:24px;--shadow:0 2px 8px rgba(15,23,42,.05);--shadow-md:0 10px 28px rgba(15,23,42,.09);--shadow-lg:0 22px 54px rgba(15,23,42,.15);--shadow-xl:0 34px 90px rgba(15,23,42,.22);--transition:all .25s cubic-bezier(.4,0,.2,1);--ease-bounce:cubic-bezier(.34,1.56,.64,1)}
 html{font-size:15px;scroll-behavior:smooth;overflow-x:hidden;max-width:100vw}
 body{overflow-x:hidden;max-width:100vw}
 body.store-body{font-family:'Noto Kufi Arabic','Cairo','Segoe UI',Tahoma,sans-serif;background:#f7f8fc;color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
@@ -66,9 +66,10 @@ img{max-width:100%;display:block}
 .st-main{max-width:1120px;margin:0 auto;padding:1.2rem 1.2rem 4rem}
 .st-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.9rem}
 
-/* ===== PRODUCT CARD ===== */
-.st-card{background:#fff;border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;transition:var(--transition);border:1px solid rgba(226,232,240,.6);position:relative;box-shadow:0 1px 3px rgba(15,23,42,.03)}
-.st-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:transparent}
+/* ===== PRODUCT CARD — 2026 tactile + slow browsing ===== */
+.st-card{background:#fff;border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;transition:transform .35s var(--ease-bounce),box-shadow .3s ease,border-color .3s; border:1px solid rgba(226,232,240,.65);position:relative;box-shadow:0 1px 3px rgba(15,23,42,.04); will-change:transform; content-visibility:auto; contain-intrinsic-size:320px}
+.st-card:hover{transform:translateY(-6px) scale(1.01);box-shadow:0 14px 36px rgba(15,23,42,.11),0 2px 10px rgba(15,23,42,.04);border-color:rgba(14,165,233,.18)}
+.st-card:active{transform:translateY(-2px) scale(.985)}
 .st-img{aspect-ratio:1/1;background:linear-gradient(135deg,#f8fafc,#f1f5f9);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
 .st-img::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(15,23,42,.06));pointer-events:none;opacity:0;transition:opacity .3s}
 .st-card:hover .st-img::after{opacity:1}
@@ -95,12 +96,12 @@ img{max-width:100%;display:block}
 .st-price del{color:#94a3b8;font-size:.75rem;text-decoration:line-through}
 .st-price.big b{font-size:1.35rem;font-weight:800}
 
-/* Add to cart button */
-.st-btn{border:none;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:.72rem 1rem;border-radius:var(--radius);font-weight:700;font-size:.88rem;cursor:pointer;margin-top:auto;transition:var(--transition);font-family:inherit;display:flex;align-items:center;justify-content:center;gap:.4rem;position:relative;overflow:hidden}
-.st-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);transition:left .5s}
+/* Add to cart — jelly tactile + seamless micro-interaction */
+.st-btn{border:none;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:.74rem 1rem;border-radius:var(--radius);font-weight:800;font-size:.88rem;cursor:pointer;margin-top:auto;transition:transform .18s var(--ease-bounce),box-shadow .2s,filter .2s; font-family:inherit;display:flex;align-items:center;justify-content:center;gap:.4rem;position:relative;overflow:hidden; will-change:transform; -webkit-tap-highlight-color:transparent}
+.st-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.24),transparent);transition:left .55s}
 .st-btn:hover::before{left:100%}
-.st-btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(14,165,233,.45);filter:brightness(1.05)}
-.st-btn:active{transform:scale(.97)}
+.st-btn:hover{transform:translateY(-1px) scale(1.015);box-shadow:0 12px 28px rgba(14,165,233,.42);filter:brightness(1.06)}
+.st-btn:active{transform:scale(.96) translateY(0); box-shadow:0 4px 14px rgba(14,165,233,.3)}
 .st-btn-disabled{background:#e8ecf4;color:#94a3b8;cursor:not-allowed;pointer-events:none}
 .big-btn{padding:.95rem 1.6rem;font-size:1rem;width:100%;border-radius:var(--radius-lg)}
 .st-empty{text-align:center;color:var(--muted);padding:5rem 0;font-size:1.05rem}
@@ -348,6 +349,12 @@ img{max-width:100%;display:block}
 .natural-grid .st-card:nth-child(3n+2){transform:translateY(-4px)}
 @media(max-width:900px){.natural-grid{grid-template-columns:repeat(2,1fr) !important} .natural-grid .st-card:nth-child(3n+1), .natural-grid .st-card:nth-child(3n+2){transform:none}}
 @media(max-width:360px){.natural-grid{grid-template-columns:1fr !important}}
+
+/* ===== 2026 slow browsing — breathing + grain subtle ===== */
+.st-main{padding-block-start:1.6rem}
+.st-grid{row-gap:1.15rem}
+.st-head::after{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(15,23,42,.035) 1px,transparent 1px);background-size:14px 14px;opacity:.35;pointer-events:none;mix-blend-mode:soft-light}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.st-card:hover{transform:none}}
 
 /* ===== POLISH: hero centered for comfort (all templates) ===== */
 .store-body.tpl-c .st-head { text-align:center; }

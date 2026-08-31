@@ -106,5 +106,11 @@
     </div>
   </div>
 </main>
+<style>
+/* tactile stat polish — layered shadow + lift */
+.stat{box-shadow:0 1px 2px rgba(11,18,32,.06),0 4px 12px -8px rgba(11,18,32,.12);transition:transform .22s cubic-bezier(.4,0,.2,1),box-shadow .22s}
+.stat:hover{transform:translateY(-3px);box-shadow:0 8px 22px -14px rgba(11,18,32,.18),0 4px 10px -6px rgba(11,18,32,.08)}
+@media(prefers-reduced-motion:reduce){.stat:hover{transform:none}}
+</style>
 </body>
 </html>

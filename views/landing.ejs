@@ -7,6 +7,16 @@
 <meta name="description" content="دُكّان: منصة عراقية لإنشاء متاجر إلكترونية جاهزة — قالب مجاني نضيف + 3 بريميوم (الذهب العاجي/الإمبراطورية السوداء/السوق العصري)، سلة وواتساب وتقييمات. ابدأ مجاناً.">
 <link rel="icon" href="/img/logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/css/site.css">
+<style>
+/* polish 2026 — slow browsing tactile: hero breathing + stats rhythm + grain */
+.hero-inner{padding:5.6rem 1.2rem 6.4rem}
+.hero-stats{gap:2.2rem;margin-top:1.9rem}
+.hero-stats div{padding:.75rem 1.35rem}
+.hero{position:relative;isolation:isolate}
+.hero-grain{position:absolute;inset:0;pointer-events:none;opacity:.032;z-index:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");mix-blend-mode:multiply}
+@media(max-width:900px){.hero-inner{padding:3.4rem 1rem 4rem}.hero-stats{gap:1.1rem;margin-top:1.4rem}}
+@media(prefers-reduced-motion:reduce){.mock-phone,.mc,.mock-badge{animation:none!important}}
+</style>
 </head>
 <body class="site">
 <header class="site-nav">
@@ -27,6 +37,7 @@
 </header>
 
 <section class="hero">
+  <div class="hero-grain" aria-hidden="true"></div>
   <div class="hero-inner">
     <div class="hero-txt">
       <span class="pill">🇮🇶 منصة عراقية 100% — بدون تعقيد</span>

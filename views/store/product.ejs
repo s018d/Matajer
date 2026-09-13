@@ -180,7 +180,7 @@
 <%- include('../partials/store-brand') %>
 <%- include('../partials/cart-drawer') %>
 <script>
-  const images = <%- JSON.stringify(images.map(i => ({path: i.path, variant: i.variant || ''}))) %>;
+  const images = <%- JSON.stringify(images.map(i => ({path: i.path, variant: i.variant || ''}))).replace(/</g,'\\u003c') %>;
   let currentImg = 0;
   // تبديل الصور حسب اللون المختار
   function applyVariantImages(){

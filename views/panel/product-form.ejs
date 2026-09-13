@@ -46,13 +46,13 @@
               <label style="font-weight:700;font-size:.88rem;display:flex;align-items:center;justify-content:space-between">خيارات المنتج <button type="button" class="btn btn-sm btn-ghost" onclick="addOptRow()">+ خيار</button></label>
               <small class="muted">مثال: المقاس → XL , L , M — يظهر للزبون قائمة اختيار</small>
               <div id="optsWrap" style="display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem"></div>
-              <textarea name="options" id="optsJson" hidden><%- optsVal %></textarea>
+              <textarea name="options" id="optsJson" hidden><%- String(optsVal).replace(/</g,'\\u003c').replace(/>/g,'\\u003e') %></textarea>
             </div>
             <div>
               <label style="font-weight:700;font-size:.88rem;display:flex;align-items:center;justify-content:space-between">إضافات بسعر <button type="button" class="btn btn-sm btn-ghost" onclick="addAddonRow()">+ إضافة</button></label>
               <small class="muted">مثال: تغليف هدية +2000 د.ع</small>
               <div id="addonsWrap" style="display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem"></div>
-              <textarea name="addons" id="addonsJson" hidden><%- addonsVal %></textarea>
+              <textarea name="addons" id="addonsJson" hidden><%- String(addonsVal).replace(/</g,'\\u003c').replace(/>/g,'\\u003e') %></textarea>
             </div>
           </details>
           <script>

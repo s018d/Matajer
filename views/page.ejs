@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><%= title %> — <%= cfg.site_name %></title>
-<meta name="description" content="<%- typeof desc !== 'undefined' ? desc : title %>">
+<meta name="description" content="<%= typeof desc !== 'undefined' ? desc : title %>">
 <link rel="icon" href="/img/logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/css/site.css">
 </head>
@@ -43,7 +43,6 @@
       <a href="/terms">الشروط والأحكام</a>
       <% if (cfg.site_whatsapp) { %><a href="https://wa.me/<%= cfg.site_whatsapp.replace(/\D/g,'') %>" target="_blank">واتساب الدعم</a><% } %>
     </div>
-    <p class="fine">صُنع بحب في العراق 🇮🇶</p>
   </div>
 </footer>
 </body>

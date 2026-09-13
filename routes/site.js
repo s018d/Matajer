@@ -136,10 +136,21 @@ router.post('/signup', (req, res) => {
   const tpl = 'classic';
   const cfg = siteSettings();
   const trialExp = new Date(Date.now() + Number(cfg.trial_days || 7) * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
-  const info = db.prepare('INSERT INTO stores (name, slug, description, owner_name, phone, template, color, plan, plan_expires) VALUES (?,?,?,?,?,?,?,?,?)')
-    .run(pname, genSlug(pname), 'متجري الجديد على ' + (cfg.site_name || 'دُكّان Dukkan'), String(uname), String(phone || ''), tpl, '#0ea5e9', 'pro', trialExp);
-  const uinfo = db.prepare('INSERT INTO users (username, password_hash, role, store_id) VALUES (?,?,?,?)')
-    .run(uname, hashPassword(String(password)), 'owner', info.lastInsertRowid);
+  let info;
+  try {
+    info = db.prepare('INSERT INTO stores (name, slug, description, owner_name, phone, template, color, plan, plan_expires) VALUES (?,?,?,?,?,?,?,?,?)')
+      .run(pname, genSlug(pname), 'متجري الجديد على ' + (cfg.site_name || 'دُكّان Dukkan'), String(uname), String(phone || ''), tpl, '#0ea5e9', 'pro', trialExp);
+  } catch(e){ return res.redirect('/signup?err=' + encodeURIComponent('فشل إنشاء المتجر — حاول اسماً آخر')); }
+  let uinfo;
+  try {
+    uinfo = db.prepare('INSERT INTO users (username, password_hash, role, store_id) VALUES (?,?,?,?)')
+      .run(uname, hashPassword(String(password)), 'owner', info.lastInsertRowid);
+  } catch(e){
+    // سباق اسم مكرر — نظف المتجر اليتيم
+    try{ db.prepare('DELETE FROM stores WHERE id=?').run(info.lastInsertRowid);}catch{}
+    if (String(e.message||'').includes('UNIQUE') || String(e.message||'').includes('unique')) return res.redirect('/signup?err=' + encodeURIComponent('اسم المستخدم محجوز — اختر غيره'));
+    return res.redirect('/signup?err=' + encodeURIComponent('فشل التسجيل — حاول مجدداً'));
+  }
   const token = createSession(uinfo.lastInsertRowid);
   res.cookie('sid', token, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production' });
   const slug = db.prepare('SELECT slug FROM stores WHERE id=?').get(info.lastInsertRowid).slug;

@@ -94,6 +94,7 @@ if (process.env.DATABASE_URL) {
           plan_expires TEXT DEFAULT '',
           created_at TEXT DEFAULT NOW()
         );
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_stores_custom_domain ON stores(lower(custom_domain)) WHERE custom_domain<>'' AND custom_domain IS NOT NULL;
         CREATE TABLE IF NOT EXISTS categories (
           id SERIAL PRIMARY KEY,
           store_id INTEGER NOT NULL,
@@ -228,8 +229,13 @@ if (process.env.DATABASE_URL) {
         `CREATE TABLE IF NOT EXISTS support_messages (id SERIAL PRIMARY KEY, ticket_id INTEGER NOT NULL, sender_type TEXT NOT NULL, sender_id INTEGER, message TEXT NOT NULL, attachments TEXT, is_internal INTEGER DEFAULT 0, created_at TEXT DEFAULT NOW())`,
         `CREATE TABLE IF NOT EXISTS sms_logs (id SERIAL PRIMARY KEY, store_id INTEGER, phone TEXT NOT NULL, message TEXT NOT NULL, type TEXT NOT NULL, status TEXT DEFAULT 'pending', provider TEXT, provider_message_id TEXT, error_message TEXT, cost INTEGER DEFAULT 0, sent_at TEXT, delivered_at TEXT, created_at TEXT DEFAULT NOW())`
       ];
+      // cash_flow_entries + domain_requests + indexes
+      for (const q of [
+        `CREATE TABLE IF NOT EXISTS cash_flow_entries (id SERIAL PRIMARY KEY, store_id INTEGER NOT NULL, type TEXT NOT NULL, category TEXT NOT NULL, amount INTEGER NOT NULL, reference_type TEXT DEFAULT '', reference_id INTEGER DEFAULT 0, description TEXT DEFAULT '', created_at TEXT DEFAULT NOW()); CREATE INDEX IF NOT EXISTS idx_cfe_store ON cash_flow_entries(store_id);`,
+        `CREATE INDEX IF NOT EXISTS idx_orders_store_status_created ON orders(store_id, status, created_at); CREATE INDEX IF NOT EXISTS idx_products_store_active ON products(store_id, active);`
+      ]) { try { await pool.query(q); } catch(e) {} }
       for (const q of extraTables) { try { await pool.query(q); } catch(e) {} }
-      console.log('🐘 PostgreSQL tables ready (38)');
+      console.log('🐘 PostgreSQL tables ready (39)');
     } catch(e) {
       console.error('PG init error', e.message);
     }
@@ -405,7 +411,9 @@ CREATE TABLE IF NOT EXISTS coupons (
   try { db.exec(`CREATE TABLE IF NOT EXISTS reviews (id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER NOT NULL, customer_name TEXT NOT NULL, customer_phone TEXT, rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5), comment TEXT DEFAULT '', approved INTEGER NOT NULL DEFAULT 0, created_at TEXT DEFAULT (datetime('now','localtime')))`); } catch (e) {}
   try { db.exec(`CREATE TABLE IF NOT EXISTS loyalty_points (id INTEGER PRIMARY KEY AUTOINCREMENT, store_id INTEGER NOT NULL, customer_phone TEXT NOT NULL, points INTEGER NOT NULL DEFAULT 0, total_earned INTEGER NOT NULL DEFAULT 0, total_redeemed INTEGER NOT NULL DEFAULT 0, last_activity TEXT DEFAULT (datetime('now','localtime')), UNIQUE(store_id, customer_phone))`); } catch (e) {}
   try { db.exec(`CREATE TABLE IF NOT EXISTS loyalty_transactions (id INTEGER PRIMARY KEY AUTOINCREMENT, store_id INTEGER NOT NULL, customer_phone TEXT NOT NULL, type TEXT NOT NULL, points INTEGER NOT NULL, reference_type TEXT, reference_id INTEGER, description TEXT, created_at TEXT DEFAULT (datetime('now','localtime')))`); } catch (e) {}
-  try { db.exec(`CREATE INDEX IF NOT EXISTS idx_products_store ON products(store_id); CREATE INDEX IF NOT EXISTS idx_orders_store ON orders(store_id); CREATE INDEX IF NOT EXISTS idx_images_product ON product_images(product_id); CREATE INDEX IF NOT EXISTS idx_cats_store ON categories(store_id);`); } catch (e) {}
+  try { db.exec(`CREATE INDEX IF NOT EXISTS idx_products_store ON products(store_id); CREATE INDEX IF NOT EXISTS idx_products_store_active ON products(store_id, active); CREATE INDEX IF NOT EXISTS idx_orders_store ON orders(store_id); CREATE INDEX IF NOT EXISTS idx_orders_store_status_created ON orders(store_id, status, created_at); CREATE INDEX IF NOT EXISTS idx_images_product ON product_images(product_id); CREATE INDEX IF NOT EXISTS idx_cats_store ON categories(store_id); CREATE INDEX IF NOT EXISTS idx_payments_store ON payments(store_id);`); } catch (e) {}
+  // P0-3: فهرس فريد يمنع استيلاء دومين متزامن
+  try { db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_stores_custom_domain ON stores(lower(custom_domain)) WHERE custom_domain<>'' AND custom_domain IS NOT NULL`); } catch (e) {}
   // RBAC — أعمدة جديدة للمشرفين
   try { db.exec("ALTER TABLE users ADD COLUMN display_name TEXT DEFAULT ''"); } catch (e) {}
   try { db.exec("ALTER TABLE users ADD COLUMN permissions TEXT DEFAULT ''"); } catch (e) {}
@@ -414,6 +422,8 @@ CREATE TABLE IF NOT EXISTS coupons (
   try { db.exec("ALTER TABLE users ADD COLUMN last_login TEXT DEFAULT ''"); } catch (e) {}
   // جدول القوالب الديناميكي
   try { db.exec(`CREATE TABLE IF NOT EXISTS templates (id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT DEFAULT '', css_file TEXT DEFAULT '', preview_image TEXT DEFAULT '', is_premium INTEGER DEFAULT 0, is_active INTEGER DEFAULT 1, position INTEGER DEFAULT 0, created_at TEXT DEFAULT (datetime('now','localtime')))`); } catch (e) {}
+  // cash_flow_entries — كان ناقصاً (يستدعيه addCashFlowEntry)
+  try { db.exec(`CREATE TABLE IF NOT EXISTS cash_flow_entries (id INTEGER PRIMARY KEY AUTOINCREMENT, store_id INTEGER NOT NULL, type TEXT NOT NULL, category TEXT NOT NULL, amount INTEGER NOT NULL, reference_type TEXT DEFAULT '', reference_id INTEGER DEFAULT 0, description TEXT DEFAULT '', created_at TEXT DEFAULT (datetime('now','localtime'))); CREATE INDEX IF NOT EXISTS idx_cfe_store ON cash_flow_entries(store_id);`); } catch (e) {}
 }
 
 function logActivity(userId, username, action, details = '') {
@@ -431,9 +441,9 @@ function siteSettings() {
     site_whatsapp: map.site_whatsapp || '9647831020026',
     pay_account: map.pay_account || '',
     free_products: Number(map.free_products || 10),
-    pro_price: Number(map.pro_price || 12000),
-    pro_price_3: Number(map.pro_price_3 || 30000),
-    pro_price_12: Number(map.pro_price_12 || 72000),
+    pro_price: Number(map.pro_price || 20000),
+    pro_price_3: Number(map.pro_price_3 || 50000),
+    pro_price_12: Number(map.pro_price_12 || 100000),
     tagline: map.tagline || 'أنشئ متجرك الإلكتروني خلال دقائق وابدأ البيع فوراً',
     site_telegram: map.site_telegram || '@s018d',
     site_instagram: map.site_instagram || '@s018d',
@@ -453,9 +463,9 @@ async function siteSettingsAsync() {
     site_whatsapp: map.site_whatsapp || '9647831020026',
     pay_account: map.pay_account || '',
     free_products: Number(map.free_products || 10),
-    pro_price: Number(map.pro_price || 12000),
-    pro_price_3: Number(map.pro_price_3 || 30000),
-    pro_price_12: Number(map.pro_price_12 || 72000),
+    pro_price: Number(map.pro_price || 20000),
+    pro_price_3: Number(map.pro_price_3 || 50000),
+    pro_price_12: Number(map.pro_price_12 || 100000),
     tagline: map.tagline || 'أنشئ متجرك الإلكتروني خلال دقائق وابدأ البيع فوراً',
     site_telegram: map.site_telegram || '@s018d',
     site_instagram: map.site_instagram || '@s018d',

@@ -204,9 +204,38 @@ router.post('/stores/:id/resetpass', (req, res) => {
 router.post('/stores/:id/delete', (req, res) => {
   const store = getStore(req.params.id);
   if (!store) return res.redirect('/admin/stores');
-  const owner = db.prepare('SELECT id FROM users WHERE store_id=?').get(store.id);
-  if (owner) db.prepare('DELETE FROM users WHERE id=?').run(owner.id);
-  db.prepare('DELETE FROM stores WHERE id=?').run(store.id);
+  // حذف متتالي آمن بمعاملة واحدة — يمنع الأيتام (P0-2)
+  try {
+    db.exec('BEGIN IMMEDIATE');
+    // احذف صور المنتجات المرتبطة أولاً عبر المنتجات
+    const pIds = db.prepare('SELECT id FROM products WHERE store_id=?').all(store.id).map(r=>r.id);
+    if (pIds.length) {
+      const ph = pIds.map(()=>'?').join(',');
+      db.prepare(`DELETE FROM product_images WHERE product_id IN (${ph})`).run(...pIds);
+      // احذف بنود الطلبات المرتبطة بطلبات المتجر
+      const oIds = db.prepare('SELECT id FROM orders WHERE store_id=?').all(store.id).map(r=>r.id);
+      if (oIds.length) {
+        const oph = oIds.map(()=>'?').join(',');
+        db.prepare(`DELETE FROM order_items WHERE order_id IN (${oph})`).run(...oIds);
+      }
+    }
+    db.prepare('DELETE FROM orders WHERE store_id=?').run(store.id);
+    db.prepare('DELETE FROM products WHERE store_id=?').run(store.id);
+    db.prepare('DELETE FROM categories WHERE store_id=?').run(store.id);
+    db.prepare('DELETE FROM coupons WHERE store_id=?').run(store.id);
+    db.prepare('DELETE FROM abandoned_carts WHERE store_id=?').run(store.id);
+    db.prepare('DELETE FROM reviews WHERE store_id=?').run(store.id);
+    db.prepare('DELETE FROM payments WHERE store_id=?').run(store.id);
+    try { db.prepare('DELETE FROM referrals WHERE store_id=?').run(store.id); } catch{}
+    try { db.prepare('DELETE FROM loyalty_points WHERE store_id=?').run(store.id); } catch{}
+    try { db.prepare('DELETE FROM loyalty_transactions WHERE store_id=?').run(store.id); } catch{}
+    try { db.prepare('DELETE FROM cash_flow_entries WHERE store_id=?').run(store.id); } catch{}
+    try { db.prepare('DELETE FROM support_messages WHERE store_id=?').run(store.id); } catch{}
+    try { db.prepare('DELETE FROM support_tickets WHERE store_id=?').run(store.id); } catch{}
+    db.prepare('DELETE FROM users WHERE store_id=?').run(store.id);
+    db.prepare('DELETE FROM stores WHERE id=?').run(store.id);
+    db.exec('COMMIT');
+  } catch(e){ try{db.exec('ROLLBACK')}catch{}; return res.status(500).render('error',{msg:'فشل حذف المتجر: '+(e.message||e), user:req.user}) }
   const folder = path.join(UPLOADS_DIR, 'store_' + store.id);
   if (fs.existsSync(folder)) fs.rmSync(folder, { recursive: true, force: true });
   logActivity(req.user.id, req.user.username, 'حذف متجر', `حذف متجر «${store.name}» بكل محتواه`);
@@ -221,7 +250,8 @@ router.get('/activity', (req, res) => {
 
 function makeBackup() {
   const zip = new AdmZip();
-  zip.addLocalFile(DB_FILE, '', 'data/matajer.db');
+  if (DB_FILE && !require('../db').isPg && fs.existsSync(DB_FILE)) zip.addLocalFile(DB_FILE, '', 'data/matajer.db');
+  else if (require('../db').isPg) zip.addFile('data/pg-note.txt', Buffer.from('PostgreSQL mode — use pg_dump for DB backup'));
   if (fs.existsSync(UPLOADS_DIR)) {
     const walk = (dir, prefix) => {
       for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -292,7 +322,11 @@ router.get('/payments', (req, res) => {
 router.get('/payments/receipt/:paymentId', (req, res) => {
   const p = db.prepare('SELECT * FROM payments WHERE id=?').get(req.params.paymentId);
   if (!p || !p.receipt_path) return res.redirect('/admin/payments');
-  const abs = path.join(__dirname, '..', p.receipt_path);
+  // P0-5: منع تسريب مسار — تحقق صارم
+  if (!/^private-receipts\//.test(p.receipt_path) || p.receipt_path.includes('..')) return res.status(403).render('error',{msg:'مسار غير صالح', user:req.user});
+  const abs = path.resolve(path.join(__dirname, '..', p.receipt_path));
+  const root = path.resolve(path.join(__dirname,'..'));
+  if (!abs.startsWith(root)) return res.status(403).render('error',{msg:'مسار خارج النطاق', user:req.user});
   if (!require('fs').existsSync(abs)) return res.redirect('/admin/payments');
   res.sendFile(abs);
 });

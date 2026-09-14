@@ -5,13 +5,13 @@
   <%- include('../partials/topbar', { pageTitle: 'نظرة عامة' }) %>
   <div class="content">
     <% if (stats.products === 0) { %>
-    <div class="card" style="background:linear-gradient(135deg,#0f172a,#1e3a5f);color:#fff;border:none;padding:1.6rem 1.4rem;margin-bottom:1rem;position:relative;overflow:hidden">
-      <div style="position:absolute;top:-40px;left:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(14,165,233,.25),transparent 70%);border-radius:50%"></div>
+    <div class="card" style="background:linear-gradient(135deg,#1c0a0a,#7f1d1d 55%,#b45309);color:#fff;border:none;padding:1.6rem 1.4rem;margin-bottom:1rem;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-40px;left:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(245,158,11,.3),transparent 70%);border-radius:50%"></div>
       <h2 style="color:#fff;margin:0 0 .3rem;position:relative">👋 أهلاً بيك في متجرك الجديد!</h2>
       <p style="color:#cbd5e1;margin:0 0 1.2rem;position:relative">خلّي متجرك جاهز للبيع بـ 3 خطوات — دقيقتين وتبلش</p>
       <div style="display:flex;flex-direction:column;gap:.7rem;position:relative">
         <a href="/panel/products/new" style="display:flex;align-items:center;gap:.8rem;background:rgba(255,255,255,.12);padding:.8rem 1rem;border-radius:12px;text-decoration:none;color:#fff;border:1px solid rgba(255,255,255,.15);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.12)'">
-          <span style="background:#0ea5e9;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem">1</span>
+          <span style="background:linear-gradient(135deg,#b45309,#f59e0b);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem">1</span>
           <div style="flex:1"><b>أضف أول منتج</b><div style="font-size:.82rem;color:#cbd5e1">صورة + سعر + وصف — 30 ثانية</div></div>
           <span>→</span>
         </a>
@@ -29,7 +29,7 @@
     </div>
     <% } %>
     <div class="stat-grid">
-      <div class="stat" style="border-top:3px solid #0ea5e9"><span>📦 المنتجات</span><b><%= stats.products %></b><small class="muted" style="font-size:.7rem"><%= stats.products===0 ? 'أضف أول منتج' : 'نشط' %></small></div>
+      <div class="stat" style="border-top:3px solid #b45309"><span>📦 المنتجات</span><b><%= stats.products %></b><small class="muted" style="font-size:.7rem"><%= stats.products===0 ? 'أضف أول منتج' : 'نشط' %></small></div>
       <div class="stat <%= stats.newOrders ? 'stat-strong' : '' %>" style="border-top:3px solid #f59e0b"><span>🆕 طلبات جديدة</span><b><%= stats.newOrders %></b><small class="muted" style="font-size:.7rem"><%= stats.newOrders ? 'تحتاج متابعة' : 'لا جديد' %></small></div>
       <div class="stat" style="border-top:3px solid #64748b"><span>🧾 كل الطلبات</span><b><%= stats.orders %></b></div>
       <div class="stat" style="border-top:3px solid #8b5cf6"><span>👁️ المشاهدات</span><b><%= stats.views %></b></div>

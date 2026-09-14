@@ -1,29 +1,46 @@
 <%
   const out = p.stock != null && Number(p.stock) <= 0;
+  const hasOff = p.old_price && Number(p.old_price) > Number(p.price);
+  const offPct = hasOff ? Math.round((1 - Number(p.price) / Number(p.old_price)) * 100) : 0;
 %>
-<div class="st-card" style="animation:fadeInUp .45s ease both; animation-delay:<%= (typeof idx !== 'undefined' ? idx % 8 : 0) * 55 %>ms">
-  <a href="<%= store.base %>/p/<%= p.id %>">
-    <div class="st-img">
-      <% if (p.img) { %><img src="<%= p.img %>" alt="<%= p.name %>" width="400" height="400" loading="<%= (typeof idx !== 'undefined' && idx < 2) ? 'eager' : 'lazy' %>" <%= (typeof idx !== 'undefined' && idx < 2) ? 'fetchpriority="high"' : '' %>><% } else { %><span class="st-img-empty">لا صورة</span><% } %>
-      <% if (store.template === 'market' && p.old_price && Number(p.old_price) > Number(p.price)) { %>
-        <span class="mk-discount">خصم <%= Math.round((1 - p.price / p.old_price) * 100) %>%</span>
-      <% } %>
-      <% if (store.template === 'neo' && p.old_price && Number(p.old_price) > Number(p.price)) { %>
-        <span class="neo-off"><%= Math.round((1 - p.price / p.old_price) * 100) %>%</span>
-      <% } %>
-      <% if (out) { %><span class="st-soldout-tag">نفذ</span><% } %>
-    </div>
+<article class="dkc" style="animation:dkcIn .4s ease both; animation-delay:<%= (typeof idx !== 'undefined' ? idx % 8 : 0) * 50 %>ms">
+  <a class="dkc-img" href="<%= store.base %>/p/<%= p.id %>" aria-label="<%= p.name.replace(/"/g,'') %>">
+    <% if (p.img) { %><img src="<%= p.img %>" alt="<%= p.name %>" width="400" height="400" loading="<%= (typeof idx !== 'undefined' && idx < 2) ? 'eager' : 'lazy' %>" <%= (typeof idx !== 'undefined' && idx < 2) ? 'fetchpriority="high"' : '' %>><% } else { %><span class="dkc-noimg">لا صورة</span><% } %>
+    <% if (hasOff) { %><span class="dkc-off">خصم <%= offPct %>%</span><% } %>
+    <% if (out) { %><span class="dkc-out">نفذ</span><% } %>
   </a>
-  <div class="st-card-body">
-    <a class="st-name" href="<%= store.base %>/p/<%= p.id %>"><%= p.name %></a>
-    <div class="st-price">
-      <b><%= Number(p.price).toLocaleString('en-US') %> د.ع</b>
+  <div class="dkc-body">
+    <a class="dkc-name" href="<%= store.base %>/p/<%= p.id %>"><%= p.name %></a>
+    <div class="dkc-price">
+      <b><%= Number(p.price).toLocaleString('en-US') %> <small>د.ع</small></b>
       <% if (p.old_price) { %><del><%= Number(p.old_price).toLocaleString('en-US') %></del><% } %>
     </div>
     <% if (!out) { %>
-      <button class="add-cart st-btn" data-id="<%= p.id %>" data-name="<%= p.name.replace(/"/g,'&quot;') %>" data-price="<%= p.price %>" data-img="<%= p.img || '' %>" onclick="addToCart(this)">أضف للسلة</button>
+      <button class="add-cart dkc-add" data-id="<%= p.id %>" data-name="<%= p.name.replace(/"/g,'&quot;') %>" data-price="<%= p.price %>" data-img="<%= p.img || '' %>" onclick="addToCart(this)">أضف للسلة 🛒</button>
     <% } else { %>
-      <span class="st-btn st-btn-disabled">نفذ المخزون</span>
+      <span class="dkc-add dkc-disabled">نفذ المخزون</span>
     <% } %>
   </div>
-</div>
+</article>
+<style>
+@keyframes dkcIn{from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:none}}
+.dkc{background:#fff; border:1.5px solid #ece9e6; border-radius:18px; overflow:hidden; display:flex; flex-direction:column; transition:transform .2s, box-shadow .2s, border-color .2s}
+.dkc:hover{transform:translateY(-4px); box-shadow:0 16px 38px rgba(28,25,23,.12); border-color:#f59e0b}
+.dkc-img{position:relative; display:block; aspect-ratio:1; background:#faf9f8; overflow:hidden}
+.dkc-img img{width:100%; height:100%; object-fit:cover; transition:transform .35s}
+.dkc:hover .dkc-img img{transform:scale(1.05)}
+.dkc-noimg{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#a8a29e; font-size:.85rem}
+.dkc-off{position:absolute; top:.6rem; right:.6rem; background:linear-gradient(135deg,#7f1d1d,#dc2626); color:#fff; font-size:.72rem; font-weight:800; border-radius:99px; padding:.2rem .7rem; box-shadow:0 4px 12px rgba(127,29,29,.4)}
+.dkc-out{position:absolute; inset:auto 0 0 0; background:rgba(28,25,23,.75); color:#fff; text-align:center; font-size:.8rem; font-weight:800; padding:.35rem}
+.dkc-body{padding:.8rem .9rem 1rem; display:flex; flex-direction:column; gap:.45rem; flex:1}
+.dkc-name{font-weight:800; font-size:.9rem; color:#1c1917; text-decoration:none; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.6em; line-height:1.5}
+.dkc-name:hover{color:#b45309}
+.dkc-price{display:flex; align-items:baseline; gap:.5rem}
+.dkc-price b{color:#7f1d1d; font-size:1.02rem; font-weight:900}
+.dkc-price b small{font-size:.7rem; font-weight:700}
+.dkc-price del{color:#a8a29e; font-size:.78rem}
+.dkc-add{margin-top:auto; border:none; cursor:pointer; font-family:inherit; font-weight:800; font-size:.86rem; color:#fff; background:linear-gradient(135deg,#7f1d1d,#b45309 60%,#d97706); border-radius:12px; padding:.62rem; text-align:center; transition:all .18s; display:block; width:100%}
+.dkc-add:hover{transform:translateY(-1px); box-shadow:0 8px 20px rgba(127,29,29,.35)}
+.dkc-disabled{background:#e7e5e4; color:#a8a29e; cursor:default}
+.dkc-disabled:hover{transform:none; box-shadow:none}
+</style>

@@ -588,16 +588,20 @@ router.post('/billing/request', upReceipt().single('receipt'), (req, res) => {
   const store = getStore(req.user.store_id);
   const cfg = siteSettings();
   if (isPro(store)) return res.redirect('/panel/billing?err=' + encodeURIComponent('متجرك احترافي بالفعل'));
-  const months = [1, 3, 12].includes(Number(req.body.months)) ? Number(req.body.months) : 1;
-  const priceMap = { 1: Number(cfg.pro_price || 12000), 3: Number(cfg.pro_price_3 || 30000), 12: Number(cfg.pro_price_12 || 72000) };
+  const months = [1, 12].includes(Number(req.body.months)) ? Number(req.body.months) : 1;
+  const plan = req.body.plan === 'business' ? 'business' : 'pro';
+  const priceMap = plan === 'business'
+    ? { 1: Number(cfg.business_price || 35000), 12: Number(cfg.business_price || 35000) * 10 }
+    : { 1: Number(cfg.pro_price || 15000), 12: Number(cfg.pro_price_12 || 150000) };
   const amount = priceMap[months];
   const ref = 'DKR-' + Math.random().toString(36).slice(2, 8).toUpperCase();
   const receiptPath = req.file ? '/private-receipts/store_' + store.id + '/' + req.file.filename : '';
   const transferRef = String(req.body.transfer_ref || '').trim().slice(0, 80);
   db.prepare('INSERT INTO payments (store_id, plan, amount, status, months, ref, receipt_path, note) VALUES (?,?,?,?,?,?,?,?)')
-    .run(store.id, 'pro', amount, receiptPath ? 'reported' : 'pending', months, ref, receiptPath, transferRef);
-  logActivity(req.user.id, req.user.username, 'طلب ترقية', `طلب باقة احترافية (${months} شهراً) — مرجع ${ref}`);
-  appendLog(`**طلب ترقية جديد** — مستخدم «${req.user.username}» طلب الباقة الاحترافية لمتجر «${store.name}» (${months} شهراً — المبلغ ${money(amount)})${receiptPath ? ' — مرفق إثبات الدفع' : ''} — المرجع ${ref}`);
+    .run(store.id, plan, amount, receiptPath ? 'reported' : 'pending', months, ref, receiptPath, transferRef);
+  const planName = plan === 'business' ? 'الأعمال' : 'الاحترافية';
+  logActivity(req.user.id, req.user.username, 'طلب ترقية', `طلب باقة ${planName} (${months} شهراً) — مرجع ${ref}`);
+  appendLog(`**طلب ترقية جديد** — مستخدم «${req.user.username}» طلب باقة ${planName} لمتجر «${store.name}» (${months} شهراً — المبلغ ${money(amount)})${receiptPath ? ' — مرفق إثبات الدفع' : ''} — المرجع ${ref}`);
   res.redirect('/panel/billing?ok=' + encodeURIComponent('تم إرسال طلب الترقية' + (receiptPath ? ' مع إثبات الدفع' : '') + ' — مرجعك: ' + ref + ' — سنفعّل باقتك فور تأكيدنا'));
 }, (err, req, res, next) => {
   res.redirect('/panel/billing?err=' + encodeURIComponent(err.message || 'فشل رفع الإثبات'));

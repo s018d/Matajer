@@ -178,7 +178,7 @@ router.post('/stores/:id', (req, res) => {
     }
   } else domain = '';
   let tpl = TPL.valid(template) ? template : 'classic';
-  if (TPL.isPremium(tpl) && store.plan !== 'pro') tpl = 'classic';
+  if (TPL.isPremium(tpl) && store.plan !== 'pro' && store.plan !== 'business') tpl = 'classic';
   db.prepare('UPDATE stores SET name=?, slug=?, description=?, owner_name=?, phone=?, template=?, color=?, status=?, custom_domain=?, delivery_fee=?, free_delivery_min=?, meta_desc=? WHERE id=?')
     .run(String(name || store.name), newSlug, String(description ?? store.description), String(owner_name ?? ''), String(phone ?? ''), tpl, String(color || '#0ea5e9'), status === 'active' ? 'active' : 'suspended', domain,
       Math.max(0, Number(delivery_fee) || 0), Math.max(0, Number(free_delivery_min) || 0), String(meta_desc || '').slice(0, 200), store.id);
@@ -334,16 +334,17 @@ router.get('/payments/receipt/:paymentId', (req, res) => {
 router.post('/payments/:id/confirm', (req, res) => {
   const p = db.prepare('SELECT * FROM payments WHERE id=?').get(req.params.id);
   if (!p) return res.redirect('/admin/payments');
-  const days = Math.max(1, Number(req.body.months) || 1) * 30;
+  const days = Math.max(1, Number(p.months) || Number(req.body.months) || 1) * 30;
   const exp = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
-  db.prepare('UPDATE stores SET plan=?, plan_expires=? WHERE id=?').run('pro', exp, p.store_id);
+  const newPlan = p.plan === 'business' ? 'business' : 'pro';
+  db.prepare('UPDATE stores SET plan=?, plan_expires=? WHERE id=?').run(newPlan, exp, p.store_id);
   db.prepare("UPDATE payments SET status='done' WHERE id=?").run(p.id);
   const ref = db.prepare("SELECT * FROM referrals WHERE new_store_id=? AND status='pending'").get(p.store_id);
   if (ref) {
     db.prepare("UPDATE referrals SET status='done' WHERE id=?").run(ref.id);
     const referrer = db.prepare('SELECT * FROM stores WHERE id=?').get(ref.referrer_store_id);
     if (referrer) {
-      const base = referrer.plan === 'pro' && referrer.plan_expires && new Date(referrer.plan_expires) > new Date() ? new Date(referrer.plan_expires) : new Date();
+      const base = (referrer.plan === 'pro' || referrer.plan === 'business') && referrer.plan_expires && new Date(referrer.plan_expires) > new Date() ? new Date(referrer.plan_expires) : new Date();
       const rewardExp = new Date(base.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
       db.prepare('UPDATE stores SET plan=?, plan_expires=? WHERE id=?').run('pro', rewardExp, referrer.id);
       appendLog(`**مكافأة إحالة** — متجر «${referrer.name}» كسب شهراً مجانياً (حتى ${rewardExp}) لأنه دعى متجر «${db.prepare('SELECT name FROM stores WHERE id=?').get(p.store_id).name}»`);
@@ -359,12 +360,13 @@ router.post('/payments/:id/confirm', (req, res) => {
 router.post('/stores/:id/plan', (req, res) => {
   const store = getStore(req.params.id);
   if (!store) return res.redirect('/admin/stores');
-  const plan = req.body.plan === 'pro' ? 'pro' : 'free';
+  const plan = req.body.plan === 'business' ? 'business' : (req.body.plan === 'pro' ? 'pro' : 'free');
   const days = Math.max(1, Number(req.body.months) || 1) * 30;
-  const exp = plan === 'pro' ? new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString().slice(0, 10) : '';
+  const exp = plan === 'free' ? '' : new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
   db.prepare('UPDATE stores SET plan=?, plan_expires=? WHERE id=?').run(plan, exp, store.id);
+  const planAr = plan === 'business' ? 'الأعمال حتى ' + exp : (plan === 'pro' ? 'احترافية حتى ' + exp : 'مجانية');
   logActivity(req.user.id, req.user.username, 'تعديل باقة', `حدّد باقة «${plan}» لمتجر «${store.name}»`);
-  appendLog(`المدير العام حدّد باقة «${plan === 'pro' ? 'احترافية حتى ' + exp : 'مجانية'}» لمتجر «${store.name}»`);
+  appendLog(`المدير العام حدّد باقة «${planAr}» لمتجر «${store.name}»`);
   res.redirect('/admin/stores/' + store.id + '?ok=' + encodeURIComponent('تم تحديث الباقة'));
 });
 

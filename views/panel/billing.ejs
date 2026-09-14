@@ -25,64 +25,64 @@
           <p class="muted" style="margin-top:.3rem;font-size:.85rem">كل الأنماط العالمية تُفتح لك فوراً للتجربة — تنتهي تلقائياً بعد 7 أيام وتعود للمجانية بدون خصم أي شيء من بياناتك. إلغاؤها سهل مثل تشغيلها.</p>
         </div>
       </div>
-      <p class="muted" style="text-align:center;margin:.6rem 0 .2rem;font-size:.88rem">💡 كلما طالت المدة وفّرت أكثر — اختر ما يناسبك:</p>
+      <p class="muted" style="text-align:center;margin:.6rem 0 .2rem;font-size:.88rem">💡 أرخص من كل المنصات — اختر ما يناسبك:</p>
       <div class="tiers">
-        <div class="tier">
-          <h3>شهر واحد</h3>
+        <div class="tier tier-hit">
+          <div class="tier-tag">الأكثر طلباً ⭐</div>
+          <h3>الاحترافية — شهري</h3>
           <span class="tier-sub">مرن — بدون التزام</span>
-          <div class="tier-price"><b><%= (cfg.pro_price / 1000).toLocaleString('en-US') %> ألف</b><span>/ شهر</span></div>
-          <div class="tier-monthly">≈ <%= (cfg.pro_price / 1000).toLocaleString('en-US') %> ألف / شهر</div>
+          <div class="tier-price"><b><%= Number(cfg.pro_price || 15000).toLocaleString('en-US') %></b><span>د.ع / شهر</span></div>
           <ul>
-            <li>كل مزايا الاحترافية كاملة</li>
-            <li>مثالي للتجربة الأولى</li>
-            <li>إلغاء تلقائي — بدون فقدان بيانات</li>
+            <li>منتجات وأكواد بلا حدود</li>
+            <li>كل القوالب الأربعة</li>
+            <li>دومينك الخاص + بلا علامة</li>
+            <li>تقارير + تيليجرام</li>
           </ul>
           <form method="post" action="/panel/billing/request?_csrf=<%= csrf %>" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="<%= csrf %>">
+            <input type="hidden" name="plan" value="pro">
             <input type="hidden" name="months" value="1">
             <input type="text" name="transfer_ref" placeholder="رقم الحوالة (اختياري)" dir="ltr" class="billing-input">
             <input type="file" name="receipt" accept="image/*" class="billing-file" title="صورة إثبات الدفع">
-            <button class="btn btn-primary">أريد الترقية</button>
-          </form>
-        </div>
-        <div class="tier tier-hit">
-          <div class="tier-tag">الأكثر طلباً ⭐</div>
-          <h3>3 شهور</h3>
-          <span class="tier-sub">الأكثر توازناً</span>
-          <div class="tier-price"><b><%= (cfg.pro_price_3 / 1000).toLocaleString('en-US') %> ألف</b><span>/ 3 شهور</span></div>
-          <div class="tier-monthly">≈ <%= Math.round(cfg.pro_price_3 / 3 / 1000).toLocaleString('en-US') %> ألف / شهر</div>
-          <div class="tier-save">توفّر <%= Math.round((1 - cfg.pro_price_3 / (cfg.pro_price * 3)) * 100) %>% مقارنة بالشهري</div>
-          <ul>
-            <li>كل مزايا الاحترافية</li>
-            <li>خصم حقيقي على الشهر الواحد</li>
-            <li>الخيار المفضّل لـ 70% من التجار</li>
-          </ul>
-          <form method="post" action="/panel/billing/request?_csrf=<%= csrf %>" enctype="multipart/form-data">
-            <input type="hidden" name="_csrf" value="<%= csrf %>">
-            <input type="hidden" name="months" value="3">
-            <input type="text" name="transfer_ref" placeholder="رقم الحوالة (اختياري)" dir="ltr" class="billing-input">
-            <input type="file" name="receipt" accept="image/*" class="billing-file" title="صورة إثبات الدفع">
-            <button class="btn btn-primary">أريد الترقية</button>
+            <button class="btn btn-primary">أريد الاحترافية</button>
           </form>
         </div>
         <div class="tier tier-best">
           <div class="tier-tag" style="background:linear-gradient(135deg,#059669,#0d9488)">أفضل قيمة 👑</div>
-          <h3>سنة كاملة</h3>
-          <span class="tier-sub">وفّر أكثر — استثمار سنوي</span>
-          <div class="tier-price"><b><%= (cfg.pro_price_12 / 1000).toLocaleString('en-US') %> ألف</b><span>/ سنة</span></div>
-          <div class="tier-monthly">≈ <%= Math.round(cfg.pro_price_12 / 12 / 1000).toLocaleString('en-US') %> ألف / شهر فقط</div>
-          <div class="tier-save">توفّر <%= Math.round((1 - cfg.pro_price_12 / (cfg.pro_price * 12)) * 100) %>% — أوفر سعر شهري</div>
+          <h3>الاحترافية — سنوي</h3>
+          <span class="tier-sub">شهرين مجاناً</span>
+          <div class="tier-price"><b><%= Number(cfg.pro_price_12 || 150000).toLocaleString('en-US') %></b><span>د.ع / سنة</span></div>
+          <div class="tier-monthly">≈ <%= Math.round(Number(cfg.pro_price_12 || 150000) / 12 / 1000 * 10) / 10 %> ألف / شهر فقط</div>
           <ul>
             <li>كل مزايا الاحترافية</li>
-            <li>أفضل سعر — <%= Math.round(cfg.pro_price_12 / 12 / 1000) %> ألف شهرياً فقط</li>
             <li>أولوية الدعم + التصاميم الجديدة</li>
           </ul>
           <form method="post" action="/panel/billing/request?_csrf=<%= csrf %>" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="<%= csrf %>">
+            <input type="hidden" name="plan" value="pro">
             <input type="hidden" name="months" value="12">
             <input type="text" name="transfer_ref" placeholder="رقم الحوالة (اختياري)" dir="ltr" class="billing-input">
             <input type="file" name="receipt" accept="image/*" class="billing-file" title="صورة إثبات الدفع">
-            <button class="btn btn-primary">أريد الترقية</button>
+            <button class="btn btn-primary">أريد السنوي</button>
+          </form>
+        </div>
+        <div class="tier">
+          <div class="tier-tag" style="background:linear-gradient(135deg,#7f1d1d,#b45309)">للفرق 🏢</div>
+          <h3>الأعمال — شهري</h3>
+          <span class="tier-sub">للمتاجر الكبيرة والفرق</span>
+          <div class="tier-price"><b><%= Number(cfg.business_price || 35000).toLocaleString('en-US') %></b><span>د.ع / شهر</span></div>
+          <ul>
+            <li>كل مزايا الاحترافية</li>
+            <li>حسابات فريق بصلاحيات</li>
+            <li>تقارير متقدمة + أولوية واتساب</li>
+          </ul>
+          <form method="post" action="/panel/billing/request?_csrf=<%= csrf %>" enctype="multipart/form-data">
+            <input type="hidden" name="_csrf" value="<%= csrf %>">
+            <input type="hidden" name="plan" value="business">
+            <input type="hidden" name="months" value="1">
+            <input type="text" name="transfer_ref" placeholder="رقم الحوالة (اختياري)" dir="ltr" class="billing-input">
+            <input type="file" name="receipt" accept="image/*" class="billing-file" title="صورة إثبات الدفع">
+            <button class="btn btn-primary">أريد الأعمال</button>
           </form>
         </div>
       </div>
@@ -110,7 +110,7 @@
         <ul class="feed">
           <% payments.forEach(p => { %>
             <li>
-              <span class="feed-act">طلب #<%= p.id %> — <%= money(p.amount) %> (<%= p.months || 1 %> شهراً)</span>
+              <span class="feed-act">طلب #<%= p.id %> — <%= p.plan === 'business' ? 'الأعمال' : 'الاحترافية' %> — <%= money(p.amount) %> (<%= p.months || 1 %> شهراً)</span>
               <span class="feed-detail">
                 <span class="badge <%= p.status==='done' ? 'badge-ok' : 'badge-warn' %>">
                   <%= p.status === 'done' ? 'مفعّل' : (p.status === 'reported' ? 'أُرسل الدفع — بانتظار التأكيد' : 'بالتسوية') %>

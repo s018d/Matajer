@@ -452,10 +452,11 @@ function siteSettings() {
     site_name: map.site_name || 'دُكّان Dukkan',
     site_whatsapp: map.site_whatsapp || '9647831020026',
     pay_account: map.pay_account || '',
-    free_products: Number(map.free_products || 10),
-    pro_price: Number(map.pro_price || 20000),
-    pro_price_3: Number(map.pro_price_3 || 50000),
-    pro_price_12: Number(map.pro_price_12 || 100000),
+    free_products: Number(map.free_products || 25),
+    pro_price: Number(map.pro_price || 15000),
+    pro_price_3: Number(map.pro_price_3 || 40000),
+    pro_price_12: Number(map.pro_price_12 || 150000),
+    business_price: Number(map.business_price || 35000),
     tagline: map.tagline || 'أنشئ متجرك الإلكتروني خلال دقائق وابدأ البيع فوراً',
     site_telegram: map.site_telegram || '@s018d',
     site_instagram: map.site_instagram || '@s018d',
@@ -474,10 +475,11 @@ async function siteSettingsAsync() {
     site_name: map.site_name || 'دُكّان Dukkan',
     site_whatsapp: map.site_whatsapp || '9647831020026',
     pay_account: map.pay_account || '',
-    free_products: Number(map.free_products || 10),
-    pro_price: Number(map.pro_price || 20000),
-    pro_price_3: Number(map.pro_price_3 || 50000),
-    pro_price_12: Number(map.pro_price_12 || 100000),
+    free_products: Number(map.free_products || 25),
+    pro_price: Number(map.pro_price || 15000),
+    pro_price_3: Number(map.pro_price_3 || 40000),
+    pro_price_12: Number(map.pro_price_12 || 150000),
+    business_price: Number(map.business_price || 35000),
     tagline: map.tagline || 'أنشئ متجرك الإلكتروني خلال دقائق وابدأ البيع فوراً',
     site_telegram: map.site_telegram || '@s018d',
     site_instagram: map.site_instagram || '@s018d',
@@ -492,9 +494,14 @@ function setSetting(key, value) {
   return db.prepare('INSERT INTO settings (key, value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').run(String(key), String(value));
 }
 function isPro(store) {
-  if (!store || store.plan !== 'pro') return false;
+  if (!store || (store.plan !== 'pro' && store.plan !== 'business')) return false;
+  if (!store.plan_expires) return false;
+  return new Date(store.plan_expires) > new Date();
+}
+function isBusiness(store) {
+  if (!store || store.plan !== 'business') return false;
   if (!store.plan_expires) return false;
   return new Date(store.plan_expires) > new Date();
 }
 
-module.exports = { db, isPg, pool, logActivity, siteSettings, siteSettingsAsync, setSetting, isPro, UPLOADS_DIR, DB_FILE };
+module.exports = { db, isPg, pool, logActivity, siteSettings, siteSettingsAsync, setSetting, isPro, isBusiness, UPLOADS_DIR, DB_FILE };

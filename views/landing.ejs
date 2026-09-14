@@ -3,250 +3,189 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><%= cfg.site_name %> — أنشئ متجرك الإلكتروني خلال دقائق</title>
-<meta name="description" content="دُكّان: منصة عراقية لإنشاء متاجر إلكترونية جاهزة — قالب مجاني نضيف + 3 بريميوم (الذهب العاجي/الإمبراطورية السوداء/السوق العصري)، سلة وواتساب وتقييمات. ابدأ مجاناً.">
+<title><%= cfg.site_name %> — متجرك الإلكتروني بدقيقة</title>
+<meta name="description" content="دُكّان: منصة عراقية — أنشئ متجرك بدقيقة، بِع بالدفع عند الاستلام، استلم طلباتك واتساب. مجاني للبداية، 15 ألف للاحترافية.">
 <link rel="icon" href="/img/logo.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/css/site.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* polish 2026 — slow browsing tactile: hero breathing + stats rhythm + grain */
-.hero-inner{padding:5.6rem 1.2rem 6.4rem}
-.hero-stats{gap:2.2rem;margin-top:1.9rem}
-.hero-stats div{padding:.75rem 1.35rem}
-.hero{position:relative;isolation:isolate}
-.hero-grain{position:absolute;inset:0;pointer-events:none;opacity:.032;z-index:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");mix-blend-mode:multiply}
-@media(max-width:900px){.hero-inner{padding:3.4rem 1rem 4rem}.hero-stats{gap:1.1rem;margin-top:1.4rem}}
-@media(prefers-reduced-motion:reduce){.mock-phone,.mc,.mock-badge{animation:none!important}}
+:root{--red:#7f1d1d; --red2:#991b1b; --gold:#d97706; --gold2:#f59e0b; --ink:#1c1917; --mut:#78716c; --bg:#fafaf9; --line:#e7e5e4}
+*{box-sizing:border-box; margin:0; padding:0}
+body{font-family:'Noto Kufi Arabic',sans-serif; background:var(--bg); color:var(--ink); line-height:1.8}
+a{text-decoration:none}
+/* شريط علوي */
+.dk-nav{position:sticky; top:0; z-index:50; background:rgba(13,10,8,.92); backdrop-filter:blur(12px); border-bottom:1px solid rgba(245,158,11,.2)}
+.dk-nav-in{max-width:1120px; margin:0 auto; padding:.7rem 1rem; display:flex; align-items:center; gap:1rem}
+.dk-logo{display:flex; align-items:center; gap:.5rem; color:#fff; font-weight:900; font-size:1.2rem}
+.dk-logo-mark{width:36px; height:36px; border-radius:11px; background:linear-gradient(135deg,#7f1d1d,#d97706 60%,#f59e0b); display:flex; align-items:center; justify-content:center; font-size:1.3rem; box-shadow:0 4px 14px rgba(217,119,6,.4)}
+.dk-logo small{color:var(--gold2); font-size:.7rem; font-weight:700}
+.dk-links{display:flex; gap:1.1rem; margin-inline-start:auto; font-size:.85rem}
+.dk-links a{color:#d6d3d1; font-weight:600}
+.dk-links a:hover{color:var(--gold2)}
+.dk-cta{display:flex; gap:.5rem}
+.btn{display:inline-block; padding:.6rem 1.2rem; border-radius:12px; font-weight:800; font-size:.88rem; transition:all .18s; font-family:inherit; cursor:pointer; border:none}
+.btn-gold{background:linear-gradient(135deg,#b45309,#f59e0b); color:#fff; box-shadow:0 8px 22px rgba(217,119,6,.35)}
+.btn-gold:hover{transform:translateY(-2px); box-shadow:0 12px 28px rgba(217,119,6,.45)}
+.btn-ghost{border:1.5px solid #44403c; color:#e7e5e4}
+.btn-ghost:hover{border-color:var(--gold2); color:var(--gold2)}
+.btn-big{padding:.9rem 2rem; font-size:1.02rem; border-radius:14px}
+/* بطل */
+.dk-hero{background:radial-gradient(600px 300px at 80% 10%, rgba(217,119,6,.15), transparent), radial-gradient(500px 300px at 15% 90%, rgba(127,29,29,.25), transparent), #0d0a08; color:#fff; text-align:center; padding:4.5rem 1rem 4rem; position:relative; overflow:hidden}
+.dk-hero::before{content:''; position:absolute; inset:0; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E"); opacity:.05}
+.dk-pill{display:inline-block; background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.4); color:#fcd34d; border-radius:99px; padding:.35rem 1rem; font-size:.8rem; font-weight:700}
+.dk-hero h1{font-size:clamp(1.7rem,5vw,2.8rem); font-weight:900; line-height:1.4; margin:1rem auto; max-width:720px}
+.dk-hero h1 em{font-style:normal; background:linear-gradient(135deg,#fbbf24,#f59e0b); -webkit-background-clip:text; -webkit-text-fill-color:transparent}
+.dk-hero p{color:#d6d3d1; max-width:600px; margin:0 auto 1.6rem; font-size:1rem}
+.dk-hero-btns{display:flex; gap:.7rem; justify-content:center; flex-wrap:wrap}
+.dk-trust{display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap; margin-top:1.6rem; font-size:.82rem}
+.dk-trust span{background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); border-radius:99px; padding:.4rem .9rem; color:#e7e5e4}
+.dk-steps{display:inline-block; margin-top:1.2rem; font-size:.85rem; color:#fcd34d; background:rgba(245,158,11,.1); border:1px solid rgba(245,158,11,.3); padding:.5rem 1.1rem; border-radius:99px}
+/* أقسام */
+.dk-sec{max-width:1120px; margin:0 auto; padding:3.5rem 1rem}
+.dk-sec h2{font-size:1.6rem; font-weight:900; text-align:center; margin-bottom:.3rem}
+.dk-sec h2 em{font-style:normal; color:var(--red2)}
+.dk-sub2{text-align:center; color:var(--mut); font-size:.92rem; margin-bottom:2rem}
+/* متاجر */
+.dk-shops{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1rem}
+.dk-shop{background:#fff; border:1.5px solid var(--line); border-radius:18px; overflow:hidden; transition:all .2s; color:inherit}
+.dk-shop:hover{transform:translateY(-4px); box-shadow:0 16px 40px rgba(0,0,0,.1); border-color:var(--gold2)}
+.dk-shop-top{height:120px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.2rem; color:#fff; font-weight:900}
+.dk-shop-top small{font-weight:600; opacity:.85; font-size:.75rem}
+.dk-shop-body{padding:.9rem 1rem; font-size:.85rem}
+.dk-shop-body b{display:block}
+.dk-shop-body span{color:var(--mut); font-size:.78rem}
+/* مميزات */
+.dk-feats{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1rem}
+.dk-feat{background:#fff; border:1.5px solid var(--line); border-radius:18px; padding:1.4rem 1.2rem; transition:all .2s}
+.dk-feat:hover{border-color:var(--gold2); box-shadow:0 12px 30px rgba(217,119,6,.12)}
+.dk-feat i{font-style:normal; font-size:1.6rem}
+.dk-feat b{display:block; margin:.5rem 0 .2rem; font-size:.98rem}
+.dk-feat p{color:var(--mut); font-size:.85rem}
+/* باقات */
+.dk-plans{display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:1.1rem; align-items:stretch}
+.dk-plan{background:#fff; border:2px solid var(--line); border-radius:22px; padding:1.8rem 1.5rem; position:relative; display:flex; flex-direction:column}
+.dk-plan.hot{border-color:var(--gold2); box-shadow:0 20px 50px rgba(217,119,6,.2); transform:scale(1.03)}
+.dk-tag{position:absolute; top:-14px; right:50%; transform:translateX(50%); background:linear-gradient(135deg,#b45309,#f59e0b); color:#fff; font-size:.75rem; font-weight:800; border-radius:99px; padding:.25rem 1rem; white-space:nowrap}
+.dk-plan h3{font-size:1.05rem; font-weight:900}
+.dk-price{font-size:1.9rem; font-weight:900; margin:.4rem 0; color:var(--red2)}
+.dk-price span{font-size:.8rem; font-weight:700; color:var(--mut)}
+.dk-plan ul{list-style:none; margin:1rem 0 1.4rem; flex:1}
+.dk-plan li{font-size:.86rem; padding:.35rem 0; border-bottom:1px dashed #f0ede9}
+.dk-plan li::before{content:'✓ '; color:#15803d; font-weight:900}
+/* أسئلة */
+.dk-faq{max-width:720px; margin:0 auto}
+.dk-faq details{background:#fff; border:1.5px solid var(--line); border-radius:14px; margin-bottom:.6rem; padding:.9rem 1.1rem; font-size:.88rem}
+.dk-faq summary{font-weight:800; cursor:pointer}
+.dk-faq p{color:var(--mut); margin-top:.4rem; font-size:.85rem}
+/* تذييل */
+.dk-foot{background:#0d0a08; color:#a8a29e; text-align:center; padding:2.2rem 1rem; font-size:.82rem}
+.dk-foot b{color:#fff}
+.dk-foot-links{display:flex; gap:1.2rem; justify-content:center; flex-wrap:wrap; margin-top:.8rem}
+.dk-foot-links a{color:#d6d3d1}
+.dk-foot-links a:hover{color:var(--gold2)}
+@media(max-width:700px){.dk-links{display:none} .dk-plan.hot{transform:none}}
 </style>
 </head>
-<body class="site">
-<header class="site-nav">
-  <div class="site-nav-inner">
-    <a class="brand" href="/"><img src="/img/logo.jpg" alt="شعار دُكّان" class="brand-logo" style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #f59e0b;box-shadow:0 2px 8px rgba(0,0,0,.15)"><b><%= cfg.site_name %></b><span>متاجر</span></a>
-    <nav>
-      <a href="/#features">المميزات</a>
-      <a href="/#designs">التصاميم</a>
-      <a href="/#showcase">متاجر حية</a>
-      <a href="/#pricing">الباقات</a>
-      <a href="/#faq">أسئلة شائعة</a>
-    </nav>
-    <div class="site-cta">
-      <a class="btn-ghost" href="/login">دخول</a>
-      <a class="btn-main" href="/signup">أنشئ متجرك مجاناً</a>
-    </div>
+<body>
+<header class="dk-nav"><div class="dk-nav-in">
+  <a class="dk-logo" href="/"><span class="dk-logo-mark">د</span><span><%= cfg.site_name %> <small>متاجر</small></span></a>
+  <nav class="dk-links">
+    <a href="#features">المميزات</a><a href="#shops">متاجر حية</a><a href="#pricing">الباقات</a><a href="#faq">أسئلة</a>
+  </nav>
+  <div class="dk-cta" style="margin-inline-start:auto">
+    <a class="btn btn-ghost" href="/login">دخول</a>
+    <a class="btn btn-gold" href="/signup">أنشئ متجرك مجاناً</a>
   </div>
-</header>
+</div></header>
 
-<section class="hero">
-  <div class="hero-grain" aria-hidden="true"></div>
-  <div class="hero-inner">
-    <div class="hero-txt">
-      <span class="pill">🇮🇶 منصة عراقية 100% — بدون تعقيد</span>
-      <h1>من فكرة إلى <em>متجر يبيع</em> خلال دقيقة — بدون مبرمج</h1>
-      <p><%= cfg.tagline %> — بدون خبرة أو دومين. سجّل، ارفع منتجاتك بصورها وألوانها، واستلم الطلبات على واتسابك مباشرة.</p>
-      <div class="hero-btns">
-        <a class="btn-main big" href="/signup">ابدأ الآن مجاناً →</a>
-        <a class="btn-outline big" href="/#showcase">شاهد متاجر حية</a>
-      </div>
-      <div class="hero-mini">
-        <span>✓ سلة فورية</span><span>✓ دفع عند الاستلام</span><span>✓ واتساب مباشر</span>
-      </div>
-      <p style="margin-top:.9rem;font-size:.82rem;color:#64748b">🎁 يوم برو مجاناً عند التسجيل — جرّب القوالب البريميوم ثم قرر.</p>
-    </div>
-    <div class="hero-visual">
-      <img src="/img/logo-ornate.jpg" alt="شعار دكان" style="width:140px;height:140px;border-radius:50%;border:3px solid #f59e0b;box-shadow:0 8px 24px rgba(0,0,0,.15);margin:0 auto 1rem;display:block;object-fit:cover">
-      <div class="mock-phone">
-        <div class="mock-top" style="background:linear-gradient(135deg,#0d9488,#0f766e)"></div>
-        <div class="mock-line l1"></div><div class="mock-line l2 short"></div>
-        <div class="mock-cards">
-          <div class="mc"><div class="mc-img" style="background:#ccfbf1"></div><div><b></b><i></i></div></div>
-          <div class="mc"><div class="mc-img" style="background:#fde68a"></div><div><b></b><i></i></div></div>
-          <div class="mc"><div class="mc-img" style="background:#cffafe"></div><div><b></b><i></i></div></div>
-        </div>
-        <span class="mock-badge">طلب جديد وصل!</span>
-      </div>
-      <div class="hero-stats">
-        <div><b id="statStores">0</b><span>متجر نشط</span></div>
-        <% if (stats.ordersDone > 0) { %><div><b id="statOrders">0</b><span>طلب مُنفَّذ</span></div><% } %>
-        <% if (stats.storesToday > 0) { %><div><b id="statToday">0</b><span>انطلق اليوم</span></div><% } %>
-      </div>
-    </div>
+<section class="dk-hero">
+  <span class="dk-pill">🇮🇶 منصة عراقية 100% — بدون تعقيد</span>
+  <h1>من فكرة إلى <em>متجر يبيع</em> خلال دقيقة</h1>
+  <p><%= cfg.tagline %> — سجّل، ارفع منتجاتك، واستلم الطلبات على واتسابك مباشرة. الدفع عند الاستلام.</p>
+  <div class="dk-hero-btns">
+    <a class="btn btn-gold btn-big" href="/signup">ابدأ الآن مجاناً ←</a>
+    <a class="btn btn-ghost btn-big" href="#shops">شاهد متاجر حية</a>
   </div>
+  <div class="dk-trust"><span>✓ سلة فورية</span><span>✓ دفع عند الاستلام</span><span>✓ واتساب مباشر</span><span>🎁 تجربة احترافية مجانية</span></div>
+  <br><span class="dk-steps">⚡ 3 خطوات: سجّل ← ارفع منتجاتك ← شارك الرابط</span>
 </section>
 
-<section class="section alt" id="showcase">
-  <div class="section-inner">
-    <h2>متاجر <em>حية</em> تشتغل الآن 🔥</h2>
+<section class="dk-sec" id="shops">
+  <h2>متاجر <em>حية</em> تبيع الآن 🔥</h2>
+  <p class="dk-sub2">متاجر حقيقية على المنصة — اضغط وجرّب بنفسك</p>
+  <div class="dk-shops">
     <% if (stores.length === 0) { %>
-      <p class="sub">سجّل وكن أول من يظهر هنا — هذه معاينات القوالب:</p>
-      <div class="store-showcase">
-        <a class="show-card" href="/signup" style="opacity:.92">
-          <div class="show-thumb" style="background:linear-gradient(135deg,#e0f2fe,#0284c7)"><span class="show-name">الواضح</span><span class="show-tpl">مجاني — نظيف وسريع</span></div>
-          <div class="show-meta"><b>الواضح</b><span>أبيض نظيف — لكل المتاجر</span></div>
-        </a>
-        <a class="show-card" href="/signup" style="opacity:.92">
-          <div class="show-thumb" style="background:linear-gradient(135deg,#F8F5EF,#C9A96E)"><span class="show-name">الذهب العاجي</span><span class="show-tpl">فاخر هادئ — Royal Ivory</span></div>
-          <div class="show-meta"><b>الذهب العاجي</b><span>للأزياء والعطور</span></div>
-        </a>
-        <a class="show-card" href="/signup" style="opacity:.92">
-          <div class="show-thumb" style="background:linear-gradient(135deg,#0A0A0A,#C9A96E)"><span class="show-name">الإمبراطورية السوداء</span><span class="show-tpl">فاخر جريء — Black Gold</span></div>
-          <div class="show-meta"><b>الإمبراطورية السوداء</b><span>للإلكترونيات</span></div>
-        </a>
-        <a class="show-card" href="/signup" style="opacity:.92">
-          <div class="show-thumb" style="background:linear-gradient(135deg,#F5F7F6,#2E7D5E)"><span class="show-name">السوق العصري</span><span class="show-tpl">نظيف — Modern Green</span></div>
-          <div class="show-meta"><b>السوق العصري</b><span>للحلويات والأكل</span></div>
-        </a>
-      </div>
-      <p style="text-align:center;margin-top:1rem"><a class="btn-main" href="/signup">أنشئ متجرك مجاناً →</a></p>
+      <% const tplShow = [['classic','الواضح','مجاني — نظيف وسريع','linear-gradient(135deg,#e0f2fe,#0284c7)'],['royal-ivory','الذهب العاجي','فاخر هادئ','linear-gradient(135deg,#F8F5EF,#C9A96E)'],['black-gold','الإمبراطورية السوداء','فاخر جريء','linear-gradient(135deg,#1c1917,#C9A96E)'],['modern-green','السوق العصري','نظيف وموثوق','linear-gradient(135deg,#F5F7F6,#2E7D5E)']]; %>
+      <% tplShow.forEach(t => { %>
+        <a class="dk-shop" href="/signup"><div class="dk-shop-top" style="background:<%= t[3] %>"><b><%= t[1] %></b><small><%= t[2] %></small></div><div class="dk-shop-body"><b><%= t[1] %></b><span>قالب جاهز — أنشئ متجرك به ←</span></div></a>
+      <% }) %>
     <% } else { %>
-      <% const tplNames = { 'classic':'الواضح', 'royal-ivory':'الذهب العاجي', 'black-gold':'الإمبراطورية السوداء', 'modern-green':'السوق العصري' }; %>
-      <p class="sub">متاجر حقيقية تعمل الآن — اضغط وجرّب بنفسك:</p>
-      <div class="store-showcase">
-        <% stores.slice(0,4).forEach(s => { %>
-        <a class="show-card" href="/s/<%= s.slug %>" target="_blank">
-          <div class="show-thumb" style="background:linear-gradient(135deg, <%= s.color %>, #0f172a)">
-            <span class="show-name"><%= s.name %></span>
-            <span class="show-tpl"><%= tplNames[s.template] || s.template %></span>
-          </div>
-          <div class="show-meta"><b><%= s.name %></b><span><%= s.products %> منتج — افتح المتجر ←</span></div>
-        </a>
-        <% }) %>
-      </div>
+      <% stores.slice(0,4).forEach(s => { %>
+        <a class="dk-shop" href="/s/<%= s.slug %>" target="_blank"><div class="dk-shop-top" style="background:linear-gradient(135deg,<%= s.color %>,#1c1917)"><b><%= s.name %></b><small><%= s.products %> منتج</small></div><div class="dk-shop-body"><b><%= s.name %></b><span>افتح المتجر ←</span></div></a>
+      <% }) %>
     <% } %>
   </div>
 </section>
 
-<section class="section" id="features">
-  <div class="section-inner">
-    <h2>كلشي تحتاجه — <em>بسيط وقوي</em></h2>
-    <p class="sub">لوحة خفيفة، سلة سريعة، وحماية من التخريب — بدون تعقيد</p>
-    <div class="feat-grid">
-      <div class="feat"><b>⚡ انطلق في 60 ثانية</b><p>لا دومين، لا استضافة، لا مبرمج. رابطك الخاص جاهز فوراً + PWA يثبت على جوال الزبون.</p></div>
-      <div class="feat"><b>🎨 4 قوالب — كل واحد شخصية</b><p>الواضح مجاني نظيف — والذهب العاجي للأزياء، الإمبراطورية السوداء للإلكترونيات، السوق العصري للأكل. كل واحد ألوان وخط وشبكة مختلفة.</p></div>
-      <div class="feat"><b>📊 لوحة تحكم خفيفة</b><p>8 أقسام واضحة: منتجات، طلبات، كوبونات، تقييمات، قوالب، محرر، باقات، إعدادات — بدون زحمة.</p></div>
-      <div class="feat"><b>🛒 سلة تبيع وهي نايمة</b><p>زبونك يطلب بثلاث ضغطات، يشوف التوصيل والخصم لحظياً، ويدفع عند الباب.</p></div>
-      <div class="feat"><b>💬 واتساب مباشر</b><p>زر طلب يرسل التفاصيل للزبون بضغطة — تواصل يبني ثقة ويقفل البيع.</p></div>
-      <div class="feat"><b>🔒 حماية من التخريب</b><p>فلتر كلمات ممنوعة + مراجعة متاجر جديدة + تقييمات بموافقة — متجرك آمن.</p></div>
+<section class="dk-sec" id="features" style="background:#fff; max-width:none"><div style="max-width:1120px; margin:0 auto">
+  <h2>كلشي تحتاجه — <em>بسيط وقوي</em></h2>
+  <p class="dk-sub2">صُمم للتاجر العراقي: بدون خبرة، بدون تعقيد</p>
+  <div class="dk-feats">
+    <div class="dk-feat"><i>⚡</i><b>انطلق بـ 60 ثانية</b><p>لا دومين، لا استضافة، لا مبرمج. رابطك جاهز فوراً.</p></div>
+    <div class="dk-feat"><i>🛒</i><b>طلب بثلاث خطوات</b><p>الزبون يطلب، يوصلك إشعار، تتواصل واتساب — والدفع عند الباب.</p></div>
+    <div class="dk-feat"><i>🎨</i><b>4 شخصيات للمتجر</b><p>كل قالب عالم مختلف — معاينة حية قبل الاعتماد.</p></div>
+    <div class="dk-feat"><i>🎟️</i><b>كوبونات وولاء</b><p>خصومات ونقاط ترجع الزبون يشتري مرة ثانية.</p></div>
+    <div class="dk-feat"><i>📊</i><b>لوحة واضحة</b><p>منتجات، طلبات، مبيعات — كلشي بمكان واحد.</p></div>
+    <div class="dk-feat"><i>🔐</i><b>حماية حقيقية</b><p>تشفير، منع تخريب، حظر المسيئين — متجرك بأمان.</p></div>
+  </div>
+</div></section>
+
+<section class="dk-sec" id="pricing">
+  <h2>باقات <em>تكسر السوق</em> — تبدأ مجاناً</h2>
+  <p class="dk-sub2">أرخص من كل المنصات — بنص السعر ومميزات أكثر</p>
+  <div class="dk-plans">
+    <div class="dk-plan">
+      <h3>🌱 البداية</h3>
+      <div class="dk-price">0 د.ع<span> / للأبد</span></div>
+      <ul><li>25 منتج</li><li>القالب الأساسي</li><li>طلبات بلا حدود</li><li>دفع عند الاستلام + واتساب</li><li>5 أكواد خصم</li></ul>
+      <a class="btn btn-ghost" style="border-color:var(--line); color:var(--ink); text-align:center" href="/signup">ابدأ مجاناً</a>
+    </div>
+    <div class="dk-plan hot">
+      <span class="dk-tag">الأكثر طلباً 🔥</span>
+      <h3>⭐ الاحترافية</h3>
+      <div class="dk-price">15,000 د.ع<span> / شهر</span></div>
+      <ul><li>منتجات وأكواد بلا حدود</li><li>كل القوالب الأربعة</li><li>دومينك الخاص</li><li>مخزون وتنبيهات</li><li>تقارير مبيعات + تيليجرام</li><li>بلا علامة المنصة</li></ul>
+      <a class="btn btn-gold" style="text-align:center" href="/signup">جرّب مجاناً ثم رقِّ</a>
+    </div>
+    <div class="dk-plan">
+      <h3>🏢 الأعمال</h3>
+      <div class="dk-price">35,000 د.ع<span> / شهر</span></div>
+      <ul><li>كل مزايا الاحترافية</li><li>حسابات فريق بصلاحيات</li><li>تقارير متقدمة</li><li>أولوية دعم واتساب</li><li>سلة مهجورة تلقائية</li></ul>
+      <a class="btn btn-ghost" style="border-color:var(--line); color:var(--ink); text-align:center" href="/signup">تواصل معنا</a>
     </div>
   </div>
+  <p class="dk-sub2" style="margin-top:1.2rem">💰 السنوي أوفر: الاحترافية 150 ألف/سنة (شهرين مجاناً) — الدفع تحويل يدوي يناسب العراق</p>
 </section>
 
-<section class="section alt" id="designs">
-  <div class="section-inner">
-    <h2>قالب مجاني + <em>3 بريميوم كل واحد عالم</em></h2>
-    <p class="sub"><b>الواضح</b> مجاني وسريع — والبريميوم: <b>الذهب العاجي</b> للفخامة الهادئة، <b>الإمبراطورية السوداء</b> للفخامة الجريئة، <b>السوق العصري</b> للنظافة والثقة. كل تصميم شبكة وألوان وتجربة مختلفة — معاينة حية قبل الاعتماد.</p>
-    <div class="design-grid">
-      <div class="design-chip free">الواضح — مجاني</div>
-      <div class="design-chip">الذهب العاجي — فاخر هادئ</div>
-      <div class="design-chip">الإمبراطورية السوداء — فاخر جريء</div>
-      <div class="design-chip">السوق العصري — أخضر عصري</div>
-    </div>
-    <p class="fine">اختر شخصية متجرك — كل قالب شبكة وروح مختلفة، مو بس لون.</p>
+<section class="dk-sec" id="faq" style="background:#fff; max-width:none"><div style="max-width:760px; margin:0 auto">
+  <h2>أسئلة شائعة</h2>
+  <p class="dk-sub2">كل ما يدور ببالك قبل ما تبدأ</p>
+  <div class="dk-faq">
+    <details><summary>هل أحتاج خبرة تقنية؟</summary><p>لا. اسم المتجر + اسم المستخدم وكلمة مرور — وبعدها ترفع منتجاتك بالصور مباشرة.</p></details>
+    <details><summary>كيف يدفع الزبون؟</summary><p>دفع عند الاستلام. الطلب يوصلك بلوحة التحكم، تتواصل واتساب بضغطة، والزبون يدفع عند الباب.</p></details>
+    <details><summary>هل أحتاج دومين أو استضافة؟</summary><p>لا. متجرك ينطلق فوراً على رابط خاص. الباقة الاحترافية تسمح بربط دومينك الخاص.</p></details>
+    <details><summary>كيف أرقّي للاحترافية؟</summary><p>من صفحة الباقات بلوحتك: حوّل 15 ألف لجهة الاستلام، أرسل الإثبات — نفعّل باقتك خلال دقائق.</p></details>
+    <details><summary>ماذا بعد انتهاء الباقة؟</summary><p>يرجع متجرك للمجانية بكل بياناته — منتجاتك وصورك وطلباتك تبقى. التصميم الاحترافي يتعطل حتى تجدد.</p></details>
   </div>
-</section>
+</div></section>
 
-<section class="section" id="pricing">
-  <div class="section-inner">
-    <h2>باقات بسيطة — تبدأ <em>مجاناً</em></h2>
-    <div class="price-grid three">
-      <div class="price-card">
-        <h3>مجانية</h3>
-        <div class="price">0 د.ع<span>/ شهرياً</span></div>
-        <ul>
-          <li>متجر برابط خاص + معرض عام</li>
-          <li><%= cfg.free_products %> منتج</li>
-          <li>تصميم «الواضح» النضيف</li>
-          <li>سلة وطلب وواتساب</li>
-          <li>حتى 5 أكواد خصم</li>
-          <li>علامة «صُنع بواسطة <%= cfg.site_name %>»</li>
-        </ul>
-        <a class="btn-outline" href="/signup">ابدأ مجاناً</a>
-      </div>
-      <div class="price-card hot">
-        <span class="hot-tag">الأكثر طلباً</span>
-        <h3>احترافية — 3 شهور</h3>
-        <div class="price"><%= (cfg.pro_price_3 || 30000).toLocaleString('en-US') %> د.ع<span>/ 3 شهور</span></div>
-        <ul>
-          <li>القوالب الثلاثة البريميوم (الذهب العاجي / السوداء / العصري)</li>
-          <li>منتجات وأكواد وتقييمات بلا حدود</li>
-          <li>مخزون وتتبع وألوان بصورها</li>
-          <li>دومينك الخاص (شراء منفصل — واتساب)</li>
-          <li>بلا علامة للمنصة</li>
-          <li>دعم واتساب مباشر</li>
-        </ul>
-        <a class="btn-main" href="/signup">ابدأ ثم ترقَّ</a>
-      </div>
-      <div class="price-card">
-        <h3>احترافية — سنة</h3>
-        <div class="price"><%= (cfg.pro_price_12 || 72000).toLocaleString('en-US') %> د.ع<span>/ سنة</span></div>
-        <ul>
-          <li>كل مزايا الاحترافية</li>
-          <li>أفضل سعر — <%= Math.round((cfg.pro_price_12 || 72000) / 12 / 1000) %> ألف شهرياً فقط</li>
-          <li>أولوية الدعم والتصاميم الجديدة</li>
-        </ul>
-        <a class="btn-outline" href="/signup">ابدأ ثم ترقَّ</a>
-      </div>
-    </div>
-    <p class="fine">أو شهر واحد بـ <%= (cfg.pro_price || 12000).toLocaleString('en-US') %> د.ع. الترقية: تواصل واتساب من لوحة تحكمك للحصول على رقم التحويل — ترفع الإثبات ويتفعل خلال دقائق.</p>
-  </div>
-</section>
-
-<section class="section alt" id="faq">
-  <div class="section-inner">
-    <h2>أسئلة شائعة</h2>
-    <div class="faq-list">
-      <details><summary>هل أحتاج خبرة تقنية؟</summary><p>لا. التسجيل يلخّص بخطوتين: اسم المتجر + اسم المستخدم وكلمة مرور. بعدها ترفع منتجاتك بالصور مباشرة.</p></details>
-      <details><summary>كيف يدفع الزبون؟</summary><p>دفع عند الاستلام. الزبون يطلب من متجرك، يصلك الطلب في لوحة التحكم، تتواصل معه واتساب بضغطة واحدة، ويستلم طلبه ويدفع عند الباب.</p></details>
-      <details><summary>هل أحتاج دومين أو استضافة؟</summary><p>لا. متجرك ينطلق فوراً على رابط خاص بك (مثل dukkan.example/s/my-store). الباقة الاحترافية تسمح بربط دومينك الخاص عند توفره.</p></details>
-      <details><summary>كيف أرقّي للباقة الاحترافية؟</summary><p>من صفحة «الباقات» داخل لوحة تحكمك تختار 1 أو 3 أو 12 شهراً، تحوّل المبلغ لجهة الاستلام الموضحة هناك، وترسل إثبات التحويل — نفعّل باقتك خلال دقائق.</p></details>
-      <details><summary>ماذا يحصل بعد انتهاء الباقة؟</summary><p>يعود متجرك للباقة المجانية بكل بياناته: منتجاتك وصورك وطلباتك تبقى كما هي، ويبقى التصميم الاحترافي معطلاً حتى تجدد الباقة.</p></details>
-      <details><summary>هل أستطيع إلغاء الباقة؟</summary><p>نعم في أي وقت — ببساطة لا تجدد عند الانتهاء، أو راسلنا واتساب لإيقافها فوراً.</p></details>
-    </div>
-    <p class="sub" style="margin-top:1.5rem">سؤالك غير موجود؟ <a href="https://wa.me/<%= cfg.site_whatsapp.replace(/\D/g,'') %>" target="_blank" style="font-weight:700;color:#0d9488">راسلنا واتساب</a> — نرد خلال ساعات.</p>
-  </div>
-</section>
-
-<footer class="site-foot">
-  <div class="section-inner">
-    <b><%= cfg.site_name %> — منصة المتاجر الإلكترونية الجاهزة</b>
-    <div class="foot-links">
-      <a href="/signup">إنشاء متجر</a>
-      <a href="/login">دخول</a>
-      <a href="/faq">أسئلة شائعة</a>
-      <a href="/privacy">سياسة الخصوصية</a>
-      <a href="/terms">الشروط والأحكام</a>
-      <% if (cfg.site_whatsapp) { %><a href="https://wa.me/<%= cfg.site_whatsapp.replace(/\D/g,'') %>" target="_blank">واتساب: 07831020026</a><% } %>
-      <% if (cfg.site_telegram) { %><a href="https://t.me/s018d" target="_blank">تيليغرام: <%= cfg.site_telegram %></a><% } %>
-      <% if (cfg.site_instagram) { %><a href="https://instagram.com/s018d" target="_blank">إنستغرام: <%= cfg.site_instagram %></a><% } %>
-    </div>
-    <p class="fine">صُنع بحب في العراق 🇮🇶</p>
+<footer class="dk-foot">
+  <b><%= cfg.site_name %></b> — منصة المتاجر الإلكترونية العراقية
+  <div class="dk-foot-links">
+    <a href="/signup">إنشاء متجر</a><a href="/login">دخول</a><a href="/faq">أسئلة</a><a href="/privacy">الخصوصية</a><a href="/terms">الشروط</a>
+    <% if (cfg.site_whatsapp) { %><a href="https://wa.me/<%= cfg.site_whatsapp.replace(/\D/g,'') %>" target="_blank">واتساب الدعم</a><% } %>
   </div>
 </footer>
-<script>
-try {
-  function countUp(el, target) {
-    if (!el || !target) return;
-    var duration = 900, start = null;
-    function step(ts) {
-      if (!start) start = ts;
-      var p = Math.min((ts - start) / duration, 1);
-      var eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(eased * target).toLocaleString('en-US');
-      if (p < 1) requestAnimationFrame(step);
-      else el.textContent = target.toLocaleString('en-US');
-    }
-    requestAnimationFrame(step);
-  }
-  function initStats() {
-    countUp(document.getElementById('statStores'), <%= stores.length %>);
-    countUp(document.getElementById('statToday'), <%= stats.storesToday %>);
-    countUp(document.getElementById('statOrders'), <%= stats.ordersDone %>);
-  }
-  var statsEl = document.querySelector('.hero-stats');
-  if (statsEl && 'IntersectionObserver' in window) {
-    var obs = new IntersectionObserver(function(entries){ if(entries[0].isIntersecting){ initStats(); obs.disconnect(); } }, {threshold:0.3});
-    obs.observe(statsEl);
-  } else { initStats(); }
-} catch (e) {}
-</script>
 </body>
 </html>

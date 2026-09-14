@@ -53,6 +53,7 @@
           </div>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem">
             <label>سنة (د.ع)<input type="number" name="pro_price_12" value="<%= cfg.pro_price_12 %>" min="1000" dir="ltr"></label>
+            <label>الأعمال شهري (د.ع)<input type="number" name="business_price" value="<%= cfg.business_price || 35000 %>" min="1000" dir="ltr"></label>
             <label>جهة استلام الدفع
               <input type="text" name="pay_account" value="<%= cfg.pay_account %>" dir="ltr" placeholder="زين كاش 0770... أو حساب مصرفي">
               <small class="field-hint">تظهر عند طلب الترقية</small>

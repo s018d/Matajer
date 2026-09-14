@@ -289,15 +289,16 @@ router.get('/site', (req, res) => {
 });
 
 router.post('/site', (req, res) => {
-  const { site_name, tagline, site_whatsapp, pay_account, free_products, pro_price, pro_price_3, pro_price_12, trial_days, telegram_bot_token, telegram_admin_chat_id } = req.body;
+  const { site_name, tagline, site_whatsapp, pay_account, free_products, pro_price, pro_price_3, pro_price_12, business_price, trial_days, telegram_bot_token, telegram_admin_chat_id } = req.body;
   setSetting('site_name', String(site_name || '').trim() || 'دُكّان Dukkan');
   setSetting('tagline', String(tagline || ''));
   setSetting('site_whatsapp', String(site_whatsapp || '').trim());
   setSetting('pay_account', String(pay_account || '').trim());
-  setSetting('free_products', String(Math.max(1, Math.min(100, Number(free_products) || 10))));
-  setSetting('pro_price', String(Math.max(1000, Number(pro_price) || 12000)));
-  setSetting('pro_price_3', String(Math.max(1000, Number(pro_price_3) || 30000)));
-  setSetting('pro_price_12', String(Math.max(1000, Number(pro_price_12) || 72000)));
+  setSetting('free_products', String(Math.max(1, Math.min(100, Number(free_products) || 25))));
+  setSetting('pro_price', String(Math.max(1000, Number(pro_price) || 15000)));
+  setSetting('pro_price_3', String(Math.max(1000, Number(pro_price_3) || 40000)));
+  setSetting('pro_price_12', String(Math.max(1000, Number(pro_price_12) || 150000)));
+  setSetting('business_price', String(Math.max(1000, Number(business_price) || 35000)));
   setSetting('trial_days', String(Math.max(0, Math.min(30, Number(trial_days) || 0))));
   setSetting('telegram_bot_token', String(telegram_bot_token || '').trim());
   setSetting('telegram_admin_chat_id', String(telegram_admin_chat_id || '').trim());

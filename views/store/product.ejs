@@ -42,16 +42,16 @@
         <div class="st-img-empty big">لا توجد صورة لهذا المنتج</div>
       <% } %>
     </div>
-    <div class="st-product-info">
-      <h1><%= product.name %></h1>
-      <div class="st-price big">
-        <b><%= Number(product.price).toLocaleString('en-US') %> د.ع</b>
-        <% if (product.old_price) { %><del><%= Number(product.old_price).toLocaleString('en-US') %> د.ع</del><% } %>
+    <div class="st-product-info dkp">
+      <h1 class="dkp-name"><%= product.name %></h1>
+      <div class="dkp-price">
+        <b><%= Number(product.price).toLocaleString('en-US') %> <small>د.ع</small></b>
+        <% if (product.old_price) { %><del><%= Number(product.old_price).toLocaleString('en-US') %></del><span class="dkp-save">وفّر <%= Math.round((1 - Number(product.price)/Number(product.old_price))*100) %>%</span><% } %>
       </div>
       <% if (out) { %>
-        <div class="st-badge-soldout">🚫 نفد المخزون — تواصل واتساب للطلب المسبق</div>
+        <div class="dkp-soldout">🚫 نفد المخزون — تواصل واتساب للطلب المسبق</div>
       <% } else if (lowStock) { %>
-        <div class="st-badge-lowstock">⚡ كمية محدودة: <%= product.stock %> قطع متبقية</div>
+        <div class="dkp-low">⚡ كمية محدودة: <%= product.stock %> قطع متبقية — اطلب هسه</div>
       <% } %>
       <% const isTech = store.template === 'black-gold' || store.template === 'prem-classic'; const descLines = String(product.description||'').split('\n').map(s=>s.trim()).filter(Boolean); const hasSpecs = descLines.some(l=>l.includes(':')); %>
       <% if (isTech && hasSpecs) { %>
@@ -81,26 +81,26 @@
         </div>
       <% } %>
       <% if (!out) { %>
-        <div class="qty-row" style="display:flex; align-items:center; gap:.6rem; margin:.8rem 0; justify-content:center; background:var(--soft); padding:.5rem; border-radius:12px; width:fit-content">
-          <button onclick="qty(-1)" style="width:36px; height:36px; border-radius:8px; border:1.5px solid var(--line); background:#fff; font-size:1.2rem; cursor:pointer">−</button>
-          <input id="qty" value="1" readonly style="width:50px; text-align:center; font-weight:800; font-size:1rem; border:none; background:transparent">
-          <button onclick="qty(1)" style="width:36px; height:36px; border-radius:8px; border:1.5px solid var(--line); background:#fff; font-size:1.2rem; cursor:pointer">+</button>
-          <span class="muted" style="font-size:.8rem; margin-inline-start:.5rem">الكمية</span>
+        <div class="dkp-qty">
+          <button type="button" onclick="qty(-1)" aria-label="إنقاص">−</button>
+          <input id="qty" value="1" readonly>
+          <button type="button" onclick="qty(1)" aria-label="زيادة">+</button>
+          <span>الكمية</span>
         </div>
-        <button class="add-cart st-btn big-btn" data-id="<%= product.id %>" data-name="<%= product.name.replace(/"/g,'&quot;') %>" data-price="<%= product.price %>" data-img="<%= images.length ? images[0].path : '' %>" onclick="productAddToCart(this)" style="width:100%; padding:1rem; font-size:1.05rem; border-radius:14px">
+        <button class="add-cart st-btn big-btn dkp-atc" data-id="<%= product.id %>" data-name="<%= product.name.replace(/"/g,'&quot;') %>" data-price="<%= product.price %>" data-img="<%= images.length ? images[0].path : '' %>" onclick="productAddToCart(this)">
           🛒 أضف للسلة — <%= Number(product.price).toLocaleString('en-US') %> د.ع
         </button>
         <% if (store.whatsapp) { %>
-        <a class="st-btn big-btn wa-order" href="https://wa.me/<%= store.whatsapp.replace(/^0/, '964') %>?text=<%= encodeURIComponent('أريد طلب: ' + product.name + ' - السعر: ' + Number(product.price).toLocaleString('en-US') + ' د.ع - الكمية: 1') %>" target="_blank" rel="noopener" style="width:100%; margin-top:.6rem; justify-content:center">
+        <a class="st-btn big-btn wa-order dkp-wa" href="https://wa.me/<%= store.whatsapp.replace(/^0/, '964') %>?text=<%= encodeURIComponent('أريد طلب: ' + product.name + ' - السعر: ' + Number(product.price).toLocaleString('en-US') + ' د.ع - الكمية: 1') %>" target="_blank" rel="noopener">
           💬 اطلب عبر واتساب
         </a>
         <% } %>
-        <div style="display:flex; gap:.5rem; margin-top:.8rem; flex-wrap:wrap; justify-content:center; font-size:.75rem; color:var(--muted)">
-          <span style="display:flex; align-items:center; gap:.3rem; background:#f0fdf4; padding:.3rem .6rem; border-radius:99px; border:1px solid #bbf7d0">✓ دفع عند الاستلام</span>
-          <span style="display:flex; align-items:center; gap:.3rem; background:#eff6ff; padding:.3rem .6rem; border-radius:99px; border:1px solid #bfdbfe">✓ توصيل سريع</span>
-          <span style="display:flex; align-items:center; gap:.3rem; background:#fef3c7; padding:.3rem .6rem; border-radius:99px; border:1px solid #fde68a">✓ ضمان الاستبدال</span>
+        <div class="dkp-trust">
+          <span>✓ دفع عند الاستلام</span>
+          <span>✓ توصيل سريع</span>
+          <span>✓ ضمان الاستبدال</span>
         </div>
-        <% if (product.stock != null) { %><p class="st-stock">المتبقي: <%= product.stock %> قطعة</p><% } %>
+        <% if (product.stock != null) { %><p class="dkp-stock">المتبقي: <%= product.stock %> قطعة</p><% } %>
       <% } %>
     </div>
   </div>
@@ -337,6 +337,27 @@
   });
 </script>
 <style>
+/* صندوق الشراء الجديد — هوية دكان (أحمر دومي/ذهبي) */
+.dkp-name{font-size:1.35rem; font-weight:900; color:#1c1917; line-height:1.5}
+.dkp-price{display:flex; align-items:center; gap:.6rem; margin:.5rem 0; flex-wrap:wrap}
+.dkp-price b{font-size:1.5rem; font-weight:900; color:#7f1d1d}
+.dkp-price b small{font-size:.8rem}
+.dkp-price del{color:#a8a29e; font-size:.9rem}
+.dkp-save{background:linear-gradient(135deg,#7f1d1d,#dc2626); color:#fff; font-size:.72rem; font-weight:800; border-radius:99px; padding:.2rem .7rem}
+.dkp-soldout{background:#fef2f2; border:1.5px solid #fecaca; color:#b91c1c; font-weight:800; padding:.65rem 1.1rem; border-radius:12px; text-align:center; margin:.5rem 0; font-size:.88rem}
+.dkp-low{background:#fffbeb; border:1.5px solid #fcd34d; color:#92400e; font-weight:800; padding:.65rem 1.1rem; border-radius:12px; text-align:center; margin:.5rem 0; font-size:.88rem; animation:dkpPulse 1.6s infinite}
+@keyframes dkpPulse{0%,100%{box-shadow:0 0 0 0 rgba(217,119,6,.3)} 50%{box-shadow:0 0 0 6px rgba(217,119,6,0)}}
+.dkp-qty{display:flex; align-items:center; gap:.55rem; margin:.8rem 0; background:#faf9f8; border:1.5px solid #ece9e6; padding:.45rem .7rem; border-radius:14px; width:fit-content}
+.dkp-qty button{width:36px; height:36px; border-radius:10px; border:1.5px solid #e7e5e4; background:#fff; font-size:1.25rem; font-weight:900; cursor:pointer; color:#7f1d1d; line-height:1}
+.dkp-qty button:active{transform:scale(.92)}
+.dkp-qty input{width:46px; text-align:center; font-weight:900; font-size:1rem; border:none; background:transparent; font-family:inherit}
+.dkp-qty span{font-size:.78rem; color:#78716c; font-weight:700}
+.dkp-atc{width:100%; padding:1rem !important; font-size:1.05rem !important; border-radius:14px !important; background:linear-gradient(135deg,#7f1d1d,#b45309 55%,#d97706) !important; box-shadow:0 10px 26px rgba(127,29,29,.4) !important; font-weight:900}
+.dkp-atc:hover{transform:translateY(-2px); box-shadow:0 14px 32px rgba(127,29,29,.5) !important}
+.dkp-wa{width:100%; margin-top:.6rem; display:flex; justify-content:center}
+.dkp-trust{display:flex; gap:.5rem; margin-top:.8rem; flex-wrap:wrap; justify-content:center}
+.dkp-trust span{font-size:.74rem; font-weight:700; padding:.32rem .7rem; border-radius:99px; background:#f0fdf4; border:1px solid #bbf7d0; color:#15803d}
+.dkp-stock{font-size:.82rem; color:#15803d; font-weight:700; margin-top:.5rem}
 /* Product page styles */
 .st-badge-soldout{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#991b1b;font-weight:800;padding:.65rem 1.2rem;border-radius:var(--radius);text-align:center;margin:.5rem 0;font-size:.9rem}
 .st-badge-lowstock{background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;font-weight:700;padding:.65rem 1.2rem;border-radius:var(--radius);text-align:center;margin:.5rem 0;font-size:.9rem}

@@ -1,5 +1,5 @@
-<aside class="sidebar">
-  <div class="brand">Dukkan.<span>دُكّان</span></div>
+<aside class="kit-sidebar sidebar" id="kitSidebar">
+  <div class="brand">Dukkan.<span class="nav-text">دُكّان</span></div>
   <nav>
     <a href="/panel" class="<%= typeof active !== 'undefined' && active==='dash' ? 'on' : '' %>">📊 الرئيسية</a>
     <a href="/panel/products" class="<%= typeof active !== 'undefined' && active==='products' ? 'on' : '' %>">📦 المنتجات</a>
@@ -11,7 +11,7 @@
     <a href="/panel/billing" class="<%= typeof active !== 'undefined' && active==='billing' ? 'on' : '' %>">💳 الباقات والفوترة</a>
     <a href="/panel/domain/buy" class="<%= typeof active !== 'undefined' && active==='domain-buy' ? 'on' : '' %>">🌐 شراء دومين</a>
     <a href="/panel/settings" class="<%= typeof active !== 'undefined' && active==='settings' ? 'on' : '' %>">⚙️ الإعدادات</a>
-    <!-- روابط متقدمة مخفية: /panel/categories, /panel/abandoned-carts, /panel/shipping, /panel/shipments, /panel/returns, /panel/drivers, /panel/warehouses, /panel/cashflow, /panel/domain, /panel/kurdish, /panel/bundles -->
+    <!-- روابط متقدمة: /panel/categories, /panel/abandoned-carts, /panel/domain -->
   </nav>
   <div class="side-note">متجر: <%= typeof store !== 'undefined' && store ? store.name : '' %><br><small style="color:#475569">منصة خفيفة • جاهز للانطلاق</small></div>
 </aside>

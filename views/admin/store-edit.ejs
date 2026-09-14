@@ -138,6 +138,23 @@
             <input type="hidden" name="_csrf" value="<%= csrf %>">
             <button type="submit" class="btn btn-danger">🗑️ حذف المتجر نهائياً</button>
           </form>
+          <% if (typeof owner !== 'undefined' && owner) { %>
+          <hr style="border:none; border-top:1px solid #fecaca; margin:.4rem 0">
+          <h3 style="color:#dc2626; font-size:.95rem">🚫 حظر صاحب المتجر (<%= owner.username %>)</h3>
+          <% if (owner.banned) { %>
+            <p class="muted" style="font-size:.82rem">محظور حالياً — السبب: <%= owner.banned_reason || 'غير مذكور' %></p>
+            <form method="post" action="/admin/users/<%= owner.id %>/unban">
+              <input type="hidden" name="_csrf" value="<%= csrf %>">
+              <button type="submit" class="btn btn-sm btn-primary">✅ فك الحظر</button>
+            </form>
+          <% } else { %>
+            <form method="post" action="/admin/users/<%= owner.id %>/ban" onsubmit="return confirm('حظر <%= owner.username %> وطرده فوراً؟')">
+              <input type="hidden" name="_csrf" value="<%= csrf %>">
+              <input type="text" name="reason" placeholder="سبب الحظر (يظهر للمستخدم)" style="margin-bottom:.5rem">
+              <button type="submit" class="btn btn-sm btn-danger">🚫 حظر وطرد فوري</button>
+            </form>
+          <% } %>
+          <% } %>
         </div>
       </div>
     </div>

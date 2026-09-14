@@ -46,12 +46,21 @@ function genSlug(base) {
   return slug;
 }
 
-function createSession(userId) {
+function createSession(userId, days = 30) {
   const token = crypto.randomBytes(32).toString('hex');
   const hashed = crypto.createHash('sha256').update(token).digest('hex');
-  const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  const d = Math.max(1, Math.min(180, Number(days) || 30));
+  const expires = new Date(Date.now() + d * 24 * 60 * 60 * 1000).toISOString();
   db.prepare('INSERT INTO sessions (id, user_id, expires_at) VALUES (?,?,?)').run(hashed, userId, expires);
-  return token;
+  return { token, days: d };
+}
+
+/* سجل تسجيلات الدخول — ناجح وفاشل مع الطريقة والجهاز */
+function logLogin(userId, username, ip, userAgent, success, method) {
+  try {
+    db.prepare('INSERT INTO login_logs (user_id, username, ip, user_agent, success, method) VALUES (?,?,?,?,?,?)')
+      .run(userId || null, String(username || '').slice(0, 60), String(ip || '').slice(0, 60), String(userAgent || '').slice(0, 200), success ? 1 : 0, String(method || 'password').slice(0, 20));
+  } catch (e) {}
 }
 
 function destroySession(token) {
@@ -74,6 +83,7 @@ function currentUser(req) {
 function requireAuth(req, res, next) {
   const user = currentUser(req);
   if (!user) return res.redirect('/login');
+  if (user.banned === 1) { destroySession(req.cookies && req.cookies.sid); return res.redirect('/login?err=' + encodeURIComponent('حسابك محظور — تواصل مع الإدارة')); }
   req.user = user;
   next();
 }
@@ -100,6 +110,7 @@ function requireAdmin(req, res, next) {
   const user = currentUser(req);
   if (!user) return res.redirect('/login');
   if (!ADMIN_ROLES.includes(user.role)) return res.status(403).render('error', { msg: 'هذه الصفحة للإدارة فقط', user });
+  if (user.banned === 1) { destroySession(req.cookies && req.cookies.sid); return res.redirect('/login?err=' + encodeURIComponent('حسابك محظور — تواصل مع الإدارة')); }
   if (user.is_active === 0) return res.status(403).render('error', { msg: 'حسابك موقوف — تواصل مع المدير العام', user });
   req.user = user;
   next();
@@ -117,6 +128,7 @@ function requireOwner(req, res, next) {
   const user = currentUser(req);
   if (!user) return res.redirect('/login');
   if (user.role === 'superadmin') return res.redirect('/admin?err=' + encodeURIComponent('أنت مدير عام — لوحة المتجر للتجار فقط. استخدم لوحة الإدارة.'));
+  if (user.banned === 1) { destroySession(req.cookies && req.cookies.sid); return res.redirect('/login?err=' + encodeURIComponent('حسابك محظور — تواصل مع الإدارة')); }
   if (user.role !== 'owner' || !user.store_id) return res.status(403).render('error', { msg: 'ليس لديك متجر مرتبط بحسابك — سجل متجراً جديداً من الصفحة الرئيسية', user });
   req.user = user;
   next();
@@ -314,7 +326,7 @@ function addCashFlowEntry(storeId, type, category, amount, referenceType, refere
 
 module.exports = {
   now, appendLog, hashPassword, checkPassword, genPassword, genSlug,
-  createSession, destroySession, currentUser,
+  createSession, destroySession, currentUser, logLogin,
   requireAuth, requireAdmin, requirePermission, hasPermission, ADMIN_ROLES, ROLE_PERMISSIONS, requireOwner, money, logActivity, thumb,
   checkLimit, loginLocked, loginFail, loginOk, captchaNew, captchaCheck,
   sendTelegram, notifyNewOrder,

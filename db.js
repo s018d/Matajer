@@ -209,6 +209,12 @@ if (process.env.DATABASE_URL) {
         "ALTER TABLE payments ADD COLUMN IF NOT EXISTS ref TEXT DEFAULT ''",
         "ALTER TABLE payments ADD COLUMN IF NOT EXISTS receipt_path TEXT DEFAULT ''",
         "CREATE UNIQUE INDEX IF NOT EXISTS idx_coupons_store_code ON coupons(store_id, code)",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS google_sub TEXT DEFAULT ''",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS email TEXT DEFAULT ''",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS banned INTEGER DEFAULT 0",
+        "ALTER TABLE users ADD COLUMN IF NOT EXISTS banned_reason TEXT DEFAULT ''",
+        "CREATE TABLE IF NOT EXISTS login_logs (id SERIAL PRIMARY KEY, user_id INTEGER, username TEXT DEFAULT '', ip TEXT DEFAULT '', user_agent TEXT DEFAULT '', success INTEGER DEFAULT 0, method TEXT DEFAULT 'password', created_at TEXT DEFAULT NOW())",
+        "CREATE INDEX IF NOT EXISTS idx_login_logs_user ON login_logs(user_id)",
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS display_name TEXT DEFAULT ''",
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS permissions TEXT DEFAULT ''",
         "ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active INTEGER DEFAULT 1",
@@ -424,6 +430,12 @@ CREATE TABLE IF NOT EXISTS coupons (
   try { db.exec(`CREATE TABLE IF NOT EXISTS templates (id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT DEFAULT '', css_file TEXT DEFAULT '', preview_image TEXT DEFAULT '', is_premium INTEGER DEFAULT 0, is_active INTEGER DEFAULT 1, position INTEGER DEFAULT 0, created_at TEXT DEFAULT (datetime('now','localtime')))`); } catch (e) {}
   // cash_flow_entries — كان ناقصاً (يستدعيه addCashFlowEntry)
   try { db.exec(`CREATE TABLE IF NOT EXISTS cash_flow_entries (id INTEGER PRIMARY KEY AUTOINCREMENT, store_id INTEGER NOT NULL, type TEXT NOT NULL, category TEXT NOT NULL, amount INTEGER NOT NULL, reference_type TEXT DEFAULT '', reference_id INTEGER DEFAULT 0, description TEXT DEFAULT '', created_at TEXT DEFAULT (datetime('now','localtime'))); CREATE INDEX IF NOT EXISTS idx_cfe_store ON cash_flow_entries(store_id);`); } catch (e) {}
+  // نظام الدخول المزدوج — جوجل + حظر + سجل دخول
+  try { db.exec("ALTER TABLE users ADD COLUMN google_sub TEXT DEFAULT ''"); } catch (e) {}
+  try { db.exec("ALTER TABLE users ADD COLUMN email TEXT DEFAULT ''"); } catch (e) {}
+  try { db.exec("ALTER TABLE users ADD COLUMN banned INTEGER DEFAULT 0"); } catch (e) {}
+  try { db.exec("ALTER TABLE users ADD COLUMN banned_reason TEXT DEFAULT ''"); } catch (e) {}
+  try { db.exec(`CREATE TABLE IF NOT EXISTS login_logs (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, username TEXT DEFAULT '', ip TEXT DEFAULT '', user_agent TEXT DEFAULT '', success INTEGER DEFAULT 0, method TEXT DEFAULT 'password', created_at TEXT DEFAULT (datetime('now','localtime'))); CREATE INDEX IF NOT EXISTS idx_login_logs_user ON login_logs(user_id);`); } catch (e) {}
 }
 
 function logActivity(userId, username, action, details = '') {

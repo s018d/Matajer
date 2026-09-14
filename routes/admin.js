@@ -151,7 +151,7 @@ router.post('/stores', (req, res) => {
 router.get('/stores/:id', (req, res) => {
   const store = getStore(req.params.id);
   if (!store) return res.redirect('/admin/stores');
-  const owner = db.prepare('SELECT id, username FROM users WHERE store_id=?').get(store.id);
+  const owner = db.prepare('SELECT id, username, banned, banned_reason FROM users WHERE store_id=?').get(store.id);
   const stats = storeStats(store.id);
   const referrals = db.prepare('SELECT COUNT(*) c FROM referrals WHERE referrer_store_id=?').get(store.id).c;
   const rewarded = db.prepare("SELECT COUNT(*) c FROM referrals WHERE referrer_store_id=? AND status='done'").get(store.id).c;
@@ -433,6 +433,44 @@ router.post('/team/:id/resetpass', (req, res) => {
   db.prepare('UPDATE users SET password_hash=? WHERE id=?').run(hashPassword(pass), t.id);
   setFlash(res, `كلمة المرور الجديدة لـ ${t.username}: ${pass} (مرة واحدة)`);
   res.redirect('/admin/team');
+});
+
+/* ====== حظر المستخدمين (مكافحة التخريب والحسابات الوهمية) ====== */
+router.post('/users/:id/ban', (req, res) => {
+  const { hasPermission } = require('../util');
+  if (!hasPermission(req.user, 'users.manage')) return res.redirect('/admin/stores?err=' + encodeURIComponent('ليس لديك صلاحية'));
+  const t = db.prepare('SELECT * FROM users WHERE id=?').get(req.params.id);
+  if (!t) return res.redirect('/admin/stores?err=' + encodeURIComponent('المستخدم غير موجود'));
+  if (t.id === req.user.id) return res.redirect('/admin/stores?err=' + encodeURIComponent('لا يمكنك حظر نفسك'));
+  if (t.role === 'superadmin') return res.redirect('/admin/stores?err=' + encodeURIComponent('لا يمكن حظر السوبر أدمن'));
+  const reason = String(req.body.reason || '').slice(0, 200);
+  db.prepare('UPDATE users SET banned=1, banned_reason=? WHERE id=?').run(reason, t.id);
+  db.prepare('DELETE FROM sessions WHERE user_id=?').run(t.id); // طرد فوري من كل الجلسات
+  logActivity(req.user.id, req.user.username, 'حظر مستخدم', `حظر «${t.username}» — السبب: ${reason || 'غير مذكور'}`);
+  appendLog(`المدير ${req.user.username} حظر المستخدم «${t.username}» وطرده من كل الجلسات`);
+  res.redirect('/admin/stores?ok=' + encodeURIComponent('تم حظر ' + t.username + ' وطرده فوراً'));
+});
+
+router.post('/users/:id/unban', (req, res) => {
+  const { hasPermission } = require('../util');
+  if (!hasPermission(req.user, 'users.manage')) return res.redirect('/admin/stores?err=' + encodeURIComponent('ليس لديك صلاحية'));
+  const t = db.prepare('SELECT * FROM users WHERE id=?').get(req.params.id);
+  if (!t) return res.redirect('/admin/stores?err=' + encodeURIComponent('المستخدم غير موجود'));
+  db.prepare("UPDATE users SET banned=0, banned_reason='' WHERE id=?").run(t.id);
+  logActivity(req.user.id, req.user.username, 'فك حظر', `فك حظر «${t.username}»`);
+  res.redirect('/admin/stores?ok=' + encodeURIComponent('تم فك حظر ' + t.username));
+});
+
+/* ====== سجل تسجيلات الدخول ====== */
+router.get('/logins', (req, res) => {
+  const { hasPermission } = require('../util');
+  if (!hasPermission(req.user, 'users.view')) return res.status(403).render('error', { msg: 'ليس لديك صلاحية', user: req.user });
+  const q = String(req.query.q || '').trim();
+  let rows;
+  if (q) rows = db.prepare('SELECT * FROM login_logs WHERE username LIKE ? ORDER BY id DESC LIMIT 200').all('%' + q + '%');
+  else rows = db.prepare('SELECT * FROM login_logs ORDER BY id DESC LIMIT 200').all();
+  const fails = db.prepare('SELECT COUNT(*) c FROM login_logs WHERE success=0').get().c;
+  res.render('admin/logins', { rows, fails, q, ok: req.query.ok || '', user: req.user });
 });
 
 /* ====== إدارة القوالب الديناميكية ====== */

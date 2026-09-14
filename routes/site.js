@@ -151,7 +151,7 @@ router.post('/signup', (req, res) => {
     if (String(e.message||'').includes('UNIQUE') || String(e.message||'').includes('unique')) return res.redirect('/signup?err=' + encodeURIComponent('اسم المستخدم محجوز — اختر غيره'));
     return res.redirect('/signup?err=' + encodeURIComponent('فشل التسجيل — حاول مجدداً'));
   }
-  const token = createSession(uinfo.lastInsertRowid);
+  const { token } = createSession(uinfo.lastInsertRowid, 30);
   res.cookie('sid', token, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production' });
   const slug = db.prepare('SELECT slug FROM stores WHERE id=?').get(info.lastInsertRowid).slug;
   const refSlug = String(ref || '').trim();

@@ -66,14 +66,14 @@
           <label>الاسم الكامل *</label>
           <div class="co-input-wrap">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <input type="text" name="customer_name" placeholder="أدخل اسمك الكامل" required>
+            <input type="text" name="customer_name" placeholder="أدخل اسمك الكامل" required autocomplete="name" autocapitalize="words">
           </div>
         </div>
         <div class="co-field">
           <label>رقم الهاتف *</label>
           <div class="co-input-wrap">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            <input type="text" name="customer_phone" dir="ltr" placeholder="07XX XXX XXXX" required>
+            <input type="tel" name="customer_phone" dir="ltr" placeholder="07XX XXX XXXX" required autocomplete="tel" inputmode="numeric" pattern="[0-9 ]{10,15}">
           </div>
         </div>
         <div class="co-field">
@@ -162,9 +162,14 @@
 .co-pay-name{font-weight:700;font-size:.92rem;color:var(--ink)}
 .co-pay-info small{color:var(--muted);font-size:.78rem}
 
-/* Submit button */
-.co-submit-btn{margin-top:.5rem;font-size:1.05rem;padding:1rem;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--primary),#0284c7)!important;box-shadow:0 8px 24px rgba(14,165,233,.35)}
-.co-submit-btn:hover{box-shadow:0 12px 32px rgba(14,165,233,.5)!important;transform:translateY(-2px)!important}
+/* Submit button — هوية دكان */
+.co-submit-btn{margin-top:.5rem;font-size:1.05rem;padding:1rem;border-radius:14px;background:linear-gradient(135deg,#7f1d1d,#b45309 55%,#d97706)!important;box-shadow:0 10px 26px rgba(127,29,29,.4)!important;font-weight:900}
+.co-submit-btn:hover{box-shadow:0 14px 32px rgba(127,29,29,.5)!important;transform:translateY(-2px)!important}
+.co-step.active .co-step-num{background:linear-gradient(135deg,#7f1d1d,#d97706)!important;color:#fff;box-shadow:0 4px 12px rgba(127,29,29,.35)}
+.co-pay-option:has(input:checked){border-color:#d97706 !important;background:rgba(217,119,6,.06) !important}
+.co-pay-option input{accent-color:#b45309}
+.co-input-wrap:focus-within{border-color:#d97706 !important;box-shadow:0 0 0 3px rgba(217,119,6,.12) !important}
+#coApplyCoupon{background:linear-gradient(135deg,#7f1d1d,#b45309) !important; border:none !important; color:#fff !important; font-weight:800}
 
 @media(max-width:800px){
   .co-steps{margin-bottom:1rem;padding:.8rem}

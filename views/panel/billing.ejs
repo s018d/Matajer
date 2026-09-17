@@ -21,8 +21,8 @@
           <li><span class="feed-act">كل المزايا الأساسية:</span> <span class="feed-detail">السلة والطلب والواتساب والبحث والتوصيل — كاملة بدون استثناء</span></li>
         </ul>
         <div style="margin-top:1rem;padding:1rem;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border-radius:12px;border:1px solid #bfdbfe">
-          <b style="color:#1d4ed8">✨ جرّب الاحترافية 7 أيام مجاناً</b>
-          <p class="muted" style="margin-top:.3rem;font-size:.85rem">كل الأنماط العالمية تُفتح لك فوراً للتجربة — تنتهي تلقائياً بعد 7 أيام وتعود للمجانية بدون خصم أي شيء من بياناتك. إلغاؤها سهل مثل تشغيلها.</p>
+          <b style="color:#1d4ed8">✨ جرّب الاحترافية <%= cfg.trial_days || 14 %> أيام مجاناً</b>
+          <p class="muted" style="margin-top:.3rem;font-size:.85rem">كل الأنماط العالمية تُفتح لك فوراً للتجربة — تنتهي تلقائياً بعد <%= cfg.trial_days || 14 %> أيام وتعود للمجانية بدون خصم أي شيء من بياناتك. إلغاؤها سهل مثل تشغيلها.</p>
         </div>
       </div>
       <p class="muted" style="text-align:center;margin:.6rem 0 .2rem;font-size:.88rem">💡 أرخص من كل المنصات — اختر ما يناسبك:</p>

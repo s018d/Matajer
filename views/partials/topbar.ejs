@@ -10,7 +10,12 @@
         <% if (store.plan === 'pro' && !store.ispro) { %>
           <a class="btn btn-sm btn-warn" href="/panel/billing">⏰ باقتك انتهت — فعّلها</a>
         <% } else if (store.plan === 'pro' && store.plan_expires) { %>
-          <span class="badge badge-ok" title="تنتهي باقتك بتاريخ <%= store.plan_expires %>">احترافية حتى <span dir="ltr"><%= store.plan_expires %></span></span>
+          <% const __days = Math.ceil((new Date(store.plan_expires) - new Date()) / 86400000); %>
+          <% if (__days <= 3) { %>
+            <a class="btn btn-sm btn-warn" href="/panel/billing" title="تنتهي باقتك بتاريخ <%= store.plan_expires %>">⏰ تنتهي بعد <%= __days %> يوم — جدد</a>
+          <% } else { %>
+            <span class="badge badge-ok" title="تنتهي باقتك بتاريخ <%= store.plan_expires %>">احترافية حتى <span dir="ltr"><%= store.plan_expires %></span></span>
+          <% } %>
         <% } %>
         <a class="btn btn-sm" href="/s/<%= store.slug %>" target="_blank">عرض متجري</a>
       <% } %>

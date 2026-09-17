@@ -53,7 +53,7 @@
           </div>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem">
             <label>سنة (د.ع)<input type="number" name="pro_price_12" value="<%= cfg.pro_price_12 %>" min="1000" dir="ltr"></label>
-            <label>الأعمال شهري (د.ع)<input type="number" name="business_price" value="<%= cfg.business_price || 35000 %>" min="1000" dir="ltr"></label>
+            <label>الأعمال شهري (د.ع)<input type="number" name="business_price" value="<%= cfg.business_price || 25000 %>" min="1000" dir="ltr"></label>
             <label>جهة استلام الدفع
               <input type="text" name="pay_account" value="<%= cfg.pay_account %>" dir="ltr" placeholder="زين كاش 0770... أو حساب مصرفي">
               <small class="field-hint">تظهر عند طلب الترقية</small>
@@ -67,7 +67,7 @@
           <h2>🎁 التجربة والإحالة</h2>
           <label>أيام التجربة الاحترافية عند التسجيل (0 = بدون)
             <input type="number" name="trial_days" value="<%= cfg.trial_days %>" min="0" max="30" dir="ltr" style="max-width:200px">
-            <small class="field-hint">كل متجر جديد يحصل برو مجاناً لهذه المدة — 7 أيام موصى به</small>
+            <small class="field-hint">كل متجر جديد يحصل برو مجاناً لهذه المدة — 14 يوم موصى به</small>
           </label>
           <div style="margin-top:1rem; padding:1rem; background:#fffbeb; border-radius:12px; border:1.5px solid #fde68a">
             <b>🎁 نظام الإحالة:</b> كل تاجر لديه رابط <code dir="ltr">/signup?ref=slug</code> — عند ترقية المدعو، الداعي يكسب شهر مجاني (تلقائي في <code>admin/payments</code>)

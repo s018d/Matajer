@@ -238,10 +238,12 @@
   };
   window.skipTour=hideTour;
   window.startTour=function(force){ tourIdx=0; localStorage.removeItem('dukkan_tour_done'); showTour(); };
-  // إظهار تلقائي للتاجر الجديد (0 منتجات ولم يشاهد الشرح)
+  // إظهار تلقائي للتاجر الجديد (0 منتجات ولم يشاهد الشرح) أو بعد التسجيل مباشرة
   (function(){
     const products=<%= stats.products %>;
-    if(products===0 && localStorage.getItem('dukkan_tour_done')!=='1'){
+    const fresh = <%= (typeof welcome !== 'undefined' && welcome) ? 'true' : 'false' %>;
+    if (fresh) localStorage.removeItem('dukkan_tour_done');
+    if((products===0 && localStorage.getItem('dukkan_tour_done')!=='1') || fresh){
       setTimeout(showTour, 800);
     }
   })();

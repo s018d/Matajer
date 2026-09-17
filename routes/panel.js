@@ -133,8 +133,8 @@ router.get('/', (req, res) => {
     chart.push({ d: d.slice(5), s: Number(r.s), c: Number(r.c) });
   }
   const chartMax = Math.max(1, ...chart.map(x => x.s));
-  res.render('panel/dashboard', { store, stats, recent, chart, chartMax, money, user: req.user, 
-    avgOrder, conversionRate, topProducts, peakHours, peakDays, dowNames });
+  res.render('panel/dashboard', { store, stats, recent, chart, chartMax, money, user: req.user,
+    avgOrder, conversionRate, topProducts, peakHours, peakDays, dowNames, welcome: req.query.welcome === '1' });
 });
 
 router.get('/products', (req, res) => {

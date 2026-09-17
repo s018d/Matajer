@@ -5,7 +5,7 @@
   const addonsVal = product ? (product.addons || '') : '';
 %>
 <%- include('../partials/head', { title: (isNew ? 'منتج جديد' : 'تعديل: ' + product.name) + ' — متجري' }) %>
-<style>.auth-back{display:inline-flex;align-items:center;gap:.35rem;color:#b45309;font-size:.85rem;font-weight:700;text-decoration:none;padding:.4rem .7rem;border-radius:8px;background:#fffbeb;border:1px solid #fde68a;transition:all .2s}.auth-back:hover{background:#fef3c7;transform:translateX(2px)}</style>
+<style>.auth-back{display:inline-flex;align-items:center;gap:.35rem;color:#0E7C5B;font-size:.85rem;font-weight:700;text-decoration:none;padding:.4rem .7rem;border-radius:8px;background:#F0FDFA;border:1px solid #99F6E4;transition:all .2s}.auth-back:hover{background:#CCFBF1;transform:translateX(2px)}</style>
 <body class="app">
 <%- include('../partials/sidebar-panel', { active: 'products', store }) %>
 <main class="main">
@@ -137,7 +137,7 @@
             <% images.forEach(im => { %>
               <div class="img-cell">
                 <img src="<%= im.path %>" alt="">
-                <% if (im.variant) { %><span class="badge" style="position:absolute;top:6px;right:6px;background:linear-gradient(135deg,#b45309,#d97706);color:#fff;font-size:.7rem;padding:.15rem .4rem;border-radius:99px"><%= im.variant %></span><% } %>
+                <% if (im.variant) { %><span class="badge" style="position:absolute;top:6px;right:6px;background:linear-gradient(135deg,#0E7C5B,#0D9488);color:#fff;font-size:.7rem;padding:.15rem .4rem;border-radius:99px"><%= im.variant %></span><% } %>
                 <div class="img-cell-actions">
                   <% if (im.position !== 0) { %>
                     <form method="post" action="/panel/products/<%= pid %>/images/<%= im.id %>/setmain">

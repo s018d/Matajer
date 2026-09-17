@@ -6,7 +6,7 @@
   <div class="content">
     <%- include('../partials/alerts', { ok: typeof ok !== 'undefined' ? ok : '', err: typeof err !== 'undefined' ? err : '' }) %>
     <a href="/panel" class="auth-back" style="display:inline-flex;margin-bottom:1rem">→ رجوع للوحة</a>
-    <style>.auth-back{display:inline-flex;align-items:center;gap:.35rem;color:#b45309;font-size:.85rem;font-weight:700;text-decoration:none;padding:.4rem .7rem;border-radius:8px;background:#fffbeb;border:1px solid #fde68a;transition:all .2s}.auth-back:hover{background:#fef3c7;transform:translateX(2px)}</style>
+    <style>.auth-back{display:inline-flex;align-items:center;gap:.35rem;color:#0E7C5B;font-size:.85rem;font-weight:700;text-decoration:none;padding:.4rem .7rem;border-radius:8px;background:#F0FDFA;border:1px solid #99F6E4;transition:all .2s}.auth-back:hover{background:#CCFBF1;transform:translateX(2px)}</style>
     <div class="tpl-toolbar">
       <input type="text" id="tplSearch" placeholder="ابحث: اسم القالب، اللون، الشكل، الخط…" autocomplete="off">
       <button class="btn btn-ghost" id="tplRandom" title="اختر قالباً عشوائياً">قالب عشوائي</button>
@@ -60,11 +60,11 @@
 <style>
 .tpl-toolbar { display: flex; gap: .6rem; align-items: center; margin-bottom: .5rem; flex-wrap: wrap; }
 .tpl-toolbar input { flex: 1; min-width: 200px; padding: .55rem .8rem; border: 1.5px solid var(--line, #e2e8f0); border-radius: 10px; font-family: inherit; font-size: .92rem; }
-.tpl-toolbar input:focus { outline: 2px solid var(--primary, #b45309); border-color: transparent; }
+.tpl-toolbar input:focus { outline: 2px solid var(--primary, #0E7C5B); border-color: transparent; }
 .tpl-hint { color: var(--muted, #64748b); font-size: .85rem; margin-bottom: 1rem; }
 .tpl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .9rem; }
 .tpl-card { background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px; overflow: hidden; cursor: pointer; position: relative; transition: transform .15s, box-shadow .15s, border-color .15s; }
-.tpl-card:hover { transform: translateY(-3px); box-shadow: 0 14px 30px -14px rgba(15,23,42,.25); border-color: var(--primary, #b45309); }
+.tpl-card:hover { transform: translateY(-3px); box-shadow: 0 14px 30px -14px rgba(15,23,42,.25); border-color: var(--primary, #0E7C5B); }
 .tpl-card.on { border-color: #16a34a; box-shadow: 0 0 0 3px rgba(22,163,74,.18); }
 .tpl-thumb { height: 128px; background: var(--bgc); padding: 8px; }
 .tpl-th-head { height: 26px; border-radius: 8px 8px 0 0; background: var(--pk); }
@@ -74,7 +74,7 @@
 .tpl-info b { font-size: .85rem; color: var(--ink, #0f172a); }
 .tpl-info span { font-size: .72rem; color: var(--muted, #64748b); }
 .tpl-current { position: absolute; top: 8px; left: 8px; background: #16a34a; color: #fff; font-size: .68rem; font-weight: 700; padding: .15rem .5rem; border-radius: 99px; }
-.tpl-prem-badge { background: linear-gradient(90deg, #f59e0b, #d97706); color: #fff; font-size: .62rem; font-weight: 800; padding: .1rem .45rem; border-radius: 99px; vertical-align: middle; }
+.tpl-prem-badge { background: linear-gradient(90deg, #2DD4BF, #0D9488); color: #fff; font-size: .62rem; font-weight: 800; padding: .1rem .45rem; border-radius: 99px; vertical-align: middle; }
 .tpl-hover { position: fixed; left: 14px; bottom: 14px; z-index: 120; width: min(400px, 92vw); height: 62vh; background: #fff; border-radius: 14px; box-shadow: 0 24px 60px -18px rgba(0,0,0,.45); overflow: hidden; display: none; border: 1px solid #e2e8f0; }
 .tpl-hover-head { display: flex; align-items: center; justify-content: space-between; padding: .5rem .8rem; background: var(--ink, #0f172a); color: #fff; }
 .tpl-hover-head b { font-size: .85rem; }

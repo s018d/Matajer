@@ -10,9 +10,9 @@
       <div>
         <div class="card">
           <h2>اطلب دومينك — بلا تعب، بلا DNS</h2>
-          <div style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1.5px solid #fde68a;border-radius:12px;padding:.8rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.6rem">
+          <div style="background:linear-gradient(135deg,#F0FDFA,#CCFBF1);border:1.5px solid #99F6E4;border-radius:12px;padding:.8rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.6rem">
             <span style="font-size:1.4rem">💬</span>
-            <div style="font-size:.85rem;color:#92400e;line-height:1.6"><b>الدومين شراء منفصل</b> — السعر مو ضمن الباقة. بعد الطلب نتواصل واتساب ونرسل لك رقم التحويل، ومن تدفع نربطه خلال 24 ساعة.</div>
+            <div style="font-size:.85rem;color:#0A4A38;line-height:1.6"><b>الدومين شراء منفصل</b> — السعر مو ضمن الباقة. بعد الطلب نتواصل واتساب ونرسل لك رقم التحويل، ومن تدفع نربطه خلال 24 ساعة.</div>
           </div>
           <p class="muted" style="margin-bottom:1rem">اكتب الدومين اللي تريده، احنا نشتريه ونربطه بمتجرك مباشرة.</p>
           <form method="post" action="/panel/domain/buy?_csrf=<%= csrf %>">
@@ -24,7 +24,7 @@
               <div class="tier tier-hit" style="background:linear-gradient(135deg,#f0fdfa,#ecfdf5);border-color:#6ee7b7">
                 <h3>🌐 عادي</h3>
                 <div class="tier-price"><b><%= (domainPrice / 1000).toLocaleString('en-US') %> ألف</b><span>د.ع — دفع منفصل</span></div>
-                <ul><li>.com / .net / .org</li><li>ربط كامل خلال 24 ساعة</li><li style="color:#92400e;font-weight:700">السعر منفصل عن الباقة</li></ul>
+                <ul><li>.com / .net / .org</li><li>ربط كامل خلال 24 ساعة</li><li style="color:#0A4A38;font-weight:700">السعر منفصل عن الباقة</li></ul>
                 <input type="radio" name="type" value="normal" id="typeNormal" checked style="display:none">
                 <span class="badge" style="background:#10b981;color:#fff">تواصل واتساب بعد الطلب</span>
               </div>

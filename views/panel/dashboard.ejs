@@ -5,13 +5,13 @@
   <%- include('../partials/topbar', { pageTitle: 'نظرة عامة' }) %>
   <div class="content">
     <% if (stats.products === 0) { %>
-    <div class="card" style="background:linear-gradient(135deg,#1c0a0a,#7f1d1d 55%,#b45309);color:#fff;border:none;padding:1.6rem 1.4rem;margin-bottom:1rem;position:relative;overflow:hidden">
+    <div class="card" style="background:linear-gradient(135deg,#0B1F3A,#0B1F3A 55%,#0E7C5B);color:#fff;border:none;padding:1.6rem 1.4rem;margin-bottom:1rem;position:relative;overflow:hidden">
       <div style="position:absolute;top:-40px;left:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(245,158,11,.3),transparent 70%);border-radius:50%"></div>
       <h2 style="color:#fff;margin:0 0 .3rem;position:relative">👋 أهلاً بيك في متجرك الجديد!</h2>
       <p style="color:#cbd5e1;margin:0 0 1.2rem;position:relative">خلّي متجرك جاهز للبيع بـ 3 خطوات — دقيقتين وتبلش</p>
       <div style="display:flex;flex-direction:column;gap:.7rem;position:relative">
         <a href="/panel/products/new" style="display:flex;align-items:center;gap:.8rem;background:rgba(255,255,255,.12);padding:.8rem 1rem;border-radius:12px;text-decoration:none;color:#fff;border:1px solid rgba(255,255,255,.15);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.12)'">
-          <span style="background:linear-gradient(135deg,#b45309,#f59e0b);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem">1</span>
+          <span style="background:linear-gradient(135deg,#0E7C5B,#2DD4BF);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem">1</span>
           <div style="flex:1"><b>أضف أول منتج</b><div style="font-size:.82rem;color:#cbd5e1">صورة + سعر + وصف — 30 ثانية</div></div>
           <span>→</span>
         </a>
@@ -29,8 +29,8 @@
     </div>
     <% } %>
     <div class="stat-grid">
-      <div class="stat" style="border-top:3px solid #b45309"><span>📦 المنتجات</span><b><%= stats.products %></b><small class="muted" style="font-size:.7rem"><%= stats.products===0 ? 'أضف أول منتج' : 'نشط' %></small></div>
-      <div class="stat <%= stats.newOrders ? 'stat-strong' : '' %>" style="border-top:3px solid #f59e0b"><span>🆕 طلبات جديدة</span><b><%= stats.newOrders %></b><small class="muted" style="font-size:.7rem"><%= stats.newOrders ? 'تحتاج متابعة' : 'لا جديد' %></small></div>
+      <div class="stat" style="border-top:3px solid #0E7C5B"><span>📦 المنتجات</span><b><%= stats.products %></b><small class="muted" style="font-size:.7rem"><%= stats.products===0 ? 'أضف أول منتج' : 'نشط' %></small></div>
+      <div class="stat <%= stats.newOrders ? 'stat-strong' : '' %>" style="border-top:3px solid #2DD4BF"><span>🆕 طلبات جديدة</span><b><%= stats.newOrders %></b><small class="muted" style="font-size:.7rem"><%= stats.newOrders ? 'تحتاج متابعة' : 'لا جديد' %></small></div>
       <div class="stat" style="border-top:3px solid #64748b"><span>🧾 كل الطلبات</span><b><%= stats.orders %></b></div>
       <div class="stat" style="border-top:3px solid #8b5cf6"><span>👁️ المشاهدات</span><b><%= stats.views %></b></div>
       <div class="stat stat-strong" style="border-top:3px solid #10b981"><span>💰 المبيعات</span><b><%= money(stats.revenue) %></b><small class="muted" style="font-size:.7rem">إجمالي</small></div>
@@ -150,7 +150,7 @@
     <p id="tourText" style="color:#475569;font-size:.92rem;line-height:1.7;margin:0 0 1.4rem"></p>
     <div style="display:flex;gap:.5rem;justify-content:center">
       <button onclick="skipTour()" style="flex:1;padding:.65rem;border-radius:10px;border:1.5px solid #e2e8f0;background:#f8fafc;color:#475569;font-weight:700;cursor:pointer">تخطي الشرح</button>
-      <button onclick="nextTour()" id="tourNext" style="flex:1.4;padding:.65rem;border-radius:10px;border:none;background:linear-gradient(135deg,#7f1d1d,#b45309 60%,#d97706);color:#fff;font-weight:800;cursor:pointer">التالي →</button>
+      <button onclick="nextTour()" id="tourNext" style="flex:1.4;padding:.65rem;border-radius:10px;border:none;background:linear-gradient(135deg,#0B1F3A,#0E7C5B 60%,#0D9488);color:#fff;font-weight:800;cursor:pointer">التالي →</button>
     </div>
     <div style="margin-top:1rem;display:flex;gap:.35rem;justify-content:center" id="tourDots"></div>
     <div id="tourStep" style="margin-top:.4rem;font-size:.72rem;color:#94a3b8"></div>
@@ -228,7 +228,7 @@
     document.getElementById('tourStep').textContent=(tourIdx+1)+' / '+tourSteps.length;
     document.getElementById('tourNext').textContent= tourIdx===tourSteps.length-1 ? 'ابدأ البيع 🚀' : 'التالي →';
     const dots=document.getElementById('tourDots');
-    dots.innerHTML=tourSteps.map((_,i)=>'<span style="width:8px;height:8px;border-radius:50%;background:'+(i===tourIdx?'#d97706':'#e2e8f0')+';display:inline-block"></span>').join('');
+    dots.innerHTML=tourSteps.map((_,i)=>'<span style="width:8px;height:8px;border-radius:50%;background:'+(i===tourIdx?'#0D9488':'#e2e8f0')+';display:inline-block"></span>').join('');
   }
   function showTour(){ document.getElementById('tourOverlay').style.display='flex'; renderTour(); }
   function hideTour(){ document.getElementById('tourOverlay').style.display='none'; localStorage.setItem('dukkan_tour_done','1'); }
@@ -252,7 +252,7 @@
 <style>
   .chart-row { display: flex; align-items: flex-end; gap: .7rem; height: 160px; padding-top: .5rem; }
   .chart-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: .25rem; height: 100%; }
-  .chart-bar { width: 100%; max-width: 46px; background: linear-gradient(180deg, #d97706, #7f1d1d); border-radius: 7px 7px 0 0; min-height: 4px; transition: height .4s; }
+  .chart-bar { width: 100%; max-width: 46px; background: linear-gradient(180deg, #0D9488, #0B1F3A); border-radius: 7px 7px 0 0; min-height: 4px; transition: height .4s; }
   .chart-day { font-size: .68rem; color: var(--muted, #64748b); }
   .chart-amt { font-size: .66rem; color: #16a34a; font-weight: 700; }
   .muted { color: var(--muted, #64748b); font-size: .86rem; }

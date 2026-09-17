@@ -5,8 +5,8 @@
   <%- include('../partials/topbar', { pageTitle: '⭐ تقييمات الزبائن' }) %>
   <div class="content">
     <%- include('../partials/alerts') %>
-    <div class="card" style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fde68a">
-      <p style="margin:0;color:#92400e">💡 التقييمات تزيد ثقة الزبائن وترفع المبيعات. عندما يقيّم زبون منتجك، يظهر هنا بانتظار موافقتك — وافق ليظهر في صفحة المنتج للجميع. التقييمات الموافق عليها تكسب الزبون نقاط ولاء.</p>
+    <div class="card" style="background:linear-gradient(135deg,#F0FDFA,#CCFBF1);border-color:#99F6E4">
+      <p style="margin:0;color:#0A4A38">💡 التقييمات تزيد ثقة الزبائن وترفع المبيعات. عندما يقيّم زبون منتجك، يظهر هنا بانتظار موافقتك — وافق ليظهر في صفحة المنتج للجميع. التقييمات الموافق عليها تكسب الزبون نقاط ولاء.</p>
     </div>
     <% if(reviews.length===0){ %>
       <div class="empty-state" style="text-align:center;padding:3rem 1.5rem;background:linear-gradient(135deg,#f8fafc,#eff6ff);border:1.5px dashed #bfdbfe;border-radius:16px;margin-top:1rem">
@@ -20,7 +20,7 @@
         <table>
           <tr><th>المنتج</th><th>الزبون</th><th>التقييم</th><th>التعليق</th><th>الحالة</th><th>التاريخ</th><th></th></tr>
           <% reviews.forEach(r=>{ %>
-            <tr style="<%= r.approved ? '' : 'background:#fffbeb' %>">
+            <tr style="<%= r.approved ? '' : 'background:#F0FDFA' %>">
               <td><%= r.product_name %></td>
               <td><%= r.customer_name %><% if(r.customer_phone){ %><br><small dir="ltr" class="muted"><%= r.customer_phone %></small><% } %></td>
               <td><%= '★'.repeat(r.rating) %><span style="color:#e2e8f0"><%= '☆'.repeat(5-r.rating) %></span></td>

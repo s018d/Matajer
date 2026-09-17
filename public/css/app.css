@@ -62,9 +62,9 @@
   --ink: #0b1220;
   --muted: #64748b;
   --line: #e8ecf4;
-  --brand: #0E7C5B;
+  --brand: #C2410C;
   --brand-dark: #0B1F3A;
-  --brand-2: #0D9488;
+  --brand-2: #EA580C;
   --danger: #ef4444;
   --warn: #f59e0b;
   --success: #10b981;
@@ -86,9 +86,9 @@ html.dark {
   --ink: #e8edf7;
   --muted: #8b98b8;
   --line: #1d2a4d;
-  --brand: #2DD4BF;
-  --brand-dark: #0D9488;
-  --brand-2: #5EEAD4;
+  --brand: #FDBA74;
+  --brand-dark: #EA580C;
+  --brand-2: #FED7AA;
   --danger: #f87171;
   --warn: #fbbf24;
   --success: #34d399;
@@ -105,9 +105,9 @@ html.dark {
     --ink: #e8edf7;
     --muted: #8b98b8;
     --line: #1d2a4d;
-    --brand: #f59e0b;
-    --brand-dark: #d97706;
-    --brand-2: #fbbf24;
+    --brand: #2DD4BF;
+    --brand-dark: #0D9488;
+    --brand-2: #5EEAD4;
     --danger: #f87171;
     --warn: #fbbf24;
     --success: #34d399;
@@ -215,7 +215,7 @@ h1,h2,h3 {
 }
 /* ═══ .sidebar .brand span ═══ */
 .sidebar .brand span {
-  background: linear-gradient(135deg,#2DD4BF,#5EEAD4); /* الخلفية */
+  background: linear-gradient(135deg,#FDBA74,#FED7AA); /* الخلفية */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -257,10 +257,10 @@ h1,h2,h3 {
 }
 /* ═══ .sidebar nav a.on ═══ */
 .sidebar nav a.on {
-  background: linear-gradient(135deg,rgba(11,31,58,.7),rgba(13,148,136,.22)); /* الخلفية */
+  background: linear-gradient(135deg,rgba(11,31,58,.7),rgba(234,88,12,.22)); /* الخلفية */
   color: #fff; /* لون النص */
   font-weight: 700; /* سماكة الخط */
-  box-shadow: inset 0 0 0 1px rgba(45,212,191,.4); /* الظل */
+  box-shadow: inset 0 0 0 1px rgba(251,146,60,.4); /* الظل */
 }
 /* ═══ .sidebar nav a.on::before ═══ */
 .sidebar nav a.on::before {
@@ -271,7 +271,7 @@ h1,h2,h3 {
   bottom: 20%; /* البعد عن الأسفل */
   width: 3.5px; /* العرض */
   border-radius: 0 4px 4px 0; /* تدوير الزوايا */
-  background: linear-gradient(180deg,#2DD4BF,#0D9488); /* الخلفية */
+  background: linear-gradient(180deg,#FDBA74,#EA580C); /* الخلفية */
 }
 /* ═══ .side-note ═══ */
 .side-note {
@@ -439,7 +439,7 @@ input,select,textarea {
 input:focus,select:focus,textarea:focus {
   outline: none; /* الإطار الخارجي */
   border-color: var(--brand);
-  box-shadow: 0 0 0 3.5px rgba(14,124,91,.14); /* الظل */
+  box-shadow: 0 0 0 3.5px rgba(194,65,12,.14); /* الظل */
 }
 /* ═══ textarea ═══ */
 textarea {
@@ -513,11 +513,11 @@ textarea {
   background: linear-gradient(135deg,var(--brand),var(--brand-2)); /* الخلفية */
   color: #fff; /* لون النص */
   border-color: transparent;
-  box-shadow: 0 6px 16px -6px rgba(14,124,91,.55); /* الظل */
+  box-shadow: 0 6px 16px -6px rgba(194,65,12,.55); /* الظل */
 }
 /* ═══ .btn-primary:hover ═══ */
 .btn-primary:hover {
-  box-shadow: 0 12px 28px -10px rgba(14,124,91,.65); /* الظل */
+  box-shadow: 0 12px 28px -10px rgba(194,65,12,.65); /* الظل */
   filter: brightness(1.04); /* فلاتر */
   transform: translateY(-1px) scale(1.015); /* التحويل (تدوير/تكبير) */
 }
@@ -541,7 +541,7 @@ textarea {
 .btn-ghost:hover {
   border-color: var(--brand);
   color: var(--brand); /* لون النص */
-  background: rgba(14,124,91,.06); /* الخلفية */
+  background: rgba(194,65,12,.06); /* الخلفية */
 }
 /* ═══ .btn-sm ═══ */
 .btn-sm {
@@ -625,7 +625,7 @@ textarea {
 }
 /* ═══ .stat-strong ═══ */
 .stat-strong {
-  border-color: rgba(14,124,91,.4);
+  border-color: rgba(194,65,12,.4);
 }
 /* ═══ .stat-strong b ═══ */
 .stat-strong b {
@@ -965,7 +965,7 @@ textarea {
 /* ═══ .upload-box:hover ═══ */
 .upload-box:hover {
   border-color: var(--brand);
-  background: rgba(14,124,91,.05); /* الخلفية */
+  background: rgba(194,65,12,.05); /* الخلفية */
 }
 /* ═══ .upload-box small ═══ */
 .upload-box small {
@@ -1264,8 +1264,8 @@ textarea {
 }
 /* ═══ .tier-hit ═══ */
 .tier-hit {
-  border-color: rgba(14,124,91,.5);
-  box-shadow: 0 10px 28px -12px rgba(14,124,91,.45); /* الظل */
+  border-color: rgba(194,65,12,.5);
+  box-shadow: 0 10px 28px -12px rgba(194,65,12,.45); /* الظل */
 }
 /* ═══ .tier-hit .tier-tag ═══ */
 .tier-hit .tier-tag {
@@ -1450,7 +1450,7 @@ textarea {
   display: flex; /* طريقة العرض */
   align-items: center; /* محاذاة عمودية */
   justify-content: center; /* محاذاة أفقية */
-  box-shadow: 0 8px 20px rgba(14,124,91,.4); /* الظل */
+  box-shadow: 0 8px 20px rgba(194,65,12,.4); /* الظل */
 }
 /* ═══ .store-card h3 ═══ */
 .store-card h3 {
@@ -1812,7 +1812,7 @@ textarea {
 /* ===== BEAUTY LAYER v1.1 — توحيد وتناسق (إضافات آمنة) ===== */
 /* ═══ selection ═══ */
 ::selection {
-  background: rgba(13,148,136,.3); /* تمييز النص بلون زمردي */
+  background: rgba(234,88,12,.3); /* تمييز النص بلون زمردي */
 }
 /* ═══ scrollbar ═══ */
 ::-webkit-scrollbar {
@@ -1829,7 +1829,7 @@ textarea {
   background-clip: content-box; /* قص الخلفية */
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #0E7C5B; /* لون المقبض عند التحويم */
+  background: #C2410C; /* لون المقبض عند التحويم */
   background-clip: content-box; /* قص الخلفية */
 }
 html.dark ::-webkit-scrollbar-thumb {
@@ -1838,7 +1838,7 @@ html.dark ::-webkit-scrollbar-thumb {
 }
 /* ═══ focus-visible عام ═══ */
 :focus-visible {
-  outline: 3px solid rgba(13,148,136,.55); /* إطار التركيز */
+  outline: 3px solid rgba(234,88,12,.55); /* إطار التركيز */
   outline-offset: 2px; /* إزاحة الإطار */
   border-radius: 8px; /* تدوير الزوايا */
 }

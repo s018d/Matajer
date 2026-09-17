@@ -15,7 +15,7 @@
 </div>
 <button class="to-top" id="toTop" aria-label="العودة للأعلى" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <style>
-.cart-fab{position:fixed; bottom:1.2rem; left:1.2rem; z-index:60; display:flex; align-items:center; gap:.5rem; background:linear-gradient(135deg,#0B1F3A,#0E7C5B 60%,#0D9488); color:#fff; border-radius:99px; padding:.7rem 1.1rem; box-shadow:0 12px 30px rgba(11,31,58,.45); cursor:pointer; font-weight:800; animation:fabIn .3s ease}
+.cart-fab{position:fixed; bottom:1.2rem; left:1.2rem; z-index:60; display:flex; align-items:center; gap:.5rem; background:linear-gradient(135deg,#0B1F3A,#C2410C 60%,#EA580C); color:#fff; border-radius:99px; padding:.7rem 1.1rem; box-shadow:0 12px 30px rgba(11,31,58,.45); cursor:pointer; font-weight:800; animation:fabIn .3s ease}
 @keyframes fabIn{from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:none}}
 .cart-fab button{background:none; border:none; color:#fff; font-family:inherit; font-weight:800; font-size:.9rem; cursor:pointer}
 .cart-count{background:#fff; color:#0B1F3A; min-width:24px; height:24px; border-radius:99px; display:inline-flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:900; padding:0 .4rem}
@@ -28,7 +28,7 @@
 .drawer-head{display:flex; align-items:center; justify-content:space-between; padding:1rem 1.2rem; border-bottom:1.5px solid #f0ede9}
 .drawer-head h3{margin:0; font-size:1.05rem; font-weight:900}
 .btn-ghost-x{width:32px; height:32px; border-radius:50%; border:1.5px solid #e7e5e4; background:#fafaf9; font-size:1.1rem; cursor:pointer; line-height:1}
-.btn-ghost-x:hover{border-color:#0D9488; color:#0E7C5B}
+.btn-ghost-x:hover{border-color:#EA580C; color:#C2410C}
 #cartItems{flex:1; overflow-y:auto; padding:.9rem 1.1rem; display:flex; flex-direction:column; gap:.7rem}
 .co-empty{text-align:center; color:#a8a29e; padding:2rem 0}
 .co-item{display:flex; gap:.7rem; align-items:center; background:#fafaf9; border:1.5px solid #f0ede9; border-radius:14px; padding:.6rem}
@@ -43,14 +43,14 @@
 .drawer-foot{padding:1rem 1.2rem 1.2rem; border-top:1.5px solid #f0ede9; background:#fff}
 .drawer-total{display:flex; justify-content:space-between; font-weight:800; margin-bottom:.7rem}
 .drawer-total b{color:#0B1F3A}
-.btn-block{display:block; text-align:center; background:linear-gradient(135deg,#0B1F3A,#0E7C5B 55%,#0D9488); color:#fff; border-radius:14px; padding:.85rem; font-weight:900; text-decoration:none; box-shadow:0 10px 26px rgba(11,31,58,.35)}
+.btn-block{display:block; text-align:center; background:linear-gradient(135deg,#0B1F3A,#C2410C 55%,#EA580C); color:#fff; border-radius:14px; padding:.85rem; font-weight:900; text-decoration:none; box-shadow:0 10px 26px rgba(11,31,58,.35)}
 .btn-block.disabled{opacity:.5; pointer-events:none}
-.mc-toast{position:fixed; bottom:5.5rem; right:50%; transform:translateX(50%); background:#1c1917; color:#fff; padding:.65rem 1.2rem; border-radius:99px; font-size:.85rem; font-weight:700; z-index:99; box-shadow:0 12px 30px rgba(0,0,0,.35); animation:toastIn .25s ease; border:1px solid rgba(45,212,191,.4)}
+.mc-toast{position:fixed; bottom:5.5rem; right:50%; transform:translateX(50%); background:#1c1917; color:#fff; padding:.65rem 1.2rem; border-radius:99px; font-size:.85rem; font-weight:700; z-index:99; box-shadow:0 12px 30px rgba(0,0,0,.35); animation:toastIn .25s ease; border:1px solid rgba(251,146,60,.4)}
 @keyframes toastIn{from{opacity:0; transform:translateX(50%) translateY(10px)} to{opacity:1; transform:translateX(50%)}}
 .to-top{position:fixed; bottom:1.2rem; right:1.2rem; z-index:60; width:44px; height:44px; border-radius:50%; border:1.5px solid #e7e5e4; background:rgba(255,255,255,.95); font-size:1.1rem; font-weight:900; cursor:pointer; box-shadow:0 8px 20px rgba(0,0,0,.12); opacity:0; pointer-events:none; transition:opacity .25s, transform .2s}
 .to-top.show{opacity:1; pointer-events:auto}
-.to-top:hover{transform:translateY(-2px); border-color:#0D9488; color:#0E7C5B}
-:focus-visible{outline:3px solid rgba(13,148,136,.55); outline-offset:2px; border-radius:8px}
+.to-top:hover{transform:translateY(-2px); border-color:#EA580C; color:#C2410C}
+:focus-visible{outline:3px solid rgba(234,88,12,.55); outline-offset:2px; border-radius:8px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
 </style>
 <script>

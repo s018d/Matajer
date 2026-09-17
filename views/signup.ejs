@@ -8,16 +8,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{--red:#0B1F3A; --gold:#0D9488; --gold2:#2DD4BF; --ink:#1c1917; --mut:#78716c; --line:#e7e5e4}
+:root{--red:#0B1F3A; --gold:#EA580C; --gold2:#FDBA74; --ink:#1c1917; --mut:#78716c; --line:#e7e5e4}
 *{box-sizing:border-box; margin:0; padding:0}
 body{font-family:'Noto Kufi Arabic',sans-serif; background:#0d0a08; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1.5rem 1rem; position:relative; overflow-x:hidden}
 body::before{content:''; position:absolute; width:480px; height:480px; border-radius:50%; background:radial-gradient(circle,rgba(11,31,58,.5),transparent 70%); top:-160px; right:-140px}
-body::after{content:''; position:absolute; width:380px; height:380px; border-radius:50%; background:radial-gradient(circle,rgba(13,148,136,.3),transparent 70%); bottom:-140px; left:-120px}
-.su-card{position:relative; z-index:1; background:rgba(255,255,255,.97); border-radius:24px; padding:2rem 1.8rem 1.5rem; width:min(440px,100%); box-shadow:0 30px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(45,212,191,.25)}
+body::after{content:''; position:absolute; width:380px; height:380px; border-radius:50%; background:radial-gradient(circle,rgba(234,88,12,.3),transparent 70%); bottom:-140px; left:-120px}
+.su-card{position:relative; z-index:1; background:rgba(255,255,255,.97); border-radius:24px; padding:2rem 1.8rem 1.5rem; width:min(440px,100%); box-shadow:0 30px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(251,146,60,.25)}
 .su-back{display:inline-block; color:var(--gold); font-size:.82rem; font-weight:800; text-decoration:none; margin-bottom:.8rem}
 .su-card h1{font-size:1.4rem; font-weight:900; color:var(--ink)}
 .su-sub{color:var(--mut); font-size:.86rem; margin:.2rem 0 1.1rem}
-.su-gift{background:#F0FDFA; border:1.5px solid #99F6E4; color:#0A4A38; border-radius:12px; padding:.6rem .9rem; font-size:.83rem; font-weight:700; margin-bottom:1rem}
+.su-gift{background:#FFF7ED; border:1.5px solid #FFEDD5; color:#7C2D12; border-radius:12px; padding:.6rem .9rem; font-size:.83rem; font-weight:700; margin-bottom:1rem}
 .su-err{background:#fef2f2; border:1.5px solid #fecaca; color:#b91c1c; border-radius:12px; padding:.6rem .9rem; font-size:.83rem; font-weight:700; margin-bottom:1rem}
 .su-google{display:flex; align-items:center; justify-content:center; gap:.6rem; border:1.5px solid var(--line); border-radius:14px; padding:.75rem; font-weight:800; font-size:.92rem; color:var(--ink); text-decoration:none; background:#fff; font-family:inherit; transition:all .18s}
 .su-google:hover{border-color:#4285F4; box-shadow:0 6px 18px rgba(66,133,244,.2)}
@@ -25,15 +25,15 @@ body::after{content:''; position:absolute; width:380px; height:380px; border-rad
 .su-or::before,.su-or::after{content:''; flex:1; height:1px; background:var(--line)}
 .su-card label{display:block; font-size:.8rem; font-weight:800; color:#44403c; margin-bottom:.8rem}
 .su-card input[type="text"],.su-card input[type="password"]{width:100%; margin-top:.3rem; border:1.5px solid var(--line); border-radius:12px; padding:.68rem .9rem; font-size:.92rem; font-family:inherit; background:#fafaf9}
-.su-card input:focus{outline:none; border-color:var(--gold); background:#fff; box-shadow:0 0 0 3px rgba(13,148,136,.12)}
+.su-card input:focus{outline:none; border-color:var(--gold); background:#fff; box-shadow:0 0 0 3px rgba(234,88,12,.12)}
 .su-pass{position:relative; display:block}
 .su-pass input{padding-left:2.6rem}
 .su-pass button{position:absolute; left:.5rem; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; font-size:1.05rem}
 .su-cap{display:flex; gap:.6rem; align-items:center; margin-top:.3rem}
-.su-cap span{background:#F0FDFA; border:1.5px solid #99F6E4; color:#0A4A38; font-weight:900; padding:.68rem 1rem; border-radius:12px; white-space:nowrap}
+.su-cap span{background:#FFF7ED; border:1.5px solid #FFEDD5; color:#7C2D12; font-weight:900; padding:.68rem 1rem; border-radius:12px; white-space:nowrap}
 .su-cap input{flex:1}
 .hp{position:absolute; left:-9999px; opacity:0; height:0}
-.su-submit{width:100%; border:none; border-radius:14px; padding:.85rem; font-size:1.02rem; font-weight:900; font-family:inherit; color:#fff; cursor:pointer; background:linear-gradient(135deg,#0B1F3A,#0E7C5B 55%,#0D9488); box-shadow:0 10px 26px rgba(11,31,58,.4); margin-top:.4rem}
+.su-submit{width:100%; border:none; border-radius:14px; padding:.85rem; font-size:1.02rem; font-weight:900; font-family:inherit; color:#fff; cursor:pointer; background:linear-gradient(135deg,#0B1F3A,#C2410C 55%,#EA580C); box-shadow:0 10px 26px rgba(11,31,58,.4); margin-top:.4rem}
 .su-submit:hover{transform:translateY(-1px)}
 .su-perks{margin:1.2rem 0; padding:.9rem 1rem; background:#fafaf9; border:1px solid var(--line); border-radius:14px; font-size:.82rem; color:#57534e; display:flex; flex-direction:column; gap:.4rem}
 .su-alt{text-align:center; font-size:.85rem; color:var(--mut)}

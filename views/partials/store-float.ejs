@@ -1,3 +1,11 @@
+<style>
+.store-float{position:fixed; bottom:5.5rem; left:1rem; z-index:65; display:flex; flex-direction:column; gap:.6rem}
+.store-float .sf-wa,.store-float .sf-share{width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 26px rgba(0,0,0,.28); transition:transform .2s; border:none; cursor:pointer; text-decoration:none}
+.store-float .sf-wa{background:#25d366; color:#fff}
+.store-float .sf-share{background:linear-gradient(135deg,#0B1F3A,#C2410C); color:#fff}
+.store-float .sf-wa:hover,.store-float .sf-share:hover{transform:scale(1.08)}
+.store-float svg{width:26px; height:26px; flex-shrink:0}
+</style>
 <div class="store-float">
   <% if (store.whatsapp) { %>
   <a class="sf-wa" href="https://wa.me/<%= String(store.whatsapp).replace(/\D/g, '') %>" target="_blank" rel="noopener" title="تواصل واتساب" aria-label="واتساب">

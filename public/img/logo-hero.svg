@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
   <defs>
     <linearGradient id="goldH" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#99F6E4"/><stop offset="50%" stop-color="#0D9488"/><stop offset="100%" stop-color="#0E7C5B"/>
+      <stop offset="0%" stop-color="#FFEDD5"/><stop offset="50%" stop-color="#EA580C"/><stop offset="100%" stop-color="#C2410C"/>
     </linearGradient>
     <linearGradient id="navyH" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#143A5E"/><stop offset="100%" stop-color="#0B1F3A"/>
@@ -21,13 +21,13 @@
   <g transform="translate(100,170)">
     <rect x="0" y="0" width="200" height="110" rx="12" fill="#143A5E" stroke="url(#goldH)" stroke-width="2"/>
     <rect x="10" y="18" width="180" height="14" rx="7" fill="url(#goldH)"/>
-    <rect x="20" y="42" width="50" height="60" rx="6" fill="#99F6E4" stroke="#0E7C5B" stroke-width="1.2"/>
+    <rect x="20" y="42" width="50" height="60" rx="6" fill="#FFEDD5" stroke="#C2410C" stroke-width="1.2"/>
     <rect x="85" y="42" width="95" height="60" rx="6" fill="#0B1F3A" stroke="url(#goldH)" stroke-width="1.2"/>
-    <circle cx="175" cy="52" r="3" fill="#99F6E4" opacity="0.9"/>
-    <circle cx="175" cy="62" r="3" fill="#99F6E4" opacity="0.9"/>
+    <circle cx="175" cy="52" r="3" fill="#FFEDD5" opacity="0.9"/>
+    <circle cx="175" cy="62" r="3" fill="#FFEDD5" opacity="0.9"/>
   </g>
   <!-- DUKKAN -->
-  <text x="200" y="320" text-anchor="middle" font-family="Inter, sans-serif" font-size="42" font-weight="900" fill="#99F6E4" letter-spacing="0.14em" stroke="#0E7C5B" stroke-width="0.3">DUKKAN</text>
-  <text x="200" y="345" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#0D9488" letter-spacing="0.32em">LOCAL GOODS</text>
+  <text x="200" y="320" text-anchor="middle" font-family="Inter, sans-serif" font-size="42" font-weight="900" fill="#FFEDD5" letter-spacing="0.14em" stroke="#C2410C" stroke-width="0.3">DUKKAN</text>
+  <text x="200" y="345" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="#EA580C" letter-spacing="0.32em">LOCAL GOODS</text>
   <rect x="120" y="355" width="160" height="1.5" rx="0.7" fill="url(#goldH)" opacity="0.8"/>
 </svg>

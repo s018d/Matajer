@@ -15,7 +15,7 @@
 
   function getCart() { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; } }
   function saveCart(c) { localStorage.setItem(KEY, JSON.stringify(c)); updateAll(); }
-  function unitPrice(it) { return Number(it.price) + Number(it.addonsTotal || 0); }
+  function unitPrice(it) { return (Number(it.price) || 0) + (Number(it.addonsTotal) || 0); }
   function lineTotal(it) { return unitPrice(it) * Number(it.qty); }
   function totalOf(c) { return c.reduce((s, it) => s + lineTotal(it), 0); }
   const optsKey = it => String(it.opts || '') + '|' + (it.addons || []).map(a => a.name).sort().join(',');

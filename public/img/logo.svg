@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 64" width="200" height="64">
   <defs>
     <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2DD4BF"/>
-      <stop offset="50%" stop-color="#0D9488"/>
-      <stop offset="100%" stop-color="#0E7C5B"/>
+      <stop offset="0%" stop-color="#FDBA74"/>
+      <stop offset="50%" stop-color="#EA580C"/>
+      <stop offset="100%" stop-color="#C2410C"/>
     </linearGradient>
     <linearGradient id="navy" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#143A5E"/>
@@ -13,7 +13,7 @@
   <!-- دكان — خط عربي مبسط فاخر -->
   <text x="100" y="34" text-anchor="middle" font-family="Noto Kufi Arabic, Cairo, sans-serif" font-size="32" font-weight="900" fill="url(#navy)" stroke="url(#gold)" stroke-width="0.4" style="letter-spacing:0.02em; paint-order: stroke fill;">دكّان</text>
   <!-- DUKKAN -->
-  <text x="100" y="54" text-anchor="middle" font-family="Inter, Cairo, sans-serif" font-size="11.5" font-weight="800" fill="#0E7C5B" letter-spacing="0.22em">DUKKAN</text>
+  <text x="100" y="54" text-anchor="middle" font-family="Inter, Cairo, sans-serif" font-size="11.5" font-weight="800" fill="#C2410C" letter-spacing="0.22em">DUKKAN</text>
   <!-- خط ذهبي رفيع -->
   <rect x="62" y="58" width="76" height="1.2" rx="0.6" fill="url(#gold)" opacity="0.9"/>
 </svg>

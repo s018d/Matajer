@@ -34,7 +34,7 @@ a{text-decoration:none}
 .dk-hero{background:radial-gradient(600px 300px at 80% 10%, rgba(234,88,12,.15), transparent), radial-gradient(500px 300px at 15% 90%, rgba(11,31,58,.25), transparent), #0d0a08; color:#fff; text-align:center; padding:4.5rem 1rem 4rem; position:relative; overflow:hidden}
 .dk-hero::before{content:''; position:absolute; inset:0; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E"); opacity:.05}
 .dk-pill{display:inline-block; background:rgba(251,146,60,.12); border:1px solid rgba(251,146,60,.4); color:#FFEDD5; border-radius:99px; padding:.35rem 1rem; font-size:.8rem; font-weight:700}
-.dk-hero h1{font-size:clamp(1.7rem,5vw,2.8rem); font-weight:900; line-height:1.4; margin:1rem auto; max-width:720px}
+.dk-hero h1{font-size:clamp(1.7rem,5vw,2.8rem); font-weight:900; line-height:2; margin:1rem auto; max-width:720px}
 .dk-hero h1 em{font-style:normal; background:linear-gradient(135deg,#FED7AA,#FDBA74); -webkit-background-clip:text; -webkit-text-fill-color:transparent}
 .dk-hero p{color:#d6d3d1; max-width:600px; margin:0 auto 1.6rem; font-size:1rem}
 .dk-hero-btns{display:flex; gap:.7rem; justify-content:center; flex-wrap:wrap}
@@ -93,7 +93,24 @@ a{text-decoration:none}
 .dk-foot-links{display:flex; gap:1.2rem; justify-content:center; flex-wrap:wrap; margin-top:.8rem}
 .dk-foot-links a{color:#d6d3d1}
 .dk-foot-links a:hover{color:var(--gold2)}
-@media(max-width:700px){.dk-links{display:none} .dk-plan.hot{transform:none}}
+@media(max-width:700px){
+  .dk-links{display:none} .dk-plan.hot{transform:none}
+  .dk-nav-in{padding:.55rem .7rem; gap:.5rem}
+  .dk-logo{font-size:1rem; gap:.4rem; flex-shrink:0}
+  .dk-logo-mark{width:30px; height:30px; font-size:1.05rem; border-radius:9px}
+  .dk-logo small{display:none}
+  .dk-cta{margin-inline-start:auto; flex-shrink:0}
+  .dk-cta .btn{padding:.5rem .7rem; font-size:.75rem; white-space:nowrap; border-radius:10px}
+  .dk-hero{padding:2.4rem .9rem 2.2rem}
+  .dk-hero h1{font-size:1.45rem; line-height:2.1; margin:.8rem auto}
+  .dk-hero p{font-size:.88rem; margin-bottom:1.2rem}
+  .dk-hero-btns{flex-direction:column; align-items:stretch; max-width:320px; margin:0 auto}
+  .dk-hero-btns .btn{width:100%; text-align:center}
+  .dk-pill{font-size:.72rem}
+  .dk-trust{font-size:.72rem}
+  .dk-sec{padding:2.2rem .9rem}
+  .dk-sec h2{font-size:1.25rem}
+}
 html{scroll-behavior:smooth}
 :focus-visible{outline:3px solid rgba(251,146,60,.6); outline-offset:2px}
 .dk-mobile-cta{display:none}

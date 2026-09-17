@@ -85,6 +85,15 @@ a{text-decoration:none}
 .dk-foot-links a{color:#d6d3d1}
 .dk-foot-links a:hover{color:var(--gold2)}
 @media(max-width:700px){.dk-links{display:none} .dk-plan.hot{transform:none}}
+html{scroll-behavior:smooth}
+:focus-visible{outline:3px solid rgba(245,158,11,.6); outline-offset:2px}
+.dk-mobile-cta{display:none}
+@media(max-width:700px){
+  .dk-mobile-cta{display:flex; position:fixed; bottom:0; right:0; left:0; z-index:60; gap:.6rem; padding:.7rem .9rem calc(.7rem + env(safe-area-inset-bottom)); background:rgba(13,10,8,.94); backdrop-filter:blur(12px); border-top:1px solid rgba(245,158,11,.25)}
+  .dk-mobile-cta a{flex:1; text-align:center; padding:.75rem; font-size:.9rem}
+  body{padding-bottom:64px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important; transition:none!important}}
 </style>
 </head>
 <body>
@@ -187,5 +196,9 @@ a{text-decoration:none}
     <% if (cfg.site_whatsapp) { %><a href="https://wa.me/<%= cfg.site_whatsapp.replace(/\D/g,'') %>" target="_blank">واتساب الدعم</a><% } %>
   </div>
 </footer>
+<div class="dk-mobile-cta">
+  <a class="btn btn-ghost" href="/login">دخول</a>
+  <a class="btn btn-gold" href="/signup">أنشئ متجرك مجاناً</a>
+</div>
 </body>
 </html>

@@ -5,12 +5,55 @@
 </div>
 <% } %>
 <div class="drawer-overlay" id="cartOverlay" onclick="closeCart()"></div>
-<div class="cart-drawer" id="cartDrawer">
-  <div class="drawer-head"><h3>سلة الشراء</h3><button class="btn-ghost-x" onclick="closeCart()">×</button></div>
+<div class="cart-drawer" id="cartDrawer" role="dialog" aria-label="سلة الشراء">
+  <div class="drawer-head"><h3>🛒 سلة الشراء</h3><button class="btn-ghost-x" onclick="closeCart()" aria-label="إغلاق">×</button></div>
   <div id="cartItems"></div>
   <div class="drawer-foot">
     <div class="drawer-total">الإجمالي: <b id="cartTotal">0</b></div>
-    <a class="btn btn-block" id="cartCheckout" href="#">إتمام الطلب</a>
+    <a class="btn btn-block" id="cartCheckout" href="#">إتمام الطلب ←</a>
   </div>
 </div>
+<button class="to-top" id="toTop" aria-label="العودة للأعلى" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<style>
+.cart-fab{position:fixed; bottom:1.2rem; left:1.2rem; z-index:60; display:flex; align-items:center; gap:.5rem; background:linear-gradient(135deg,#7f1d1d,#b45309 60%,#d97706); color:#fff; border-radius:99px; padding:.7rem 1.1rem; box-shadow:0 12px 30px rgba(127,29,29,.45); cursor:pointer; font-weight:800; animation:fabIn .3s ease}
+@keyframes fabIn{from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:none}}
+.cart-fab button{background:none; border:none; color:#fff; font-family:inherit; font-weight:800; font-size:.9rem; cursor:pointer}
+.cart-count{background:#fff; color:#7f1d1d; min-width:24px; height:24px; border-radius:99px; display:inline-flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:900; padding:0 .4rem}
+.cart-count.bump{animation:bump .35s ease}
+@keyframes bump{0%{transform:scale(1)} 40%{transform:scale(1.45)} 100%{transform:scale(1)}}
+.drawer-overlay{position:fixed; inset:0; background:rgba(12,10,9,.55); backdrop-filter:blur(2px); opacity:0; pointer-events:none; transition:opacity .25s; z-index:70}
+.drawer-overlay.open, .drawer-overlay.show{opacity:1; pointer-events:auto}
+.cart-drawer{position:fixed; top:0; bottom:0; left:0; width:min(380px,92vw); background:#fff; z-index:71; transform:translateX(-105%); transition:transform .3s cubic-bezier(.32,.72,.35,1); display:flex; flex-direction:column; box-shadow:30px 0 60px rgba(0,0,0,.25); border-radius:0 20px 20px 0}
+.cart-drawer.open{transform:none}
+.drawer-head{display:flex; align-items:center; justify-content:space-between; padding:1rem 1.2rem; border-bottom:1.5px solid #f0ede9}
+.drawer-head h3{margin:0; font-size:1.05rem; font-weight:900}
+.btn-ghost-x{width:32px; height:32px; border-radius:50%; border:1.5px solid #e7e5e4; background:#fafaf9; font-size:1.1rem; cursor:pointer; line-height:1}
+.btn-ghost-x:hover{border-color:#d97706; color:#b45309}
+#cartItems{flex:1; overflow-y:auto; padding:.9rem 1.1rem; display:flex; flex-direction:column; gap:.7rem}
+.co-empty{text-align:center; color:#a8a29e; padding:2rem 0}
+.co-item{display:flex; gap:.7rem; align-items:center; background:#fafaf9; border:1.5px solid #f0ede9; border-radius:14px; padding:.6rem}
+.co-item img{width:52px; height:52px; border-radius:10px; object-fit:cover}
+.co-noimg{width:52px; height:52px; border-radius:10px; background:#e7e5e4}
+.co-info{flex:1; display:flex; flex-direction:column; font-size:.82rem; font-weight:700}
+.co-info small{color:#78716c; font-weight:600; font-size:.72rem}
+.qty-row.mini{display:flex; align-items:center; gap:.3rem}
+.qty-row.mini button{width:26px; height:26px; border-radius:8px; border:1.5px solid #e7e5e4; background:#fff; cursor:pointer; font-weight:900}
+.qty-row.mini input{width:32px; text-align:center; border:none; background:none; font-weight:800; font-family:inherit}
+.co-rm{border:none; background:none; color:#b91c1c; font-size:1.2rem; cursor:pointer; font-weight:900}
+.drawer-foot{padding:1rem 1.2rem 1.2rem; border-top:1.5px solid #f0ede9; background:#fff}
+.drawer-total{display:flex; justify-content:space-between; font-weight:800; margin-bottom:.7rem}
+.drawer-total b{color:#7f1d1d}
+.btn-block{display:block; text-align:center; background:linear-gradient(135deg,#7f1d1d,#b45309 55%,#d97706); color:#fff; border-radius:14px; padding:.85rem; font-weight:900; text-decoration:none; box-shadow:0 10px 26px rgba(127,29,29,.35)}
+.btn-block.disabled{opacity:.5; pointer-events:none}
+.mc-toast{position:fixed; bottom:5.5rem; right:50%; transform:translateX(50%); background:#1c1917; color:#fff; padding:.65rem 1.2rem; border-radius:99px; font-size:.85rem; font-weight:700; z-index:99; box-shadow:0 12px 30px rgba(0,0,0,.35); animation:toastIn .25s ease; border:1px solid rgba(245,158,11,.4)}
+@keyframes toastIn{from{opacity:0; transform:translateX(50%) translateY(10px)} to{opacity:1; transform:translateX(50%)}}
+.to-top{position:fixed; bottom:1.2rem; right:1.2rem; z-index:60; width:44px; height:44px; border-radius:50%; border:1.5px solid #e7e5e4; background:rgba(255,255,255,.95); font-size:1.1rem; font-weight:900; cursor:pointer; box-shadow:0 8px 20px rgba(0,0,0,.12); opacity:0; pointer-events:none; transition:opacity .25s, transform .2s}
+.to-top.show{opacity:1; pointer-events:auto}
+.to-top:hover{transform:translateY(-2px); border-color:#d97706; color:#b45309}
+:focus-visible{outline:3px solid rgba(217,119,6,.55); outline-offset:2px; border-radius:8px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+<script>
+window.addEventListener('scroll', function(){ var b=document.getElementById('toTop'); if(b) b.classList.toggle('show', window.scrollY>600); }, {passive:true});
+</script>
 <script src="/js/cart.js?v=5"></script>

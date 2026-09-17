@@ -132,6 +132,5 @@ function seedSamples() {
 }
 
 const SAMPLE_IMG = ['perfume.svg', 'phone.svg', 'headphones.svg', 'watch.svg', 'bag.svg', 'shoes.svg', 'lamp.svg', 'makeup.svg'];
-const SAMPLE_DEMO_CREDENTIALS = SAMPLES.map(s => `${s.name} → ${s.owner} / ${s.password}`);
 
 module.exports = { seedSamples };

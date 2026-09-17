@@ -121,6 +121,7 @@ router.post('/s/:slug/checkout', asyncHandler(async (req, res) => {
   if (!rows.length) return res.redirect(`${store.base}?err=` + encodeURIComponent('المنتجات غير متوفرة حالياً'));
   let discount = 0;
   let couponCode = '';
+  let couponId = 0;
   const code = String(coupon || '').trim().toUpperCase().slice(0, 40);
   if (code) {
     const c = db.prepare("SELECT * FROM coupons WHERE store_id=? AND code=? AND active=1").get(store.id, code);
@@ -129,10 +130,10 @@ router.post('/s/:slug/checkout', asyncHandler(async (req, res) => {
       subtotal >= Number(c.min_total || 0);
     if (ok) {
       couponCode = code;
+      couponId = c.id;
       discount = c.type === 'amount'
         ? Math.min(Number(c.value), subtotal)
         : Math.min(subtotal, Math.round(subtotal * Number(c.value) / 100));
-      db.prepare('UPDATE coupons SET used = used + 1 WHERE id=?').run(c.id);
     }
   }
   
@@ -140,17 +141,36 @@ router.post('/s/:slug/checkout', asyncHandler(async (req, res) => {
   const freeMin = Number(store.free_delivery_min) || 0;
   const deliveryFee = df > 0 && (freeMin <= 0 || subtotal - discount < freeMin) ? df : 0;
   const total = Math.max(0, subtotal - discount) + deliveryFee;
-  
+
   const doneToken = crypto.randomBytes(16).toString('hex');
-  const info = db.prepare('INSERT INTO orders (store_id, customer_name, customer_phone, customer_address, note, subtotal, discount, coupon_code, delivery_fee, total, status, done_token) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)')
-    .run(store.id, cleanName, cleanPhone, cleanAddr, cleanNote, subtotal, discount, couponCode, deliveryFee, total, 'new', doneToken);
-  const orderId = info.lastInsertRowid;
+  // معاملة ذرية: كوبون + طلب + مخزون — تمنع الاستخدام المزدوج والبيع فوق المتوفر
+  let orderId = 0;
   const orderItems = [];
-  for (const r of rows) {
-    db.prepare('INSERT INTO order_items (order_id, product_id, product_name, product_price, qty, options, addons_price) VALUES (?,?,?,?,?,?,?)')
-      .run(orderId, r.p.id, r.p.name, r.price, r.qty, r.opts, r.addonsTotal);
-    orderItems.push({ product_name: r.p.name, qty: r.qty, product_price: r.price, addons_price: r.addonsTotal });
-    if (r.p.stock != null) db.prepare('UPDATE products SET stock = stock - ? WHERE id=?').run(r.qty, r.p.id);
+  const placeOrder = db.transaction(() => {
+    if (code && couponCode) {
+      const cupd = db.prepare('UPDATE coupons SET used = used + 1 WHERE id=? AND (max_uses=0 OR used < max_uses)').run(couponId);
+      if (!cupd.changes) throw new Error('coupon-exhausted');
+    }
+    const info = db.prepare('INSERT INTO orders (store_id, customer_name, customer_phone, customer_address, note, subtotal, discount, coupon_code, delivery_fee, total, status, done_token) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)')
+      .run(store.id, cleanName, cleanPhone, cleanAddr, cleanNote, subtotal, discount, couponCode, deliveryFee, total, 'new', doneToken);
+    orderId = info.lastInsertRowid;
+    for (const r of rows) {
+      db.prepare('INSERT INTO order_items (order_id, product_id, product_name, product_price, qty, options, addons_price) VALUES (?,?,?,?,?,?,?)')
+        .run(orderId, r.p.id, r.p.name, r.price, r.qty, r.opts, r.addonsTotal);
+      orderItems.push({ product_name: r.p.name, qty: r.qty, product_price: r.price, addons_price: r.addonsTotal });
+      if (r.p.stock != null) {
+        const supd = db.prepare('UPDATE products SET stock = stock - ? WHERE id=? AND stock >= ?').run(r.qty, r.p.id, r.qty);
+        if (!supd.changes) throw new Error('out-of-stock:' + r.p.name);
+      }
+    }
+  });
+  try {
+    placeOrder();
+  } catch (e) {
+    const msg = String((e && e.message) || '');
+    if (msg.startsWith('out-of-stock:')) return res.redirect(`${store.base}/checkout?err=` + encodeURIComponent(`نفد «${msg.slice(13)}» أثناء إتمام طلبك — عدّل الكمية وحاول`));
+    if (msg === 'coupon-exhausted') return res.redirect(`${store.base}/checkout?err=` + encodeURIComponent('الكوبون استُنفد قبل لحظات — أكمل بدون كوبون أو جرّب آخر'));
+    throw e;
   }
   appendLog(`وصول طلب جديد (#${orderId}) إلى متجر «${store.name}» بمبلغ ${total.toLocaleString('en-US')} د.ع من «${cleanName}» — دفع عند الاستلام`);
   // Loyalty points

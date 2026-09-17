@@ -64,14 +64,26 @@ router.get('/review', (req, res) => {
 });
 
 router.get('/stores', (req, res) => {
+  const q = String(req.query.q || '').trim();
+  const plan = ['pro', 'free'].includes(req.query.plan) ? req.query.plan : '';
+  const status = ['active', 'suspended'].includes(req.query.status) ? req.query.status : '';
+  const perPage = 25;
+  const page = Math.max(1, Number(req.query.page) || 1);
+  let where = '1=1';
+  const params = [];
+  if (q) { where += ' AND (s.name LIKE ? OR s.slug LIKE ? OR u.username LIKE ?)'; params.push(`%${q}%`, `%${q}%`, `%${q}%`); }
+  if (plan) { where += ' AND s.plan=?'; params.push(plan); }
+  if (status) { where += ' AND s.status=?'; params.push(status); }
+  const total = db.prepare(`SELECT COUNT(*) c FROM stores s LEFT JOIN users u ON u.store_id=s.id WHERE ${where}`).get(...params).c;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
   const rows = db.prepare(`
     SELECT s.*, u.username owner_username,
       (SELECT COUNT(*) FROM products WHERE store_id=s.id) products,
       (SELECT COUNT(*) FROM product_images i JOIN products p ON p.id=i.product_id WHERE p.store_id=s.id) images,
       (SELECT COUNT(*) FROM orders WHERE store_id=s.id) orders,
       (SELECT COALESCE(SUM(total),0) FROM orders WHERE store_id=s.id AND status != 'cancelled') revenue
-    FROM stores s LEFT JOIN users u ON u.store_id = s.id ORDER BY s.id DESC`).all();
-  res.render('admin/stores', { list: rows, money, ok: req.query.ok || takeFlash(req, res), err: req.query.err || '', user: req.user });
+    FROM stores s LEFT JOIN users u ON u.store_id = s.id WHERE ${where} ORDER BY s.id DESC LIMIT ? OFFSET ?`).all(...params, perPage, (page - 1) * perPage);
+  res.render('admin/stores', { list: rows, money, ok: req.query.ok || takeFlash(req, res), err: req.query.err || '', user: req.user, q, plan, status, page, totalPages, total });
 });
 
 router.get('/domains', (req, res) => {

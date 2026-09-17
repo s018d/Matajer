@@ -23,20 +23,22 @@
 
     <div class="card">
       <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.8rem; margin-bottom:1rem">
-        <h2>📚 كل المتاجر (<%= list.length %>)</h2>
-        <div style="display:flex; gap:.5rem; flex-wrap:wrap; align-items:center">
-          <input type="search" id="storeSearch" placeholder="🔍 ابحث بالاسم/اليوزر/Slug..." style="min-width:240px; padding:.5rem .8rem; border-radius:10px; border:1.5px solid var(--line)">
-          <select id="planFilter" style="padding:.5rem; border-radius:10px; border:1.5px solid var(--line)" onchange="filterStores()">
+        <h2>📚 كل المتاجر (<%= total %>)</h2>
+        <form method="get" action="/admin/stores" style="display:flex; gap:.5rem; flex-wrap:wrap; align-items:center">
+          <input type="search" name="q" value="<%= q %>" placeholder="🔍 ابحث بالاسم/اليوزر/Slug..." style="min-width:220px; padding:.5rem .8rem; border-radius:10px; border:1.5px solid var(--line)">
+          <select name="plan" style="padding:.5rem; border-radius:10px; border:1.5px solid var(--line)" onchange="this.form.submit()">
             <option value="">كل الباقات</option>
-            <option value="pro">⭐ برو فقط</option>
-            <option value="free">مجاني فقط</option>
+            <option value="pro" <%= plan==='pro' ? 'selected' : '' %>>⭐ برو فقط</option>
+            <option value="free" <%= plan==='free' ? 'selected' : '' %>>مجاني فقط</option>
           </select>
-          <select id="statusFilter" style="padding:.5rem; border-radius:10px; border:1.5px solid var(--line)" onchange="filterStores()">
+          <select name="status" style="padding:.5rem; border-radius:10px; border:1.5px solid var(--line)" onchange="this.form.submit()">
             <option value="">كل الحالات</option>
-            <option value="active">نشط فقط</option>
-            <option value="suspended">موقوف فقط</option>
+            <option value="active" <%= status==='active' ? 'selected' : '' %>>نشط فقط</option>
+            <option value="suspended" <%= status==='suspended' ? 'selected' : '' %>>موقوف فقط</option>
           </select>
-        </div>
+          <button class="btn btn-sm btn-primary">بحث</button>
+          <% if (q || plan || status) { %><a class="btn btn-sm btn-ghost" href="/admin/stores">إلغاء</a><% } %>
+        </form>
       </div>
       <div class="table-wrap"><table class="table" id="storesTable">
         <tr><th>المتجر</th><th>مستخدم</th><th>منتجات</th><th>طلبات</th><th>مبيعات</th><th>الباقة</th><th>الحالة</th><th>إجراءات</th></tr>
@@ -56,28 +58,18 @@
           </tr>
         <% }) %>
       </table></div>
-      <p id="noResults" class="muted" style="display:none; text-align:center; padding:1.5rem">لا نتائج للبحث — جرّب كلمة أخرى</p>
+      <% if (list.length === 0) { %><p class="muted" style="text-align:center; padding:1.5rem">لا متاجر مطابقة — جرّب كلمة أخرى أو <a href="/admin/stores">عرض الكل</a></p><% } %>
+      <% if (totalPages > 1) { %>
+        <div class="pager">
+          <% const qp = (q ? '&q=' + encodeURIComponent(q) : '') + (plan ? '&plan=' + plan : '') + (status ? '&status=' + status : ''); %>
+          <% if (page > 1) { %><a class="btn btn-sm btn-ghost" href="/admin/stores?page=<%= page - 1 %><%= qp %>">→ السابق</a><% } %>
+          <span class="muted">صفحة <%= page %> من <%= totalPages %> (<%= total %> متجر)</span>
+          <% if (page < totalPages) { %><a class="btn btn-sm btn-ghost" href="/admin/stores?page=<%= page + 1 %><%= qp %>">التالي ←</a><% } %>
+        </div>
+      <% } %>
       <p class="muted" style="font-size:.78rem; margin-top:.8rem">💡 اضغط "إدارة" لتعديل كل شيء: الاسم، القالب، اللون، التوصيل، SEO، الباقة — بدون كود</p>
     </div>
   </div>
 </main>
-<script>
-function filterStores(){
-  const q = document.getElementById('storeSearch').value.toLowerCase().trim();
-  const plan = document.getElementById('planFilter').value;
-  const status = document.getElementById('statusFilter').value;
-  let visible = 0;
-  document.querySelectorAll('#storesTable tr[data-name]').forEach(tr=>{
-    const matchQ = !q || tr.dataset.name.includes(q);
-    const matchPlan = !plan || tr.dataset.plan===plan;
-    const matchStatus = !status || tr.dataset.status===status;
-    const show = matchQ && matchPlan && matchStatus;
-    tr.style.display = show ? '' : 'none';
-    if(show) visible++;
-  });
-  document.getElementById('noResults').style.display = visible===0 ? 'block' : 'none';
-}
-document.getElementById('storeSearch')?.addEventListener('input', filterStores);
-</script>
 </body>
 </html>

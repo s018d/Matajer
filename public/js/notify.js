@@ -40,7 +40,8 @@
         const n = Number(d.count) || 0;
         if (last !== null && n > 0 && localStorage.getItem(KEY) !== '0') { beep(); pushNotify(n, d.msg); }
         if (n > 0) document.title = `(${n}) طلب جديد — دُكّان`;
-        last = last === null ? new Date().toISOString().slice(0, 19).replace('T', ' ') : last;
+        else if (/طلب جديد/.test(document.title)) document.title = 'دُكّان';
+        last = d.serverTime || new Date().toISOString().slice(0, 19).replace('T', ' ');
         setBadge(n);
       })
       .catch(() => {});

@@ -14,9 +14,9 @@ const gridCfg = L.grid || {};
 const heroTitle = heroCfg.title || store.name;
 const heroSub = heroCfg.sub || store.description;
 %>
-<% if (store.template === 'market') { %><link rel="stylesheet" href="/css/store-market.css"><% } %>
+<% const __c = /^#[0-9a-fA-F]{6}$/.test(String(store.color)) ? store.color : '#0ea5e9'; %>
 <% if (tpl && tpl.css) { %><link rel="stylesheet" href="<%= tpl.css %>"><% } %>
-<style>:root{--store-primary:<%= store.color %>; --store-primary-dark:<%= store.color %>}</style>
+<style>:root{--store-primary:<%= __c %>; --store-primary-dark:<%= __c %>}</style>
 <% if (tpl) { %><style><%= tpl.style %></style><% } %>
 <% if (store.custom_css) { %><style><%= store.custom_css %></style><% } %>
 <% /* خلفية المتجر العامة */ %>
@@ -91,7 +91,7 @@ const heroSub = heroCfg.sub || store.description;
 
 <% function renderBrand(){ %><%- include('../partials/store-brand') %><% } %>
 
-<% function renderAnnounce(){ if (!show('announce')) return; const a = L.announce || {}; if (!a.text) return; const bg = a.bg || '#fff3cd'; const color = a.color || '#856404'; const icon = a.icon || '📢'; const link = a.link || ''; const txt = a.text || ''; const linkAttr = link ? `href="${link}" target="_blank"` : ''; %>
+<% function renderAnnounce(){ if (!show('announce')) return; const a = L.announce || {}; if (!a.text) return; const bg = a.bg || '#fff3cd'; const color = a.color || '#856404'; const icon = a.icon || '📢'; const rawLink = String(a.link || ''); const link = /^https?:\/\/[^\s"<>]+$/.test(rawLink) ? rawLink : ''; const txt = a.text || ''; const linkAttr = link ? `href="${link.replace(/"/g, '')}" target="_blank" rel="noopener"` : ''; %>
   <div class="announce-bar" style="background:<%=bg%>;color:<%=color%>;padding:.6rem 1rem;text-align:center;font-size:.9rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:.5rem;<%= a.link ? 'cursor:pointer' : '' %>" <%= linkAttr %>>
     <span><%= icon %></span>
     <span><%= txt %></span>

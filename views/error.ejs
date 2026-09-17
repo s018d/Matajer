@@ -20,7 +20,7 @@
     <h2><%= msg %></h2>
     <p>عذراً، حدث شيء غير متوقع — جرّب الرجوع أو العودة للرئيسية</p>
     <div class="error-actions">
-      <a class="btn btn-ghost" href="javascript:history.back()">→ رجوع</a>
+      <a class="btn btn-ghost" href="/" onclick="if (history.length > 1) { history.back(); return false; }">→ رجوع</a>
       <a class="btn btn-primary" href="/">🏠 الرئيسية</a>
     </div>
   </div>

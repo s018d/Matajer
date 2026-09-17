@@ -83,18 +83,20 @@
 
   window.openCart = () => {
     var drawer = document.getElementById('cartDrawer');
-    if (!drawer) return;
+    var overlay = document.getElementById('cartOverlay');
+    if (!drawer || !overlay) return;
     drawer.style.transform = 'translateX(0)';
     drawer.classList.add('open');
-    document.getElementById('cartOverlay').classList.add('show');
+    overlay.classList.add('show');
     document.body.style.overflow = 'hidden';
   };
   window.closeCart = () => {
     var drawer = document.getElementById('cartDrawer');
-    if (!drawer) return;
+    var overlay = document.getElementById('cartOverlay');
+    if (!drawer || !overlay) return;
     drawer.style.transform = 'translateX(-100%)';
     drawer.classList.remove('open');
-    document.getElementById('cartOverlay').classList.remove('show');
+    overlay.classList.remove('show');
     document.body.style.overflow = '';
   };
 
@@ -122,7 +124,9 @@
     if (form) {
       form.addEventListener('submit', function (e) {
         if (!c.length) { e.preventDefault(); alert('السلة فارغة'); return; }
-        document.getElementById('coCart').value = JSON.stringify(c.map(it => ({ id: it.id, qty: it.qty, opts: it.opts || '', addons: it.addons || [] })));
+        var hid = document.getElementById('coCart');
+        if (!hid) { e.preventDefault(); alert('حدث خطأ — أعد تحميل الصفحة'); return; }
+        hid.value = JSON.stringify(c.map(it => ({ id: it.id, qty: it.qty, opts: it.opts || '', addons: it.addons || [] })));
       });
     }
     const applyBtn = document.getElementById('coApplyCoupon');
@@ -164,6 +168,7 @@
   function applyCoupon() {
     const input = document.getElementById('coCoupon');
     const msgEl = document.getElementById('coCouponMsg');
+    if (!input || !msgEl) return;
     const code = (input.value || '').trim();
     if (!code) return;
     fetch(base + '/coupon-check?code=' + encodeURIComponent(code))
@@ -171,6 +176,7 @@
       .then(j => {
         const c = getCart();
         const subtotal = totalOf(c);
+        const hid = document.getElementById('coCouponCode');
         if (j.ok) {
           if (j.min_total > 0 && subtotal < j.min_total) {
             msgEl.textContent = 'الكود يتطلب طلباً بمبلغ ' + fmt(j.min_total) + ' فأكثر';
@@ -179,17 +185,17 @@
             window.__discount = j.type === 'amount' ? Math.min(j.value, subtotal) : Math.min(subtotal, Math.round(subtotal * j.value / 100));
             msgEl.textContent = '✓ الكود مقبول';
             msgEl.className = 'co-coupon-msg ok';
-            document.getElementById('coCouponCode').value = code;
+            if (hid) hid.value = code;
           }
         } else {
           window.__discount = 0;
-          document.getElementById('coCouponCode').value = '';
+          if (hid) hid.value = '';
           msgEl.textContent = j.message || 'الكود غير مقبول';
           msgEl.className = 'co-coupon-msg';
         }
         refreshTotals();
       })
-      .catch(() => { msgEl.textContent = 'تعذر الفحص — أعد المحاولة'; });
+      .catch(() => { if (msgEl) msgEl.textContent = 'تعذر الفحص — أعد المحاولة'; });
   }
 
   document.addEventListener('DOMContentLoaded', updateAll);

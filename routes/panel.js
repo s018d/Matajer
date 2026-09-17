@@ -377,8 +377,7 @@ router.get('/orders', (req, res) => {
   const total = db.prepare(`SELECT COUNT(*) c FROM orders WHERE ${where}`).get(...params).c;
   const totalPages = Math.max(1, Math.ceil(total / perPage));
   const rows = db.prepare(`
-    SELECT o.*, (SELECT GROUP_CONCAT(oi.product_name || ' ×' || oi.qty || ' — ' || oi.product_price || ' د.ع', ' ⏺ ') FROM order_items oi WHERE oi.order_id=o.id) items_txt
-    FROM orders o WHERE ${where} ORDER BY o.id DESC LIMIT ? OFFSET ?`).all(...params, perPage, (page - 1) * perPage);
+    SELECT o.* FROM orders o WHERE ${where} ORDER BY o.id DESC LIMIT ? OFFSET ?`).all(...params, perPage, (page - 1) * perPage);
   const withItems = rows.map(o => {
     const items = db.prepare('SELECT * FROM order_items WHERE order_id=?').all(o.id);
     return Object.assign({}, o, { items });
@@ -515,7 +514,7 @@ router.get('/api/neworders', (req, res) => {
   } else {
     count = db.prepare("SELECT COUNT(*) c FROM orders WHERE store_id=? AND status='new'").get(store.id).c;
   }
-  res.json({ count });
+  res.json({ count, serverTime: new Date().toISOString().slice(0, 19).replace('T', ' ') });
 });
 
 /* إثباتات الدفع تُحفظ خارج uploads العام في مجلد خاص — لا تُخدَّم إلا عبر route محمي */
@@ -615,7 +614,10 @@ router.post('/billing/request', upReceipt().single('receipt'), (req, res) => {
 router.get('/billing/receipt/:paymentId', (req, res) => {
   const p = db.prepare('SELECT * FROM payments WHERE id=? AND store_id=?').get(req.params.paymentId, req.user.store_id);
   if (!p || !p.receipt_path) return res.redirect('/panel/billing?err=' + encodeURIComponent('الإثبات غير موجود'));
-  const abs = path.join(__dirname, '..', p.receipt_path);
+  if (!/^private-receipts\//.test(p.receipt_path) || p.receipt_path.includes('..')) return res.status(403).render('error',{msg:'مسار غير صالح', user:req.user});
+  const abs = path.resolve(path.join(__dirname, '..', p.receipt_path));
+  const root = path.resolve(path.join(__dirname,'..'));
+  if (!abs.startsWith(root)) return res.status(403).render('error',{msg:'مسار خارج النطاق', user:req.user});
   if (!fs.existsSync(abs)) return res.redirect('/panel/billing?err=' + encodeURIComponent('ملف الإثبات غير موجود'));
   res.sendFile(abs);
 });

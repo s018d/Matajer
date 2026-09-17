@@ -64,9 +64,14 @@ router.get('/review', (req, res) => {
 });
 
 router.get('/stores', (req, res) => {
-  const rows = db.prepare('SELECT s.*, u.username owner_username FROM stores s LEFT JOIN users u ON u.store_id = s.id ORDER BY s.id DESC').all();
-  const list = rows.map(r => ({ ...r, ...storeStats(r.id) }));
-  res.render('admin/stores', { list, money, ok: req.query.ok || takeFlash(req, res), err: req.query.err || '', user: req.user });
+  const rows = db.prepare(`
+    SELECT s.*, u.username owner_username,
+      (SELECT COUNT(*) FROM products WHERE store_id=s.id) products,
+      (SELECT COUNT(*) FROM product_images i JOIN products p ON p.id=i.product_id WHERE p.store_id=s.id) images,
+      (SELECT COUNT(*) FROM orders WHERE store_id=s.id) orders,
+      (SELECT COALESCE(SUM(total),0) FROM orders WHERE store_id=s.id AND status != 'cancelled') revenue
+    FROM stores s LEFT JOIN users u ON u.store_id = s.id ORDER BY s.id DESC`).all();
+  res.render('admin/stores', { list: rows, money, ok: req.query.ok || takeFlash(req, res), err: req.query.err || '', user: req.user });
 });
 
 router.get('/domains', (req, res) => {
@@ -119,11 +124,15 @@ router.post('/review/bulk-approve', (req, res) => {
   res.redirect('/admin/review?ok=' + encodeURIComponent(`تمت الموافقة على ${valid.length} تقييم`));
 });
 router.post('/review/:id/approve', (req, res) => {
-  db.prepare('UPDATE reviews SET approved=1 WHERE id=?').run(req.params.id);
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) return res.redirect('/admin/review?err=' + encodeURIComponent('تقييم غير صالح'));
+  db.prepare('UPDATE reviews SET approved=1 WHERE id=?').run(id);
   res.redirect('/admin/review?ok=' + encodeURIComponent('تمت الموافقة على التقييم'));
 });
 router.post('/review/:id/delete', (req, res) => {
-  db.prepare('DELETE FROM reviews WHERE id=?').run(req.params.id);
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) return res.redirect('/admin/review?err=' + encodeURIComponent('تقييم غير صالح'));
+  db.prepare('DELETE FROM reviews WHERE id=?').run(id);
   res.redirect('/admin/review?ok=' + encodeURIComponent('تم حذف التقييم'));
 });
 
@@ -520,6 +529,8 @@ router.post('/templates', tplUpload.single('css_file'), (req,res)=>{
 }, (err,req,res,next)=> res.redirect('/admin/templates?err=' + encodeURIComponent(err.message||'فشل الرفع')));
 
 router.post('/templates/:id/toggle', (req,res)=>{
+  const { hasPermission } = require('../util');
+  if (!hasPermission(req.user,'templates.manage')) return res.redirect('/admin/templates?err=' + encodeURIComponent('ليس لديك صلاحية'));
   const t = db.prepare('SELECT * FROM templates WHERE id=?').get(req.params.id);
   if (!t) return res.redirect('/admin/templates?err=' + encodeURIComponent('القالب غير موجود'));
   db.prepare('UPDATE templates SET is_active=? WHERE id=?').run(t.is_active?0:1, t.id);
@@ -527,6 +538,8 @@ router.post('/templates/:id/toggle', (req,res)=>{
 });
 
 router.post('/templates/:id/premium', (req,res)=>{
+  const { hasPermission } = require('../util');
+  if (!hasPermission(req.user,'templates.manage')) return res.redirect('/admin/templates?err=' + encodeURIComponent('ليس لديك صلاحية'));
   const t = db.prepare('SELECT * FROM templates WHERE id=?').get(req.params.id);
   if (!t) return res.redirect('/admin/templates?err=' + encodeURIComponent('القالب غير موجود'));
   db.prepare('UPDATE templates SET is_premium=? WHERE id=?').run(t.is_premium?0:1, t.id);
@@ -534,6 +547,8 @@ router.post('/templates/:id/premium', (req,res)=>{
 });
 
 router.post('/templates/:id/delete', (req,res)=>{
+  const { hasPermission } = require('../util');
+  if (!hasPermission(req.user,'templates.manage')) return res.redirect('/admin/templates?err=' + encodeURIComponent('ليس لديك صلاحية'));
   const t = db.prepare('SELECT * FROM templates WHERE id=?').get(req.params.id);
   if (!t) return res.redirect('/admin/templates?err=' + encodeURIComponent('القالب غير موجود'));
   if (t.id==='classic') return res.redirect('/admin/templates?err=' + encodeURIComponent('لا يمكن حذف القالب الأساسي'));

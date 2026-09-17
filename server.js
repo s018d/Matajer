@@ -86,7 +86,8 @@ app.use((req, res, next) => {
     let t = req.cookies._csrf;
     if (!t) {
       t = crypto.randomBytes(18).toString('hex');
-      res.setHeader('Set-Cookie', '_csrf=' + t + '; Path=/; HttpOnly; SameSite=Lax');
+      const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
+      res.setHeader('Set-Cookie', '_csrf=' + t + '; Path=/; HttpOnly; SameSite=Lax' + secure);
     }
     res.locals.csrf = t;
     return next();

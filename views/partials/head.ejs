@@ -1,3 +1,10 @@
+<%
+/* تحقق مركزي أولاً: اللون hex فقط، والروابط http(s) أو مسارات داخلية فقط */
+const __safeColor = (typeof themeColor !== 'undefined' && /^#[0-9a-fA-F]{6}$/.test(String(themeColor))) ? themeColor : '#0ea5e9';
+const __safeCss = (typeof css !== 'undefined' && /^\/(css|img|js)\/[a-zA-Z0-9._/-]+\.(css|js|svg|png|jpg)$/.test(String(css))) ? css : '/css/app.css';
+const __safeOg = (typeof ogImage !== 'undefined' && /^(https:\/\/|\/img\/|\/uploads\/)/.test(String(ogImage))) ? String(ogImage).replace(/"/g, '') : '';
+const __safePwa = (typeof pwa !== 'undefined' && /^[a-z0-9-]+$/.test(String(pwa))) ? String(pwa) : '';
+%>
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
@@ -8,7 +15,7 @@
 <meta property="og:type" content="<%= typeof ogType !== 'undefined' ? ogType : 'website' %>">
 <meta property="og:title" content="<%= typeof title !== 'undefined' ? title : 'دُكّان — منصة المتاجر' %>">
 <meta property="og:description" content="<%= typeof desc !== 'undefined' && desc ? desc : 'دُكّان Dukkan — منصة عراقية لإنشاء متاجر إلكترونية جاهزة.' %>">
-<%- typeof ogImage !== 'undefined' ? '<meta property="og:image" content="' + ogImage + '">' : '' %>
+<%- __safeOg ? '<meta property="og:image" content="' + __safeOg + '">' : '' %>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="<%= typeof title !== 'undefined' ? title : 'دُكّان — منصة المتاجر' %>">
 <meta name="twitter:description" content="<%= typeof desc !== 'undefined' && desc ? desc : 'دُكّان Dukkan — منصة عراقية لإنشاء متاجر إلكترونية جاهزة.' %>">
@@ -18,9 +25,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;600;700;800;900&family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/img/logo.svg">
-<%- typeof pwa !== 'undefined' && pwa ? '<link rel="manifest" href="/s/' + pwa + '/manifest.json">' : '' %>
-<%- typeof themeColor !== 'undefined' ? '<meta name="theme-color" content="' + themeColor + '">' : '' %>
-<link rel="stylesheet" href="<%= typeof css !== 'undefined' ? css : '/css/app.css' %>">
+<%- __safePwa ? '<link rel="manifest" href="/s/' + __safePwa + '/manifest.json">' : '' %>
+<meta name="theme-color" content="<%= __safeColor %>">
+<link rel="stylesheet" href="<%= __safeCss %>">
 <%- typeof extraCss !== 'undefined' ? extraCss : '' %>
-<%- typeof pwa !== 'undefined' && pwa ? '<script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){navigator.serviceWorker.register("/sw.js",{updateViaCache:"none"}).then(function(reg){if(reg.waiting||navigator.serviceWorker.controller){navigator.serviceWorker.addEventListener("controllerchange",function(){location.reload()})}}).catch(function(){})}</script>' : '' %>
+<%- __safePwa ? '<script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){navigator.serviceWorker.register("/sw.js",{updateViaCache:"none"}).then(function(reg){if(reg.waiting||navigator.serviceWorker.controller){navigator.serviceWorker.addEventListener("controllerchange",function(){location.reload()})}}).catch(function(){})}</script>' : '' %>
 </head>

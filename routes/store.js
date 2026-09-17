@@ -83,8 +83,12 @@ router.post('/s/:slug/checkout', asyncHandler(async (req, res) => {
     return res.redirect(`${store.base}/checkout?err=` + encodeURIComponent('محاولات إتمام طلب كثيرة — حاول بعد دقيقة'));
   }
   const { customer_name, customer_phone, customer_address, note, cart, coupon } = req.body;
-  if (!customer_name || !customer_phone) {
-    return res.redirect(`${store.base}/checkout?err=` + encodeURIComponent('الاسم ورقم الهاتف مطلوبان'));
+  const cleanName = String(customer_name || '').replace(/<[^>]*>/g, '').trim().slice(0, 80);
+  const cleanPhone = String(customer_phone || '').replace(/[^0-9+\s-]/g, '').slice(0, 20);
+  const cleanAddr = String(customer_address || '').replace(/<[^>]*>/g, '').trim().slice(0, 300);
+  const cleanNote = String(note || '').replace(/<[^>]*>/g, '').trim().slice(0, 500);
+  if (cleanName.length < 2 || cleanPhone.replace(/\D/g, '').length < 7) {
+    return res.redirect(`${store.base}/checkout?err=` + encodeURIComponent('الاسم ورقم هاتف صحيح مطلوبان'));
   }
   let items;
   try { items = JSON.parse(cart || '[]'); } catch { items = []; }
@@ -139,7 +143,7 @@ router.post('/s/:slug/checkout', asyncHandler(async (req, res) => {
   
   const doneToken = crypto.randomBytes(16).toString('hex');
   const info = db.prepare('INSERT INTO orders (store_id, customer_name, customer_phone, customer_address, note, subtotal, discount, coupon_code, delivery_fee, total, status, done_token) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)')
-    .run(store.id, String(customer_name).trim(), String(customer_phone).trim(), String(customer_address || ''), String(note || ''), subtotal, discount, couponCode, deliveryFee, total, 'new', doneToken);
+    .run(store.id, cleanName, cleanPhone, cleanAddr, cleanNote, subtotal, discount, couponCode, deliveryFee, total, 'new', doneToken);
   const orderId = info.lastInsertRowid;
   const orderItems = [];
   for (const r of rows) {
@@ -148,14 +152,14 @@ router.post('/s/:slug/checkout', asyncHandler(async (req, res) => {
     orderItems.push({ product_name: r.p.name, qty: r.qty, product_price: r.price, addons_price: r.addonsTotal });
     if (r.p.stock != null) db.prepare('UPDATE products SET stock = stock - ? WHERE id=?').run(r.qty, r.p.id);
   }
-  appendLog(`وصول طلب جديد (#${orderId}) إلى متجر «${store.name}» بمبلغ ${total.toLocaleString('en-US')} د.ع من «${customer_name}» — دفع عند الاستلام`);
+  appendLog(`وصول طلب جديد (#${orderId}) إلى متجر «${store.name}» بمبلغ ${total.toLocaleString('en-US')} د.ع من «${cleanName}» — دفع عند الاستلام`);
   // Loyalty points
   const loyalty = getLoyaltyConfig();
   const earnedPoints = Math.floor(total / 1000) * loyalty.points_per_1000;
-  addLoyaltyPoints(store.id, customer_phone, earnedPoints, 'order', orderId, `طلب #${orderId}`);
-  
+  addLoyaltyPoints(store.id, cleanPhone, earnedPoints, 'order', orderId, `طلب #${orderId}`);
+
   // Telegram notification
-  notifyNewOrder(store, { id: orderId, customer_name, customer_phone, customer_address, note, total, created_at: new Date().toISOString() }, orderItems);
+  notifyNewOrder(store, { id: orderId, customer_name: cleanName, customer_phone: cleanPhone, customer_address: cleanAddr, note: cleanNote, total, created_at: new Date().toISOString() }, orderItems);
   res.render('store/done', { store, orderId, doneToken, subtotal, discount, deliveryFee, total, couponCode, tpl: tplFor(store), earnedPoints, paid: false });
 }));
 
@@ -207,23 +211,31 @@ router.get('/s/:slug/checkout', (req, res) => {
 router.post('/s/:slug/abandoned-cart', (req, res) => {
   const store = getStoreBySlug(req.params.slug);
   if (!store) return res.json({ ok: false, message: 'متجر غير موجود' });
+  const lim = checkLimit('abcart:' + clientIp(req), 20, 60 * 1000);
+  if (!lim.ok) return res.json({ ok: false, message: 'طلبات كثيرة — حاول بعد دقيقة' });
   const { session_id, cart, customer_phone, customer_name, subtotal } = req.body;
-  if (!session_id || !cart) return res.json({ ok: false, message: 'بيانات ناقصة' });
-  const exists = db.prepare('SELECT id FROM abandoned_carts WHERE store_id=? AND session_id=?').get(store.id, session_id);
+  const sid = String(session_id || '').slice(0, 64);
+  if (!sid || cart == null) return res.json({ ok: false, message: 'بيانات ناقصة' });
+  let cartStr = '';
+  try { cartStr = JSON.stringify(cart).slice(0, 20000); JSON.parse(cartStr); } catch { return res.json({ ok: false, message: 'سلة غير صالحة' }); }
+  const cPhone = String(customer_phone || '').replace(/[^0-9+\s-]/g, '').slice(0, 20);
+  const cName = String(customer_name || '').replace(/<[^>]*>/g, '').slice(0, 80);
+  const cSub = Math.max(0, Math.min(999999999, Number(subtotal) || 0));
+  const exists = db.prepare('SELECT id FROM abandoned_carts WHERE store_id=? AND session_id=?').get(store.id, sid);
   if (exists) {
     db.prepare("UPDATE abandoned_carts SET cart_data=?, customer_phone=?, customer_name=?, subtotal=?, created_at=datetime('now','localtime') WHERE id=?")
-      .run(JSON.stringify(cart), customer_phone || '', customer_name || '', subtotal || 0, exists.id);
+      .run(cartStr, cPhone, cName, cSub, exists.id);
   } else {
     db.prepare('INSERT INTO abandoned_carts (store_id, session_id, cart_data, customer_phone, customer_name, subtotal) VALUES (?,?,?,?,?,?)')
-      .run(store.id, session_id, JSON.stringify(cart), customer_phone || '', customer_name || '', subtotal || 0);
+      .run(store.id, sid, cartStr, cPhone, cName, cSub);
   }
   res.json({ ok: true });
 });
 
 router.get('/s/:slug/reorder/:orderId', (req, res) => {
   const store = getStoreBySlug(req.params.slug);
+  if (!store) return res.redirect('/s/' + String(req.params.slug || '').toLowerCase() + '?err=' + encodeURIComponent('متجر غير موجود'));
   const base = '/s/' + store.slug;
-  if (!store) return res.redirect(base + '?err=' + encodeURIComponent('متجر غير موجود'));
   
   const order = db.prepare('SELECT * FROM orders WHERE id=? AND store_id=?').get(req.params.orderId, store.id);
   if (!order) return res.redirect(base + '?err=' + encodeURIComponent('الطلب غير موجود'));

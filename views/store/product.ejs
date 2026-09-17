@@ -5,11 +5,8 @@
   const lowStock = product.stock != null && Number(product.stock) > 0 && Number(product.stock) <= 5;
 %>
 <%- include('../partials/head', { title: product.name + ' — ' + store.name, desc: store.meta_desc || store.description, ogType: 'product', css: '/css/store.css', pwa: store.slug, themeColor: store.color }) %>
-<% if (store.template === 'market') { %><link rel="stylesheet" href="/css/store-market.css"><% } %>
-<% if (store.template === 'neo') { %><link rel="stylesheet" href="/css/store-neo.css"><% } %>
-<% if (store.template === 'gen') { %><link rel="stylesheet" href="/css/store-gen.css"><% } %>
 <% if (tpl && tpl.css) { %><link rel="stylesheet" href="<%= tpl.css %>"><% } %>
-<% if (tpl) { %><style><%= tpl.style %></style><% } else { %><style>:root{--primary:<%= store.color %>}</style><% } %>
+<% const __c = /^#[0-9a-fA-F]{6}$/.test(String(store.color)) ? store.color : '#0ea5e9'; %><% if (tpl) { %><style><%= tpl.style %></style><% } else { %><style>:root{--primary:<%= __c %>}</style><% } %>
 <body data-template="<%= store.template %>" data-slug="<%= store.slug %>" data-base="<%= store.base %>" class="store-body<%= tpl ? ' ' + tpl.classes : '' %>">
 <% if (store.template === 'market') { %>
   <%- include('../partials/market-marquee') %>

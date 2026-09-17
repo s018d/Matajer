@@ -1,8 +1,10 @@
-/* دُكّان Dukkan — Service Worker v8 — كاش أقوى */
-const CACHE = 'dukkan-v8';
+/* دُكّان Dukkan — Service Worker v9 — كاش أقوى */
+const CACHE = 'dukkan-v9';
 const STATIC = [
-  '/css/store.css', '/css/prem-fashion.css', '/css/prem-classic.css', '/css/prem-natural.css',
-  '/css/app.css', '/js/cart.js', '/img/logo.svg', '/img/logo.jpg', '/img/favicon.svg', '/img/placeholder.svg',
+  '/css/store.css', '/css/site.css', '/css/app.css',
+  '/css/prem-fashion.css', '/css/prem-classic.css', '/css/prem-natural.css',
+  '/css/royal-ivory.css', '/css/black-gold.css', '/css/modern-green.css',
+  '/js/cart.js', '/js/notify.js', '/img/logo.svg', '/img/logo.jpg', '/img/favicon.svg', '/img/placeholder.svg',
   'https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;600;700;800;900&family=Cairo:wght@300;400;500;600;700;800;900&display=swap'
 ];
 

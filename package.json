@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "prod": "NODE_ENV=production node server.js",
+    "prod": "set NODE_ENV=production&& node server.js",
+    "prod:unix": "NODE_ENV=production node server.js",
     "pm2": "pm2 start ecosystem.config.js"
   },
   "engines": { "node": ">=20" },

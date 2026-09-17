@@ -267,18 +267,25 @@ router.get('/s/:slug/reorder-data/:sessionId', (req, res) => {
 router.post('/s/:slug/reviews', (req, res) => {
   const store = getStoreBySlug(req.params.slug);
   if (!store) return res.json({ ok: false, message: 'متجر غير موجود' });
-  
-  const { product_id, customer_name, customer_phone, rating, comment } = req.body;
+  const lim = checkLimit('review:' + clientIp(req), 5, 10 * 60 * 1000);
+  if (!lim.ok) return res.json({ ok: false, message: 'تقييمات كثيرة — انتظر قليلاً ثم حاول' });
+
+  const { product_id, customer_name, customer_phone, rating, comment, website } = req.body;
+  if (website) return res.json({ ok: false, message: 'رفض الطلب' });
   if (!product_id || !customer_name || !rating) return res.json({ ok: false, message: 'بيانات ناقصة' });
+  const cleanName = String(customer_name).replace(/<[^>]*>/g, '').trim().slice(0, 60);
+  const cleanPhone = String(customer_phone || '').replace(/[^0-9+\s-]/g, '').slice(0, 20);
+  const cleanComment = String(comment || '').replace(/<[^>]*>/g, '').trim().slice(0, 500);
+  if (cleanName.length < 2) return res.json({ ok: false, message: 'اكتب اسمك' });
   const r = Math.floor(Number(rating));
   if (r < 1 || r > 5) return res.json({ ok: false, message: 'التقييم يجب أن يكون بين 1 و 5' });
-  
+
   const product = db.prepare('SELECT id FROM products WHERE id=? AND store_id=? AND active=1').get(product_id, store.id);
   if (!product) return res.json({ ok: false, message: 'منتج غير موجود' });
-  
+
   db.prepare('INSERT INTO reviews (product_id, customer_name, customer_phone, rating, comment) VALUES (?,?,?,?,?)')
-    .run(product_id, customer_name.trim(), customer_phone?.trim() || '', Math.floor(Number(rating)), comment?.trim() || '');
-  
+    .run(product_id, cleanName, cleanPhone, r, cleanComment);
+
   res.json({ ok: true, message: 'شكراً لتقييمك — سيظهر بعد المراجعة' });
 });
 

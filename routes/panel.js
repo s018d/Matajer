@@ -140,18 +140,21 @@ router.get('/', (req, res) => {
 router.get('/products', (req, res) => {
   const store = getStore(req.user.store_id);
   const q = String(req.query.q || '').trim();
+  const lowOnly = String(req.query.stock || '') === 'low';
   let where = 'p.store_id=?';
   const params = [store.id];
   if (q) {
     where += ' AND (p.name LIKE ? OR p.description LIKE ?)';
     params.push(`%${q}%`, `%${q}%`);
   }
+  if (lowOnly) where += ' AND p.stock IS NOT NULL AND p.stock <= 5';
   const rows = db.prepare(`
     SELECT p.*, c.name cat, (SELECT path FROM product_images i WHERE i.product_id=p.id ORDER BY position, id LIMIT 1) img,
       (SELECT COUNT(*) FROM product_images i WHERE i.product_id=p.id) img_count
     FROM products p LEFT JOIN categories c ON c.id=p.category_id WHERE ${where} ORDER BY p.id DESC`).all(...params);
   rows.forEach(r => { r.img = thumb(r.img); });
-  res.render('panel/products', { store, rows, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user, searchQ: q });
+  const lowCount = db.prepare('SELECT COUNT(*) c FROM products WHERE store_id=? AND stock IS NOT NULL AND stock<=5').get(store.id).c;
+  res.render('panel/products', { store, rows, money, ok: req.query.ok || '', err: req.query.err || '', user: req.user, searchQ: q, lowOnly, lowCount });
 });
 
 function productForm(store, pid) {

@@ -30,7 +30,7 @@
   <div class="st-product">
     <div class="st-gallery">
       <% if (images.length) { %>
-        <img src="<%= images[0].path %>" class="st-main-img" id="mainImg" alt="<%= product.name %>" loading="lazy" onclick="openLightbox(0)" data-variant="<%= images[0].variant || '' %>">
+        <img src="<%= images[0].path %>" class="st-main-img" id="mainImg" alt="<%= product.name %>" loading="eager" fetchpriority="high" onclick="openLightbox(0)" data-variant="<%= images[0].variant || '' %>">
         <% if (images.length > 1) { %>
           <div class="st-thumbs" id="stThumbs">
             <% images.forEach((im, idx) => { %>

@@ -91,9 +91,9 @@
                 <option value="cancelled" <%= o.status==='cancelled' ? 'selected' : '' %>>ملغي</option>
               </select>
             </form>
-            <% const wa = String(store.whatsapp || '').replace(/^0/, '964'); %>
-            <% if (wa) { %>
-              <a class="btn btn-sm btn-ok" target="_blank" rel="noopener" href="https://wa.me/<%= wa %>?text=<%= encodeURIComponent('طلب جديد #' + o.id + ' من ' + o.customer_name + ' (' + o.customer_phone + ')' + (o.customer_address ? ' — ' + o.customer_address : '') + '\n' + o.items_txt + '\nالإجمالي: ' + o.total + ' د.ع') %>">واتساب الزبون</a>
+            <% const custWa = String(o.customer_phone || '').replace(/[^0-9]/g, '').replace(/^0/, '964'); %>
+            <% if (custWa) { %>
+              <a class="btn btn-sm btn-ok" target="_blank" rel="noopener" href="https://wa.me/<%= custWa %>?text=<%= encodeURIComponent('مرحباً ' + o.customer_name + '، معك ' + store.name + ' بخصوص طلبك #' + o.id + ' (' + o.total + ' د.ع)') %>">واتساب الزبون</a>
             <% } %>
           </div>
         </div>

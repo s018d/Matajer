@@ -1,5 +1,5 @@
-/* دُكّان Dukkan — Service Worker v7 — كاش أقوى */
-const CACHE = 'dukkan-v7';
+/* دُكّان Dukkan — Service Worker v8 — كاش أقوى */
+const CACHE = 'dukkan-v8';
 const STATIC = [
   '/css/store.css', '/css/prem-fashion.css', '/css/prem-classic.css', '/css/prem-natural.css',
   '/css/app.css', '/js/cart.js', '/img/logo.svg', '/img/logo.jpg', '/img/favicon.svg', '/img/placeholder.svg',

@@ -56,8 +56,8 @@
     </div>
 
     <% if (store.whatsapp) { %>
-    <a class="st-done-wa" href="https://wa.me/<%= store.whatsapp.replace(/^0/, '964') %>?text=<%= encodeURIComponent('مرحباً، أريد الاستفسار عن طلب #' + orderId) %>" target="_blank" rel="noopener">
-      💬 تواصل معنا عبر الواتساب
+    <a class="st-done-wa" href="https://wa.me/<%= store.whatsapp.replace(/^0/, '964') %>?text=<%= encodeURIComponent('مرحباً ' + store.name + '، أنا صاحب الطلب #' + orderId + ' بمبلغ ' + Number(total).toLocaleString('en-US') + ' د.ع — أريد تأكيده') %>" target="_blank" rel="noopener">
+      💬 تأكيد الطلب عبر الواتساب
     </a>
     <% } %>
   </div>

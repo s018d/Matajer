@@ -11,8 +11,12 @@
     </div>
     <form class="search-form" method="get" style="margin-bottom:1rem">
       <input type="search" name="q" placeholder="ابحث بالاسم أو الوصف…" value="<%= typeof searchQ !== 'undefined' ? searchQ : '' %>">
+      <% if (typeof lowOnly !== 'undefined' && lowOnly) { %><input type="hidden" name="stock" value="low"><% } %>
       <button class="btn btn-sm" type="submit">🔍 بحث</button>
-      <% if (searchQ) { %><a class="btn btn-sm btn-ghost" href="/panel/products">إلغاء</a><% } %>
+      <% if (searchQ) { %><a class="btn btn-sm btn-ghost" href="/panel/products<%= (typeof lowOnly !== 'undefined' && lowOnly) ? '?stock=low' : '' %>">إلغاء</a><% } %>
+      <% if (typeof lowCount !== 'undefined' && lowCount > 0) { %>
+        <% if (typeof lowOnly !== 'undefined' && lowOnly) { %><a class="btn btn-sm btn-ghost" href="/panel/products">عرض الكل</a><% } else { %><a class="btn btn-sm btn-warn" href="/panel/products?stock=low">⚠️ مخزون قليل (<%= lowCount %>)</a><% } %>
+      <% } %>
     </form>
     <% if (rows.length === 0) { %>
       <div class="empty-state" style="text-align:center;padding:3rem 1.5rem;background:linear-gradient(135deg,#f8fafc,#eff6ff);border:1.5px dashed #bfdbfe;border-radius:16px;margin-top:1rem">

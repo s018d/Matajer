@@ -650,9 +650,10 @@ router.get('/preview/:id', (req, res) => {
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   const t = TPL.get(req.params.id);
   if (!t) return res.status(404).render('store/notfound', {});
+  const me = getStore(req.user.store_id);
   const store = {
     id: 0, name: 'متجر تجريبي', slug: 'preview', base: '/s/preview', description: 'هكذا سيظهر متجرك عند الزائر — معاينة حية للقالب',
-    logo_path: '', template: t.id, color: '#0ea5e9', whatsapp: '', plan: 'pro', plan_expires: '2099-12-31'
+    logo_path: me.logo_path || '', template: t.id, color: me.color || '#0ea5e9', whatsapp: '', plan: 'pro', plan_expires: '2099-12-31'
   };
   const cats = [];
   const sample = [
@@ -738,7 +739,9 @@ router.post('/templates/customize', (req, res) => {
     };
   }
   if (req.body.announce !== undefined && !req.body.layout_json) {
-    layout.announce = String(req.body.announce || '').slice(0,120);
+    const aTxt = String(req.body.announce || '').slice(0, 120);
+    const prev = layout.announce && typeof layout.announce === 'object' ? layout.announce : {};
+    layout.announce = { ...prev, text: aTxt };
   }
   // حفظ الـ layout إذا تغير عبر النموذج المبسط
   if (req.body.heroTitle !== undefined || (req.body.announce !== undefined && !req.body.layout_json)) {

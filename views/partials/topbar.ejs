@@ -27,3 +27,7 @@
     <% } %>
   </div>
 </header>
+<script>
+function closeSidebar(){ document.querySelectorAll('.sidebar.open').forEach(s=>s.classList.remove('open')); document.querySelectorAll('.sidebar-overlay.show').forEach(o=>o.classList.remove('show')); document.body.style.overflow=''; }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeSidebar(); });
+</script>

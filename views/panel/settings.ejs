@@ -61,8 +61,6 @@
           <label>دومينك<input type="text" name="custom_domain" value="<%= store.custom_domain || '' %>" dir="ltr" placeholder="shop.mybrand.com" <%= store.ispro?'':'disabled' %>>
             <% if(store.ispro){ %><small class="field-hint">أشر CNAME إلى المنصة وسيفتح متجرك عليه — اتركه فارغاً للإلغاء</small><% } else { %><small class="field-hint">للباقة الاحترافية فقط — <a href="/panel/billing">رقِّ</a></small><% } %>
           </label>
-          <input type="hidden" name="description" value="<%= store.description %>">
-          <input type="hidden" name="meta_desc" value="<%= store.meta_desc || '' %>">
         </div>
 
         <div style="display:flex; gap:.6rem; margin-top:.5rem">

@@ -215,10 +215,35 @@ h1,h2,h3 {
 }
 /* ═══ .sidebar .brand span ═══ */
 .sidebar .brand span {
-  background: linear-gradient(135deg,#FDBA74,#FED7AA); /* الخلفية */
+  background: linear-gradient(135deg,#2DD4BF,#5EEAD4); /* الخلفية */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+/* ═══ .side-close ═══ */
+.side-close {
+  display: none; /* زر الإغلاق — موبايل فقط */
+  margin-inline-start: auto; /* أقصى الطرف */
+  width: 32px; /* العرض */
+  height: 32px; /* الارتفاع */
+  border-radius: 50%; /* دائري */
+  border: 1.5px solid rgba(255,255,255,.2); /* الحدود */
+  background: rgba(255,255,255,.08); /* الخلفية */
+  color: #fff; /* لون النص */
+  font-size: .9rem; /* حجم الخط */
+  cursor: pointer; /* شكل المؤشر */
+  align-items: center; /* محاذاة عمودية */
+  justify-content: center; /* محاذاة أفقية */
+  flex-shrink: 0; /* الانكماش */
+}
+@media(max-width:600px) {
+  .side-close {
+    display: inline-flex; /* يظهر بالموبايل */
+  }
+  .sidebar .brand {
+    font-size: 1.05rem; /* تصغير الشعار ليتسع مع زر الإغلاق */
+    padding: .4rem 1rem 1.2rem; /* حشوة أضيق */
+  }
 }
 /* ═══ .sidebar nav ═══ */
 .sidebar nav {

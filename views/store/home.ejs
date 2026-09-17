@@ -91,7 +91,7 @@ const heroSub = heroCfg.sub || store.description;
 
 <% function renderBrand(){ %><%- include('../partials/store-brand') %><% } %>
 
-<% function renderAnnounce(){ if (!show('announce')) return; const a = L.announce || {}; if (!a.text) return; const bg = a.bg || '#fff3cd'; const color = a.color || '#856404'; const icon = a.icon || '📢'; const rawLink = String(a.link || ''); const link = /^https?:\/\/[^\s"<>]+$/.test(rawLink) ? rawLink : ''; const txt = a.text || ''; const linkAttr = link ? `href="${link.replace(/"/g, '')}" target="_blank" rel="noopener"` : ''; %>
+<% function renderAnnounce(){ if (!show('announce')) return; let aRaw = L.announce || {}; if (typeof aRaw === 'string') aRaw = { text: aRaw }; const a = aRaw; if (!a.text) return; const bg = a.bg || '#fff3cd'; const color = a.color || '#856404'; const icon = a.icon || '📢'; const rawLink = String(a.link || ''); const link = /^https?:\/\/[^\s"<>]+$/.test(rawLink) ? rawLink : ''; const txt = a.text || ''; const linkAttr = link ? `href="${link.replace(/"/g, '')}" target="_blank" rel="noopener"` : ''; %>
   <div class="announce-bar" style="background:<%=bg%>;color:<%=color%>;padding:.6rem 1rem;text-align:center;font-size:.9rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:.5rem;<%= a.link ? 'cursor:pointer' : '' %>" <%= linkAttr %>>
     <span><%= icon %></span>
     <span><%= txt %></span>

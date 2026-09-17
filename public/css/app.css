@@ -105,9 +105,9 @@ html.dark {
     --ink: #e8edf7;
     --muted: #8b98b8;
     --line: #1d2a4d;
-    --brand: #60a5fa;
-    --brand-dark: #3b82f6;
-    --brand-2: #a78bfa;
+    --brand: #f59e0b;
+    --brand-dark: #d97706;
+    --brand-2: #fbbf24;
     --danger: #f87171;
     --warn: #fbbf24;
     --success: #34d399;
@@ -215,7 +215,7 @@ h1,h2,h3 {
 }
 /* ═══ .sidebar .brand span ═══ */
 .sidebar .brand span {
-  background: linear-gradient(135deg,#818cf8,#38bdf8); /* الخلفية */
+  background: linear-gradient(135deg,#f59e0b,#fbbf24); /* الخلفية */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -257,10 +257,10 @@ h1,h2,h3 {
 }
 /* ═══ .sidebar nav a.on ═══ */
 .sidebar nav a.on {
-  background: linear-gradient(135deg,rgba(99,102,241,.22),rgba(245,158,11,.14)); /* الخلفية */
+  background: linear-gradient(135deg,rgba(127,29,29,.55),rgba(245,158,11,.18)); /* الخلفية */
   color: #fff; /* لون النص */
   font-weight: 700; /* سماكة الخط */
-  box-shadow: inset 0 0 0 1px rgba(129,140,248,.35); /* الظل */
+  box-shadow: inset 0 0 0 1px rgba(245,158,11,.4); /* الظل */
 }
 /* ═══ .sidebar nav a.on::before ═══ */
 .sidebar nav a.on::before {
@@ -271,7 +271,7 @@ h1,h2,h3 {
   bottom: 20%; /* البعد عن الأسفل */
   width: 3.5px; /* العرض */
   border-radius: 0 4px 4px 0; /* تدوير الزوايا */
-  background: linear-gradient(180deg,#818cf8,#38bdf8); /* الخلفية */
+  background: linear-gradient(180deg,#f59e0b,#b45309); /* الخلفية */
 }
 /* ═══ .side-note ═══ */
 .side-note {
@@ -1807,5 +1807,89 @@ textarea {
   /* ═══ .card:hover,.stat:hover,.btn:hover ═══ */
   .card:hover,.stat:hover,.btn:hover {
     transform: none!important; /* التحويل (تدوير/تكبير) */
+  }
+}
+/* ===== BEAUTY LAYER v1.1 — توحيد وتناسق (إضافات آمنة) ===== */
+/* ═══ selection ═══ */
+::selection {
+  background: rgba(217,119,6,.28); /* تمييز النص بلون ذهبي */
+}
+/* ═══ scrollbar ═══ */
+::-webkit-scrollbar {
+  width: 10px; /* عرض الشريط */
+  height: 10px; /* ارتفاع الشريط */
+}
+::-webkit-scrollbar-track {
+  background: transparent; /* خلفية المسار */
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1; /* لون المقبض */
+  border-radius: 99px; /* تدوير الزوايا */
+  border: 2px solid transparent; /* حدود */
+  background-clip: content-box; /* قص الخلفية */
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b45309; /* لون المقبض عند التحويم */
+  background-clip: content-box; /* قص الخلفية */
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: #334155; /* لون المقبض بالداكن */
+  background-clip: content-box; /* قص الخلفية */
+}
+/* ═══ focus-visible عام ═══ */
+:focus-visible {
+  outline: 3px solid rgba(217,119,6,.55); /* إطار التركيز */
+  outline-offset: 2px; /* إزاحة الإطار */
+  border-radius: 8px; /* تدوير الزوايا */
+}
+/* ═══ empty-state موحدة ═══ */
+.empty-state h3 {
+  font-size: 1.05rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  color: var(--ink); /* لون النص */
+}
+.empty-state p {
+  color: var(--muted); /* لون النص */
+  font-size: .88rem; /* حجم الخط */
+  line-height: 1.7; /* ارتفاع السطر */
+}
+/* ═══ feed موحدة ═══ */
+.feed {
+  list-style: none; /* بدون نقاط */
+  display: flex; /* طريقة العرض */
+  flex-direction: column; /* اتجاه العناصر */
+  gap: .55rem; /* المسافة بين العناصر */
+  margin-top: .8rem; /* هامش علوي */
+}
+.feed li {
+  background: var(--soft); /* الخلفية */
+  border: 1px solid var(--line); /* الحدود */
+  border-radius: 10px; /* تدوير الزوايا */
+  padding: .55rem .8rem; /* الحشوة الداخلية */
+  font-size: .85rem; /* حجم الخط */
+  transition: border-color .18s, transform .18s; /* الحركة الانتقالية */
+}
+.feed li:hover {
+  border-color: var(--brand-2); /* لون الحدود عند التحويم */
+  transform: translateX(-2px); /* إزاحة خفيفة */
+}
+.feed-act {
+  font-weight: 800; /* سماكة الخط */
+  color: var(--ink); /* لون النص */
+}
+.feed-detail {
+  color: var(--muted); /* لون النص */
+}
+/* ═══ طباعة: إخفاء التنقل ═══ */
+@media print {
+  .sidebar,.topbar,.tb-menu,.no-print {
+    display: none!important; /* إخفاء عناصر التنقل عند الطباعة */
+  }
+  .main {
+    margin: 0!important; /* إزالة الهامش */
+  }
+  .card {
+    box-shadow: none!important; /* بدون ظل */
+    break-inside: avoid; /* منع الكسر */
   }
 }

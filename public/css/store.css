@@ -2163,3 +2163,34 @@ img {
   margin-inline: auto;
 }
 /* FIX removed - existing 800/480/360 breakpoints handle mobile cleanly */
+/* ===== BEAUTY LAYER v1.1 — تناسق المتجر (إضافات آمنة) ===== */
+/* ═══ selection ═══ */
+::selection {
+  background: rgba(217,119,6,.3); /* تمييز النص بلون ذهبي */
+}
+/* ═══ ظهور ناعم لصور المنتجات ═══ */
+.dkc-img img,.st-main-img,.st-thumbs img {
+  animation: dkcFade .45s ease both; /* ظهور تدريجي */
+}
+@keyframes dkcFade {
+  from { opacity: 0; } /* البداية شفافة */
+  to { opacity: 1; } /* النهاية واضحة */
+}
+/* ═══ توازن عناوين الهيرو ═══ */
+.st-head h1,.st-hero-title,.dk-hero h1 {
+  text-wrap: balance; /* توزيع متوازن للسطور */
+}
+/* ═══ تباعد متناسق للشبكة ═══ */
+.st-grid {
+  align-items: stretch; /* تمدد متساوٍ للبطاقات */
+}
+/* ═══ تركيز واضح ═══ */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible {
+  outline: 3px solid rgba(217,119,6,.55); /* إطار التركيز */
+  outline-offset: 2px; /* إزاحة الإطار */
+}
+@media(prefers-reduced-motion:reduce) {
+  .dkc-img img,.st-main-img,.st-thumbs img {
+    animation: none; /* بدون حركة */
+  }
+}

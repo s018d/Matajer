@@ -390,7 +390,8 @@ router.post('/orders/:id/status', (req, res) => {
   const statuses = ['new', 'confirmed', 'completed', 'cancelled'];
   const status = statuses.includes(req.body.status) ? req.body.status : 'new';
   db.prepare('UPDATE orders SET status=? WHERE id=? AND store_id=?').run(status, req.params.id, req.user.store_id);
-  res.redirect('/panel/orders?status=' + (req.query.back || 'all'));
+  const back = ['all', 'new', 'confirmed', 'completed', 'cancelled'].includes(req.query.back) ? req.query.back : 'all';
+  res.redirect('/panel/orders?status=' + back);
 });
 
 router.get('/orders/export', (req, res) => {

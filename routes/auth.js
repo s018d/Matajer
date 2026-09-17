@@ -150,14 +150,14 @@ router.get('/oauth2/callback/google', async (req, res) => {
       if (uname.length < 3) uname += '123';
       let n = uname, i = 2;
       while (db.prepare('SELECT id FROM users WHERE username=?').get(n)) { n = uname.slice(0, 14) + i; i++; }
-      const trialExp = new Date(Date.now() + Number(cfg.trial_days || 7) * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+      const trialExp = new Date(Date.now() + Number(cfg.trial_days || 14) * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
       const info = db.prepare('INSERT INTO stores (name, slug, description, owner_name, phone, template, color, plan, plan_expires) VALUES (?,?,?,?,?,?,?,?,?)')
         .run('متجر ' + name, genSlug(name), 'متجري الجديد على ' + (cfg.site_name || 'دُكّان Dukkan'), name, '', 'classic', '#0ea5e9', 'pro', trialExp);
       const fakePass = crypto.randomBytes(24).toString('hex'); // دخوله عبر جوجل فقط
       const uinfo = db.prepare('INSERT INTO users (username, password_hash, role, store_id, email, google_sub) VALUES (?,?,?,?,?,?)')
         .run(n, hashPassword(fakePass), 'owner', info.lastInsertRowid, email, sub);
       user = db.prepare('SELECT * FROM users WHERE id=?').get(uinfo.lastInsertRowid);
-      appendLog(`**تسجيل جيميل جديد** — «${email}» — متجر «متجر ${name}» — تجربة احترافية ${cfg.trial_days || 7} أيام`);
+      appendLog(`**تسجيل جيميل جديد** — «${email}» — متجر «متجر ${name}» — تجربة احترافية ${cfg.trial_days || 14} أيام`);
     }
     loginOk(clientIp(req));
     finishLogin(req, res, user, 'google', true); // جوجل = تذكرني دائماً (90 يوم)

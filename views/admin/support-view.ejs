@@ -1,0 +1,37 @@
+<%- include('../partials/head', { title: 'تذكرة #' + t.id + ' — الدعم' }) %>
+<body class="app">
+<%- include('../partials/sidebar-admin', { active: 'support', user }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: '🎫 تذكرة #' + t.id }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <a class="btn btn-sm btn-ghost" href="/admin/support">→ كل التذاكر</a>
+    <div class="card" style="margin-top:.8rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap">
+        <h2 style="margin:0"><%= t.subject %></h2>
+        <span class="badge <%= t.status==='open' ? 'badge-warn' : t.status==='answered' ? 'badge-ok' : '' %>"><%= t.status==='open' ? 'مفتوحة' : t.status==='answered' ? 'تم الرد' : 'مغلقة' %></span>
+      </div>
+      <small class="muted"><%= t.store_name || '' %> • <%= t.category %> • فُتحت <%= t.created_at %></small>
+      <form method="post" action="/admin/support/<%= t.id %>/status" class="inline" style="margin-top:.6rem">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <input type="hidden" name="status" value="<%= t.status==='closed' ? 'open' : 'closed' %>">
+        <button class="btn btn-sm <%= t.status==='closed' ? 'btn-ghost' : 'btn-danger' %>" onclick="return confirm('تغيير حالة التذكرة؟')"><%= t.status==='closed' ? '🔓 إعادة فتح' : '🔒 إغلاق' %></button>
+      </form>
+    </div>
+    <div class="card">
+      <% msgs.forEach(m => { %>
+        <div style="border-inline-start:3px solid <%= m.sender_type==='admin' ? '#0ea5e9' : '#d97706' %>;background:var(--soft);border-radius:10px;padding:.6rem .9rem;margin-bottom:.6rem">
+          <small class="muted"><%= m.sender_type==='admin' ? '🛎️ الإدارة' : '🧑‍💼 التاجر' %> • <%= m.created_at %></small>
+          <p style="margin:.25rem 0 0;white-space:pre-wrap"><%= m.message %></p>
+        </div>
+      <% }) %>
+      <form method="post" action="/admin/support/<%= t.id %>/reply" class="stack" style="margin-top:.8rem">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <label>رد الإدارة<textarea name="message" required maxlength="2000" rows="3" placeholder="اكتب الرد للتاجر"></textarea></label>
+        <button class="btn btn-primary">إرسال الرد</button>
+      </form>
+    </div>
+  </div>
+</main>
+</body>
+</html>

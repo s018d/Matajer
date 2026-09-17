@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 const { db, logActivity, UPLOADS_DIR, siteSettings, setSetting, isPro } = require('../db');
-const { requireOwner, hashPassword, checkPassword, appendLog, money, thumb, asyncHandler, containsForbidden, getForbiddenWord } = require('../util');
+const { requireOwner, hashPassword, checkPassword, appendLog, money, thumb, asyncHandler, containsForbidden, getForbiddenWord, checkLimit } = require('../util');
 const TPL = require('../templates');
 const { tplFor } = require('./store');
 const router = express.Router();
@@ -594,8 +594,8 @@ router.post('/billing/request', upReceipt().single('receipt'), (req, res) => {
   const months = [1, 12].includes(Number(req.body.months)) ? Number(req.body.months) : 1;
   const plan = req.body.plan === 'business' ? 'business' : 'pro';
   const priceMap = plan === 'business'
-    ? { 1: Number(cfg.business_price || 35000), 12: Number(cfg.business_price || 35000) * 10 }
-    : { 1: Number(cfg.pro_price || 15000), 12: Number(cfg.pro_price_12 || 150000) };
+    ? { 1: Number(cfg.business_price || 25000), 12: Number(cfg.business_price || 25000) * 10 }
+    : { 1: Number(cfg.pro_price || 10000), 12: Number(cfg.pro_price_12 || 100000) };
   const amount = priceMap[months];
   const ref = 'DKR-' + Math.random().toString(36).slice(2, 8).toUpperCase();
   const receiptPath = req.file ? '/private-receipts/store_' + store.id + '/' + req.file.filename : '';
@@ -890,6 +890,52 @@ router.post('/reviews/:id/delete', (req, res) => {
   if (!r) return res.redirect('/panel/reviews?err=' + encodeURIComponent('التقييم غير موجود'));
   db.prepare('DELETE FROM reviews WHERE id=?').run(r.id);
   res.redirect('/panel/reviews?ok=' + encodeURIComponent('تم حذف التقييم'));
+});
+
+/* ====== تذاكر الدعم — التاجر يفتح ويتابع، الأدمن يرد ====== */
+const TICKET_CATS = ['تقني', 'فوترة', 'منتجات', 'طلبات', 'اقتراح', 'أخرى'];
+router.get('/support', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const rows = db.prepare(`SELECT t.*, (SELECT COUNT(*) FROM support_messages m WHERE m.ticket_id=t.id) replies,
+    (SELECT message FROM support_messages m WHERE m.ticket_id=t.id ORDER BY m.id DESC LIMIT 1) last_msg
+    FROM support_tickets t WHERE t.store_id=? ORDER BY t.id DESC`).all(store.id);
+  res.render('panel/support', { store, rows, cats: TICKET_CATS, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+router.post('/support', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const lim = checkLimit('ticket:' + req.user.id, 5, 60 * 60 * 1000);
+  if (!lim.ok) return res.redirect('/panel/support?err=' + encodeURIComponent('فتحت تذاكر كثيرة — انتظر ساعة'));
+  const subject = String(req.body.subject || '').replace(/<[^>]*>/g, '').trim().slice(0, 120);
+  const category = TICKET_CATS.includes(req.body.category) ? req.body.category : 'أخرى';
+  const message = String(req.body.message || '').replace(/<[^>]*>/g, '').trim().slice(0, 2000);
+  if (subject.length < 3 || message.length < 5) return res.redirect('/panel/support?err=' + encodeURIComponent('اكتب عنواناً ووصفاً واضحاً للمشكلة'));
+  const info = db.prepare(`INSERT INTO support_tickets (store_id, subject, category, status) VALUES (?,?,?,'open')`).run(store.id, subject, category);
+  db.prepare(`INSERT INTO support_messages (ticket_id, sender_type, sender_id, message) VALUES (?,?,?,?)`).run(info.lastInsertRowid, 'owner', req.user.id, message);
+  logActivity(req.user.id, req.user.username, 'تذكرة دعم', `فتح تذكرة #${info.lastInsertRowid}: ${subject}`);
+  try {
+    const { siteSettings, sendTelegram } = require('../util');
+    const cfg = siteSettings();
+    if (cfg.telegram_admin_chat_id) sendTelegram(cfg.telegram_admin_chat_id, `🎫 <b>تذكرة دعم جديدة #${info.lastInsertRowid}</b>\n🏪 ${store.name}\n📂 ${category}\n📌 ${subject}`);
+  } catch (e) {}
+  res.redirect('/panel/support?ok=' + encodeURIComponent('تم فتح التذكرة #' + info.lastInsertRowid + ' — سنرد عليك قريباً'));
+});
+router.get('/support/:id', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const t = db.prepare('SELECT * FROM support_tickets WHERE id=? AND store_id=?').get(Number(req.params.id) || 0, store.id);
+  if (!t) return res.redirect('/panel/support?err=' + encodeURIComponent('التذكرة غير موجودة'));
+  const msgs = db.prepare('SELECT * FROM support_messages WHERE ticket_id=? ORDER BY id').all(t.id);
+  res.render('panel/support-view', { store, t, msgs, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+router.post('/support/:id/reply', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const t = db.prepare('SELECT * FROM support_tickets WHERE id=? AND store_id=?').get(Number(req.params.id) || 0, store.id);
+  if (!t) return res.redirect('/panel/support?err=' + encodeURIComponent('التذكرة غير موجودة'));
+  if (t.status === 'closed') return res.redirect(`/panel/support/${t.id}?err=` + encodeURIComponent('التذكرة مغلقة'));
+  const message = String(req.body.message || '').replace(/<[^>]*>/g, '').trim().slice(0, 2000);
+  if (message.length < 2) return res.redirect(`/panel/support/${t.id}?err=` + encodeURIComponent('اكتب ردك'));
+  db.prepare(`INSERT INTO support_messages (ticket_id, sender_type, sender_id, message) VALUES (?,?,?,?)`).run(t.id, 'owner', req.user.id, message);
+  if (t.status === 'answered') db.prepare(`UPDATE support_tickets SET status='open' WHERE id=?`).run(t.id);
+  res.redirect(`/panel/support/${t.id}?ok=` + encodeURIComponent('تم إرسال ردك'));
 });
 
 module.exports = router;

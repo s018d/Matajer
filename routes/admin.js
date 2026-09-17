@@ -304,10 +304,10 @@ router.post('/site', (req, res) => {
   setSetting('site_whatsapp', String(site_whatsapp || '').trim());
   setSetting('pay_account', String(pay_account || '').trim());
   setSetting('free_products', String(Math.max(1, Math.min(100, Number(free_products) || 25))));
-  setSetting('pro_price', String(Math.max(1000, Number(pro_price) || 15000)));
-  setSetting('pro_price_3', String(Math.max(1000, Number(pro_price_3) || 40000)));
-  setSetting('pro_price_12', String(Math.max(1000, Number(pro_price_12) || 150000)));
-  setSetting('business_price', String(Math.max(1000, Number(business_price) || 35000)));
+  setSetting('pro_price', String(Math.max(1000, Number(pro_price) || 10000)));
+  setSetting('pro_price_3', String(Math.max(1000, Number(pro_price_3) || 25000)));
+  setSetting('pro_price_12', String(Math.max(1000, Number(pro_price_12) || 100000)));
+  setSetting('business_price', String(Math.max(1000, Number(business_price) || 25000)));
   setSetting('trial_days', String(Math.max(0, Math.min(30, Number(trial_days) || 0))));
   setSetting('telegram_bot_token', String(telegram_bot_token || '').trim());
   setSetting('telegram_admin_chat_id', String(telegram_admin_chat_id || '').trim());
@@ -571,6 +571,41 @@ router.post('/password', (req, res) => {
   db.prepare('UPDATE users SET password_hash=? WHERE id=?').run(hashPassword(String(newpass)), req.user.id);
   appendLog(`المدير العام غيّر كلمة مرور حسابه الخاص`);
   res.redirect('/admin/password?ok=تم تغيير كلمة المرور بنجاح');
+});
+
+/* ====== تذاكر الدعم — عرض الكل + رد + إغلاق ====== */
+router.get('/support', (req, res) => {
+  const filter = ['open', 'answered', 'closed', 'all'].includes(req.query.status) ? req.query.status : 'open';
+  const where = filter === 'all' ? '' : 'WHERE t.status=?';
+  const params = filter === 'all' ? [] : [filter];
+  const rows = db.prepare(`SELECT t.*, s.name store_name, s.slug store_slug,
+    (SELECT COUNT(*) FROM support_messages m WHERE m.ticket_id=t.id) replies
+    FROM support_tickets t LEFT JOIN stores s ON s.id=t.store_id ${where} ORDER BY t.id DESC LIMIT 200`).all(...params);
+  const openCount = db.prepare(`SELECT COUNT(*) c FROM support_tickets WHERE status='open'`).get().c;
+  res.render('admin/support', { rows, filter, openCount, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+router.get('/support/:id', (req, res) => {
+  const t = db.prepare(`SELECT t.*, s.name store_name, s.slug store_slug FROM support_tickets t LEFT JOIN stores s ON s.id=t.store_id WHERE t.id=?`).get(Number(req.params.id) || 0);
+  if (!t) return res.redirect('/admin/support?err=' + encodeURIComponent('التذكرة غير موجودة'));
+  const msgs = db.prepare('SELECT * FROM support_messages WHERE ticket_id=? ORDER BY id').all(t.id);
+  res.render('admin/support-view', { t, msgs, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+router.post('/support/:id/reply', (req, res) => {
+  const t = db.prepare('SELECT * FROM support_tickets WHERE id=?').get(Number(req.params.id) || 0);
+  if (!t) return res.redirect('/admin/support?err=' + encodeURIComponent('التذكرة غير موجودة'));
+  const message = String(req.body.message || '').replace(/<[^>]*>/g, '').trim().slice(0, 2000);
+  if (message.length < 2) return res.redirect(`/admin/support/${t.id}?err=` + encodeURIComponent('اكتب الرد'));
+  db.prepare(`INSERT INTO support_messages (ticket_id, sender_type, sender_id, message) VALUES (?,?,?,?)`).run(t.id, 'admin', req.user.id, message);
+  db.prepare(`UPDATE support_tickets SET status='answered' WHERE id=?`).run(t.id);
+  logActivity(req.user.id, req.user.username, 'رد دعم', `رد على تذكرة #${t.id}`);
+  res.redirect(`/admin/support/${t.id}?ok=` + encodeURIComponent('تم إرسال الرد'));
+});
+router.post('/support/:id/status', (req, res) => {
+  const t = db.prepare('SELECT * FROM support_tickets WHERE id=?').get(Number(req.params.id) || 0);
+  if (!t) return res.redirect('/admin/support?err=' + encodeURIComponent('التذكرة غير موجودة'));
+  const st = ['open', 'closed'].includes(req.body.status) ? req.body.status : 'open';
+  db.prepare(`UPDATE support_tickets SET status=?, resolved_at=CASE WHEN ?='closed' THEN datetime('now','localtime') ELSE '' END WHERE id=?`).run(st, st, t.id);
+  res.redirect(`/admin/support/${t.id}?ok=` + encodeURIComponent(st === 'closed' ? 'تم إغلاق التذكرة' : 'تم إعادة فتح التذكرة'));
 });
 
 module.exports = router;

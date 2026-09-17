@@ -1,0 +1,41 @@
+<%- include('../partials/head', { title: 'الدعم الفني — متجري' }) %>
+<body class="app">
+<%- include('../partials/sidebar-panel', { active: 'support', store }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: '🎫 الدعم الفني' }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <div class="two-col">
+      <div class="card">
+        <h2>تذكرة جديدة</h2>
+        <form method="post" action="/panel/support" class="stack">
+          <input type="hidden" name="_csrf" value="<%= csrf %>">
+          <label>الموضوع<input type="text" name="subject" required maxlength="120" placeholder="مثال: مشكلة في رفع الصور"></label>
+          <label>التصنيف
+            <select name="category">
+              <% cats.forEach(c => { %><option value="<%= c %>"><%= c %></option><% }) %>
+            </select>
+          </label>
+          <label>شرح المشكلة<textarea name="message" required maxlength="2000" rows="5" placeholder="اشرح المشكلة بالتفصيل حتى نساعدك بسرعة"></textarea></label>
+          <button class="btn btn-primary">إرسال التذكرة</button>
+        </form>
+      </div>
+      <div class="card">
+        <h2>تذاكري (<%= rows.length %>)</h2>
+        <% if (rows.length === 0) { %><p class="muted">لا تذاكر بعد — افتح تذكرتك الأولى وسنرد عليك هنا</p><% } %>
+        <% rows.forEach(t => { %>
+          <a href="/panel/support/<%= t.id %>" class="ticket-row" style="display:block;text-decoration:none;color:inherit;border:1.5px solid var(--line);border-radius:12px;padding:.7rem .9rem;margin-bottom:.6rem;<%= t.status==='closed' ? 'opacity:.65' : '' %>">
+            <div style="display:flex;justify-content:space-between;gap:.5rem;align-items:center">
+              <b>#<%= t.id %> — <%= t.subject %></b>
+              <span class="badge <%= t.status==='open' ? 'badge-warn' : t.status==='answered' ? 'badge-ok' : '' %>"><%= t.status==='open' ? 'مفتوحة' : t.status==='answered' ? 'تم الرد' : 'مغلقة' %></span>
+            </div>
+            <small class="muted"><%= t.category %> • <%= t.replies %> ردود • <%= t.created_at %></small>
+            <% if (t.last_msg) { %><p style="margin:.3rem 0 0;font-size:.82rem;color:var(--muted)">آخر رد: <%= String(t.last_msg).slice(0, 80) %></p><% } %>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

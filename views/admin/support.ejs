@@ -1,0 +1,34 @@
+<%- include('../partials/head', { title: 'تذاكر الدعم — المدير العام' }) %>
+<body class="app">
+<%- include('../partials/sidebar-admin', { active: 'support', user }) %>
+<main class="main">
+  <%- include('../partials/topbar', { pageTitle: '🎫 تذاكر الدعم' + (openCount ? ` (${openCount} مفتوحة)` : '') }) %>
+  <div class="content">
+    <%- include('../partials/alerts') %>
+    <div class="card" style="margin-bottom:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
+      <% [['open','المفتوحة'],['answered','تم الرد'],['closed','المغلقة'],['all','الكل']].forEach(([v, l]) => { %>
+        <a class="btn btn-sm <%= filter===v ? 'btn-primary' : 'btn-ghost' %>" href="/admin/support?status=<%= v %>"><%= l %></a>
+      <% }) %>
+    </div>
+    <div class="card">
+      <% if (rows.length === 0) { %><p class="muted">لا تذاكر بهذه الحالة</p><% } %>
+      <div class="table-wrap"><table class="table">
+        <tr><th>#</th><th>المتجر</th><th>الموضوع</th><th>التصنيف</th><th>الردود</th><th>الحالة</th><th>التاريخ</th><th></th></tr>
+        <% rows.forEach(t => { %>
+          <tr style="<%= t.status==='open' ? 'background:#fffbeb' : '' %>">
+            <td><b>#<%= t.id %></b></td>
+            <td><small><%= t.store_name || ('متجر ' + t.store_id) %><br><span class="muted">/s/<%= t.store_slug %></span></small></td>
+            <td><b><%= t.subject %></b></td>
+            <td><small><%= t.category %></small></td>
+            <td><span class="badge"><%= t.replies %></span></td>
+            <td><span class="badge <%= t.status==='open' ? 'badge-warn' : t.status==='answered' ? 'badge-ok' : '' %>"><%= t.status==='open' ? 'مفتوحة' : t.status==='answered' ? 'تم الرد' : 'مغلقة' %></span></td>
+            <td><small class="muted"><%= t.created_at %></small></td>
+            <td><a class="btn btn-sm" href="/admin/support/<%= t.id %>">فتح</a></td>
+          </tr>
+        <% }) %>
+      </table></div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

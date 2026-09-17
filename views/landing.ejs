@@ -163,18 +163,18 @@ html{scroll-behavior:smooth}
     <div class="dk-plan hot">
       <span class="dk-tag">الأكثر طلباً 🔥</span>
       <h3>⭐ الاحترافية</h3>
-      <div class="dk-price">15,000 د.ع<span> / شهر</span></div>
+      <div class="dk-price"><%= Number(cfg.pro_price || 10000).toLocaleString('en-US') %> د.ع<span> / شهر</span></div>
       <ul><li>منتجات وأكواد بلا حدود</li><li>كل القوالب الأربعة</li><li>دومينك الخاص</li><li>مخزون وتنبيهات</li><li>تقارير مبيعات + تيليجرام</li><li>بلا علامة المنصة</li></ul>
       <a class="btn btn-gold" style="text-align:center" href="/signup">جرّب مجاناً ثم رقِّ</a>
     </div>
     <div class="dk-plan">
       <h3>🏢 الأعمال</h3>
-      <div class="dk-price">35,000 د.ع<span> / شهر</span></div>
+      <div class="dk-price"><%= Number(cfg.business_price || 25000).toLocaleString('en-US') %> د.ع<span> / شهر</span></div>
       <ul><li>كل مزايا الاحترافية</li><li>حسابات فريق بصلاحيات</li><li>تقارير متقدمة</li><li>أولوية دعم واتساب</li><li>سلة مهجورة تلقائية</li></ul>
       <a class="btn btn-ghost" style="border-color:var(--line); color:var(--ink); text-align:center" href="/signup">تواصل معنا</a>
     </div>
   </div>
-  <p class="dk-sub2" style="margin-top:1.2rem">💰 السنوي أوفر: الاحترافية 150 ألف/سنة (شهرين مجاناً) — الدفع تحويل يدوي يناسب العراق</p>
+  <p class="dk-sub2" style="margin-top:1.2rem">💰 السنوي أوفر: الاحترافية <%= Number(cfg.pro_price_12 || 100000).toLocaleString('en-US') %> د.ع/سنة (شهرين مجاناً) — الدفع تحويل يدوي يناسب العراق</p>
 </section>
 
 <section class="dk-sec" id="faq" style="background:#fff; max-width:none"><div style="max-width:760px; margin:0 auto">
@@ -184,7 +184,7 @@ html{scroll-behavior:smooth}
     <details><summary>هل أحتاج خبرة تقنية؟</summary><p>لا. اسم المتجر + اسم المستخدم وكلمة مرور — وبعدها ترفع منتجاتك بالصور مباشرة.</p></details>
     <details><summary>كيف يدفع الزبون؟</summary><p>دفع عند الاستلام. الطلب يوصلك بلوحة التحكم، تتواصل واتساب بضغطة، والزبون يدفع عند الباب.</p></details>
     <details><summary>هل أحتاج دومين أو استضافة؟</summary><p>لا. متجرك ينطلق فوراً على رابط خاص. الباقة الاحترافية تسمح بربط دومينك الخاص.</p></details>
-    <details><summary>كيف أرقّي للاحترافية؟</summary><p>من صفحة الباقات بلوحتك: حوّل 15 ألف لجهة الاستلام، أرسل الإثبات — نفعّل باقتك خلال دقائق.</p></details>
+    <details><summary>كيف أرقّي للاحترافية؟</summary><p>من صفحة الباقات بلوحتك: حوّل <%= Number(cfg.pro_price || 10000).toLocaleString('en-US') %> لجهة الاستلام، أرسل الإثبات — نفعّل باقتك خلال دقائق.</p></details>
     <details><summary>ماذا بعد انتهاء الباقة؟</summary><p>يرجع متجرك للمجانية بكل بياناته — منتجاتك وصورك وطلباتك تبقى. التصميم الاحترافي يتعطل حتى تجدد.</p></details>
   </div>
 </div></section>

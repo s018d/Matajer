@@ -436,6 +436,9 @@ CREATE TABLE IF NOT EXISTS coupons (
   try { db.exec("ALTER TABLE users ADD COLUMN banned INTEGER DEFAULT 0"); } catch (e) {}
   try { db.exec("ALTER TABLE users ADD COLUMN banned_reason TEXT DEFAULT ''"); } catch (e) {}
   try { db.exec(`CREATE TABLE IF NOT EXISTS login_logs (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, username TEXT DEFAULT '', ip TEXT DEFAULT '', user_agent TEXT DEFAULT '', success INTEGER DEFAULT 0, method TEXT DEFAULT 'password', created_at TEXT DEFAULT (datetime('now','localtime'))); CREATE INDEX IF NOT EXISTS idx_login_logs_user ON login_logs(user_id);`); } catch (e) {}
+  // تذاكر الدعم — التاجر يفتح، الأدمن يرد (موجودة بـ PG مسبقاً)
+  try { db.exec(`CREATE TABLE IF NOT EXISTS support_tickets (id INTEGER PRIMARY KEY AUTOINCREMENT, store_id INTEGER, customer_name TEXT DEFAULT '', customer_phone TEXT DEFAULT '', customer_email TEXT DEFAULT '', subject TEXT NOT NULL, category TEXT NOT NULL, priority TEXT DEFAULT 'normal', status TEXT DEFAULT 'open', assigned_to INTEGER, created_at TEXT DEFAULT (datetime('now','localtime')), updated_at TEXT DEFAULT (datetime('now','localtime')), resolved_at TEXT DEFAULT '')`); } catch (e) {}
+  try { db.exec(`CREATE TABLE IF NOT EXISTS support_messages (id INTEGER PRIMARY KEY AUTOINCREMENT, ticket_id INTEGER NOT NULL, sender_type TEXT NOT NULL, sender_id INTEGER, message TEXT NOT NULL, attachments TEXT DEFAULT '', is_internal INTEGER DEFAULT 0, created_at TEXT DEFAULT (datetime('now','localtime'))); CREATE INDEX IF NOT EXISTS idx_support_msg_ticket ON support_messages(ticket_id); CREATE INDEX IF NOT EXISTS idx_support_tickets_store ON support_tickets(store_id);`); } catch (e) {}
 }
 
 function logActivity(userId, username, action, details = '') {
@@ -453,15 +456,15 @@ function siteSettings() {
     site_whatsapp: map.site_whatsapp || '9647831020026',
     pay_account: map.pay_account || '',
     free_products: Number(map.free_products || 25),
-    pro_price: Number(map.pro_price || 15000),
-    pro_price_3: Number(map.pro_price_3 || 40000),
-    pro_price_12: Number(map.pro_price_12 || 150000),
-    business_price: Number(map.business_price || 35000),
+    pro_price: Number(map.pro_price || 10000),
+    pro_price_3: Number(map.pro_price_3 || 25000),
+    pro_price_12: Number(map.pro_price_12 || 100000),
+    business_price: Number(map.business_price || 25000),
     tagline: map.tagline || 'أنشئ متجرك الإلكتروني خلال دقائق وابدأ البيع فوراً',
     site_telegram: map.site_telegram || '@s018d',
     site_instagram: map.site_instagram || '@s018d',
     site_tiktok: map.site_tiktok || '@s018a',
-    trial_days: Number(map.trial_days || 7),
+    trial_days: Number(map.trial_days || 14),
     telegram_bot_token: map.telegram_bot_token || '',
     telegram_admin_chat_id: map.telegram_admin_chat_id || '',
     ...map
@@ -476,15 +479,15 @@ async function siteSettingsAsync() {
     site_whatsapp: map.site_whatsapp || '9647831020026',
     pay_account: map.pay_account || '',
     free_products: Number(map.free_products || 25),
-    pro_price: Number(map.pro_price || 15000),
-    pro_price_3: Number(map.pro_price_3 || 40000),
-    pro_price_12: Number(map.pro_price_12 || 150000),
-    business_price: Number(map.business_price || 35000),
+    pro_price: Number(map.pro_price || 10000),
+    pro_price_3: Number(map.pro_price_3 || 25000),
+    pro_price_12: Number(map.pro_price_12 || 100000),
+    business_price: Number(map.business_price || 25000),
     tagline: map.tagline || 'أنشئ متجرك الإلكتروني خلال دقائق وابدأ البيع فوراً',
     site_telegram: map.site_telegram || '@s018d',
     site_instagram: map.site_instagram || '@s018d',
     site_tiktok: map.site_tiktok || '@s018a',
-    trial_days: Number(map.trial_days || 7),
+    trial_days: Number(map.trial_days || 14),
     telegram_bot_token: map.telegram_bot_token || '',
     telegram_admin_chat_id: map.telegram_admin_chat_id || '',
     ...map

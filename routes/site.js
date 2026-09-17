@@ -135,7 +135,7 @@ router.post('/signup', (req, res) => {
   }
   const tpl = 'classic';
   const cfg = siteSettings();
-  const trialExp = new Date(Date.now() + Number(cfg.trial_days || 7) * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const trialExp = new Date(Date.now() + Number(cfg.trial_days || 14) * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
   let info;
   try {
     info = db.prepare('INSERT INTO stores (name, slug, description, owner_name, phone, template, color, plan, plan_expires) VALUES (?,?,?,?,?,?,?,?,?)')

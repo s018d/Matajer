@@ -4,36 +4,27 @@
 <main class="main">
   <%- include('../partials/topbar', { pageTitle: 'نظرة عامة' }) %>
   <div class="content">
-    <% if (stats.products === 0) { %>
-    <div class="card" style="background:linear-gradient(135deg,#0B1F3A,#0B1F3A 55%,#C2410C);color:#fff;border:none;padding:1.6rem 1.4rem;margin-bottom:1rem;position:relative;overflow:hidden">
-      <div style="position:absolute;top:-40px;left:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(245,158,11,.3),transparent 70%);border-radius:50%"></div>
-      <h2 style="color:#fff;margin:0 0 .3rem;position:relative">👋 أهلاً بيك في متجرك الجديد!</h2>
-      <p style="color:#cbd5e1;margin:0 0 1.2rem;position:relative">خلّي متجرك جاهز للبيع بـ 3 خطوات — دقيقتين وتبلش</p>
-      <div style="display:flex;flex-direction:column;gap:.7rem;position:relative">
-        <a href="/panel/products/new" style="display:flex;align-items:center;gap:.8rem;background:rgba(255,255,255,.12);padding:.8rem 1rem;border-radius:12px;text-decoration:none;color:#fff;border:1px solid rgba(255,255,255,.15);transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.12)'">
-          <span style="background:linear-gradient(135deg,#C2410C,#FDBA74);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem">1</span>
-          <div style="flex:1"><b>أضف أول منتج</b><div style="font-size:.82rem;color:#cbd5e1">صورة + سعر + وصف — 30 ثانية</div></div>
-          <span>→</span>
-        </a>
-        <a href="/panel/templates" style="display:flex;align-items:center;gap:.8rem;background:rgba(255,255,255,.08);padding:.8rem 1rem;border-radius:12px;text-decoration:none;color:#fff;border:1px solid rgba(255,255,255,.1)">
-          <span style="background:rgba(255,255,255,.2);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem">2</span>
-          <div style="flex:1"><b>اختر شكل متجرك</b><div style="font-size:.82rem;color:#94a3b8">6 قوالب — معاينة حية قبل الاعتماد</div></div>
-          <span>→</span>
-        </a>
-        <div style="display:flex;align-items:center;gap:.8rem;background:rgba(255,255,255,.06);padding:.8rem 1rem;border-radius:12px;border:1px solid rgba(255,255,255,.08)">
-          <span style="background:rgba(255,255,255,.15);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem">3</span>
-          <div style="flex:1"><b>شارك رابطك على واتساب</b><div style="font-size:.82rem;color:#94a3b8">انسخ الرابط أدناه وأرسله للزبائن — الطلبات توصلك هنا فوراً</div></div>
-          <span>📋</span>
-        </div>
+    <% if (setupDone < 3) { %>
+    <div class="card" style="border-inline-start:4px solid var(--brand-2)">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap">
+        <h2 style="margin:0">🧭 تجهيز متجرك للإطلاق (<%= setupDone %>/3)</h2>
+        <small class="muted">أكمل الخطوات وابدأ البيع</small>
       </div>
+      <div style="background:var(--soft);border-radius:99px;height:8px;margin:.7rem 0;overflow:hidden"><div style="height:100%;width:<%= Math.round(setupDone/3*100) %>%;background:linear-gradient(90deg,var(--brand),var(--brand-2));border-radius:99px;transition:width .4s"></div></div>
+      <% setup.forEach(s => { %>
+        <a href="<%= s.link %>" style="display:flex;align-items:center;gap:.6rem;text-decoration:none;color:inherit;padding:.5rem 0;border-bottom:1px dashed var(--line)">
+          <span style="width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;flex-shrink:0;<%= s.done ? 'background:#dcfce7;color:#065f46' : 'background:var(--soft);color:var(--muted);border:1.5px solid var(--line)' %>"><%= s.done ? '✓' : '○' %></span>
+          <span style="<%= s.done ? 'text-decoration:line-through;color:var(--muted)' : 'font-weight:700' %>"><%= s.title %></span>
+        </a>
+      <% }) %>
     </div>
     <% } %>
     <div class="stat-grid">
       <div class="stat" style="border-top:3px solid #C2410C"><span>📦 المنتجات</span><b><%= stats.products %></b><small class="muted" style="font-size:.7rem"><%= stats.products===0 ? 'أضف أول منتج' : 'نشط' %></small></div>
       <div class="stat <%= stats.newOrders ? 'stat-strong' : '' %>" style="border-top:3px solid #FDBA74"><span>🆕 طلبات جديدة</span><b><%= stats.newOrders %></b><small class="muted" style="font-size:.7rem"><%= stats.newOrders ? 'تحتاج متابعة' : 'لا جديد' %></small></div>
-      <div class="stat" style="border-top:3px solid #64748b"><span>🧾 كل الطلبات</span><b><%= stats.orders %></b></div>
+      <div class="stat" style="border-top:3px solid #64748b"><span>🧾 كل الطلبات</span><b><%= stats.orders %></b><small class="muted" style="font-size:.7rem"><%= deltas.orders !== 0 ? ((deltas.orders > 0 ? '▲ +' : '▼ ') + deltas.orders + ' هذا الأسبوع') : 'مستقر هذا الأسبوع' %></small></div>
       <div class="stat" style="border-top:3px solid #8b5cf6"><span>👁️ المشاهدات</span><b><%= stats.views %></b></div>
-      <div class="stat stat-strong" style="border-top:3px solid #10b981"><span>💰 المبيعات</span><b><%= money(stats.revenue) %></b><small class="muted" style="font-size:.7rem">إجمالي</small></div>
+      <div class="stat stat-strong" style="border-top:3px solid #10b981"><span>💰 المبيعات</span><b><%= money(stats.revenue) %></b><small class="muted" style="font-size:.7rem"><%= deltas.revenue > 0 ? '▲ +' + money(deltas.revenue) + ' هذا الأسبوع' : 'إجمالي' %></small></div>
     </div>
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.6rem; margin-top:1rem">
       <a href="/panel/products/new" class="btn btn-primary" style="justify-content:center; padding:.7rem; border-radius:12px">➕ منتج جديد</a>
@@ -112,19 +103,20 @@
     </div>
     <div class="two-col">
       <div class="card">
-        <h2>آخر الطلبات</h2>
-        <% if (recent.length === 0) { %><p>لا توجد طلبات بعد</p><% } %>
-        <ul class="feed">
+        <div class="card-head-row"><h2>آخر الطلبات</h2><a href="/panel/orders" class="btn btn-sm btn-ghost">عرض الكل</a></div>
+        <% if (recent.length === 0) { %><p class="muted">لا توجد طلبات بعد — شارك رابط متجرك وستظهر هنا</p><% } else { %>
+        <div class="table-wrap"><table class="table">
+          <tr><th>#</th><th>الزبون</th><th>المبلغ</th><th>الحالة</th></tr>
           <% recent.forEach(o => { %>
-            <li>
-              <span class="feed-act">طلب #<%= o.id %> — <%= o.customer_name %></span>
-              <span class="feed-detail"><%= money(o.total) %> — <%= o.customer_phone %></span>
-              <small><%= o.created_at %> — <span class="badge <%= o.status==='new' ? 'badge-warn' : (o.status==='cancelled' ? 'badge-err' : 'badge-ok') %>">
-                <%= o.status === 'new' ? 'جديد' : o.status === 'confirmed' ? 'مؤكد' : o.status === 'completed' ? 'مكتمل' : 'ملغي' %></span>
-              </small>
-            </li>
+            <tr>
+              <td><b>#<%= o.id %></b></td>
+              <td><%= o.customer_name %><br><small class="muted" dir="ltr"><%= o.customer_phone %></small></td>
+              <td><b><%= money(o.total) %></b></td>
+              <td><span class="badge <%= o.status==='new' ? 'badge-warn' : (o.status==='cancelled' ? 'badge-err' : 'badge-ok') %>"><%= o.status === 'new' ? 'جديد' : o.status === 'confirmed' ? 'مؤكد' : o.status === 'completed' ? 'مكتمل' : 'ملغي' %></span></td>
+            </tr>
           <% }) %>
-        </ul>
+        </table></div>
+        <% } %>
       </div>
       <div class="card">
         <h2>إعدادات سريعة</h2>

@@ -17,7 +17,9 @@ router.get('/', (req, res) => {
   const today = new Date().toISOString().slice(0, 10);
   const stats = {
     storesToday: db.prepare("SELECT COUNT(*) c FROM stores WHERE status='active' AND date(created_at)=?").get(today).c,
-    ordersDone: db.prepare("SELECT COUNT(*) c FROM orders WHERE status='completed'").get().c
+    ordersDone: db.prepare("SELECT COUNT(*) c FROM orders WHERE status='completed'").get().c,
+    stores: db.prepare("SELECT COUNT(*) c FROM stores WHERE status='active'").get().c,
+    orders: db.prepare("SELECT COUNT(*) c FROM orders").get().c
   };
   res.render('landing', { cfg, stores, stats, money: (n) => (Number(n) || 0).toLocaleString('en-US') + ' د.ع' });
 });

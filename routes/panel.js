@@ -133,8 +133,22 @@ router.get('/', (req, res) => {
     chart.push({ d: d.slice(5), s: Number(r.s), c: Number(r.c) });
   }
   const chartMax = Math.max(1, ...chart.map(x => x.s));
+  // مقارنة بالـ 7 أيام السابقة (زد: دلتا لكل بطاقة)
+  const prev = db.prepare("SELECT COALESCE(SUM(total),0) s, COUNT(*) c FROM orders WHERE store_id=? AND status != 'cancelled' AND date(created_at) >= date('now','-14 days') AND date(created_at) < date('now','-7 days')").get(store.id);
+  const week = db.prepare("SELECT COALESCE(SUM(total),0) s, COUNT(*) c FROM orders WHERE store_id=? AND status != 'cancelled' AND date(created_at) >= date('now','-7 days')").get(store.id);
+  const deltas = {
+    revenue: Number(week.s) - Number(prev.s),
+    orders: Number(week.c) - Number(prev.c)
+  };
+  // قائمة التجهيز (زد: checklist حتى اكتمال الإطلاق)
+  const setup = [
+    { done: stats.products > 0, title: 'أضف منتجك الأول', link: '/panel/products/new' },
+    { done: store.template !== 'classic' || !!store.logo_path, title: 'خصص مظهر متجرك', link: '/panel/templates' },
+    { done: stats.orders > 0, title: 'استلم طلبك الأول', link: '/panel/orders' }
+  ];
+  const setupDone = setup.filter(s => s.done).length;
   res.render('panel/dashboard', { store, stats, recent, chart, chartMax, money, user: req.user,
-    avgOrder, conversionRate, topProducts, peakHours, peakDays, dowNames, welcome: req.query.welcome === '1' });
+    avgOrder, conversionRate, topProducts, peakHours, peakDays, dowNames, welcome: req.query.welcome === '1', deltas, setup, setupDone });
 });
 
 router.get('/products', (req, res) => {

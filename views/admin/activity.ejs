@@ -4,16 +4,21 @@
 <main class="main">
   <%- include('../partials/topbar', { pageTitle: 'سجل النشاط' }) %>
   <div class="content">
-    <div class="card" style="margin-bottom:1rem; display:flex; gap:.6rem; flex-wrap:wrap; align-items:center">
-      <input type="search" id="actSearch" placeholder="🔍 ابحث بالعملية/المستخدم/التفاصيل..." style="flex:1; min-width:240px; padding:.6rem .9rem; border-radius:10px; border:1.5px solid var(--line)">
-      <span class="badge" id="actCount"><%= rows.length %> سجل</span>
-      <span class="muted" style="font-size:.78rem">آخر 200 نشاط — الأحدث أولاً</span>
+    <div class="card" style="margin-bottom:1rem">
+      <form method="get" action="/admin/activity" style="display:flex; gap:.6rem; flex-wrap:wrap; align-items:center">
+        <input type="search" name="q" value="<%= q %>" placeholder="🔍 ابحث بالعملية/المستخدم/التفاصيل..." style="flex:1; min-width:240px; padding:.6rem .9rem; border-radius:10px; border:1.5px solid var(--line)">
+        <button class="btn btn-sm btn-primary">بحث</button>
+        <% if (q) { %><a class="btn btn-sm btn-ghost" href="/admin/activity">إلغاء</a><% } %>
+        <span class="badge"><%= total %> سجل</span>
+      </form>
+      <small class="muted">الأحدث أولاً — 50 بصفحة</small>
     </div>
     <div class="card">
+      <% if (rows.length === 0) { %><p class="muted" style="text-align:center; padding:1.5rem">لا نشاطات مطابقة</p><% } %>
       <div class="table-wrap"><table class="table" id="actTable">
         <tr><th>الوقت</th><th>المستخدم</th><th>العملية</th><th>التفاصيل</th></tr>
         <% rows.forEach(r => { %>
-          <tr data-text="<%= (r.action + ' ' + (r.username||'') + ' ' + (r.details||'')).toLowerCase() %>">
+          <tr>
             <td><small><%= r.created_at %></small></td>
             <td><b><%= r.username || '—' %></b></td>
             <td><span class="badge"><%= r.action %></span></td>
@@ -21,22 +26,15 @@
           </tr>
         <% }) %>
       </table></div>
-      <p id="actNo" class="muted" style="display:none; text-align:center; padding:1.5rem">لا نتائج للبحث</p>
+      <% if (totalPages > 1) { %>
+        <div class="pager">
+          <% if (page > 1) { %><a class="btn btn-sm btn-ghost" href="/admin/activity?page=<%= page - 1 %><%= q ? '&q=' + encodeURIComponent(q) : '' %>">→ السابق</a><% } %>
+          <span class="muted">صفحة <%= page %> من <%= totalPages %> (<%= total %> سجل)</span>
+          <% if (page < totalPages) { %><a class="btn btn-sm btn-ghost" href="/admin/activity?page=<%= page + 1 %><%= q ? '&q=' + encodeURIComponent(q) : '' %>">التالي ←</a><% } %>
+        </div>
+      <% } %>
     </div>
   </div>
-<script>
-document.getElementById('actSearch')?.addEventListener('input', function(){
-  const q=this.value.toLowerCase().trim();
-  let v=0;
-  document.querySelectorAll('#actTable tr[data-text]').forEach(tr=>{
-    const show=!q || tr.dataset.text.includes(q);
-    tr.style.display=show?'':'none';
-    if(show) v++;
-  });
-  document.getElementById('actCount').textContent=v+' سجل';
-  document.getElementById('actNo').style.display=v===0?'block':'none';
-});
-</script>
 </main>
 </body>
 </html>

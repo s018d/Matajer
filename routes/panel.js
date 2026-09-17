@@ -69,13 +69,17 @@ async function processImage(filePath) {
     const ext = path.extname(filePath).toLowerCase();
     const thumbPath = filePath.replace(/(\.[^.]+)$/, '_t$1');
     const fmt = ext === '.png' ? 'png' : ext === '.webp' ? 'webp' : ext === '.gif' ? 'gif' : 'jpeg';
-    const opts = fmt === 'jpeg' ? { quality: 82 } : fmt === 'webp' ? { quality: 82 } : {};
-    const img = sharp(filePath, { failOn: 'none', animated: fmt === 'gif' });
-    const meta = await img.metadata();
-    if (!meta.width) return;
-    if (meta.width > 1200) await img.clone().resize({ width: 1200, withoutEnlargement: true }).toFormat(fmt, opts).toFile(filePath);
+    const opts = fmt === 'jpeg' ? { quality: 80, progressive: true, mozjpeg: true } : fmt === 'webp' ? { quality: 80 } : fmt === 'png' ? { compressionLevel: 8, palette: true } : {};
+    const meta = await sharp(filePath, { failOn: 'none' }).metadata();
+    if (!meta.width) throw new Error('أبعاد غير صالحة');
+    // sharp لا يكتب فوق ملف الإدخال — نكتب لملف مؤقت ثم نستبدل
+    if (meta.width > 1200) {
+      const tmp = filePath + '.opt';
+      await sharp(filePath, { failOn: 'none', animated: fmt === 'gif' }).resize({ width: 1200, withoutEnlargement: true }).toFormat(fmt, opts).toFile(tmp);
+      fs.renameSync(tmp, filePath);
+    }
     await sharp(filePath, { failOn: 'none' }).resize({ width: 400, withoutEnlargement: true }).toFormat(fmt, opts).toFile(thumbPath);
-  } catch (e) { /* نُبقي الصورة الأصلية عند أي خطأ */ }
+  } catch (e) { console.error('processImage:', (e && e.message) || e); }
 }
 // مولتر للمنتجات: مجلد مؤقت للإنشاء + مجلد المنتج للتعديل
 const upPics = () => uploader(req => `product_${req.params.id}`);

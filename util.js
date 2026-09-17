@@ -138,12 +138,17 @@ function money(n) {
   return (Number(n) || 0).toLocaleString('en-US') + ' د.ع';
 }
 
-/* مصغرة الصورة للبطاقات (تُرجع المسار الأصلي إن لم توجد) */
+/* مصغرة الصورة للبطاقات (تُرجع المسار الأصلي إن لم توجد) — مع تخزين مؤقت لتجنب فحص القرص كل مرة */
+const thumbCache = new Map();
 function thumb(p) {
   if (!p) return p;
+  if (thumbCache.has(p)) return thumbCache.get(p);
   const t = String(p).replace(/(\.[^.]+)$/, '_t$1');
-  try { if (fs.existsSync(path.join(__dirname, t))) return t; } catch (e) {}
-  return p;
+  let out = p;
+  try { if (fs.existsSync(path.join(__dirname, t))) out = t; } catch (e) {}
+  if (thumbCache.size > 2000) thumbCache.clear();
+  thumbCache.set(p, out);
+  return out;
 }
 
 /* ====== حماية المعاينة العامة ====== */

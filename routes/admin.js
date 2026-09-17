@@ -265,8 +265,16 @@ router.post('/stores/:id/delete', (req, res) => {
 });
 
 router.get('/activity', (req, res) => {
-  const rows = db.prepare('SELECT * FROM activity ORDER BY id DESC LIMIT 200').all();
-  res.render('admin/activity', { rows, now, user: req.user });
+  const q = String(req.query.q || '').trim();
+  const perPage = 50;
+  const page = Math.max(1, Number(req.query.page) || 1);
+  let where = '1=1';
+  const params = [];
+  if (q) { where += ' AND (action LIKE ? OR username LIKE ? OR details LIKE ?)'; params.push(`%${q}%`, `%${q}%`, `%${q}%`); }
+  const total = db.prepare(`SELECT COUNT(*) c FROM activity WHERE ${where}`).get(...params).c;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  const rows = db.prepare(`SELECT * FROM activity WHERE ${where} ORDER BY id DESC LIMIT ? OFFSET ?`).all(...params, perPage, (page - 1) * perPage);
+  res.render('admin/activity', { rows, now, user: req.user, q, page, totalPages, total });
 });
 
 function makeBackup() {

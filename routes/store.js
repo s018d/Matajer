@@ -32,6 +32,7 @@ function storeData(store) {
 
 function withBase(store, req) {
   store.base = req.storeBase === '' ? '' : '/s/' + store.slug;
+  try { store.origin = req.protocol + '://' + req.get('host'); } catch { store.origin = ''; }
   return store;
 }
 

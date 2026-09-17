@@ -26,6 +26,7 @@
       <div class="stat stat-strong" style="border-top:3px solid #10b981"><span>💰 إجمالي المبيعات</span><b><%= money(totals.revenue) %></b><small class="muted" style="font-size:.7rem"><%= totals.orders %> طلب</small></div>
       <div class="stat <%= totals.newOrders ? 'stat-strong' : '' %>" style="border-top:3px solid #f59e0b"><span>🆕 طلبات جديدة</span><b><%= totals.newOrders %></b><small class="muted" style="font-size:.7rem">تحتاج متابعة</small></div>
       <div class="stat <%= totals.pendingPayments ? 'stat-strong' : '' %>" style="border-top:3px solid #ef4444"><span>⏳ ترقيات معلقة</span><b><%= totals.pendingPayments %></b><small class="muted" style="font-size:.7rem">بانتظار تأكيدك</small></div>
+      <a href="/admin/support" class="stat <%= totals.openTickets ? 'stat-strong' : '' %>" style="border-top:3px solid #8b5cf6; text-decoration:none; color:inherit"><span>🎫 تذاكر مفتوحة</span><b><%= totals.openTickets || 0 %></b><small class="muted" style="font-size:.7rem"><%= totals.openTickets ? 'تحتاج ردك' : 'لا جديد' %></small></a>
       <div class="stat"><span>📦 المنتجات</span><b><%= totals.products %></b></div>
       <div class="stat"><span>🎟️ أكواد الخصم</span><b><%= totals.coupons %></b></div>
       <div class="stat"><span>👥 المستخدمون</span><b><%= totals.users %></b></div>

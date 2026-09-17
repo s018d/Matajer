@@ -1,4 +1,4 @@
-<%- include('../partials/head', { title: store.name, desc: store.meta_desc || store.description, ogType: 'website', css: '/css/store.css', pwa: store.slug, themeColor: store.color }) %>
+<%- include('../partials/head', { title: store.name, desc: store.meta_desc || store.description, ogType: 'website', ogImage: store.logo_path || '', canonical: (store.origin || '') + store.base + '/', css: '/css/store.css', pwa: store.slug, themeColor: store.color }) %>
 <%
 /* ===== محرك التخطيط الديناميكي — ترتيب الأقسام من layout_json ===== */
 let L = {};

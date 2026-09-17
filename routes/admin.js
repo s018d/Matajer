@@ -46,6 +46,7 @@ router.get('/', (req, res) => {
   totals.coupons = db.prepare('SELECT COUNT(*) c FROM coupons').get().c;
   totals.newOrders = db.prepare("SELECT COUNT(*) c FROM orders WHERE status='new'").get().c;
   totals.pendingPayments = db.prepare("SELECT COUNT(*) c FROM payments WHERE status != 'done'").get().c;
+  try { totals.openTickets = db.prepare("SELECT COUNT(*) c FROM support_tickets WHERE status='open'").get().c; } catch { totals.openTickets = 0; }
   const topStores = db.prepare(`
     SELECT s.id, s.name, s.slug, s.plan, COUNT(DISTINCT o.id) orders, COALESCE(SUM(o.total),0) revenue
     FROM stores s LEFT JOIN orders o ON o.store_id = s.id AND o.status != 'cancelled'

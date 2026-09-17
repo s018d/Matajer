@@ -4,9 +4,10 @@
   const out = product.stock != null && Number(product.stock) <= 0;
   const lowStock = product.stock != null && Number(product.stock) > 0 && Number(product.stock) <= 5;
 %>
-<%- include('../partials/head', { title: product.name + ' — ' + store.name, desc: store.meta_desc || store.description, ogType: 'product', css: '/css/store.css', pwa: store.slug, themeColor: store.color }) %>
+<%- include('../partials/head', { title: product.name + ' — ' + store.name, desc: (product.description || store.meta_desc || store.description || '').slice(0, 160), ogType: 'product', ogImage: (images.length && images[0].path) || '', canonical: (store.origin || '') + store.base + '/p/' + product.id, css: '/css/store.css', pwa: store.slug, themeColor: store.color }) %>
 <% if (tpl && tpl.css) { %><link rel="stylesheet" href="<%= tpl.css %>"><% } %>
 <% const __c = /^#[0-9a-fA-F]{6}$/.test(String(store.color)) ? store.color : '#0ea5e9'; %><% if (tpl) { %><style><%= tpl.style %></style><% } else { %><style>:root{--primary:<%= __c %>}</style><% } %>
+<script type="application/ld+json"><%- JSON.stringify({ '@context': 'https://schema.org', '@type': 'Product', name: product.name, description: String(product.description || '').slice(0, 300), image: images.length ? [(store.origin || '') + images[0].path] : [], offers: { '@type': 'Offer', priceCurrency: 'IQD', price: Number(product.price) || 0, availability: (product.stock == null || Number(product.stock) > 0) ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock' } }).replace(/</g, '\\u003c') %></script>
 <body data-template="<%= store.template %>" data-slug="<%= store.slug %>" data-base="<%= store.base %>" class="store-body<%= tpl ? ' ' + tpl.classes : '' %>">
 <% if (store.template === 'market') { %>
   <%- include('../partials/market-marquee') %>

@@ -8,7 +8,7 @@
     <div class="card" style="background:linear-gradient(135deg,#FFF7ED,#FFF7ED);border-color:#FFEDD5">
       <p style="margin:0;color:#7C2D12">💡 التقييمات تزيد ثقة الزبائن وترفع المبيعات. عندما يقيّم زبون منتجك، يظهر هنا بانتظار موافقتك — وافق ليظهر في صفحة المنتج للجميع. التقييمات الموافق عليها تكسب الزبون نقاط ولاء.</p>
     </div>
-    <% if(reviews.length===0){ %>
+    <% if(reviews.length===0 && !pendingCount){ %>
       <div class="empty-state" style="text-align:center;padding:3rem 1.5rem;background:linear-gradient(135deg,#f8fafc,#eff6ff);border:1.5px dashed #bfdbfe;border-radius:16px;margin-top:1rem">
         <div style="font-size:3rem;margin-bottom:.8rem">⭐</div>
         <h3 style="margin:0 0 .4rem;color:#0f172a">لا تقييمات بعد</h3>
@@ -16,7 +16,22 @@
       </div>
     <% } else { %>
       <div class="card" style="margin-top:1rem">
-        <h2>التقييمات (<%= reviews.length %>) — المعلقة أولاً</h2>
+        <div class="card-head-row">
+          <h2>التقييمات<% if (filter !== 'all') { %> — <%= filter === 'pending' ? 'المعلقة أولاً' : 'الموافق عليها' %><% } %></h2>
+          <div style="display:flex; gap:.4rem">
+            <% [['pending','المعلقة'],['approved','الموافق عليها'],['all','الكل']].forEach(([v, l]) => { %>
+              <a class="btn btn-sm <%= filter===v ? 'btn-primary' : 'btn-ghost' %>" href="/panel/reviews?filter=<%= v %>"><%= l %><%= v==='pending' && pendingCount ? ` (${pendingCount})` : '' %></a>
+            <% }) %>
+          </div>
+        </div>
+        <% if (pendingCount > 0) { %>
+          <form method="post" action="/panel/reviews/bulk-approve" onsubmit="return confirm('الموافقة على كل المعلقة (<%= pendingCount %>)?')" style="margin:.6rem 0">
+            <input type="hidden" name="_csrf" value="<%= csrf %>">
+            <button class="btn btn-sm btn-ok">✓ موافقة جماعية (<%= pendingCount %>)</button>
+          </form>
+        <% } %>
+        <% if(reviews.length===0){ %><p class="muted">لا تقييمات بهذا الفلتر</p><% } %>
+        <div class="table-wrap">
         <table>
           <tr><th>المنتج</th><th>الزبون</th><th>التقييم</th><th>التعليق</th><th>الحالة</th><th>التاريخ</th><th></th></tr>
           <% reviews.forEach(r=>{ %>
@@ -41,7 +56,7 @@
               </td>
             </tr>
           <% }) %>
-        </table>
+        </table></div>
       </div>
     <% } %>
   </div>

@@ -889,12 +889,24 @@ router.post('/password', (req, res) => {
 /* ====== التقييمات — إدارة تقييمات الزبائن ====== */
 router.get('/reviews', (req, res) => {
   const store = getStore(req.user.store_id);
+  const filter = ['pending', 'approved', 'all'].includes(req.query.filter) ? req.query.filter : 'pending';
+  const where = filter === 'all' ? '' : filter === 'pending' ? 'AND r.approved=0' : 'AND r.approved=1';
   const reviews = db.prepare(`
     SELECT r.*, p.name product_name
     FROM reviews r JOIN products p ON p.id=r.product_id
-    WHERE p.store_id=? ORDER BY r.approved ASC, r.id DESC
+    WHERE p.store_id=? ${where} ORDER BY r.approved ASC, r.id DESC LIMIT 100
   `).all(store.id);
-  res.render('panel/reviews', { store, reviews, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+  const pendingCount = db.prepare(`SELECT COUNT(*) c FROM reviews r JOIN products p ON p.id=r.product_id WHERE p.store_id=? AND r.approved=0`).get(store.id).c;
+  res.render('panel/reviews', { store, reviews, filter, pendingCount, ok: req.query.ok || '', err: req.query.err || '', user: req.user });
+});
+router.post('/reviews/bulk-approve', (req, res) => {
+  const store = getStore(req.user.store_id);
+  const ids = db.prepare(`SELECT r.id FROM reviews r JOIN products p ON p.id=r.product_id WHERE p.store_id=? AND r.approved=0`).all(store.id).map(r => r.id);
+  if (!ids.length) return res.redirect('/panel/reviews?err=' + encodeURIComponent('لا تقييمات معلقة'));
+  const stmt = db.prepare('UPDATE reviews SET approved=1 WHERE id=?');
+  db.transaction(list => { for (const id of list) stmt.run(id); })(ids);
+  logActivity(req.user.id, req.user.username, 'موافقة تقييمات', `وافق على ${ids.length} تقييم دفعة واحدة`);
+  res.redirect('/panel/reviews?ok=' + encodeURIComponent(`تمت الموافقة على ${ids.length} تقييم`));
 });
 router.post('/reviews/:id/approve', (req, res) => {
   const store = getStore(req.user.store_id);

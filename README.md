@@ -37,10 +37,11 @@ node server.js
 - `/panel/orders` — تصدير CSV + واتساب
 - `/panel/settings` — مبوب (عام/تصميم/توصيل/دومين/شعار)
 
-## النشر
-- PM2: `ecosystem.config.js` — `pm2 start ecosystem.config.js`
-- دومين: اربط CNAME → السيرفر، فعّل من /admin/stores/:id
-- نسخ: `/admin/backup` → `backups/`
+## النشر النهائي (Production)
+1. انسخ `.env.example` → `.env` واضبط: `NODE_ENV=production` و `TRUST_PROXY=1` (خلف nginx) و `DISABLE_SAMPLES=1` و `PORT`.
+2. من `/admin/site` املأ: جهة استلام الدفع `pay_account` + واتساب + الأسعار + أيام التجربة.
+3. HTTPS إجباري: nginx reverse proxy + شهادة (Certbot/Cloudflare) ثم `pm2 start ecosystem.config.js`.
+4. نسخ: `/admin/backup` → `backups/` + نسخة تلقائية يومياً 3 فجراً.
 
 ## الأمان
 - CSRF double-submit، bcrypt، قفل دخول 5/15د، كلمات ممنوعة، No HTTPS يتطلب reverse proxy

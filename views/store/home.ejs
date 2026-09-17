@@ -16,7 +16,8 @@ const heroSub = heroCfg.sub || store.description;
 %>
 <% if (store.template === 'market') { %><link rel="stylesheet" href="/css/store-market.css"><% } %>
 <% if (tpl && tpl.css) { %><link rel="stylesheet" href="<%= tpl.css %>"><% } %>
-<% if (tpl) { %><style><%= tpl.style %></style><% } else { %><style>:root{--primary:<%= store.color %>}</style><% } %>
+<style>:root{--store-primary:<%= store.color %>; --store-primary-dark:<%= store.color %>}</style>
+<% if (tpl) { %><style><%= tpl.style %></style><% } %>
 <% if (store.custom_css) { %><style><%= store.custom_css %></style><% } %>
 <% /* خلفية المتجر العامة */ %>
 <% if (store.store_bg_image) { %>

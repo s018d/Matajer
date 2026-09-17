@@ -73,8 +73,8 @@ app.use((req, res, next) => {
   /* X-Frame-Options: SAMEORIGIN حتى تعمل المعاينة داخل iframe المحرر */
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  /* OWASP A02: Security headers كاملة */
-  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  /* OWASP A02: Security headers كاملة — HSTS فقط بالإنتاج (خلف HTTPS) حتى لا يكسر localhost */
+  if (process.env.NODE_ENV === 'production') res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
   res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
   res.setHeader('Content-Security-Policy', "default-src 'self'; img-src 'self' data: blob: https://images.unsplash.com https://*.unsplash.com https://api.qrserver.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'");
   next();

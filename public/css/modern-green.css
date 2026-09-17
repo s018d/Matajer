@@ -1,95 +1,278 @@
+/*
+ * تنسيق عامودي: كل خاصية في سطر + تعليق عربي يشرحها
+ * لتعديل أي شيء: ابحث عن اسم الكلاس وغيّر القيمة بعد النقطتين
+ */
 /* ============================================================
    MODERN GREEN — السوق النظيف (هندسة + هواء) — هوية عصرية
    ============================================================ */
-body.store-body.modern-green{ background:#F2F7F3 !important; color:#13231D; font-family:'Cairo','Noto Kufi Arabic',sans-serif; }
-
+/* ═══ body.store-body.modern-green ═══ */
+body.store-body.modern-green {
+  background: #F2F7F3 !important; /* الخلفية */
+  color: #13231D; /* لون النص */
+  font-family: 'Cairo','Noto Kufi Arabic',sans-serif; /* نوع الخط */
+}
 /* Hero — بطاقة بيضاء بشريط أخضر يساري + شبكة خلفية نقطية */
-.store-body.modern-green .st-head{
-  background: #FFFFFF !important;
-  border:1px solid #DCE8DF !important; border-left:6px solid #2E7D5E !important;
-  border-radius:16px !important; margin:20px auto !important; max-width:1120px;
-  padding:36px 32px !important; box-shadow:0 12px 40px rgba(16,48,36,0.06) !important;
-  text-align:right; position:relative; overflow:hidden;
+/* ═══ .store-body.modern-green .st-head ═══ */
+.store-body.modern-green .st-head {
+  background: #FFFFFF !important; /* الخلفية */
+  border: 1px solid #DCE8DF !important; /* الحدود */
+  border-left: 6px solid #2E7D5E !important;
+  border-radius: 16px !important; /* تدوير الزوايا */
+  margin: 20px auto !important; /* هامش خارجي (مسافة حول العنصر) */
+  max-width: 1120px; /* أقصى عرض */
+  padding: 36px 32px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  box-shadow: 0 12px 40px rgba(16,48,36,0.06) !important; /* الظل */
+  text-align: right; /* محاذاة النص */
+  position: relative; /* طريقة التموضع */
+  overflow: hidden; /* التعامل مع الفائض */
 }
-.store-body.modern-green .st-head::before{
-  content:''; position:absolute; top:0; left:0; right:0; height:1px;
-  background: linear-gradient(90deg, #2E7D5E, transparent); opacity:.18;
+/* ═══ .store-body.modern-green .st-head::before ═══ */
+.store-body.modern-green .st-head::before {
+  content: ''; /* محتوى العنصر الوهمي */
+  position: absolute; /* طريقة التموضع */
+  top: 0; /* البعد عن الأعلى */
+  left: 0; /* البعد عن اليسار */
+  right: 0; /* البعد عن اليمين */
+  height: 1px; /* الارتفاع */
+  background: linear-gradient(90deg, #2E7D5E, transparent); /* الخلفية */
+  opacity: .18; /* الشفافية */
 }
-.store-body.modern-green .st-head::after{ display:none !important; }
-.store-body.modern-green .st-head-inner{
-  justify-content:flex-start !important; text-align:right !important; align-items:flex-start !important;
-  flex-direction:column !important; gap:10px !important; position:relative; z-index:1;
+/* ═══ .store-body.modern-green .st-head::after ═══ */
+.store-body.modern-green .st-head::after {
+  display: none !important; /* طريقة العرض */
 }
-.store-body.modern-green .st-head h1{
-  font-weight:900 !important; font-size:2.05rem !important; letter-spacing:-0.02em !important;
-  color:#0F2A1F !important; -webkit-text-fill-color:#0F2A1F !important; line-height:1.2 !important;
-  display:flex; align-items:center; gap:.6rem;
+/* ═══ .store-body.modern-green .st-head-inner ═══ */
+.store-body.modern-green .st-head-inner {
+  justify-content: flex-start !important; /* محاذاة أفقية */
+  text-align: right !important; /* محاذاة النص */
+  align-items: flex-start !important; /* محاذاة عمودية */
+  flex-direction: column !important; /* اتجاه العناصر */
+  gap: 10px !important; /* المسافة بين العناصر */
+  position: relative; /* طريقة التموضع */
+  z-index: 1; /* طبقة الترتيب (فوق/تحت) */
 }
-.store-body.modern-green .st-head h1::before{
-  content:''; width:10px; height:10px; background:#2E7D5E; border-radius:50%; box-shadow:0 0 0 6px rgba(46,125,94,0.12); flex-shrink:0;
+/* ═══ .store-body.modern-green .st-head h1 ═══ */
+.store-body.modern-green .st-head h1 {
+  font-weight: 900 !important; /* سماكة الخط */
+  font-size: 2.05rem !important; /* حجم الخط */
+  letter-spacing: -0.02em !important;
+  color: #0F2A1F !important; /* لون النص */
+  -webkit-text-fill-color: #0F2A1F !important;
+  line-height: 1.2 !important; /* ارتفاع السطر */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: .6rem; /* المسافة بين العناصر */
 }
-.store-body.modern-green .st-head p{ color:#4A645C !important; font-size:1.0rem !important; max-width:560px; line-height:1.75 !important; margin-top:2px !important; }
-.store-body.modern-green .st-logo{ border-radius:12px !important; border:1px solid #DCE8DF !important; }
-
+/* ═══ .store-body.modern-green .st-head h1::before ═══ */
+.store-body.modern-green .st-head h1::before {
+  content: ''; /* محتوى العنصر الوهمي */
+  width: 10px; /* العرض */
+  height: 10px; /* الارتفاع */
+  background: #2E7D5E; /* الخلفية */
+  border-radius: 50%; /* تدوير الزوايا */
+  box-shadow: 0 0 0 6px rgba(46,125,94,0.12); /* الظل */
+  flex-shrink: 0; /* الانكماش */
+}
+/* ═══ .store-body.modern-green .st-head p ═══ */
+.store-body.modern-green .st-head p {
+  color: #4A645C !important; /* لون النص */
+  font-size: 1.0rem !important; /* حجم الخط */
+  max-width: 560px; /* أقصى عرض */
+  line-height: 1.75 !important; /* ارتفاع السطر */
+  margin-top: 2px !important; /* هامش علوي */
+}
+/* ═══ .store-body.modern-green .st-logo ═══ */
+.store-body.modern-green .st-logo {
+  border-radius: 12px !important; /* تدوير الزوايا */
+  border: 1px solid #DCE8DF !important; /* الحدود */
+}
 /* Search — مستطيل نظيف بحدة 10 */
-.store-body.modern-green .st-search{ max-width:1120px; margin:0 auto; padding:0 1.2rem 1rem; }
-.store-body.modern-green .st-search form{
-  background:#FFFFFF !important; border:1.5px solid #C8D9CC !important; border-radius:10px !important;
-  padding:.38rem .38rem .38rem 1.2rem !important; box-shadow:0 4px 18px rgba(16,48,36,0.05) !important;
+/* ═══ .store-body.modern-green .st-search ═══ */
+.store-body.modern-green .st-search {
+  max-width: 1120px; /* أقصى عرض */
+  margin: 0 auto; /* هامش خارجي (مسافة حول العنصر) */
+  padding: 0 1.2rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
 }
-.store-body.modern-green .st-search input{ color:#0F2A1F !important; font-size:.98rem !important; padding:11px 16px !important; }
-.store-body.modern-green .st-search input::placeholder{ color:#8FA99E !important; }
-.store-body.modern-green .st-search button{
-  background:#2E7D5E !important; color:#FFFFFF !important; border-radius:8px !important;
-  font-weight:800 !important; font-size:.92rem !important; letter-spacing:.02em;
-  box-shadow:0 6px 16px rgba(46,125,94,0.20) !important; padding:.62rem 1.6rem !important;
+/* ═══ .store-body.modern-green .st-search form ═══ */
+.store-body.modern-green .st-search form {
+  background: #FFFFFF !important; /* الخلفية */
+  border: 1.5px solid #C8D9CC !important; /* الحدود */
+  border-radius: 10px !important; /* تدوير الزوايا */
+  padding: .38rem .38rem .38rem 1.2rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  box-shadow: 0 4px 18px rgba(16,48,36,0.05) !important; /* الظل */
 }
-
+/* ═══ .store-body.modern-green .st-search input ═══ */
+.store-body.modern-green .st-search input {
+  color: #0F2A1F !important; /* لون النص */
+  font-size: .98rem !important; /* حجم الخط */
+  padding: 11px 16px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+}
+/* ═══ .store-body.modern-green .st-search input::placeholder ═══ */
+.store-body.modern-green .st-search input::placeholder {
+  color: #8FA99E !important; /* لون النص */
+}
+/* ═══ .store-body.modern-green .st-search button ═══ */
+.store-body.modern-green .st-search button {
+  background: #2E7D5E !important; /* الخلفية */
+  color: #FFFFFF !important; /* لون النص */
+  border-radius: 8px !important; /* تدوير الزوايا */
+  font-weight: 800 !important; /* سماكة الخط */
+  font-size: .92rem !important; /* حجم الخط */
+  letter-spacing: .02em;
+  box-shadow: 0 6px 16px rgba(46,125,94,0.20) !important; /* الظل */
+  padding: .62rem 1.6rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+}
 /* Nav — حبوب بيضاء بحد أخضر عند التحويم */
-.store-body.modern-green .st-nav{ justify-content:flex-start !important; gap:.55rem !important; padding:1rem 1.2rem !important; }
-.store-body.modern-green .st-nav a{
-  background:#FFFFFF !important; border:1px solid #DCE8DF !important; color:#4A645C !important;
-  border-radius:10px !important; padding:.48rem 1.1rem !important; font-size:.84rem !important; font-weight:700 !important;
-  box-shadow:0 2px 8px rgba(16,48,36,0.03) !important;
+/* ═══ .store-body.modern-green .st-nav ═══ */
+.store-body.modern-green .st-nav {
+  justify-content: flex-start !important; /* محاذاة أفقية */
+  gap: .55rem !important; /* المسافة بين العناصر */
+  padding: 1rem 1.2rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
 }
-.store-body.modern-green .st-nav a:hover{ border-color:#2E7D5E !important; color:#0F2A1F !important; background:#F2F7F3 !important; transform:translateY(-1px) !important; }
-.store-body.modern-green .st-nav a.on{ background:#2E7D5E !important; color:#FFFFFF !important; border-color:#2E7D5E !important; box-shadow:0 6px 16px rgba(46,125,94,0.20) !important; }
-
+/* ═══ .store-body.modern-green .st-nav a ═══ */
+.store-body.modern-green .st-nav a {
+  background: #FFFFFF !important; /* الخلفية */
+  border: 1px solid #DCE8DF !important; /* الحدود */
+  color: #4A645C !important; /* لون النص */
+  border-radius: 10px !important; /* تدوير الزوايا */
+  padding: .48rem 1.1rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-size: .84rem !important; /* حجم الخط */
+  font-weight: 700 !important; /* سماكة الخط */
+  box-shadow: 0 2px 8px rgba(16,48,36,0.03) !important; /* الظل */
+}
+/* ═══ .store-body.modern-green .st-nav a:hover ═══ */
+.store-body.modern-green .st-nav a:hover {
+  border-color: #2E7D5E !important;
+  color: #0F2A1F !important; /* لون النص */
+  background: #F2F7F3 !important; /* الخلفية */
+  transform: translateY(-1px) !important; /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .store-body.modern-green .st-nav a.on ═══ */
+.store-body.modern-green .st-nav a.on {
+  background: #2E7D5E !important; /* الخلفية */
+  color: #FFFFFF !important; /* لون النص */
+  border-color: #2E7D5E !important;
+  box-shadow: 0 6px 16px rgba(46,125,94,0.20) !important; /* الظل */
+}
 /* Grid — 3 أعمدة متوازنة بمسافات تنفس */
-.store-body.modern-green .st-main{ padding:0 1.4rem 5rem !important; max-width:1120px; }
-.store-body.modern-green .st-grid{ grid-template-columns: repeat(3, 1fr) !important; gap:22px !important; }
-.store-body.modern-green .st-card{
-  background:#FFFFFF !important; border-radius:16px !important; padding:12px !important;
-  border:1px solid #E3EDE6 !important; box-shadow:0 6px 24px rgba(16,48,36,0.04) !important;
-  transition: all .28s !important;
+/* ═══ .store-body.modern-green .st-main ═══ */
+.store-body.modern-green .st-main {
+  padding: 0 1.4rem 5rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  max-width: 1120px; /* أقصى عرض */
 }
-.store-body.modern-green .st-card:hover{ transform:translateY(-6px) !important; box-shadow:0 16px 40px rgba(16,48,36,0.08) !important; border-color:#C8D9CC !important; }
-.store-body.modern-green .st-img{
-  border-radius:12px !important; background:#F2F7F3 !important; aspect-ratio:1/1 !important;
-  overflow:hidden !important; border:1px solid #E8F0E8;
+/* ═══ .store-body.modern-green .st-grid ═══ */
+.store-body.modern-green .st-grid {
+  grid-template-columns: repeat(3, 1fr) !important; /* أعمدة الشبكة */
+  gap: 22px !important; /* المسافة بين العناصر */
 }
-.store-body.modern-green .st-img img{ transition:transform .5s !important; }
-.store-body.modern-green .st-card:hover .st-img img{ transform:scale(1.05) !important; }
-.store-body.modern-green .st-card-body{ padding:.9rem .3rem .4rem !important; gap:.4rem !important; }
-.store-body.modern-green .st-name{ color:#0F2A1F !important; font-weight:800 !important; font-size:.95rem !important; line-height:1.45 !important; }
-.store-body.modern-green .st-price b{ color:#2E7D5E !important; font-size:1.18rem !important; font-weight:900 !important; }
-.store-body.modern-green .st-price del{ color:#8FA99E !important; }
-.store-body.modern-green .st-btn{
-  background:#2E7D5E !important; color:#FFFFFF !important; border-radius:8px !important;
-  font-weight:800 !important; font-size:.9rem !important; letter-spacing:.02em;
-  padding:.7rem 1rem !important; box-shadow:0 6px 16px rgba(46,125,94,0.16) !important; border:none !important;
+/* ═══ .store-body.modern-green .st-card ═══ */
+.store-body.modern-green .st-card {
+  background: #FFFFFF !important; /* الخلفية */
+  border-radius: 16px !important; /* تدوير الزوايا */
+  padding: 12px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border: 1px solid #E3EDE6 !important; /* الحدود */
+  box-shadow: 0 6px 24px rgba(16,48,36,0.04) !important; /* الظل */
+  transition: all .28s !important; /* الحركة الانتقالية */
 }
-.store-body.modern-green .st-btn:hover{ background:#1F5E45 !important; transform:translateY(-1px) !important; }
-
+/* ═══ .store-body.modern-green .st-card:hover ═══ */
+.store-body.modern-green .st-card:hover {
+  transform: translateY(-6px) !important; /* التحويل (تدوير/تكبير) */
+  box-shadow: 0 16px 40px rgba(16,48,36,0.08) !important; /* الظل */
+  border-color: #C8D9CC !important;
+}
+/* ═══ .store-body.modern-green .st-img ═══ */
+.store-body.modern-green .st-img {
+  border-radius: 12px !important; /* تدوير الزوايا */
+  background: #F2F7F3 !important; /* الخلفية */
+  aspect-ratio: 1/1 !important; /* نسبة الأبعاد */
+  overflow: hidden !important; /* التعامل مع الفائض */
+  border: 1px solid #E8F0E8; /* الحدود */
+}
+/* ═══ .store-body.modern-green .st-img img ═══ */
+.store-body.modern-green .st-img img {
+  transition: transform .5s !important; /* الحركة الانتقالية */
+}
+/* ═══ .store-body.modern-green .st-card:hover .st-img img ═══ */
+.store-body.modern-green .st-card:hover .st-img img {
+  transform: scale(1.05) !important; /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .store-body.modern-green .st-card-body ═══ */
+.store-body.modern-green .st-card-body {
+  padding: .9rem .3rem .4rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  gap: .4rem !important; /* المسافة بين العناصر */
+}
+/* ═══ .store-body.modern-green .st-name ═══ */
+.store-body.modern-green .st-name {
+  color: #0F2A1F !important; /* لون النص */
+  font-weight: 800 !important; /* سماكة الخط */
+  font-size: .95rem !important; /* حجم الخط */
+  line-height: 1.45 !important; /* ارتفاع السطر */
+}
+/* ═══ .store-body.modern-green .st-price b ═══ */
+.store-body.modern-green .st-price b {
+  color: #2E7D5E !important; /* لون النص */
+  font-size: 1.18rem !important; /* حجم الخط */
+  font-weight: 900 !important; /* سماكة الخط */
+}
+/* ═══ .store-body.modern-green .st-price del ═══ */
+.store-body.modern-green .st-price del {
+  color: #8FA99E !important; /* لون النص */
+}
+/* ═══ .store-body.modern-green .st-btn ═══ */
+.store-body.modern-green .st-btn {
+  background: #2E7D5E !important; /* الخلفية */
+  color: #FFFFFF !important; /* لون النص */
+  border-radius: 8px !important; /* تدوير الزوايا */
+  font-weight: 800 !important; /* سماكة الخط */
+  font-size: .9rem !important; /* حجم الخط */
+  letter-spacing: .02em;
+  padding: .7rem 1rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  box-shadow: 0 6px 16px rgba(46,125,94,0.16) !important; /* الظل */
+  border: none !important; /* الحدود */
+}
+/* ═══ .store-body.modern-green .st-btn:hover ═══ */
+.store-body.modern-green .st-btn:hover {
+  background: #1F5E45 !important; /* الخلفية */
+  transform: translateY(-1px) !important; /* التحويل (تدوير/تكبير) */
+}
 /* Product */
-.store-body.modern-green .st-product-info, .store-body.modern-green .st-gallery, .store-body.modern-green .st-checkout .card{ border-radius:16px !important; border-color:#E3EDE6 !important; }
-
-/* Responsive */
-@media(max-width:1000px){ .store-body.modern-green .st-grid{ grid-template-columns: repeat(2, 1fr) !important; } }
-@media(max-width:640px){
-  .store-body.modern-green .st-head{ margin:14px 12px !important; padding:26px 18px !important; border-radius:14px !important; border-left-width:4px !important; }
-  .store-body.modern-green .st-head h1{ font-size:1.65rem !important; }
-  .store-body.modern-green .st-grid{ grid-template-columns: repeat(2, 1fr) !important; gap:14px !important; }
-  .store-body.modern-green .st-main{ padding:0 12px 5rem !important; }
+/* ═══ .store-body.modern-green .st-product-info, .store-body.modern-green .st-gallery, .store-body.modern-green .st-checkout .card ═══ */
+.store-body.modern-green .st-product-info, .store-body.modern-green .st-gallery, .store-body.modern-green .st-checkout .card {
+  border-radius: 16px !important; /* تدوير الزوايا */
+  border-color: #E3EDE6 !important;
 }
-@media(max-width:380px){ .store-body.modern-green .st-grid{ grid-template-columns: repeat(2,1fr) !important; } }
+/* Responsive */
+@media(max-width:1000px) {
+  /* ═══ .store-body.modern-green .st-grid ═══ */
+  .store-body.modern-green .st-grid {
+    grid-template-columns: repeat(2, 1fr) !important; /* أعمدة الشبكة */
+  }
+}
+@media(max-width:640px) {
+  /* ═══ .store-body.modern-green .st-head ═══ */
+  .store-body.modern-green .st-head {
+    margin: 14px 12px !important; /* هامش خارجي (مسافة حول العنصر) */
+    padding: 26px 18px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    border-radius: 14px !important; /* تدوير الزوايا */
+    border-left-width: 4px !important;
+  }
+  /* ═══ .store-body.modern-green .st-head h1 ═══ */
+  .store-body.modern-green .st-head h1 {
+    font-size: 1.65rem !important; /* حجم الخط */
+  }
+  /* ═══ .store-body.modern-green .st-grid ═══ */
+  .store-body.modern-green .st-grid {
+    grid-template-columns: repeat(2, 1fr) !important; /* أعمدة الشبكة */
+    gap: 14px !important; /* المسافة بين العناصر */
+  }
+  /* ═══ .store-body.modern-green .st-main ═══ */
+  .store-body.modern-green .st-main {
+    padding: 0 12px 5rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+}
+@media(max-width:380px) {
+  /* ═══ .store-body.modern-green .st-grid ═══ */
+  .store-body.modern-green .st-grid {
+    grid-template-columns: repeat(2,1fr) !important; /* أعمدة الشبكة */
+  }
+}

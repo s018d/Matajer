@@ -1,75 +1,254 @@
+/*
+ * تنسيق عامودي: كل خاصية في سطر + تعليق عربي يشرحها
+ * لتعديل أي شيء: ابحث عن اسم الكلاس وغيّر القيمة بعد النقطتين
+ */
 /* ============================================================
    ROYAL IVORY — فخامة هادئة (تحفة editorial) — هوية مميزة
    ============================================================ */
-body.store-body.royal-ivory{ background:#FFFBF5 !important; color:#3E352C; font-family:'Cairo','Noto Kufi Arabic',serif; }
-
+/* ═══ body.store-body.royal-ivory ═══ */
+body.store-body.royal-ivory {
+  background: #FFFBF5 !important; /* الخلفية */
+  color: #3E352C; /* لون النص */
+  font-family: 'Cairo','Noto Kufi Arabic',serif; /* نوع الخط */
+}
 /* Hero — بطاقة فاخرة بحد ذهبي مزدوج + خط ذهبي تحت العنوان */
-.store-body.royal-ivory .st-head{
-  background: radial-gradient(600px 300px at 50% 0%, rgba(201,169,110,0.08), transparent 70%), linear-gradient(180deg, #FFFEFC 0%, #F8F0E0 100%) !important;
-  border: 1.5px solid #E8DCC8 !important;
-  outline: 1px solid rgba(201,169,110,0.22); outline-offset: 4px;
-  border-radius: 28px !important;
-  margin: 22px auto !important; max-width:1120px;
-  padding: 56px 40px 48px !important;
-  box-shadow: 0 18px 60px rgba(62,53,44,0.08) !important;
-  text-align:center;
+/* ═══ .store-body.royal-ivory .st-head ═══ */
+.store-body.royal-ivory .st-head {
+  background: radial-gradient(600px 300px at 50% 0%, rgba(201,169,110,0.08), transparent 70%), linear-gradient(180deg, #FFFEFC 0%, #F8F0E0 100%) !important; /* الخلفية */
+  border: 1.5px solid #E8DCC8 !important; /* الحدود */
+  outline: 1px solid rgba(201,169,110,0.22); /* الإطار الخارجي */
+  outline-offset: 4px;
+  border-radius: 28px !important; /* تدوير الزوايا */
+  margin: 22px auto !important; /* هامش خارجي (مسافة حول العنصر) */
+  max-width: 1120px; /* أقصى عرض */
+  padding: 56px 40px 48px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  box-shadow: 0 18px 60px rgba(62,53,44,0.08) !important; /* الظل */
+  text-align: center; /* محاذاة النص */
 }
-.store-body.royal-ivory .st-head::before{ display:none !important; }
-.store-body.royal-ivory .st-head-inner{ justify-content:center !important; flex-direction:column !important; text-align:center !important; gap:14px !important; }
-.store-body.royal-ivory .st-head h1{
-  font-weight:900 !important; font-size:2.65rem !important; letter-spacing:-0.02em !important;
-  color:#2C241C !important; -webkit-text-fill-color:#2C241C !important; line-height:1.15 !important;
-  font-family:'Noto Kufi Arabic','Cairo',serif;
+/* ═══ .store-body.royal-ivory .st-head::before ═══ */
+.store-body.royal-ivory .st-head::before {
+  display: none !important; /* طريقة العرض */
 }
-.store-body.royal-ivory .st-head h1::after{
-  content:''; display:block; width:88px; height:3px; margin:14px auto 0;
-  background: linear-gradient(90deg, #C9A96E, #E9D5AA); border-radius:2px;
+/* ═══ .store-body.royal-ivory .st-head-inner ═══ */
+.store-body.royal-ivory .st-head-inner {
+  justify-content: center !important; /* محاذاة أفقية */
+  flex-direction: column !important; /* اتجاه العناصر */
+  text-align: center !important; /* محاذاة النص */
+  gap: 14px !important; /* المسافة بين العناصر */
 }
-.store-body.royal-ivory .st-head p{ color:#7A6E62 !important; font-size:1.08rem !important; max-width:560px; margin-inline:auto !important; line-height:1.85 !important; }
-.store-body.royal-ivory .st-logo{ border-radius:18px !important; border:2px solid #E8DCC8 !important; box-shadow:0 8px 28px rgba(0,0,0,0.06) !important; }
-
+/* ═══ .store-body.royal-ivory .st-head h1 ═══ */
+.store-body.royal-ivory .st-head h1 {
+  font-weight: 900 !important; /* سماكة الخط */
+  font-size: 2.65rem !important; /* حجم الخط */
+  letter-spacing: -0.02em !important;
+  color: #2C241C !important; /* لون النص */
+  -webkit-text-fill-color: #2C241C !important;
+  line-height: 1.15 !important; /* ارتفاع السطر */
+  font-family: 'Noto Kufi Arabic','Cairo',serif; /* نوع الخط */
+}
+/* ═══ .store-body.royal-ivory .st-head h1::after ═══ */
+.store-body.royal-ivory .st-head h1::after {
+  content: ''; /* محتوى العنصر الوهمي */
+  display: block; /* طريقة العرض */
+  width: 88px; /* العرض */
+  height: 3px; /* الارتفاع */
+  margin: 14px auto 0; /* هامش خارجي (مسافة حول العنصر) */
+  background: linear-gradient(90deg, #C9A96E, #E9D5AA); /* الخلفية */
+  border-radius: 2px; /* تدوير الزوايا */
+}
+/* ═══ .store-body.royal-ivory .st-head p ═══ */
+.store-body.royal-ivory .st-head p {
+  color: #7A6E62 !important; /* لون النص */
+  font-size: 1.08rem !important; /* حجم الخط */
+  max-width: 560px; /* أقصى عرض */
+  margin-inline: auto !important;
+  line-height: 1.85 !important; /* ارتفاع السطر */
+}
+/* ═══ .store-body.royal-ivory .st-logo ═══ */
+.store-body.royal-ivory .st-logo {
+  border-radius: 18px !important; /* تدوير الزوايا */
+  border: 2px solid #E8DCC8 !important; /* الحدود */
+  box-shadow: 0 8px 28px rgba(0,0,0,0.06) !important; /* الظل */
+}
 /* Search — عريض ومركزي كأنه جزء من الهيرو */
-.store-body.royal-ivory .st-search{ max-width:640px; margin:0 auto; padding:0 1.2rem 1.3rem; }
-.store-body.royal-ivory .st-search form{
-  background:#FFFFFF !important; border:1.5px solid #E8DCC8 !important; border-radius:32px !important;
-  padding:.4rem .4rem .4rem 1.4rem !important; box-shadow:0 8px 24px rgba(201,169,110,0.10) !important;
+/* ═══ .store-body.royal-ivory .st-search ═══ */
+.store-body.royal-ivory .st-search {
+  max-width: 640px; /* أقصى عرض */
+  margin: 0 auto; /* هامش خارجي (مسافة حول العنصر) */
+  padding: 0 1.2rem 1.3rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
 }
-.store-body.royal-ivory .st-search input{ font-size:1rem !important; color:#3E352C !important; padding:12px 18px !important; }
-.store-body.royal-ivory .st-search input::placeholder{ color:#B8A99C !important; }
-.store-body.royal-ivory .st-search button{ background: linear-gradient(135deg,#C9A96E,#B4945A) !important; border-radius:30px !important; padding:.7rem 1.8rem !important; font-size:.98rem !important; box-shadow:0 6px 18px rgba(201,169,110,0.30) !important; }
-
+/* ═══ .store-body.royal-ivory .st-search form ═══ */
+.store-body.royal-ivory .st-search form {
+  background: #FFFFFF !important; /* الخلفية */
+  border: 1.5px solid #E8DCC8 !important; /* الحدود */
+  border-radius: 32px !important; /* تدوير الزوايا */
+  padding: .4rem .4rem .4rem 1.4rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  box-shadow: 0 8px 24px rgba(201,169,110,0.10) !important; /* الظل */
+}
+/* ═══ .store-body.royal-ivory .st-search input ═══ */
+.store-body.royal-ivory .st-search input {
+  font-size: 1rem !important; /* حجم الخط */
+  color: #3E352C !important; /* لون النص */
+  padding: 12px 18px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+}
+/* ═══ .store-body.royal-ivory .st-search input::placeholder ═══ */
+.store-body.royal-ivory .st-search input::placeholder {
+  color: #B8A99C !important; /* لون النص */
+}
+/* ═══ .store-body.royal-ivory .st-search button ═══ */
+.store-body.royal-ivory .st-search button {
+  background: linear-gradient(135deg,#C9A96E,#B4945A) !important; /* الخلفية */
+  border-radius: 30px !important; /* تدوير الزوايا */
+  padding: .7rem 1.8rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-size: .98rem !important; /* حجم الخط */
+  box-shadow: 0 6px 18px rgba(201,169,110,0.30) !important; /* الظل */
+}
 /* Nav — حبوب صغيرة أنيقة */
-.store-body.royal-ivory .st-nav{ justify-content:center !important; gap:.6rem !important; padding:1.1rem 1.2rem !important; }
-.store-body.royal-ivory .st-nav a{
-  background:#FFFFFF !important; border:1px solid #F0E6D9 !important; color:#6B5E50 !important;
-  border-radius:30px !important; padding:.5rem 1.25rem !important; font-size:.86rem !important; font-weight:700 !important;
-  letter-spacing:.03em; text-transform:uppercase;
+/* ═══ .store-body.royal-ivory .st-nav ═══ */
+.store-body.royal-ivory .st-nav {
+  justify-content: center !important; /* محاذاة أفقية */
+  gap: .6rem !important; /* المسافة بين العناصر */
+  padding: 1.1rem 1.2rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
 }
-.store-body.royal-ivory .st-nav a:hover{ border-color:#C9A96E !important; color:#2C241C !important; background:#FFFBF5 !important; transform:translateY(-1px) !important; }
-.store-body.royal-ivory .st-nav a.on{ background:#C9A96E !important; color:#FFFFFF !important; border-color:#C9A96E !important; box-shadow:0 6px 18px rgba(201,169,110,0.25) !important; }
-
+/* ═══ .store-body.royal-ivory .st-nav a ═══ */
+.store-body.royal-ivory .st-nav a {
+  background: #FFFFFF !important; /* الخلفية */
+  border: 1px solid #F0E6D9 !important; /* الحدود */
+  color: #6B5E50 !important; /* لون النص */
+  border-radius: 30px !important; /* تدوير الزوايا */
+  padding: .5rem 1.25rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-size: .86rem !important; /* حجم الخط */
+  font-weight: 700 !important; /* سماكة الخط */
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+/* ═══ .store-body.royal-ivory .st-nav a:hover ═══ */
+.store-body.royal-ivory .st-nav a:hover {
+  border-color: #C9A96E !important;
+  color: #2C241C !important; /* لون النص */
+  background: #FFFBF5 !important; /* الخلفية */
+  transform: translateY(-1px) !important; /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .store-body.royal-ivory .st-nav a.on ═══ */
+.store-body.royal-ivory .st-nav a.on {
+  background: #C9A96E !important; /* الخلفية */
+  color: #FFFFFF !important; /* لون النص */
+  border-color: #C9A96E !important;
+  box-shadow: 0 6px 18px rgba(201,169,110,0.25) !important; /* الظل */
+}
 /* Grid — عمودين كبيرين Editorial */
-.store-body.royal-ivory .st-main{ padding:0 1.4rem 5rem !important; max-width:1120px; }
-.store-body.royal-ivory .st-grid{ grid-template-columns: repeat(2, 1fr) !important; gap:28px !important; }
-.store-body.royal-ivory .st-card{
-  background:#FFFFFF !important; border-radius:26px !important; padding:16px !important;
-  border:1px solid #F0E6D9 !important; box-shadow:0 12px 40px rgba(62,53,44,0.06) !important;
-  transition: all .35s cubic-bezier(.4,0,.2,1) !important;
+/* ═══ .store-body.royal-ivory .st-main ═══ */
+.store-body.royal-ivory .st-main {
+  padding: 0 1.4rem 5rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  max-width: 1120px; /* أقصى عرض */
 }
-.store-body.royal-ivory .st-card:hover{ transform:translateY(-8px) !important; box-shadow:0 24px 60px rgba(62,53,44,0.12) !important; border-color:#E8DCC8 !important; }
-.store-body.royal-ivory .st-img{ border-radius:18px !important; background:#FDF8F0 !important; aspect-ratio: 4/3 !important; overflow:hidden !important; }
-.store-body.royal-ivory .st-img img{ transition:transform .6s !important; }
-.store-body.royal-ivory .st-card:hover .st-img img{ transform:scale(1.06) !important; }
-.store-body.royal-ivory .st-card-body{ padding:1.1rem .4rem .4rem !important; gap:.45rem !important; }
-.store-body.royal-ivory .st-name{ font-family:'Noto Kufi Arabic',serif; font-weight:800 !important; font-size:1.06rem !important; color:#2C241C !important; line-height:1.45 !important; }
-.store-body.royal-ivory .st-price b{ color:#B4945A !important; font-size:1.32rem !important; font-weight:900 !important; letter-spacing:-0.02em; }
-.store-body.royal-ivory .st-price del{ color:#B8A99C !important; font-size:.82rem !important; }
-.store-body.royal-ivory .st-btn{ background: #2C241C !important; color:#FDF8F0 !important; border-radius:30px !important; font-weight:800 !important; letter-spacing:.04em; padding:.8rem 1.2rem !important; box-shadow:0 8px 20px rgba(44,36,28,0.18) !important; }
-.store-body.royal-ivory .st-btn:hover{ background:#C9A96E !important; color:#FFFFFF !important; transform:translateY(-1px) !important; }
-
+/* ═══ .store-body.royal-ivory .st-grid ═══ */
+.store-body.royal-ivory .st-grid {
+  grid-template-columns: repeat(2, 1fr) !important; /* أعمدة الشبكة */
+  gap: 28px !important; /* المسافة بين العناصر */
+}
+/* ═══ .store-body.royal-ivory .st-card ═══ */
+.store-body.royal-ivory .st-card {
+  background: #FFFFFF !important; /* الخلفية */
+  border-radius: 26px !important; /* تدوير الزوايا */
+  padding: 16px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border: 1px solid #F0E6D9 !important; /* الحدود */
+  box-shadow: 0 12px 40px rgba(62,53,44,0.06) !important; /* الظل */
+  transition: all .35s cubic-bezier(.4,0,.2,1) !important; /* الحركة الانتقالية */
+}
+/* ═══ .store-body.royal-ivory .st-card:hover ═══ */
+.store-body.royal-ivory .st-card:hover {
+  transform: translateY(-8px) !important; /* التحويل (تدوير/تكبير) */
+  box-shadow: 0 24px 60px rgba(62,53,44,0.12) !important; /* الظل */
+  border-color: #E8DCC8 !important;
+}
+/* ═══ .store-body.royal-ivory .st-img ═══ */
+.store-body.royal-ivory .st-img {
+  border-radius: 18px !important; /* تدوير الزوايا */
+  background: #FDF8F0 !important; /* الخلفية */
+  aspect-ratio: 4/3 !important; /* نسبة الأبعاد */
+  overflow: hidden !important; /* التعامل مع الفائض */
+}
+/* ═══ .store-body.royal-ivory .st-img img ═══ */
+.store-body.royal-ivory .st-img img {
+  transition: transform .6s !important; /* الحركة الانتقالية */
+}
+/* ═══ .store-body.royal-ivory .st-card:hover .st-img img ═══ */
+.store-body.royal-ivory .st-card:hover .st-img img {
+  transform: scale(1.06) !important; /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .store-body.royal-ivory .st-card-body ═══ */
+.store-body.royal-ivory .st-card-body {
+  padding: 1.1rem .4rem .4rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  gap: .45rem !important; /* المسافة بين العناصر */
+}
+/* ═══ .store-body.royal-ivory .st-name ═══ */
+.store-body.royal-ivory .st-name {
+  font-family: 'Noto Kufi Arabic',serif; /* نوع الخط */
+  font-weight: 800 !important; /* سماكة الخط */
+  font-size: 1.06rem !important; /* حجم الخط */
+  color: #2C241C !important; /* لون النص */
+  line-height: 1.45 !important; /* ارتفاع السطر */
+}
+/* ═══ .store-body.royal-ivory .st-price b ═══ */
+.store-body.royal-ivory .st-price b {
+  color: #B4945A !important; /* لون النص */
+  font-size: 1.32rem !important; /* حجم الخط */
+  font-weight: 900 !important; /* سماكة الخط */
+  letter-spacing: -0.02em;
+}
+/* ═══ .store-body.royal-ivory .st-price del ═══ */
+.store-body.royal-ivory .st-price del {
+  color: #B8A99C !important; /* لون النص */
+  font-size: .82rem !important; /* حجم الخط */
+}
+/* ═══ .store-body.royal-ivory .st-btn ═══ */
+.store-body.royal-ivory .st-btn {
+  background: #2C241C !important; /* الخلفية */
+  color: #FDF8F0 !important; /* لون النص */
+  border-radius: 30px !important; /* تدوير الزوايا */
+  font-weight: 800 !important; /* سماكة الخط */
+  letter-spacing: .04em;
+  padding: .8rem 1.2rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  box-shadow: 0 8px 20px rgba(44,36,28,0.18) !important; /* الظل */
+}
+/* ═══ .store-body.royal-ivory .st-btn:hover ═══ */
+.store-body.royal-ivory .st-btn:hover {
+  background: #C9A96E !important; /* الخلفية */
+  color: #FFFFFF !important; /* لون النص */
+  transform: translateY(-1px) !important; /* التحويل (تدوير/تكبير) */
+}
 /* Product / Checkout */
-.store-body.royal-ivory .st-product-info, .store-body.royal-ivory .st-gallery, .store-body.royal-ivory .st-checkout .card{ border-radius:24px !important; border-color:#F0E6D9 !important; }
-
+/* ═══ .store-body.royal-ivory .st-product-info, .store-body.royal-ivory .st-gallery, .store-body.royal-ivory .st-checkout .card ═══ */
+.store-body.royal-ivory .st-product-info, .store-body.royal-ivory .st-gallery, .store-body.royal-ivory .st-checkout .card {
+  border-radius: 24px !important; /* تدوير الزوايا */
+  border-color: #F0E6D9 !important;
+}
 /* Responsive */
-@media(max-width:900px){ .store-body.royal-ivory .st-grid{ grid-template-columns: repeat(2,1fr) !important; gap:18px !important; } .store-body.royal-ivory .st-head h1{ font-size:2.0rem !important; } }
-@media(max-width:640px){ .store-body.royal-ivory .st-head{ padding:36px 18px 32px !important; margin:14px 12px !important; border-radius:22px !important; } .store-body.royal-ivory .st-grid{ grid-template-columns:1fr !important; } .store-body.royal-ivory .st-main{ padding:0 12px 5rem !important; } }
+@media(max-width:900px) {
+  /* ═══ .store-body.royal-ivory .st-grid ═══ */
+  .store-body.royal-ivory .st-grid {
+    grid-template-columns: repeat(2,1fr) !important; /* أعمدة الشبكة */
+    gap: 18px !important; /* المسافة بين العناصر */
+  }
+  /* ═══ .store-body.royal-ivory .st-head h1 ═══ */
+  .store-body.royal-ivory .st-head h1 {
+    font-size: 2.0rem !important; /* حجم الخط */
+  }
+}
+@media(max-width:640px) {
+  /* ═══ .store-body.royal-ivory .st-head ═══ */
+  .store-body.royal-ivory .st-head {
+    padding: 36px 18px 32px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    margin: 14px 12px !important; /* هامش خارجي (مسافة حول العنصر) */
+    border-radius: 22px !important; /* تدوير الزوايا */
+  }
+  /* ═══ .store-body.royal-ivory .st-grid ═══ */
+  .store-body.royal-ivory .st-grid {
+    grid-template-columns: 1fr !important; /* أعمدة الشبكة */
+  }
+  /* ═══ .store-body.royal-ivory .st-main ═══ */
+  .store-body.royal-ivory .st-main {
+    padding: 0 12px 5rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+}

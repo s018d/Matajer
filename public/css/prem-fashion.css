@@ -1,3 +1,7 @@
+/*
+ * تنسيق عامودي: كل خاصية في سطر + تعليق عربي يشرحها
+ * لتعديل أي شيء: ابحث عن اسم الكلاس وغيّر القيمة بعد النقطتين
+ */
 /* ============================================================
    PREM-FASHION — متجر الفخامة (Violet/Amber) → Matajer
    Ported from: قوالب متاجر احترافية /1 — css/style.css (615 lines)
@@ -7,708 +11,1559 @@
    Targets: body.store-body.prem-fashion + Matajer classes
    Responsive: 1280 / 1024 / 768 / 600 / 480 / 375 / 360  no-overflow
    ============================================================ */
-
 /* ---------- 0. TOKENS & BASE ---------- */
-body.store-body.prem-fashion{
-  --pf-primary:#6c3cf5;
-  --pf-primary-dark:#5425d8;
-  --pf-primary-light:#efe9fe;
-  --pf-accent:#ffb400;
-  --pf-accent-dark:#e09e00;
-  --pf-dark:#191430;
-  --pf-text:#3f3a55;
-  --pf-muted:#8a85a0;
-  --pf-border:#e8e5f2;
-  --pf-bg:#ffffff;
-  --pf-bg-soft:#f7f6fc;
-  --pf-success:#16a34a;
-  --pf-danger:#e11d48;
-  --pf-radius:14px;
-  --pf-radius-lg:18px;
-  --pf-radius-pill:50px;
-  --pf-shadow-sm:0 2px 10px rgba(25,20,48,.06);
-  --pf-shadow-md:0 8px 24px rgba(25,20,48,.10);
-  --pf-shadow-lg:0 16px 44px rgba(25,20,48,.14);
-  --pf-font:'Tajawal','Poppins','Cairo','Noto Kufi Arabic',sans-serif;
-  --pf-t:all .28s cubic-bezier(.4,0,.2,1);
-  font-family:var(--pf-font);
-  background:var(--pf-bg-soft);
-  color:var(--pf-text);
-  line-height:1.65;
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-  max-width:100vw;
+/* ═══ body.store-body.prem-fashion ═══ */
+body.store-body.prem-fashion {
+  --pf-primary: #6c3cf5;
+  --pf-primary-dark: #5425d8;
+  --pf-primary-light: #efe9fe;
+  --pf-accent: #ffb400;
+  --pf-accent-dark: #e09e00;
+  --pf-dark: #191430;
+  --pf-text: #3f3a55;
+  --pf-muted: #8a85a0;
+  --pf-border: #e8e5f2;
+  --pf-bg: #ffffff;
+  --pf-bg-soft: #f7f6fc;
+  --pf-success: #16a34a;
+  --pf-danger: #e11d48;
+  --pf-radius: 14px;
+  --pf-radius-lg: 18px;
+  --pf-radius-pill: 50px;
+  --pf-shadow-sm: 0 2px 10px rgba(25,20,48,.06);
+  --pf-shadow-md: 0 8px 24px rgba(25,20,48,.10);
+  --pf-shadow-lg: 0 16px 44px rgba(25,20,48,.14);
+  --pf-font: 'Tajawal','Poppins','Cairo','Noto Kufi Arabic',sans-serif;
+  --pf-t: all .28s cubic-bezier(.4,0,.2,1);
+  font-family: var(--pf-font); /* نوع الخط */
+  background: var(--pf-bg-soft); /* الخلفية */
+  color: var(--pf-text); /* لون النص */
+  line-height: 1.65; /* ارتفاع السطر */
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; /* فائض أفقي */
+  max-width: 100vw; /* أقصى عرض */
 }
-body.store-body.prem-fashion *{box-sizing:border-box;overflow-wrap:break-word;word-break:break-word}
-body.store-body.prem-fashion html{scroll-behavior:smooth}
-body.store-body.prem-fashion img{max-width:100%;display:block}
-body.store-body.prem-fashion a{text-decoration:none;color:inherit;transition:var(--pf-t)}
-
+/* ═══ body.store-body.prem-fashion * ═══ */
+body.store-body.prem-fashion * {
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+/* ═══ body.store-body.prem-fashion html ═══ */
+body.store-body.prem-fashion html {
+  scroll-behavior: smooth; /* سلوك التمرير */
+}
+/* ═══ body.store-body.prem-fashion img ═══ */
+body.store-body.prem-fashion img {
+  max-width: 100%; /* أقصى عرض */
+  display: block; /* طريقة العرض */
+}
+/* ═══ body.store-body.prem-fashion a ═══ */
+body.store-body.prem-fashion a {
+  text-decoration: none; /* زخرفة النص */
+  color: inherit; /* لون النص */
+  transition: var(--pf-t); /* الحركة الانتقالية */
+}
 /* ---------- 1. HEADER — compact sticky + violet hero ---------- */
-.prem-fashion .st-head{
-  position:relative;
-  padding:0;
-  background:rgba(255,255,255,.92);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--pf-border);
-  overflow:hidden;
+/* ═══ .prem-fashion .st-head ═══ */
+.prem-fashion .st-head {
+  position: relative; /* طريقة التموضع */
+  padding: 0; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  background: rgba(255,255,255,.92); /* الخلفية */
+  backdrop-filter: blur(14px); /* تأثير ضبابية الخلفية */
+  -webkit-backdrop-filter: blur(14px); /* ضبابية الخلفية (سفاري) */
+  border-bottom: 1px solid var(--pf-border); /* حد سفلي */
+  overflow: hidden; /* التعامل مع الفائض */
 }
-.prem-fashion .st-head::before{
-  content:'';
-  position:absolute;inset:0;
-  background:
-    radial-gradient(circle at 85% 20%, rgba(255,180,0,.06), transparent 38%),
-    radial-gradient(circle at 10% 85%, rgba(108,60,245,.07), transparent 44%);
-  pointer-events:none;
+/* ═══ .prem-fashion .st-head::before ═══ */
+.prem-fashion .st-head::before {
+  content: ''; /* محتوى العنصر الوهمي */
+  position: absolute; /* طريقة التموضع */
+  inset: 0; /* الأبعاد الأربعة معاً */
+  background: radial-gradient(circle at 85% 20%, rgba(255,180,0,.06), transparent 38%),
+    radial-gradient(circle at 10% 85%, rgba(108,60,245,.07), transparent 44%); /* الخلفية */
+  pointer-events: none; /* استقبال النقر */
 }
 /* fashion-hero override — violet gradient hero (distinctive from source .hero) — compact */
-.prem-fashion .st-head.fashion-hero,
-.prem-fashion .fashion-hero.st-head{
-  background:linear-gradient(120deg,#22164f 0%, #3d2295 55%, var(--pf-primary) 100%);
-  color:#fff;
-  border-bottom:none;
+/* ═══ .prem-fashion .st-head.fashion-hero, .prem-fashion .fashion-hero.st-head ═══ */
+.prem-fashion .st-head.fashion-hero, .prem-fashion .fashion-hero.st-head {
+  background: linear-gradient(120deg,#22164f 0%, #3d2295 55%, var(--pf-primary) 100%); /* الخلفية */
+  color: #fff; /* لون النص */
+  border-bottom: none; /* حد سفلي */
 }
-.prem-fashion .fashion-hero.st-head::before{
-  background:
-    radial-gradient(circle at 85% 20%, rgba(255,180,0,.16), transparent 40%),
-    radial-gradient(circle at 10% 85%, rgba(155,92,255,.30), transparent 45%);
+/* ═══ .prem-fashion .fashion-hero.st-head::before ═══ */
+.prem-fashion .fashion-hero.st-head::before {
+  background: radial-gradient(circle at 85% 20%, rgba(255,180,0,.16), transparent 40%),
+    radial-gradient(circle at 10% 85%, rgba(155,92,255,.30), transparent 45%); /* الخلفية */
 }
-.prem-fashion .st-head-inner{
-  max-width:1180px;
-  margin:0 auto;
-  padding:.85rem 1.15rem;
-  display:flex;
-  align-items:center;
-  gap:.85rem;
-  position:relative;
-  z-index:1;
-  flex-wrap:wrap;
+/* ═══ .prem-fashion .st-head-inner ═══ */
+.prem-fashion .st-head-inner {
+  max-width: 1180px; /* أقصى عرض */
+  margin: 0 auto; /* هامش خارجي (مسافة حول العنصر) */
+  padding: .85rem 1.15rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: .85rem; /* المسافة بين العناصر */
+  position: relative; /* طريقة التموضع */
+  z-index: 1; /* طبقة الترتيب (فوق/تحت) */
+  flex-wrap: wrap; /* التفاف العناصر */
 }
-.prem-fashion .st-head h1{
-  font-size:1.28rem;
-  font-weight:800;
-  letter-spacing:-.01em;
-  line-height:1.35;
-  color:var(--pf-dark);
-  background:none;
-  -webkit-text-fill-color:var(--pf-dark);
+/* ═══ .prem-fashion .st-head h1 ═══ */
+.prem-fashion .st-head h1 {
+  font-size: 1.28rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  letter-spacing: -.01em;
+  line-height: 1.35; /* ارتفاع السطر */
+  color: var(--pf-dark); /* لون النص */
+  background: none; /* الخلفية */
+  -webkit-text-fill-color: var(--pf-dark);
 }
-.prem-fashion .fashion-hero.st-head h1{
-  color:#fff !important;
-  -webkit-text-fill-color:#fff !important;
-  font-size:1.38rem;
-  font-weight:800;
-  line-height:1.28;
+/* ═══ .prem-fashion .fashion-hero.st-head h1 ═══ */
+.prem-fashion .fashion-hero.st-head h1 {
+  color: #fff !important; /* لون النص */
+  -webkit-text-fill-color: #fff !important;
+  font-size: 1.38rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  line-height: 1.28; /* ارتفاع السطر */
 }
-.prem-fashion .fashion-hero.st-head h1 em{font-style:normal;color:var(--pf-accent)}
-.prem-fashion .st-head p{
-  color:var(--pf-muted);
-  font-size:.78rem;
-  font-weight:400;
-  margin-top:.18rem;
-  line-height:1.6;
-  max-width:520px;
+/* ═══ .prem-fashion .fashion-hero.st-head h1 em ═══ */
+.prem-fashion .fashion-hero.st-head h1 em {
+  font-style: normal;
+  color: var(--pf-accent); /* لون النص */
 }
-.prem-fashion .fashion-hero.st-head p{color:#d5cdf0 !important; font-size:.84rem}
-.prem-fashion .st-logo{
-  max-height:52px;
-  max-width:170px;
-  object-fit:contain;
-  border-radius:12px;
-  box-shadow:var(--pf-shadow-sm);
-  transition:var(--pf-t);
+/* ═══ .prem-fashion .st-head p ═══ */
+.prem-fashion .st-head p {
+  color: var(--pf-muted); /* لون النص */
+  font-size: .78rem; /* حجم الخط */
+  font-weight: 400; /* سماكة الخط */
+  margin-top: .18rem; /* هامش علوي */
+  line-height: 1.6; /* ارتفاع السطر */
+  max-width: 520px; /* أقصى عرض */
 }
-.prem-fashion .st-logo:hover{transform:scale(1.04);box-shadow:var(--pf-shadow-md)}
-.prem-fashion .fashion-badge,
-.prem-fashion .st-head .fashion-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  margin-top:.45rem;
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.25);
-  color:#fff;
-  padding:.28rem .75rem;
-  border-radius:var(--pf-radius-pill);
-  font-size:.72rem;
-  font-weight:700;
-  letter-spacing:.02em;
+/* ═══ .prem-fashion .fashion-hero.st-head p ═══ */
+.prem-fashion .fashion-hero.st-head p {
+  color: #d5cdf0 !important; /* لون النص */
+  font-size: .84rem; /* حجم الخط */
 }
-.prem-fashion .st-back{
-  display:inline-flex;
-  align-items:center;
-  gap:.3rem;
-  margin:0 auto .4rem;
-  font-size:.74rem;
-  font-weight:700;
-  color:var(--pf-muted);
-  background:#fff;
-  border:1.5px solid var(--pf-border);
-  border-radius:var(--pf-radius-pill);
-  padding:.36rem .85rem;
-  transition:var(--pf-t);
-  max-width:max-content;
-  white-space:nowrap;
+/* ═══ .prem-fashion .st-logo ═══ */
+.prem-fashion .st-logo {
+  max-height: 52px; /* أقصى ارتفاع */
+  max-width: 170px; /* أقصى عرض */
+  object-fit: contain; /* ملاءمة الصورة */
+  border-radius: 12px; /* تدوير الزوايا */
+  box-shadow: var(--pf-shadow-sm); /* الظل */
+  transition: var(--pf-t); /* الحركة الانتقالية */
 }
-.prem-fashion .st-back:hover{color:var(--pf-primary);border-color:var(--pf-primary);transform:translateY(-1px);box-shadow:var(--pf-shadow-sm)}
-.prem-fashion .fashion-hero .st-back{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:#fff}
-.prem-fashion .fashion-hero .st-back:hover{background:var(--pf-accent);border-color:var(--pf-accent);color:var(--pf-dark)}
-.prem-fashion .st-head.small{padding:.55rem 1.15rem .2rem}
-
+/* ═══ .prem-fashion .st-logo:hover ═══ */
+.prem-fashion .st-logo:hover {
+  transform: scale(1.04); /* التحويل (تدوير/تكبير) */
+  box-shadow: var(--pf-shadow-md); /* الظل */
+}
+/* ═══ .prem-fashion .fashion-badge, .prem-fashion .st-head .fashion-badge ═══ */
+.prem-fashion .fashion-badge, .prem-fashion .st-head .fashion-badge {
+  display: inline-flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: 6px; /* المسافة بين العناصر */
+  margin-top: .45rem; /* هامش علوي */
+  background: rgba(255,255,255,.12); /* الخلفية */
+  border: 1px solid rgba(255,255,255,.25); /* الحدود */
+  color: #fff; /* لون النص */
+  padding: .28rem .75rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: var(--pf-radius-pill); /* تدوير الزوايا */
+  font-size: .72rem; /* حجم الخط */
+  font-weight: 700; /* سماكة الخط */
+  letter-spacing: .02em;
+}
+/* ═══ .prem-fashion .st-back ═══ */
+.prem-fashion .st-back {
+  display: inline-flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: .3rem; /* المسافة بين العناصر */
+  margin: 0 auto .4rem; /* هامش خارجي (مسافة حول العنصر) */
+  font-size: .74rem; /* حجم الخط */
+  font-weight: 700; /* سماكة الخط */
+  color: var(--pf-muted); /* لون النص */
+  background: #fff; /* الخلفية */
+  border: 1.5px solid var(--pf-border); /* الحدود */
+  border-radius: var(--pf-radius-pill); /* تدوير الزوايا */
+  padding: .36rem .85rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  transition: var(--pf-t); /* الحركة الانتقالية */
+  max-width: max-content; /* أقصى عرض */
+  white-space: nowrap; /* التفاف النص */
+}
+/* ═══ .prem-fashion .st-back:hover ═══ */
+.prem-fashion .st-back:hover {
+  color: var(--pf-primary); /* لون النص */
+  border-color: var(--pf-primary);
+  transform: translateY(-1px); /* التحويل (تدوير/تكبير) */
+  box-shadow: var(--pf-shadow-sm); /* الظل */
+}
+/* ═══ .prem-fashion .fashion-hero .st-back ═══ */
+.prem-fashion .fashion-hero .st-back {
+  background: rgba(255,255,255,.12); /* الخلفية */
+  border-color: rgba(255,255,255,.25);
+  color: #fff; /* لون النص */
+}
+/* ═══ .prem-fashion .fashion-hero .st-back:hover ═══ */
+.prem-fashion .fashion-hero .st-back:hover {
+  background: var(--pf-accent); /* الخلفية */
+  border-color: var(--pf-accent);
+  color: var(--pf-dark); /* لون النص */
+}
+/* ═══ .prem-fashion .st-head.small ═══ */
+.prem-fashion .st-head.small {
+  padding: .55rem 1.15rem .2rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+}
 /* ---------- 2. SEARCH — pill compact ---------- */
-.prem-fashion .st-search{
-  max-width:1180px;
-  margin:.65rem auto 0;
-  padding:0 1.15rem;
+/* ═══ .prem-fashion .st-search ═══ */
+.prem-fashion .st-search {
+  max-width: 1180px; /* أقصى عرض */
+  margin: .65rem auto 0; /* هامش خارجي (مسافة حول العنصر) */
+  padding: 0 1.15rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
 }
-.prem-fashion .st-search form{
-  display:flex;
-  align-items:center;
-  gap:.4rem;
-  background:#fff;
-  border:1.5px solid var(--pf-border);
-  border-radius:var(--pf-radius-pill);
-  padding:.22rem .24rem .22rem .9rem;
-  box-shadow:var(--pf-shadow-sm);
-  transition:var(--pf-t);
+/* ═══ .prem-fashion .st-search form ═══ */
+.prem-fashion .st-search form {
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: .4rem; /* المسافة بين العناصر */
+  background: #fff; /* الخلفية */
+  border: 1.5px solid var(--pf-border); /* الحدود */
+  border-radius: var(--pf-radius-pill); /* تدوير الزوايا */
+  padding: .22rem .24rem .22rem .9rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  box-shadow: var(--pf-shadow-sm); /* الظل */
+  transition: var(--pf-t); /* الحركة الانتقالية */
 }
-.prem-fashion .st-search form:focus-within{
-  border-color:var(--pf-primary);
-  background:#fff;
-  box-shadow:0 0 0 3px rgba(108,60,245,.12), var(--pf-shadow-sm);
+/* ═══ .prem-fashion .st-search form:focus-within ═══ */
+.prem-fashion .st-search form:focus-within {
+  border-color: var(--pf-primary);
+  background: #fff; /* الخلفية */
+  box-shadow: 0 0 0 3px rgba(108,60,245,.12), var(--pf-shadow-sm); /* الظل */
 }
-.prem-fashion .st-search input{
-  flex:1;
-  border:none;
-  background:transparent;
-  padding:.5rem .3rem;
-  font-size:.88rem;
-  font-family:inherit;
-  color:var(--pf-text);
-  min-width:0;
-  outline:none;
+/* ═══ .prem-fashion .st-search input ═══ */
+.prem-fashion .st-search input {
+  flex: 1; /* مرونة العنصر */
+  border: none; /* الحدود */
+  background: transparent; /* الخلفية */
+  padding: .5rem .3rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-size: .88rem; /* حجم الخط */
+  font-family: inherit; /* نوع الخط */
+  color: var(--pf-text); /* لون النص */
+  min-width: 0; /* أدنى عرض */
+  outline: none; /* الإطار الخارجي */
 }
-.prem-fashion .st-search input::placeholder{color:#b0aac8}
-.prem-fashion .st-search button{
-  background:linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark));
-  color:#fff;
-  border:none;
-  border-radius:var(--pf-radius-pill);
-  padding:.52rem 1.25rem;
-  font-weight:700;
-  font-size:.82rem;
-  cursor:pointer;
-  transition:var(--pf-t);
-  font-family:inherit;
-  white-space:nowrap;
-  box-shadow:0 4px 14px rgba(108,60,245,.28);
+/* ═══ .prem-fashion .st-search input::placeholder ═══ */
+.prem-fashion .st-search input::placeholder {
+  color: #b0aac8; /* لون النص */
 }
-.prem-fashion .st-search button:hover{background:var(--pf-primary-dark);transform:translateY(-1px);box-shadow:0 8px 18px rgba(108,60,245,.35)}
-
+/* ═══ .prem-fashion .st-search button ═══ */
+.prem-fashion .st-search button {
+  background: linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark)); /* الخلفية */
+  color: #fff; /* لون النص */
+  border: none; /* الحدود */
+  border-radius: var(--pf-radius-pill); /* تدوير الزوايا */
+  padding: .52rem 1.25rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-weight: 700; /* سماكة الخط */
+  font-size: .82rem; /* حجم الخط */
+  cursor: pointer; /* شكل المؤشر */
+  transition: var(--pf-t); /* الحركة الانتقالية */
+  font-family: inherit; /* نوع الخط */
+  white-space: nowrap; /* التفاف النص */
+  box-shadow: 0 4px 14px rgba(108,60,245,.28); /* الظل */
+}
+/* ═══ .prem-fashion .st-search button:hover ═══ */
+.prem-fashion .st-search button:hover {
+  background: var(--pf-primary-dark); /* الخلفية */
+  transform: translateY(-1px); /* التحويل (تدوير/تكبير) */
+  box-shadow: 0 8px 18px rgba(108,60,245,.35); /* الظل */
+}
 /* ---------- 3. CATEGORY NAV — pill 6-col feeling compact ---------- */
-.prem-fashion .st-nav{
-  max-width:1180px;
-  margin:0 auto;
-  display:flex;
-  gap:.38rem;
-  padding:.7rem 1.15rem;
-  flex-wrap:wrap;
+/* ═══ .prem-fashion .st-nav ═══ */
+.prem-fashion .st-nav {
+  max-width: 1180px; /* أقصى عرض */
+  margin: 0 auto; /* هامش خارجي (مسافة حول العنصر) */
+  display: flex; /* طريقة العرض */
+  gap: .38rem; /* المسافة بين العناصر */
+  padding: .7rem 1.15rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  flex-wrap: wrap; /* التفاف العناصر */
 }
-.prem-fashion .st-nav a{
-  padding:.4rem .9rem;
-  border-radius:var(--pf-radius-pill);
-  background:#fff;
-  border:1.5px solid var(--pf-border);
-  color:#6b6588;
-  font-size:.78rem;
-  font-weight:700;
-  transition:var(--pf-t);
-  white-space:nowrap;
-  line-height:1;
+/* ═══ .prem-fashion .st-nav a ═══ */
+.prem-fashion .st-nav a {
+  padding: .4rem .9rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: var(--pf-radius-pill); /* تدوير الزوايا */
+  background: #fff; /* الخلفية */
+  border: 1.5px solid var(--pf-border); /* الحدود */
+  color: #6b6588; /* لون النص */
+  font-size: .78rem; /* حجم الخط */
+  font-weight: 700; /* سماكة الخط */
+  transition: var(--pf-t); /* الحركة الانتقالية */
+  white-space: nowrap; /* التفاف النص */
+  line-height: 1; /* ارتفاع السطر */
 }
-.prem-fashion .st-nav a:hover{border-color:var(--pf-primary);color:var(--pf-primary);transform:translateY(-1px);box-shadow:var(--pf-shadow-sm)}
-.prem-fashion .st-nav a.on{
-  background:linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark));
-  border-color:transparent;
-  color:#fff;
-  box-shadow:0 6px 18px rgba(108,60,245,.35);
+/* ═══ .prem-fashion .st-nav a:hover ═══ */
+.prem-fashion .st-nav a:hover {
+  border-color: var(--pf-primary);
+  color: var(--pf-primary); /* لون النص */
+  transform: translateY(-1px); /* التحويل (تدوير/تكبير) */
+  box-shadow: var(--pf-shadow-sm); /* الظل */
+}
+/* ═══ .prem-fashion .st-nav a.on ═══ */
+.prem-fashion .st-nav a.on {
+  background: linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark)); /* الخلفية */
+  border-color: transparent;
+  color: #fff; /* لون النص */
+  box-shadow: 0 6px 18px rgba(108,60,245,.35); /* الظل */
 }
 /* decorative cats count style — compact badge */
-.prem-fashion .st-nav a .count{
-  background:var(--pf-bg-soft);
-  padding:1px 7px;
-  border-radius:20px;
-  font-size:.68rem;
-  color:var(--pf-muted);
-  margin-inline-start:4px;
+/* ═══ .prem-fashion .st-nav a .count ═══ */
+.prem-fashion .st-nav a .count {
+  background: var(--pf-bg-soft); /* الخلفية */
+  padding: 1px 7px; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: 20px; /* تدوير الزوايا */
+  font-size: .68rem; /* حجم الخط */
+  color: var(--pf-muted); /* لون النص */
+  margin-inline-start: 4px;
 }
-
 /* announce bar — compact violet/amber tint */
-.prem-fashion .announce-bar{
-  font-size:.82rem !important;
-  padding:.5rem 1rem !important;
-  gap:.4rem !important;
-  border-bottom:1px solid var(--pf-border);
+/* ═══ .prem-fashion .announce-bar ═══ */
+.prem-fashion .announce-bar {
+  font-size: .82rem !important; /* حجم الخط */
+  padding: .5rem 1rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  gap: .4rem !important; /* المسافة بين العناصر */
+  border-bottom: 1px solid var(--pf-border); /* حد سفلي */
 }
-
 /* ---------- 4. GRID — compact 180px (4-col original → auto-fill compact) ---------- */
-.prem-fashion .st-main{
-  max-width:1180px;
-  margin:0 auto;
-  padding:.9rem 1.15rem 3.5rem;
+/* ═══ .prem-fashion .st-main ═══ */
+.prem-fashion .st-main {
+  max-width: 1180px; /* أقصى عرض */
+  margin: 0 auto; /* هامش خارجي (مسافة حول العنصر) */
+  padding: .9rem 1.15rem 3.5rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
 }
-.prem-fashion .st-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(172px,1fr));
-  gap:12px;
+/* ═══ .prem-fashion .st-grid ═══ */
+.prem-fashion .st-grid {
+  display: grid; /* طريقة العرض */
+  grid-template-columns: repeat(auto-fill,minmax(172px,1fr)); /* أعمدة الشبكة */
+  gap: 12px; /* المسافة بين العناصر */
 }
 /* fashion editorial 2-col override — compact 2-col with amber accent */
-.prem-fashion .fashion-grid.st-grid,
-.prem-fashion .st-grid.fashion-grid{
-  grid-template-columns:repeat(2,1fr) !important;
-  gap:14px !important;
+/* ═══ .prem-fashion .fashion-grid.st-grid, .prem-fashion .st-grid.fashion-grid ═══ */
+.prem-fashion .fashion-grid.st-grid, .prem-fashion .st-grid.fashion-grid {
+  grid-template-columns: repeat(2,1fr) !important; /* أعمدة الشبكة */
+  gap: 14px !important; /* المسافة بين العناصر */
 }
-.prem-fashion .outdoor-grid,.prem-fashion .classic-grid,.prem-fashion .natural-grid{gap:12px !important}
-
+/* ═══ .prem-fashion .outdoor-grid,.prem-fashion .classic-grid,.prem-fashion .natural-grid ═══ */
+.prem-fashion .outdoor-grid,.prem-fashion .classic-grid,.prem-fashion .natural-grid {
+  gap: 12px !important; /* المسافة بين العناصر */
+}
 /* ---------- 5. CARD — compact premium violet card (from source .product-card) ---------- */
-.prem-fashion .st-card{
-  background:#fff;
-  border-radius:var(--pf-radius-lg);
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  transition:var(--pf-t);
-  border:1px solid var(--pf-border);
-  position:relative;
-  box-shadow:var(--pf-shadow-sm);
+/* ═══ .prem-fashion .st-card ═══ */
+.prem-fashion .st-card {
+  background: #fff; /* الخلفية */
+  border-radius: var(--pf-radius-lg); /* تدوير الزوايا */
+  overflow: hidden; /* التعامل مع الفائض */
+  display: flex; /* طريقة العرض */
+  flex-direction: column; /* اتجاه العناصر */
+  transition: var(--pf-t); /* الحركة الانتقالية */
+  border: 1px solid var(--pf-border); /* الحدود */
+  position: relative; /* طريقة التموضع */
+  box-shadow: var(--pf-shadow-sm); /* الظل */
 }
-.prem-fashion .st-card:hover{
-  transform:translateY(-5px);
-  box-shadow:var(--pf-shadow-md);
-  border-color:transparent;
+/* ═══ .prem-fashion .st-card:hover ═══ */
+.prem-fashion .st-card:hover {
+  transform: translateY(-5px); /* التحويل (تدوير/تكبير) */
+  box-shadow: var(--pf-shadow-md); /* الظل */
+  border-color: transparent;
 }
-.prem-fashion .st-img{
-  aspect-ratio:1/1;
-  background:var(--pf-bg-soft);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  position:relative;
+/* ═══ .prem-fashion .st-img ═══ */
+.prem-fashion .st-img {
+  aspect-ratio: 1/1; /* نسبة الأبعاد */
+  background: var(--pf-bg-soft); /* الخلفية */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  justify-content: center; /* محاذاة أفقية */
+  overflow: hidden; /* التعامل مع الفائض */
+  position: relative; /* طريقة التموضع */
 }
-.prem-fashion .st-img img{
-  width:100%;height:100%;object-fit:cover;
-  transition:transform .48s cubic-bezier(.4,0,.2,1);
+/* ═══ .prem-fashion .st-img img ═══ */
+.prem-fashion .st-img img {
+  width: 100%; /* العرض */
+  height: 100%; /* الارتفاع */
+  object-fit: cover; /* ملاءمة الصورة */
+  transition: transform .48s cubic-bezier(.4,0,.2,1); /* الحركة الانتقالية */
 }
-.prem-fashion .st-card:hover .st-img img{transform:scale(1.06)}
-.prem-fashion .st-img-empty{color:#8a85a0;font-size:.8rem;display:flex;flex-direction:column;align-items:center;gap:.25rem}
-.prem-fashion .st-img-empty::before{content:'📦';font-size:1.6rem;opacity:.45}
-.prem-fashion .st-img-empty.big{font-size:.95rem;padding:2.6rem}
-.prem-fashion .st-img-empty.big::before{font-size:2.2rem}
-
+/* ═══ .prem-fashion .st-card:hover .st-img img ═══ */
+.prem-fashion .st-card:hover .st-img img {
+  transform: scale(1.06); /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .prem-fashion .st-img-empty ═══ */
+.prem-fashion .st-img-empty {
+  color: #8a85a0; /* لون النص */
+  font-size: .8rem; /* حجم الخط */
+  display: flex; /* طريقة العرض */
+  flex-direction: column; /* اتجاه العناصر */
+  align-items: center; /* محاذاة عمودية */
+  gap: .25rem; /* المسافة بين العناصر */
+}
+/* ═══ .prem-fashion .st-img-empty::before ═══ */
+.prem-fashion .st-img-empty::before {
+  content: '📦'; /* محتوى العنصر الوهمي */
+  font-size: 1.6rem; /* حجم الخط */
+  opacity: .45; /* الشفافية */
+}
+/* ═══ .prem-fashion .st-img-empty.big ═══ */
+.prem-fashion .st-img-empty.big {
+  font-size: .95rem; /* حجم الخط */
+  padding: 2.6rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+}
+/* ═══ .prem-fashion .st-img-empty.big::before ═══ */
+.prem-fashion .st-img-empty.big::before {
+  font-size: 2.2rem; /* حجم الخط */
+}
 /* badges — pill violet/amber/danger (source .badge) */
-.prem-fashion .mk-discount,
-.prem-fashion .neo-off{
-  position:absolute;top:10px;right:10px;
-  background:linear-gradient(135deg,var(--pf-accent),var(--pf-accent-dark));
-  color:var(--pf-dark);
-  font-size:.68rem;font-weight:800;
-  padding:.3rem .6rem;
-  border-radius:var(--pf-radius-pill);
-  box-shadow:0 4px 12px rgba(255,180,0,.32);
-  z-index:2;letter-spacing:.01em;
+/* ═══ .prem-fashion .mk-discount, .prem-fashion .neo-off ═══ */
+.prem-fashion .mk-discount, .prem-fashion .neo-off {
+  position: absolute; /* طريقة التموضع */
+  top: 10px; /* البعد عن الأعلى */
+  right: 10px; /* البعد عن اليمين */
+  background: linear-gradient(135deg,var(--pf-accent),var(--pf-accent-dark)); /* الخلفية */
+  color: var(--pf-dark); /* لون النص */
+  font-size: .68rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  padding: .3rem .6rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: var(--pf-radius-pill); /* تدوير الزوايا */
+  box-shadow: 0 4px 12px rgba(255,180,0,.32); /* الظل */
+  z-index: 2; /* طبقة الترتيب (فوق/تحت) */
+  letter-spacing: .01em;
 }
-.prem-fashion .st-soldout-tag{
-  position:absolute;top:10px;left:10px;
-  background:linear-gradient(135deg,#64748b,#475569);
-  color:#fff;font-weight:700;
-  padding:.28rem .65rem;
-  border-radius:var(--pf-radius-pill);
-  font-size:.66rem;z-index:2;
-  box-shadow:0 4px 12px rgba(71,85,105,.3);
+/* ═══ .prem-fashion .st-soldout-tag ═══ */
+.prem-fashion .st-soldout-tag {
+  position: absolute; /* طريقة التموضع */
+  top: 10px; /* البعد عن الأعلى */
+  left: 10px; /* البعد عن اليسار */
+  background: linear-gradient(135deg,#64748b,#475569); /* الخلفية */
+  color: #fff; /* لون النص */
+  font-weight: 700; /* سماكة الخط */
+  padding: .28rem .65rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: var(--pf-radius-pill); /* تدوير الزوايا */
+  font-size: .66rem; /* حجم الخط */
+  z-index: 2; /* طبقة الترتيب (فوق/تحت) */
+  box-shadow: 0 4px 12px rgba(71,85,105,.3); /* الظل */
 }
-
 /* card body — compact 0.65rem */
-.prem-fashion .st-card-body{
-  padding:.6rem .7rem .75rem;
-  display:flex;
-  flex-direction:column;
-  gap:.22rem;
-  flex:1;
+/* ═══ .prem-fashion .st-card-body ═══ */
+.prem-fashion .st-card-body {
+  padding: .6rem .7rem .75rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  display: flex; /* طريقة العرض */
+  flex-direction: column; /* اتجاه العناصر */
+  gap: .22rem; /* المسافة بين العناصر */
+  flex: 1; /* مرونة العنصر */
 }
-.prem-fashion .st-name{
-  font-weight:700;
-  font-size:.80rem;
-  line-height:1.42;
-  color:var(--pf-dark);
-  min-height:2.25em;
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
-  transition:color .2s;
+/* ═══ .prem-fashion .st-name ═══ */
+.prem-fashion .st-name {
+  font-weight: 700; /* سماكة الخط */
+  font-size: .80rem; /* حجم الخط */
+  line-height: 1.42; /* ارتفاع السطر */
+  color: var(--pf-dark); /* لون النص */
+  min-height: 2.25em; /* أدنى ارتفاع */
+  display: -webkit-box; /* طريقة العرض */
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden; /* التعامل مع الفائض */
+  transition: color .2s; /* الحركة الانتقالية */
 }
-.prem-fashion .st-name:hover{color:var(--pf-primary)}
-.prem-fashion .st-price{
-  display:flex;gap:.35rem;align-items:baseline;
-  margin-top:auto;padding-top:.18rem;
+/* ═══ .prem-fashion .st-name:hover ═══ */
+.prem-fashion .st-name:hover {
+  color: var(--pf-primary); /* لون النص */
 }
-.prem-fashion .st-price b{color:var(--pf-primary);font-size:.90rem;font-weight:800}
-.prem-fashion .st-price del{color:#b0aac8;font-size:.70rem;text-decoration:line-through}
-.prem-fashion .st-price.big b{font-size:1.28rem;font-weight:800}
-.prem-fashion .st-price.big del{font-size:.9rem}
-
+/* ═══ .prem-fashion .st-price ═══ */
+.prem-fashion .st-price {
+  display: flex; /* طريقة العرض */
+  gap: .35rem; /* المسافة بين العناصر */
+  align-items: baseline; /* محاذاة عمودية */
+  margin-top: auto; /* هامش علوي */
+  padding-top: .18rem; /* حشوة علوية */
+}
+/* ═══ .prem-fashion .st-price b ═══ */
+.prem-fashion .st-price b {
+  color: var(--pf-primary); /* لون النص */
+  font-size: .90rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+}
+/* ═══ .prem-fashion .st-price del ═══ */
+.prem-fashion .st-price del {
+  color: #b0aac8; /* لون النص */
+  font-size: .70rem; /* حجم الخط */
+  text-decoration: line-through; /* زخرفة النص */
+}
+/* ═══ .prem-fashion .st-price.big b ═══ */
+.prem-fashion .st-price.big b {
+  font-size: 1.28rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+}
+/* ═══ .prem-fashion .st-price.big del ═══ */
+.prem-fashion .st-price.big del {
+  font-size: .9rem; /* حجم الخط */
+}
 /* button — pill gradient violet (source .btn) */
-.prem-fashion .st-btn{
-  border:none;
-  background:linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark));
-  color:#fff;
-  padding:.58rem .9rem;
-  border-radius:12px;
-  font-weight:700;
-  font-size:.80rem;
-  cursor:pointer;
-  margin-top:auto;
-  transition:var(--pf-t);
-  font-family:inherit;
-  display:flex;align-items:center;justify-content:center;gap:.35rem;
-  position:relative;overflow:hidden;
-  letter-spacing:.01em;
-  box-shadow:0 4px 14px rgba(108,60,245,.24);
+/* ═══ .prem-fashion .st-btn ═══ */
+.prem-fashion .st-btn {
+  border: none; /* الحدود */
+  background: linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark)); /* الخلفية */
+  color: #fff; /* لون النص */
+  padding: .58rem .9rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: 12px; /* تدوير الزوايا */
+  font-weight: 700; /* سماكة الخط */
+  font-size: .80rem; /* حجم الخط */
+  cursor: pointer; /* شكل المؤشر */
+  margin-top: auto; /* هامش علوي */
+  transition: var(--pf-t); /* الحركة الانتقالية */
+  font-family: inherit; /* نوع الخط */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  justify-content: center; /* محاذاة أفقية */
+  gap: .35rem; /* المسافة بين العناصر */
+  position: relative; /* طريقة التموضع */
+  overflow: hidden; /* التعامل مع الفائض */
+  letter-spacing: .01em;
+  box-shadow: 0 4px 14px rgba(108,60,245,.24); /* الظل */
 }
-.prem-fashion .st-btn::before{
-  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
-  transition:left .5s;
+/* ═══ .prem-fashion .st-btn::before ═══ */
+.prem-fashion .st-btn::before {
+  content: ''; /* محتوى العنصر الوهمي */
+  position: absolute; /* طريقة التموضع */
+  top: 0; /* البعد عن الأعلى */
+  left: -100%; /* البعد عن اليسار */
+  width: 100%; /* العرض */
+  height: 100%; /* الارتفاع */
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent); /* الخلفية */
+  transition: left .5s; /* الحركة الانتقالية */
 }
-.prem-fashion .st-btn:hover::before{left:100%}
-.prem-fashion .st-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(108,60,245,.38);filter:brightness(1.04)}
-.prem-fashion .st-btn:active{transform:scale(.97)}
-.prem-fashion .st-btn-disabled{
-  background:#e8ecf4 !important;
-  color:#94a3b8 !important;
-  cursor:not-allowed;pointer-events:none;box-shadow:none !important;transform:none !important;
+/* ═══ .prem-fashion .st-btn:hover::before ═══ */
+.prem-fashion .st-btn:hover::before {
+  left: 100%; /* البعد عن اليسار */
 }
-.prem-fashion .st-btn.big-btn{padding:.82rem 1.4rem;font-size:.92rem;width:100%;border-radius:var(--pf-radius-pill)}
-.prem-fashion .st-empty{text-align:center;color:var(--pf-muted);padding:3.5rem 1rem;font-size:.95rem;font-weight:600}
-
+/* ═══ .prem-fashion .st-btn:hover ═══ */
+.prem-fashion .st-btn:hover {
+  transform: translateY(-2px); /* التحويل (تدوير/تكبير) */
+  box-shadow: 0 8px 20px rgba(108,60,245,.38); /* الظل */
+  filter: brightness(1.04); /* فلاتر */
+}
+/* ═══ .prem-fashion .st-btn:active ═══ */
+.prem-fashion .st-btn:active {
+  transform: scale(.97); /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .prem-fashion .st-btn-disabled ═══ */
+.prem-fashion .st-btn-disabled {
+  background: #e8ecf4 !important; /* الخلفية */
+  color: #94a3b8 !important; /* لون النص */
+  cursor: not-allowed; /* شكل المؤشر */
+  pointer-events: none; /* استقبال النقر */
+  box-shadow: none !important; /* الظل */
+  transform: none !important; /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .prem-fashion .st-btn.big-btn ═══ */
+.prem-fashion .st-btn.big-btn {
+  padding: .82rem 1.4rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-size: .92rem; /* حجم الخط */
+  width: 100%; /* العرض */
+  border-radius: var(--pf-radius-pill); /* تدوير الزوايا */
+}
+/* ═══ .prem-fashion .st-empty ═══ */
+.prem-fashion .st-empty {
+  text-align: center; /* محاذاة النص */
+  color: var(--pf-muted); /* لون النص */
+  padding: 3.5rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-size: .95rem; /* حجم الخط */
+  font-weight: 600; /* سماكة الخط */
+}
 /* ---------- 6. PRODUCT PAGE — compact 1.1fr/0.9fr inspired hero-grid ---------- */
-.prem-fashion .st-product{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1.35rem;
-  animation:pfFadeUp .45s ease;
+/* ═══ .prem-fashion .st-product ═══ */
+.prem-fashion .st-product {
+  display: grid; /* طريقة العرض */
+  grid-template-columns: 1fr 1fr; /* أعمدة الشبكة */
+  gap: 1.35rem; /* المسافة بين العناصر */
+  animation: pfFadeUp .45s ease; /* الحركة */
 }
-@keyframes pfFadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.prem-fashion .st-gallery{
-  background:#fff;
-  border:1px solid var(--pf-border);
-  border-radius:var(--pf-radius-lg);
-  padding:.9rem;
-  box-shadow:var(--pf-shadow-sm);
-  align-self:start;
-}
-.prem-fashion .st-main-img{
-  width:100%;aspect-ratio:1/1;object-fit:cover;
-  border-radius:12px;cursor:zoom-in;transition:transform .3s;
-  background:var(--pf-bg-soft);
-}
-.prem-fashion .st-main-img:hover{transform:scale(1.015)}
-.prem-fashion .st-thumbs{display:flex;gap:.5rem;margin-top:.7rem;flex-wrap:wrap}
-.prem-fashion .st-thumbs img{
-  width:58px;height:58px;object-fit:cover;
-  border-radius:10px;cursor:pointer;
-  border:2.5px solid transparent;transition:var(--pf-t);opacity:.78;
-}
-.prem-fashion .st-thumbs img:hover,
-.prem-fashion .st-thumbs img.active{border-color:var(--pf-primary);opacity:1;transform:scale(1.04)}
-.prem-fashion .st-product-info{
-  background:#fff;
-  border:1px solid var(--pf-border);
-  border-radius:var(--pf-radius-lg);
-  padding:1.35rem;
-  display:flex;flex-direction:column;gap:.75rem;
-  align-self:start;
-  box-shadow:var(--pf-shadow-sm);
-  position:sticky;top:78px;
-}
-.prem-fashion .st-product-info h1{font-size:1.22rem;font-weight:800;line-height:1.4;color:var(--pf-dark)}
-.prem-fashion .st-desc{color:var(--pf-muted);line-height:1.85;font-size:.88rem}
-.prem-fashion .st-badge-soldout{
-  background:linear-gradient(135deg,#fee2e2,#fecaca);color:#991b1b;
-  font-weight:800;padding:.55rem 1rem;border-radius:12px;text-align:center;font-size:.84rem;
-  border:1px solid #fecaca;
-}
-.prem-fashion .st-badge-lowstock{
-  background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;
-  font-weight:700;padding:.55rem 1rem;border-radius:12px;text-align:center;font-size:.84rem;
-  border:1px solid #fde68a;
-}
-.prem-fashion .st-stock{font-size:.78rem;color:var(--pf-success);font-weight:700;margin-top:.35rem;display:flex;align-items:center;gap:.3rem}
-.prem-fashion .st-stock::before{content:'✅';font-size:.85rem}
-.prem-fashion .st-opt{font-size:.82rem;font-weight:700;color:var(--pf-dark);display:flex;flex-direction:column;gap:.28rem;margin:.55rem 0}
-.prem-fashion .st-opt-sel{
-  padding:.55rem .8rem;border-radius:12px;border:1.5px solid var(--pf-border);
-  background:#fff;color:var(--pf-text);font-family:inherit;transition:var(--pf-t);width:100%;
-}
-.prem-fashion .st-opt-sel:focus{outline:none;border-color:var(--pf-primary);box-shadow:0 0 0 3px var(--pf-primary-light)}
-.prem-fashion .st-addons{display:flex;flex-wrap:wrap;gap:.45rem;margin:.6rem 0}
-.prem-fashion .st-addon{
-  display:flex;align-items:center;gap:.4rem;font-size:.80rem;
-  background:var(--pf-bg-soft);padding:.42rem .8rem;border-radius:var(--pf-radius-pill);
-  cursor:pointer;color:var(--pf-dark);transition:var(--pf-t);border:1.5px solid transparent;
-}
-.prem-fashion .st-addon:hover{border-color:var(--pf-primary);background:var(--pf-primary-light)}
-.prem-fashion .st-addon input{accent-color:var(--pf-primary);width:15px;height:15px}
-.prem-fashion .qty-row{display:flex;align-items:center;gap:.4rem}
-.prem-fashion .qty-row button{
-  width:38px;height:38px;border-radius:10px;
-  border:1.5px solid var(--pf-border);background:#fff;
-  font-size:1.05rem;color:var(--pf-dark);cursor:pointer;transition:var(--pf-t);
-  font-weight:700;display:flex;align-items:center;justify-content:center;
-}
-.prem-fashion .qty-row button:hover{background:var(--pf-primary-light);border-color:var(--pf-primary);color:var(--pf-primary);transform:scale(1.04)}
-.prem-fashion .qty-row input{
-  width:52px;height:38px;text-align:center;
-  border:1.5px solid var(--pf-border);border-radius:10px;
-  font-size:.95rem;font-weight:800;background:#fafbfc;color:var(--pf-dark);font-family:inherit;
-}
-.prem-fashion .qty-row input:focus{outline:2px solid var(--pf-primary);border-color:transparent}
-.prem-fashion .qty-row.mini button{width:28px;height:28px;font-size:.85rem}
-.prem-fashion .qty-row.mini input{width:38px;height:28px;font-size:.82rem}
-.prem-fashion .wa-order{
-  background:linear-gradient(135deg,#25d366,#128c7e) !important;
-  margin-top:.35rem;
-}
-.prem-fashion .wa-order:hover{filter:brightness(1.06);box-shadow:0 8px 18px rgba(37,211,102,.32) !important}
-.prem-fashion .st-rel-title{
-  margin:1.8rem 0 .9rem;font-size:1.05rem;font-weight:800;color:var(--pf-dark);
-  display:flex;align-items:center;gap:.5rem;
-}
-.prem-fashion .st-rel-title::after{content:'';flex:1;height:2px;background:linear-gradient(90deg,var(--pf-primary),transparent)}
-.prem-fashion .st-specs td{font-size:.82rem}
-
-/* ---------- 7. CHECKOUT / DONE ---------- */
-.prem-fashion .st-checkout{display:grid;grid-template-columns:1.1fr 1fr;gap:1.35rem;align-items:start}
-.prem-fashion .st-checkout .card{
-  background:#fff;border:1px solid var(--pf-border);border-radius:var(--pf-radius-lg);
-  padding:1.4rem;box-shadow:var(--pf-shadow-sm);
-}
-.prem-fashion .st-checkout h2{
-  margin-bottom:.9rem;font-size:1.02rem;font-weight:800;color:var(--pf-dark);
-  padding-bottom:.65rem;border-bottom:2px solid var(--pf-bg-soft);display:flex;align-items:center;gap:.45rem;
-}
-.prem-fashion .st-checkout label{font-size:.82rem;font-weight:700;color:#374151}
-.prem-fashion .st-checkout input,.prem-fashion .st-checkout textarea{
-  padding:.7rem .9rem;border:1.5px solid var(--pf-border);border-radius:12px;
-  font-size:.88rem;font-family:inherit;background:#fafbfc;color:var(--pf-text);transition:var(--pf-t);
-}
-.prem-fashion .st-checkout input:focus,.prem-fashion .st-checkout textarea:focus{
-  outline:none;border-color:var(--pf-primary);box-shadow:0 0 0 3px var(--pf-primary-light);background:#fff;
-}
-.prem-fashion .st-done{padding:3.5rem 1.2rem}
-.prem-fashion .st-done-icon{background:linear-gradient(135deg,#dcfce7,#bbf7d0);box-shadow:0 10px 28px rgba(22,163,74,.22)}
-.prem-fashion .st-done h1{
-  background:linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.prem-fashion .st-done-sum{border:1.5px solid var(--pf-border);border-radius:var(--pf-radius-lg)}
-
-/* ---------- 8. REVIEWS — amber stars (source .stars) ---------- */
-.prem-fashion .st-reviews .st-rating-summary{
-  background:linear-gradient(135deg,var(--pf-bg-soft),#fff);
-  border:1px solid var(--pf-border);border-radius:var(--pf-radius);
-}
-.prem-fashion .st-rating-avg{color:var(--pf-primary)}
-.prem-fashion .st-rating-bar-fill{background:linear-gradient(90deg,var(--pf-accent),#f59e0b)}
-.prem-fashion .star-btn.active,.prem-fashion .star-btn:hover{color:var(--pf-accent)}
-.prem-fashion .st-review-stars{color:var(--pf-accent)}
-.prem-fashion .st-review-card{border:1.5px solid var(--pf-border);border-radius:var(--pf-radius)}
-.prem-fashion .st-review-card:hover{box-shadow:var(--pf-shadow-sm);border-color:transparent}
-.prem-fashion .st-review-form{border:1.5px solid var(--pf-border);border-radius:var(--pf-radius-lg)}
-
-/* ---------- 9. CART FAB + DRAWER — violet pill (source .cart-fab/.cart-drawer) ---------- */
-.prem-fashion .cart-fab{
-  background:linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark));
-  border-radius:var(--pf-radius-pill);
-  padding:.62rem 1.2rem;
-  font-size:.84rem;font-weight:700;
-  box-shadow:0 10px 28px rgba(108,60,245,.42);
-  gap:.6rem;
-}
-.prem-fashion .cart-fab:hover{transform:scale(1.04) translateY(-1px);box-shadow:0 14px 34px rgba(108,60,245,.48)}
-.prem-fashion .cart-count{
-  background:#fff;color:var(--pf-primary);
-  min-width:20px;height:20px;font-size:.68rem;font-weight:900;
-  border-radius:var(--pf-radius-pill);padding:0 5px;
-}
-.prem-fashion .drawer-overlay{background:rgba(25,20,48,.48);backdrop-filter:blur(6px)}
-.prem-fashion .cart-drawer{box-shadow:var(--pf-shadow-lg)}
-.prem-fashion .drawer-head{
-  background:linear-gradient(180deg,#fbfcff,#fff);
-  border-bottom:1px solid var(--pf-border);
-}
-.prem-fashion .drawer-head h3{font-size:1.05rem;font-weight:800;color:var(--pf-dark)}
-.prem-fashion .co-item{border:1px solid var(--pf-border);border-radius:var(--pf-radius)}
-.prem-fashion .co-item:hover{box-shadow:var(--pf-shadow-sm)}
-.prem-fashion #cartCheckout{
-  background:linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark));
-  border-radius:12px;font-weight:800;
-  box-shadow:0 8px 20px rgba(108,60,245,.32);
-}
-.prem-fashion #cartCheckout:hover{filter:brightness(1.06);transform:translateY(-1px)}
-.prem-fashion .mc-toast{
-  background:var(--pf-dark);color:#fff;
-  border-radius:var(--pf-radius-pill);
-  font-weight:700;box-shadow:var(--pf-shadow-lg);
-}
-.prem-fashion .lightbox-overlay{background:rgba(25,20,48,.88)}
-
-/* ---------- 10. FLOAT / BRAND / MISC ---------- */
-.prem-fashion .store-float .sf-wa{
-  background:linear-gradient(135deg,#25d366,#128c7e);
-  box-shadow:0 8px 20px rgba(37,211,102,.35);
-}
-.prem-fashion .store-float .sf-share{
-  background:#fff;color:var(--pf-primary);
-  border:1.5px solid var(--pf-border);box-shadow:var(--pf-shadow-sm);
-}
-.prem-fashion .store-float .sf-share:hover{border-color:var(--pf-primary);transform:translateY(-2px)}
-.prem-fashion .st-brand{color:#8a85a0;font-size:.74rem}
-.prem-fashion .st-brand a{color:var(--pf-primary)}
-.prem-fashion .co-coupon .st-btn{border-radius:10px}
-.prem-fashion .co-payment label:has(input:checked){border-color:var(--pf-primary);background:var(--pf-primary-light)}
-.prem-fashion .alert-err{border-radius:12px}
-
-/* premium features — compact promo & newsletter feel (source .promo-banner/.newsletter) */
-.prem-fashion .st-main .promo-banner{
-  background:linear-gradient(120deg,var(--pf-accent),#ff8a00);
-  border-radius:var(--pf-radius-lg);
-}
-
-/* ---------- 11. RESPONSIVE — no overflow, compact ---------- */
-@media(max-width:1280px){
-  .prem-fashion .st-head-inner{max-width:1180px}
-  .prem-fashion .st-main{max-width:1180px}
-}
-@media(max-width:1024px){
-  .prem-fashion .st-head-inner{padding:.8rem 1rem}
-  .prem-fashion .st-main{padding:.9rem 1rem 3.2rem}
-  .prem-fashion .st-grid{grid-template-columns:repeat(auto-fill,minmax(164px,1fr));gap:10px}
-  .prem-fashion .fashion-grid.st-grid{grid-template-columns:repeat(2,1fr) !important;gap:12px !important}
-  .prem-fashion .st-product{grid-template-columns:1fr 1fr;gap:1.2rem}
-  .prem-fashion .st-checkout{grid-template-columns:1fr 1fr;gap:1.2rem}
-}
-@media(max-width:900px){
-  .prem-fashion .st-product{grid-template-columns:1fr}
-  .prem-fashion .st-product-info{position:static}
-  .prem-fashion .st-checkout{grid-template-columns:1fr}
-  .prem-fashion .st-grid{grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:10px}
-}
-@media(max-width:768px){
-  .prem-fashion .st-head-inner{padding:.7rem 1rem}
-  .prem-fashion .st-search{padding:0 1rem;margin-top:.55rem}
-  .prem-fashion .st-nav{
-    overflow-x:auto;flex-wrap:nowrap;justify-content:flex-start;
-    -webkit-overflow-scrolling:touch;scrollbar-width:none;
-    gap:.38rem;padding:.6rem 1rem;
+@keyframes pfFadeUp {
+  /* ═══ from ═══ */
+  from {
+    opacity: 0; /* الشفافية */
+    transform: translateY(14px); /* التحويل (تدوير/تكبير) */
   }
-  .prem-fashion .st-nav::-webkit-scrollbar{display:none}
-  .prem-fashion .st-main{padding:.75rem 1rem 3.2rem}
-  .prem-fashion .st-grid{grid-template-columns:repeat(2,1fr);gap:8px}
-  .prem-fashion .fashion-grid.st-grid{grid-template-columns:repeat(2,1fr) !important;gap:8px !important}
-  .prem-fashion .st-card-body{padding:.52rem .6rem .65rem}
-  .prem-fashion .st-name{font-size:.76rem;min-height:2.15em}
-  .prem-fashion .st-price b{font-size:.85rem}
-  .prem-fashion .st-price del{font-size:.68rem}
-  .prem-fashion .st-btn{font-size:.76rem;padding:.5rem .8rem}
-  .prem-fashion .cart-fab{bottom:14px;left:12px;right:12px;justify-content:center;border-radius:14px;padding:.6rem 1rem}
-  .prem-fashion .cart-drawer{width:100%}
-  .prem-fashion .fashion-hero.st-head h1{font-size:1.22rem}
-  .prem-fashion .st-thumbs img{width:52px;height:52px}
+  /* ═══ to ═══ */
+  to {
+    opacity: 1; /* الشفافية */
+    transform: translateY(0); /* التحويل (تدوير/تكبير) */
+  }
 }
-@media(max-width:600px){
-  .prem-fashion .st-head h1{font-size:1.15rem}
-  .prem-fashion .fashion-hero.st-head h1{font-size:1.14rem}
-  .prem-fashion .st-head p{font-size:.74rem}
-  .prem-fashion .st-grid{grid-template-columns:repeat(2,1fr);gap:7px}
-  .prem-fashion .fashion-grid.st-grid{gap:7px !important}
-  .prem-fashion .st-card{border-radius:13px}
-  .prem-fashion .st-img{aspect-ratio:1/1}
-  .prem-fashion .st-product-info{padding:1.05rem}
-  .prem-fashion .st-product-info h1{font-size:1.08rem}
-  .prem-fashion .st-price.big b{font-size:1.15rem}
-  .prem-fashion .st-checkout .card{padding:1rem}
-  .prem-fashion .st-rel-title{font-size:.98rem;margin:1.45rem 0 .8rem}
-  .prem-fashion .st-done{padding:2.2rem 1rem}
-  .prem-fashion .announce-bar{font-size:.78rem !important}
+/* ═══ .prem-fashion .st-gallery ═══ */
+.prem-fashion .st-gallery {
+  background: #fff; /* الخلفية */
+  border: 1px solid var(--pf-border); /* الحدود */
+  border-radius: var(--pf-radius-lg); /* تدوير الزوايا */
+  padding: .9rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  box-shadow: var(--pf-shadow-sm); /* الظل */
+  align-self: start;
 }
-@media(max-width:480px){
-  .prem-fashion .st-head{padding:0}
-  .prem-fashion .st-head-inner{padding:.62rem .9rem}
-  .prem-fashion .st-head h1{font-size:1.05rem}
-  .prem-fashion .fashion-hero.st-head h1{font-size:1.06rem}
-  .prem-fashion .st-logo{max-height:46px;max-width:150px}
-  .prem-fashion .st-search{padding:0 .9rem}
-  .prem-fashion .st-search form{padding:.18rem .18rem .18rem .75rem}
-  .prem-fashion .st-search input{font-size:.84rem;padding:.42rem .2rem}
-  .prem-fashion .st-search button{padding:.45rem 1rem;font-size:.78rem}
-  .prem-fashion .st-nav{padding:.5rem .9rem;gap:.32rem}
-  .prem-fashion .st-nav a{font-size:.72rem;padding:.36rem .75rem}
-  .prem-fashion .st-main{padding:.6rem .9rem 3rem}
-  .prem-fashion .st-grid{grid-template-columns:repeat(2,1fr);gap:7px}
-  .prem-fashion .mk-discount{font-size:.62rem;padding:.24rem .5rem;top:8px;right:8px}
-  .prem-fashion .st-soldout-tag{font-size:.62rem;padding:.22rem .55rem;top:8px;left:8px}
-  .prem-fashion .st-card-body{padding:.48rem .55rem .6rem}
-  .prem-fashion .st-name{font-size:.74rem}
-  .prem-fashion .st-price b{font-size:.82rem}
-  .prem-fashion .st-btn{font-size:.74rem;padding:.48rem .7rem;border-radius:10px}
-  .prem-fashion .drawer-head{padding:.85rem 1rem}
-  .prem-fashion #cartItems{padding:.85rem 1rem}
-  .prem-fashion .drawer-foot{padding:.85rem 1rem}
-  .prem-fashion .co-item{gap:.55rem;padding:.55rem}
-  .prem-fashion .co-item img,.prem-fashion .co-noimg{width:48px;height:48px}
-  .prem-fashion .st-thumbs img{width:48px;height:48px}
-  .prem-fashion .qty-row button{width:36px;height:36px;font-size:1rem}
-  .prem-fashion .qty-row input{width:48px;height:36px}
-  .prem-fashion .st-done h1{font-size:1.4rem}
-  .prem-fashion .st-rating-summary{flex-direction:column;text-align:center}
+/* ═══ .prem-fashion .st-main-img ═══ */
+.prem-fashion .st-main-img {
+  width: 100%; /* العرض */
+  aspect-ratio: 1/1; /* نسبة الأبعاد */
+  object-fit: cover; /* ملاءمة الصورة */
+  border-radius: 12px; /* تدوير الزوايا */
+  cursor: zoom-in; /* شكل المؤشر */
+  transition: transform .3s; /* الحركة الانتقالية */
+  background: var(--pf-bg-soft); /* الخلفية */
 }
-@media(max-width:375px){
-  .prem-fashion .st-head-inner{padding:.58rem .8rem}
-  .prem-fashion .st-main{padding:.55rem .8rem 3rem}
-  .prem-fashion .st-grid{grid-template-columns:repeat(2,1fr);gap:6px}
-  .prem-fashion .fashion-grid.st-grid{grid-template-columns:repeat(2,1fr) !important;gap:6px !important}
-  .prem-fashion .st-nav{padding:.5rem .8rem}
-  .prem-fashion .st-search{padding:0 .8rem}
-  .prem-fashion .st-card-body{padding:.44rem .5rem .55rem}
-  .prem-fashion .st-name{font-size:.72rem;min-height:2.05em}
-  .prem-fashion .st-price b{font-size:.80rem}
-  .prem-fashion .st-btn{padding:.46rem .65rem;font-size:.72rem}
-  .prem-fashion .st-product-info{padding:.9rem}
-  .prem-fashion .st-done{padding:1.8rem .8rem}
+/* ═══ .prem-fashion .st-main-img:hover ═══ */
+.prem-fashion .st-main-img:hover {
+  transform: scale(1.015); /* التحويل (تدوير/تكبير) */
 }
-@media(max-width:360px){
-  .prem-fashion .st-head-inner{padding:.5rem .7rem}
-  .prem-fashion .st-main{padding:.5rem .7rem 2.8rem}
-  .prem-fashion .st-grid{grid-template-columns:1fr;gap:8px}
-  .prem-fashion .fashion-grid.st-grid{grid-template-columns:1fr !important;gap:8px !important}
-  .prem-fashion .st-addons{flex-direction:column;align-items:stretch}
-  .prem-fashion .st-addon{justify-content:center}
-  .prem-fashion .qty-row{justify-content:center}
-  .prem-fashion .qty-row input{width:46px}
-  .prem-fashion .st-done .st-btn{min-width:0;width:100%}
-  .prem-fashion .co-coupon{flex-direction:column}
-  .prem-fashion .co-coupon .st-btn{width:100%}
-  .prem-fashion .st-rating-avg{font-size:2.5rem}
-  .prem-fashion .cart-fab{left:10px;right:10px;bottom:10px}
+/* ═══ .prem-fashion .st-thumbs ═══ */
+.prem-fashion .st-thumbs {
+  display: flex; /* طريقة العرض */
+  gap: .5rem; /* المسافة بين العناصر */
+  margin-top: .7rem; /* هامش علوي */
+  flex-wrap: wrap; /* التفاف العناصر */
 }
-
+/* ═══ .prem-fashion .st-thumbs img ═══ */
+.prem-fashion .st-thumbs img {
+  width: 58px; /* العرض */
+  height: 58px; /* الارتفاع */
+  object-fit: cover; /* ملاءمة الصورة */
+  border-radius: 10px; /* تدوير الزوايا */
+  cursor: pointer; /* شكل المؤشر */
+  border: 2.5px solid transparent; /* الحدود */
+  transition: var(--pf-t); /* الحركة الانتقالية */
+  opacity: .78; /* الشفافية */
+}
+/* ═══ .prem-fashion .st-thumbs img:hover, .prem-fashion .st-thumbs img.active ═══ */
+.prem-fashion .st-thumbs img:hover, .prem-fashion .st-thumbs img.active {
+  border-color: var(--pf-primary);
+  opacity: 1; /* الشفافية */
+  transform: scale(1.04); /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .prem-fashion .st-product-info ═══ */
+.prem-fashion .st-product-info {
+  background: #fff; /* الخلفية */
+  border: 1px solid var(--pf-border); /* الحدود */
+  border-radius: var(--pf-radius-lg); /* تدوير الزوايا */
+  padding: 1.35rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  display: flex; /* طريقة العرض */
+  flex-direction: column; /* اتجاه العناصر */
+  gap: .75rem; /* المسافة بين العناصر */
+  align-self: start;
+  box-shadow: var(--pf-shadow-sm); /* الظل */
+  position: sticky; /* طريقة التموضع */
+  top: 78px; /* البعد عن الأعلى */
+}
+/* ═══ .prem-fashion .st-product-info h1 ═══ */
+.prem-fashion .st-product-info h1 {
+  font-size: 1.22rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  line-height: 1.4; /* ارتفاع السطر */
+  color: var(--pf-dark); /* لون النص */
+}
+/* ═══ .prem-fashion .st-desc ═══ */
+.prem-fashion .st-desc {
+  color: var(--pf-muted); /* لون النص */
+  line-height: 1.85; /* ارتفاع السطر */
+  font-size: .88rem; /* حجم الخط */
+}
+/* ═══ .prem-fashion .st-badge-soldout ═══ */
+.prem-fashion .st-badge-soldout {
+  background: linear-gradient(135deg,#fee2e2,#fecaca); /* الخلفية */
+  color: #991b1b; /* لون النص */
+  font-weight: 800; /* سماكة الخط */
+  padding: .55rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: 12px; /* تدوير الزوايا */
+  text-align: center; /* محاذاة النص */
+  font-size: .84rem; /* حجم الخط */
+  border: 1px solid #fecaca; /* الحدود */
+}
+/* ═══ .prem-fashion .st-badge-lowstock ═══ */
+.prem-fashion .st-badge-lowstock {
+  background: linear-gradient(135deg,#fef3c7,#fde68a); /* الخلفية */
+  color: #92400e; /* لون النص */
+  font-weight: 700; /* سماكة الخط */
+  padding: .55rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: 12px; /* تدوير الزوايا */
+  text-align: center; /* محاذاة النص */
+  font-size: .84rem; /* حجم الخط */
+  border: 1px solid #fde68a; /* الحدود */
+}
+/* ═══ .prem-fashion .st-stock ═══ */
+.prem-fashion .st-stock {
+  font-size: .78rem; /* حجم الخط */
+  color: var(--pf-success); /* لون النص */
+  font-weight: 700; /* سماكة الخط */
+  margin-top: .35rem; /* هامش علوي */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: .3rem; /* المسافة بين العناصر */
+}
+/* ═══ .prem-fashion .st-stock::before ═══ */
+.prem-fashion .st-stock::before {
+  content: '✅'; /* محتوى العنصر الوهمي */
+  font-size: .85rem; /* حجم الخط */
+}
+/* ═══ .prem-fashion .st-opt ═══ */
+.prem-fashion .st-opt {
+  font-size: .82rem; /* حجم الخط */
+  font-weight: 700; /* سماكة الخط */
+  color: var(--pf-dark); /* لون النص */
+  display: flex; /* طريقة العرض */
+  flex-direction: column; /* اتجاه العناصر */
+  gap: .28rem; /* المسافة بين العناصر */
+  margin: .55rem 0; /* هامش خارجي (مسافة حول العنصر) */
+}
+/* ═══ .prem-fashion .st-opt-sel ═══ */
+.prem-fashion .st-opt-sel {
+  padding: .55rem .8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: 12px; /* تدوير الزوايا */
+  border: 1.5px solid var(--pf-border); /* الحدود */
+  background: #fff; /* الخلفية */
+  color: var(--pf-text); /* لون النص */
+  font-family: inherit; /* نوع الخط */
+  transition: var(--pf-t); /* الحركة الانتقالية */
+  width: 100%; /* العرض */
+}
+/* ═══ .prem-fashion .st-opt-sel:focus ═══ */
+.prem-fashion .st-opt-sel:focus {
+  outline: none; /* الإطار الخارجي */
+  border-color: var(--pf-primary);
+  box-shadow: 0 0 0 3px var(--pf-primary-light); /* الظل */
+}
+/* ═══ .prem-fashion .st-addons ═══ */
+.prem-fashion .st-addons {
+  display: flex; /* طريقة العرض */
+  flex-wrap: wrap; /* التفاف العناصر */
+  gap: .45rem; /* المسافة بين العناصر */
+  margin: .6rem 0; /* هامش خارجي (مسافة حول العنصر) */
+}
+/* ═══ .prem-fashion .st-addon ═══ */
+.prem-fashion .st-addon {
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: .4rem; /* المسافة بين العناصر */
+  font-size: .80rem; /* حجم الخط */
+  background: var(--pf-bg-soft); /* الخلفية */
+  padding: .42rem .8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: var(--pf-radius-pill); /* تدوير الزوايا */
+  cursor: pointer; /* شكل المؤشر */
+  color: var(--pf-dark); /* لون النص */
+  transition: var(--pf-t); /* الحركة الانتقالية */
+  border: 1.5px solid transparent; /* الحدود */
+}
+/* ═══ .prem-fashion .st-addon:hover ═══ */
+.prem-fashion .st-addon:hover {
+  border-color: var(--pf-primary);
+  background: var(--pf-primary-light); /* الخلفية */
+}
+/* ═══ .prem-fashion .st-addon input ═══ */
+.prem-fashion .st-addon input {
+  accent-color: var(--pf-primary);
+  width: 15px; /* العرض */
+  height: 15px; /* الارتفاع */
+}
+/* ═══ .prem-fashion .qty-row ═══ */
+.prem-fashion .qty-row {
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: .4rem; /* المسافة بين العناصر */
+}
+/* ═══ .prem-fashion .qty-row button ═══ */
+.prem-fashion .qty-row button {
+  width: 38px; /* العرض */
+  height: 38px; /* الارتفاع */
+  border-radius: 10px; /* تدوير الزوايا */
+  border: 1.5px solid var(--pf-border); /* الحدود */
+  background: #fff; /* الخلفية */
+  font-size: 1.05rem; /* حجم الخط */
+  color: var(--pf-dark); /* لون النص */
+  cursor: pointer; /* شكل المؤشر */
+  transition: var(--pf-t); /* الحركة الانتقالية */
+  font-weight: 700; /* سماكة الخط */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  justify-content: center; /* محاذاة أفقية */
+}
+/* ═══ .prem-fashion .qty-row button:hover ═══ */
+.prem-fashion .qty-row button:hover {
+  background: var(--pf-primary-light); /* الخلفية */
+  border-color: var(--pf-primary);
+  color: var(--pf-primary); /* لون النص */
+  transform: scale(1.04); /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .prem-fashion .qty-row input ═══ */
+.prem-fashion .qty-row input {
+  width: 52px; /* العرض */
+  height: 38px; /* الارتفاع */
+  text-align: center; /* محاذاة النص */
+  border: 1.5px solid var(--pf-border); /* الحدود */
+  border-radius: 10px; /* تدوير الزوايا */
+  font-size: .95rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  background: #fafbfc; /* الخلفية */
+  color: var(--pf-dark); /* لون النص */
+  font-family: inherit; /* نوع الخط */
+}
+/* ═══ .prem-fashion .qty-row input:focus ═══ */
+.prem-fashion .qty-row input:focus {
+  outline: 2px solid var(--pf-primary); /* الإطار الخارجي */
+  border-color: transparent;
+}
+/* ═══ .prem-fashion .qty-row.mini button ═══ */
+.prem-fashion .qty-row.mini button {
+  width: 28px; /* العرض */
+  height: 28px; /* الارتفاع */
+  font-size: .85rem; /* حجم الخط */
+}
+/* ═══ .prem-fashion .qty-row.mini input ═══ */
+.prem-fashion .qty-row.mini input {
+  width: 38px; /* العرض */
+  height: 28px; /* الارتفاع */
+  font-size: .82rem; /* حجم الخط */
+}
+/* ═══ .prem-fashion .wa-order ═══ */
+.prem-fashion .wa-order {
+  background: linear-gradient(135deg,#25d366,#128c7e) !important; /* الخلفية */
+  margin-top: .35rem; /* هامش علوي */
+}
+/* ═══ .prem-fashion .wa-order:hover ═══ */
+.prem-fashion .wa-order:hover {
+  filter: brightness(1.06); /* فلاتر */
+  box-shadow: 0 8px 18px rgba(37,211,102,.32) !important; /* الظل */
+}
+/* ═══ .prem-fashion .st-rel-title ═══ */
+.prem-fashion .st-rel-title {
+  margin: 1.8rem 0 .9rem; /* هامش خارجي (مسافة حول العنصر) */
+  font-size: 1.05rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  color: var(--pf-dark); /* لون النص */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: .5rem; /* المسافة بين العناصر */
+}
+/* ═══ .prem-fashion .st-rel-title::after ═══ */
+.prem-fashion .st-rel-title::after {
+  content: ''; /* محتوى العنصر الوهمي */
+  flex: 1; /* مرونة العنصر */
+  height: 2px; /* الارتفاع */
+  background: linear-gradient(90deg,var(--pf-primary),transparent); /* الخلفية */
+}
+/* ═══ .prem-fashion .st-specs td ═══ */
+.prem-fashion .st-specs td {
+  font-size: .82rem; /* حجم الخط */
+}
+/* ---------- 7. CHECKOUT / DONE ---------- */
+/* ═══ .prem-fashion .st-checkout ═══ */
+.prem-fashion .st-checkout {
+  display: grid; /* طريقة العرض */
+  grid-template-columns: 1.1fr 1fr; /* أعمدة الشبكة */
+  gap: 1.35rem; /* المسافة بين العناصر */
+  align-items: start; /* محاذاة عمودية */
+}
+/* ═══ .prem-fashion .st-checkout .card ═══ */
+.prem-fashion .st-checkout .card {
+  background: #fff; /* الخلفية */
+  border: 1px solid var(--pf-border); /* الحدود */
+  border-radius: var(--pf-radius-lg); /* تدوير الزوايا */
+  padding: 1.4rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  box-shadow: var(--pf-shadow-sm); /* الظل */
+}
+/* ═══ .prem-fashion .st-checkout h2 ═══ */
+.prem-fashion .st-checkout h2 {
+  margin-bottom: .9rem; /* هامش سفلي */
+  font-size: 1.02rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  color: var(--pf-dark); /* لون النص */
+  padding-bottom: .65rem; /* حشوة سفلية */
+  border-bottom: 2px solid var(--pf-bg-soft); /* حد سفلي */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: .45rem; /* المسافة بين العناصر */
+}
+/* ═══ .prem-fashion .st-checkout label ═══ */
+.prem-fashion .st-checkout label {
+  font-size: .82rem; /* حجم الخط */
+  font-weight: 700; /* سماكة الخط */
+  color: #374151; /* لون النص */
+}
+/* ═══ .prem-fashion .st-checkout input,.prem-fashion .st-checkout textarea ═══ */
+.prem-fashion .st-checkout input,.prem-fashion .st-checkout textarea {
+  padding: .7rem .9rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border: 1.5px solid var(--pf-border); /* الحدود */
+  border-radius: 12px; /* تدوير الزوايا */
+  font-size: .88rem; /* حجم الخط */
+  font-family: inherit; /* نوع الخط */
+  background: #fafbfc; /* الخلفية */
+  color: var(--pf-text); /* لون النص */
+  transition: var(--pf-t); /* الحركة الانتقالية */
+}
+/* ═══ .prem-fashion .st-checkout input:focus,.prem-fashion .st-checkout textarea:focus ═══ */
+.prem-fashion .st-checkout input:focus,.prem-fashion .st-checkout textarea:focus {
+  outline: none; /* الإطار الخارجي */
+  border-color: var(--pf-primary);
+  box-shadow: 0 0 0 3px var(--pf-primary-light); /* الظل */
+  background: #fff; /* الخلفية */
+}
+/* ═══ .prem-fashion .st-done ═══ */
+.prem-fashion .st-done {
+  padding: 3.5rem 1.2rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+}
+/* ═══ .prem-fashion .st-done-icon ═══ */
+.prem-fashion .st-done-icon {
+  background: linear-gradient(135deg,#dcfce7,#bbf7d0); /* الخلفية */
+  box-shadow: 0 10px 28px rgba(22,163,74,.22); /* الظل */
+}
+/* ═══ .prem-fashion .st-done h1 ═══ */
+.prem-fashion .st-done h1 {
+  background: linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark)); /* الخلفية */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+/* ═══ .prem-fashion .st-done-sum ═══ */
+.prem-fashion .st-done-sum {
+  border: 1.5px solid var(--pf-border); /* الحدود */
+  border-radius: var(--pf-radius-lg); /* تدوير الزوايا */
+}
+/* ---------- 8. REVIEWS — amber stars (source .stars) ---------- */
+/* ═══ .prem-fashion .st-reviews .st-rating-summary ═══ */
+.prem-fashion .st-reviews .st-rating-summary {
+  background: linear-gradient(135deg,var(--pf-bg-soft),#fff); /* الخلفية */
+  border: 1px solid var(--pf-border); /* الحدود */
+  border-radius: var(--pf-radius); /* تدوير الزوايا */
+}
+/* ═══ .prem-fashion .st-rating-avg ═══ */
+.prem-fashion .st-rating-avg {
+  color: var(--pf-primary); /* لون النص */
+}
+/* ═══ .prem-fashion .st-rating-bar-fill ═══ */
+.prem-fashion .st-rating-bar-fill {
+  background: linear-gradient(90deg,var(--pf-accent),#f59e0b); /* الخلفية */
+}
+/* ═══ .prem-fashion .star-btn.active,.prem-fashion .star-btn:hover ═══ */
+.prem-fashion .star-btn.active,.prem-fashion .star-btn:hover {
+  color: var(--pf-accent); /* لون النص */
+}
+/* ═══ .prem-fashion .st-review-stars ═══ */
+.prem-fashion .st-review-stars {
+  color: var(--pf-accent); /* لون النص */
+}
+/* ═══ .prem-fashion .st-review-card ═══ */
+.prem-fashion .st-review-card {
+  border: 1.5px solid var(--pf-border); /* الحدود */
+  border-radius: var(--pf-radius); /* تدوير الزوايا */
+}
+/* ═══ .prem-fashion .st-review-card:hover ═══ */
+.prem-fashion .st-review-card:hover {
+  box-shadow: var(--pf-shadow-sm); /* الظل */
+  border-color: transparent;
+}
+/* ═══ .prem-fashion .st-review-form ═══ */
+.prem-fashion .st-review-form {
+  border: 1.5px solid var(--pf-border); /* الحدود */
+  border-radius: var(--pf-radius-lg); /* تدوير الزوايا */
+}
+/* ---------- 9. CART FAB + DRAWER — violet pill (source .cart-fab/.cart-drawer) ---------- */
+/* ═══ .prem-fashion .cart-fab ═══ */
+.prem-fashion .cart-fab {
+  background: linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark)); /* الخلفية */
+  border-radius: var(--pf-radius-pill); /* تدوير الزوايا */
+  padding: .62rem 1.2rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-size: .84rem; /* حجم الخط */
+  font-weight: 700; /* سماكة الخط */
+  box-shadow: 0 10px 28px rgba(108,60,245,.42); /* الظل */
+  gap: .6rem; /* المسافة بين العناصر */
+}
+/* ═══ .prem-fashion .cart-fab:hover ═══ */
+.prem-fashion .cart-fab:hover {
+  transform: scale(1.04) translateY(-1px); /* التحويل (تدوير/تكبير) */
+  box-shadow: 0 14px 34px rgba(108,60,245,.48); /* الظل */
+}
+/* ═══ .prem-fashion .cart-count ═══ */
+.prem-fashion .cart-count {
+  background: #fff; /* الخلفية */
+  color: var(--pf-primary); /* لون النص */
+  min-width: 20px; /* أدنى عرض */
+  height: 20px; /* الارتفاع */
+  font-size: .68rem; /* حجم الخط */
+  font-weight: 900; /* سماكة الخط */
+  border-radius: var(--pf-radius-pill); /* تدوير الزوايا */
+  padding: 0 5px; /* الحشوة الداخلية (مسافة داخل العنصر) */
+}
+/* ═══ .prem-fashion .drawer-overlay ═══ */
+.prem-fashion .drawer-overlay {
+  background: rgba(25,20,48,.48); /* الخلفية */
+  backdrop-filter: blur(6px); /* تأثير ضبابية الخلفية */
+}
+/* ═══ .prem-fashion .cart-drawer ═══ */
+.prem-fashion .cart-drawer {
+  box-shadow: var(--pf-shadow-lg); /* الظل */
+}
+/* ═══ .prem-fashion .drawer-head ═══ */
+.prem-fashion .drawer-head {
+  background: linear-gradient(180deg,#fbfcff,#fff); /* الخلفية */
+  border-bottom: 1px solid var(--pf-border); /* حد سفلي */
+}
+/* ═══ .prem-fashion .drawer-head h3 ═══ */
+.prem-fashion .drawer-head h3 {
+  font-size: 1.05rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  color: var(--pf-dark); /* لون النص */
+}
+/* ═══ .prem-fashion .co-item ═══ */
+.prem-fashion .co-item {
+  border: 1px solid var(--pf-border); /* الحدود */
+  border-radius: var(--pf-radius); /* تدوير الزوايا */
+}
+/* ═══ .prem-fashion .co-item:hover ═══ */
+.prem-fashion .co-item:hover {
+  box-shadow: var(--pf-shadow-sm); /* الظل */
+}
+/* ═══ .prem-fashion #cartCheckout ═══ */
+.prem-fashion #cartCheckout {
+  background: linear-gradient(135deg,var(--pf-primary),var(--pf-primary-dark)); /* الخلفية */
+  border-radius: 12px; /* تدوير الزوايا */
+  font-weight: 800; /* سماكة الخط */
+  box-shadow: 0 8px 20px rgba(108,60,245,.32); /* الظل */
+}
+/* ═══ .prem-fashion #cartCheckout:hover ═══ */
+.prem-fashion #cartCheckout:hover {
+  filter: brightness(1.06); /* فلاتر */
+  transform: translateY(-1px); /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .prem-fashion .mc-toast ═══ */
+.prem-fashion .mc-toast {
+  background: var(--pf-dark); /* الخلفية */
+  color: #fff; /* لون النص */
+  border-radius: var(--pf-radius-pill); /* تدوير الزوايا */
+  font-weight: 700; /* سماكة الخط */
+  box-shadow: var(--pf-shadow-lg); /* الظل */
+}
+/* ═══ .prem-fashion .lightbox-overlay ═══ */
+.prem-fashion .lightbox-overlay {
+  background: rgba(25,20,48,.88); /* الخلفية */
+}
+/* ---------- 10. FLOAT / BRAND / MISC ---------- */
+/* ═══ .prem-fashion .store-float .sf-wa ═══ */
+.prem-fashion .store-float .sf-wa {
+  background: linear-gradient(135deg,#25d366,#128c7e); /* الخلفية */
+  box-shadow: 0 8px 20px rgba(37,211,102,.35); /* الظل */
+}
+/* ═══ .prem-fashion .store-float .sf-share ═══ */
+.prem-fashion .store-float .sf-share {
+  background: #fff; /* الخلفية */
+  color: var(--pf-primary); /* لون النص */
+  border: 1.5px solid var(--pf-border); /* الحدود */
+  box-shadow: var(--pf-shadow-sm); /* الظل */
+}
+/* ═══ .prem-fashion .store-float .sf-share:hover ═══ */
+.prem-fashion .store-float .sf-share:hover {
+  border-color: var(--pf-primary);
+  transform: translateY(-2px); /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .prem-fashion .st-brand ═══ */
+.prem-fashion .st-brand {
+  color: #8a85a0; /* لون النص */
+  font-size: .74rem; /* حجم الخط */
+}
+/* ═══ .prem-fashion .st-brand a ═══ */
+.prem-fashion .st-brand a {
+  color: var(--pf-primary); /* لون النص */
+}
+/* ═══ .prem-fashion .co-coupon .st-btn ═══ */
+.prem-fashion .co-coupon .st-btn {
+  border-radius: 10px; /* تدوير الزوايا */
+}
+/* ═══ .prem-fashion .co-payment label:has(input:checked) ═══ */
+.prem-fashion .co-payment label:has(input:checked) {
+  border-color: var(--pf-primary);
+  background: var(--pf-primary-light); /* الخلفية */
+}
+/* ═══ .prem-fashion .alert-err ═══ */
+.prem-fashion .alert-err {
+  border-radius: 12px; /* تدوير الزوايا */
+}
+/* premium features — compact promo & newsletter feel (source .promo-banner/.newsletter) */
+/* ═══ .prem-fashion .st-main .promo-banner ═══ */
+.prem-fashion .st-main .promo-banner {
+  background: linear-gradient(120deg,var(--pf-accent),#ff8a00); /* الخلفية */
+  border-radius: var(--pf-radius-lg); /* تدوير الزوايا */
+}
+/* ---------- 11. RESPONSIVE — no overflow, compact ---------- */
+@media(max-width:1280px) {
+  /* ═══ .prem-fashion .st-head-inner ═══ */
+  .prem-fashion .st-head-inner {
+    max-width: 1180px; /* أقصى عرض */
+  }
+  /* ═══ .prem-fashion .st-main ═══ */
+  .prem-fashion .st-main {
+    max-width: 1180px; /* أقصى عرض */
+  }
+}
+@media(max-width:1024px) {
+  /* ═══ .prem-fashion .st-head-inner ═══ */
+  .prem-fashion .st-head-inner {
+    padding: .8rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-main ═══ */
+  .prem-fashion .st-main {
+    padding: .9rem 1rem 3.2rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-grid ═══ */
+  .prem-fashion .st-grid {
+    grid-template-columns: repeat(auto-fill,minmax(164px,1fr)); /* أعمدة الشبكة */
+    gap: 10px; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-fashion .fashion-grid.st-grid ═══ */
+  .prem-fashion .fashion-grid.st-grid {
+    grid-template-columns: repeat(2,1fr) !important; /* أعمدة الشبكة */
+    gap: 12px !important; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-fashion .st-product ═══ */
+  .prem-fashion .st-product {
+    grid-template-columns: 1fr 1fr; /* أعمدة الشبكة */
+    gap: 1.2rem; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-fashion .st-checkout ═══ */
+  .prem-fashion .st-checkout {
+    grid-template-columns: 1fr 1fr; /* أعمدة الشبكة */
+    gap: 1.2rem; /* المسافة بين العناصر */
+  }
+}
+@media(max-width:900px) {
+  /* ═══ .prem-fashion .st-product ═══ */
+  .prem-fashion .st-product {
+    grid-template-columns: 1fr; /* أعمدة الشبكة */
+  }
+  /* ═══ .prem-fashion .st-product-info ═══ */
+  .prem-fashion .st-product-info {
+    position: static; /* طريقة التموضع */
+  }
+  /* ═══ .prem-fashion .st-checkout ═══ */
+  .prem-fashion .st-checkout {
+    grid-template-columns: 1fr; /* أعمدة الشبكة */
+  }
+  /* ═══ .prem-fashion .st-grid ═══ */
+  .prem-fashion .st-grid {
+    grid-template-columns: repeat(auto-fill,minmax(158px,1fr)); /* أعمدة الشبكة */
+    gap: 10px; /* المسافة بين العناصر */
+  }
+}
+@media(max-width:768px) {
+  /* ═══ .prem-fashion .st-head-inner ═══ */
+  .prem-fashion .st-head-inner {
+    padding: .7rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-search ═══ */
+  .prem-fashion .st-search {
+    padding: 0 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    margin-top: .55rem; /* هامش علوي */
+  }
+  /* ═══ .prem-fashion .st-nav ═══ */
+  .prem-fashion .st-nav {
+    overflow-x: auto; /* فائض أفقي */
+    flex-wrap: nowrap; /* التفاف العناصر */
+    justify-content: flex-start; /* محاذاة أفقية */
+    -webkit-overflow-scrolling: touch; /* تمرير ناعم (آيفون) */
+    scrollbar-width: none; /* عرض شريط التمرير */
+    gap: .38rem; /* المسافة بين العناصر */
+    padding: .6rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-nav::-webkit-scrollbar ═══ */
+  .prem-fashion .st-nav::-webkit-scrollbar {
+    display: none; /* طريقة العرض */
+  }
+  /* ═══ .prem-fashion .st-main ═══ */
+  .prem-fashion .st-main {
+    padding: .75rem 1rem 3.2rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-grid ═══ */
+  .prem-fashion .st-grid {
+    grid-template-columns: repeat(2,1fr); /* أعمدة الشبكة */
+    gap: 8px; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-fashion .fashion-grid.st-grid ═══ */
+  .prem-fashion .fashion-grid.st-grid {
+    grid-template-columns: repeat(2,1fr) !important; /* أعمدة الشبكة */
+    gap: 8px !important; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-fashion .st-card-body ═══ */
+  .prem-fashion .st-card-body {
+    padding: .52rem .6rem .65rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-name ═══ */
+  .prem-fashion .st-name {
+    font-size: .76rem; /* حجم الخط */
+    min-height: 2.15em; /* أدنى ارتفاع */
+  }
+  /* ═══ .prem-fashion .st-price b ═══ */
+  .prem-fashion .st-price b {
+    font-size: .85rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .st-price del ═══ */
+  .prem-fashion .st-price del {
+    font-size: .68rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .st-btn ═══ */
+  .prem-fashion .st-btn {
+    font-size: .76rem; /* حجم الخط */
+    padding: .5rem .8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .cart-fab ═══ */
+  .prem-fashion .cart-fab {
+    bottom: 14px; /* البعد عن الأسفل */
+    left: 12px; /* البعد عن اليسار */
+    right: 12px; /* البعد عن اليمين */
+    justify-content: center; /* محاذاة أفقية */
+    border-radius: 14px; /* تدوير الزوايا */
+    padding: .6rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .cart-drawer ═══ */
+  .prem-fashion .cart-drawer {
+    width: 100%; /* العرض */
+  }
+  /* ═══ .prem-fashion .fashion-hero.st-head h1 ═══ */
+  .prem-fashion .fashion-hero.st-head h1 {
+    font-size: 1.22rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .st-thumbs img ═══ */
+  .prem-fashion .st-thumbs img {
+    width: 52px; /* العرض */
+    height: 52px; /* الارتفاع */
+  }
+}
+@media(max-width:600px) {
+  /* ═══ .prem-fashion .st-head h1 ═══ */
+  .prem-fashion .st-head h1 {
+    font-size: 1.15rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .fashion-hero.st-head h1 ═══ */
+  .prem-fashion .fashion-hero.st-head h1 {
+    font-size: 1.14rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .st-head p ═══ */
+  .prem-fashion .st-head p {
+    font-size: .74rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .st-grid ═══ */
+  .prem-fashion .st-grid {
+    grid-template-columns: repeat(2,1fr); /* أعمدة الشبكة */
+    gap: 7px; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-fashion .fashion-grid.st-grid ═══ */
+  .prem-fashion .fashion-grid.st-grid {
+    gap: 7px !important; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-fashion .st-card ═══ */
+  .prem-fashion .st-card {
+    border-radius: 13px; /* تدوير الزوايا */
+  }
+  /* ═══ .prem-fashion .st-img ═══ */
+  .prem-fashion .st-img {
+    aspect-ratio: 1/1; /* نسبة الأبعاد */
+  }
+  /* ═══ .prem-fashion .st-product-info ═══ */
+  .prem-fashion .st-product-info {
+    padding: 1.05rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-product-info h1 ═══ */
+  .prem-fashion .st-product-info h1 {
+    font-size: 1.08rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .st-price.big b ═══ */
+  .prem-fashion .st-price.big b {
+    font-size: 1.15rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .st-checkout .card ═══ */
+  .prem-fashion .st-checkout .card {
+    padding: 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-rel-title ═══ */
+  .prem-fashion .st-rel-title {
+    font-size: .98rem; /* حجم الخط */
+    margin: 1.45rem 0 .8rem; /* هامش خارجي (مسافة حول العنصر) */
+  }
+  /* ═══ .prem-fashion .st-done ═══ */
+  .prem-fashion .st-done {
+    padding: 2.2rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .announce-bar ═══ */
+  .prem-fashion .announce-bar {
+    font-size: .78rem !important; /* حجم الخط */
+  }
+}
+@media(max-width:480px) {
+  /* ═══ .prem-fashion .st-head ═══ */
+  .prem-fashion .st-head {
+    padding: 0; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-head-inner ═══ */
+  .prem-fashion .st-head-inner {
+    padding: .62rem .9rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-head h1 ═══ */
+  .prem-fashion .st-head h1 {
+    font-size: 1.05rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .fashion-hero.st-head h1 ═══ */
+  .prem-fashion .fashion-hero.st-head h1 {
+    font-size: 1.06rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .st-logo ═══ */
+  .prem-fashion .st-logo {
+    max-height: 46px; /* أقصى ارتفاع */
+    max-width: 150px; /* أقصى عرض */
+  }
+  /* ═══ .prem-fashion .st-search ═══ */
+  .prem-fashion .st-search {
+    padding: 0 .9rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-search form ═══ */
+  .prem-fashion .st-search form {
+    padding: .18rem .18rem .18rem .75rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-search input ═══ */
+  .prem-fashion .st-search input {
+    font-size: .84rem; /* حجم الخط */
+    padding: .42rem .2rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-search button ═══ */
+  .prem-fashion .st-search button {
+    padding: .45rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    font-size: .78rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .st-nav ═══ */
+  .prem-fashion .st-nav {
+    padding: .5rem .9rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    gap: .32rem; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-fashion .st-nav a ═══ */
+  .prem-fashion .st-nav a {
+    font-size: .72rem; /* حجم الخط */
+    padding: .36rem .75rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-main ═══ */
+  .prem-fashion .st-main {
+    padding: .6rem .9rem 3rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-grid ═══ */
+  .prem-fashion .st-grid {
+    grid-template-columns: repeat(2,1fr); /* أعمدة الشبكة */
+    gap: 7px; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-fashion .mk-discount ═══ */
+  .prem-fashion .mk-discount {
+    font-size: .62rem; /* حجم الخط */
+    padding: .24rem .5rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    top: 8px; /* البعد عن الأعلى */
+    right: 8px; /* البعد عن اليمين */
+  }
+  /* ═══ .prem-fashion .st-soldout-tag ═══ */
+  .prem-fashion .st-soldout-tag {
+    font-size: .62rem; /* حجم الخط */
+    padding: .22rem .55rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    top: 8px; /* البعد عن الأعلى */
+    left: 8px; /* البعد عن اليسار */
+  }
+  /* ═══ .prem-fashion .st-card-body ═══ */
+  .prem-fashion .st-card-body {
+    padding: .48rem .55rem .6rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-name ═══ */
+  .prem-fashion .st-name {
+    font-size: .74rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .st-price b ═══ */
+  .prem-fashion .st-price b {
+    font-size: .82rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .st-btn ═══ */
+  .prem-fashion .st-btn {
+    font-size: .74rem; /* حجم الخط */
+    padding: .48rem .7rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    border-radius: 10px; /* تدوير الزوايا */
+  }
+  /* ═══ .prem-fashion .drawer-head ═══ */
+  .prem-fashion .drawer-head {
+    padding: .85rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion #cartItems ═══ */
+  .prem-fashion #cartItems {
+    padding: .85rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .drawer-foot ═══ */
+  .prem-fashion .drawer-foot {
+    padding: .85rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .co-item ═══ */
+  .prem-fashion .co-item {
+    gap: .55rem; /* المسافة بين العناصر */
+    padding: .55rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .co-item img,.prem-fashion .co-noimg ═══ */
+  .prem-fashion .co-item img,.prem-fashion .co-noimg {
+    width: 48px; /* العرض */
+    height: 48px; /* الارتفاع */
+  }
+  /* ═══ .prem-fashion .st-thumbs img ═══ */
+  .prem-fashion .st-thumbs img {
+    width: 48px; /* العرض */
+    height: 48px; /* الارتفاع */
+  }
+  /* ═══ .prem-fashion .qty-row button ═══ */
+  .prem-fashion .qty-row button {
+    width: 36px; /* العرض */
+    height: 36px; /* الارتفاع */
+    font-size: 1rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .qty-row input ═══ */
+  .prem-fashion .qty-row input {
+    width: 48px; /* العرض */
+    height: 36px; /* الارتفاع */
+  }
+  /* ═══ .prem-fashion .st-done h1 ═══ */
+  .prem-fashion .st-done h1 {
+    font-size: 1.4rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .st-rating-summary ═══ */
+  .prem-fashion .st-rating-summary {
+    flex-direction: column; /* اتجاه العناصر */
+    text-align: center; /* محاذاة النص */
+  }
+}
+@media(max-width:375px) {
+  /* ═══ .prem-fashion .st-head-inner ═══ */
+  .prem-fashion .st-head-inner {
+    padding: .58rem .8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-main ═══ */
+  .prem-fashion .st-main {
+    padding: .55rem .8rem 3rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-grid ═══ */
+  .prem-fashion .st-grid {
+    grid-template-columns: repeat(2,1fr); /* أعمدة الشبكة */
+    gap: 6px; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-fashion .fashion-grid.st-grid ═══ */
+  .prem-fashion .fashion-grid.st-grid {
+    grid-template-columns: repeat(2,1fr) !important; /* أعمدة الشبكة */
+    gap: 6px !important; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-fashion .st-nav ═══ */
+  .prem-fashion .st-nav {
+    padding: .5rem .8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-search ═══ */
+  .prem-fashion .st-search {
+    padding: 0 .8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-card-body ═══ */
+  .prem-fashion .st-card-body {
+    padding: .44rem .5rem .55rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-name ═══ */
+  .prem-fashion .st-name {
+    font-size: .72rem; /* حجم الخط */
+    min-height: 2.05em; /* أدنى ارتفاع */
+  }
+  /* ═══ .prem-fashion .st-price b ═══ */
+  .prem-fashion .st-price b {
+    font-size: .80rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .st-btn ═══ */
+  .prem-fashion .st-btn {
+    padding: .46rem .65rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    font-size: .72rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .st-product-info ═══ */
+  .prem-fashion .st-product-info {
+    padding: .9rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-done ═══ */
+  .prem-fashion .st-done {
+    padding: 1.8rem .8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+}
+@media(max-width:360px) {
+  /* ═══ .prem-fashion .st-head-inner ═══ */
+  .prem-fashion .st-head-inner {
+    padding: .5rem .7rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-main ═══ */
+  .prem-fashion .st-main {
+    padding: .5rem .7rem 2.8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-fashion .st-grid ═══ */
+  .prem-fashion .st-grid {
+    grid-template-columns: 1fr; /* أعمدة الشبكة */
+    gap: 8px; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-fashion .fashion-grid.st-grid ═══ */
+  .prem-fashion .fashion-grid.st-grid {
+    grid-template-columns: 1fr !important; /* أعمدة الشبكة */
+    gap: 8px !important; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-fashion .st-addons ═══ */
+  .prem-fashion .st-addons {
+    flex-direction: column; /* اتجاه العناصر */
+    align-items: stretch; /* محاذاة عمودية */
+  }
+  /* ═══ .prem-fashion .st-addon ═══ */
+  .prem-fashion .st-addon {
+    justify-content: center; /* محاذاة أفقية */
+  }
+  /* ═══ .prem-fashion .qty-row ═══ */
+  .prem-fashion .qty-row {
+    justify-content: center; /* محاذاة أفقية */
+  }
+  /* ═══ .prem-fashion .qty-row input ═══ */
+  .prem-fashion .qty-row input {
+    width: 46px; /* العرض */
+  }
+  /* ═══ .prem-fashion .st-done .st-btn ═══ */
+  .prem-fashion .st-done .st-btn {
+    min-width: 0; /* أدنى عرض */
+    width: 100%; /* العرض */
+  }
+  /* ═══ .prem-fashion .co-coupon ═══ */
+  .prem-fashion .co-coupon {
+    flex-direction: column; /* اتجاه العناصر */
+  }
+  /* ═══ .prem-fashion .co-coupon .st-btn ═══ */
+  .prem-fashion .co-coupon .st-btn {
+    width: 100%; /* العرض */
+  }
+  /* ═══ .prem-fashion .st-rating-avg ═══ */
+  .prem-fashion .st-rating-avg {
+    font-size: 2.5rem; /* حجم الخط */
+  }
+  /* ═══ .prem-fashion .cart-fab ═══ */
+  .prem-fashion .cart-fab {
+    left: 10px; /* البعد عن اليسار */
+    right: 10px; /* البعد عن اليمين */
+    bottom: 10px; /* البعد عن الأسفل */
+  }
+}
 /* ---------- 12. RTL / LTR helpers ---------- */
-[dir="rtl"] body.store-body.prem-fashion{text-align:right}
-[dir="ltr"] body.store-body.prem-fashion{text-align:left}
-.prem-fashion .st-head,.prem-fashion .st-search,.prem-fashion .st-main,.prem-fashion .st-product,.prem-fashion .st-checkout{max-width:100%}
-
+/* ═══ [dir="rtl"] body.store-body.prem-fashion ═══ */
+[dir="rtl"] body.store-body.prem-fashion {
+  text-align: right; /* محاذاة النص */
+}
+/* ═══ [dir="ltr"] body.store-body.prem-fashion ═══ */
+[dir="ltr"] body.store-body.prem-fashion {
+  text-align: left; /* محاذاة النص */
+}
+/* ═══ .prem-fashion .st-head,.prem-fashion .st-search,.prem-fashion .st-main,.prem-fashion .st-product,.prem-fashion .st-checkout ═══ */
+.prem-fashion .st-head,.prem-fashion .st-search,.prem-fashion .st-main,.prem-fashion .st-product,.prem-fashion .st-checkout {
+  max-width: 100%; /* أقصى عرض */
+}
 /* no overflow guarantee */
-body.store-body.prem-fashion, .prem-fashion .st-head, .prem-fashion .st-main, .prem-fashion .st-grid, .prem-fashion .st-card{max-width:100%;overflow-wrap:break-word}
+/* ═══ body.store-body.prem-fashion, .prem-fashion .st-head, .prem-fashion .st-main, .prem-fashion .st-grid, .prem-fashion .st-card ═══ */
+body.store-body.prem-fashion, .prem-fashion .st-head, .prem-fashion .st-main, .prem-fashion .st-grid, .prem-fashion .st-card {
+  max-width: 100%; /* أقصى عرض */
+  overflow-wrap: break-word;
+}

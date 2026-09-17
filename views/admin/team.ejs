@@ -52,7 +52,7 @@
         <% team.forEach(m => { %>
           <tr style="<%= m.id===user.id ? 'background:#f0f9ff' : '' %>">
             <td>
-              <b><%= m.username %></b> <%= m.id===user.id ? '<span class="badge badge-ok">أنت</span>' : '' %>
+              <b><%= m.username %></b> <% if (m.id===user.id) { %><span class="badge badge-ok">أنت</span><% } %>
               <% if (m.display_name) { %><br><small class="muted"><%= m.display_name %></small><% } %>
             </td>
             <td>

@@ -4,8 +4,11 @@
   "description": "منصّة متاجر متعددة المستخدمين — قاعدة بيانات المواقع مع لوحات تحكم لكل متجر",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "prod": "NODE_ENV=production node server.js",
+    "pm2": "pm2 start ecosystem.config.js"
   },
+  "engines": { "node": ">=20" },
   "dependencies": {
     "adm-zip": "^0.5.16",
     "bcryptjs": "^2.4.3",

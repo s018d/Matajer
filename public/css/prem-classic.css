@@ -1,3 +1,7 @@
+/*
+ * تنسيق عامودي: كل خاصية في سطر + تعليق عربي يشرحها
+ * لتعديل أي شيء: ابحث عن اسم الكلاس وغيّر القيمة بعد النقطتين
+ */
 /* ============================================================
    PREM-CLASSIC — التقني Editorial (Black/White/Orange) → Matajer
    Ported from: قوالب متاجر احترافية /2 — css/style.css (474 lines)
@@ -10,805 +14,2106 @@
    Distinctive: announce black/orange, 16/9 category tiles,
                sliding add-overlay, deal dark, benefits dividers
    ============================================================ */
-
 /* ---------- 0. TOKENS & BASE ---------- */
-body.store-body.prem-classic{
-  --pc-bg:#ffffff;
-  --pc-bg-soft:#f5f5f3;
-  --pc-bg-dark:#101010;
-  --pc-ink:#111111;
-  --pc-text:#444444;
-  --pc-muted:#888888;
-  --pc-line:#e6e6e3;
-  --pc-accent:#ff4d00;
-  --pc-accent-dark:#d63f00;
-  --pc-success:#16a34a;
-  --pc-danger:#e11d48;
-  --pc-radius:4px;
-  --pc-radius-sm:2px;
-  --pc-shadow:0 10px 40px rgba(0,0,0,.08);
-  --pc-shadow-sm:0 4px 16px rgba(0,0,0,.06);
-  --pc-font:'Inter','Segoe UI',Tahoma,sans-serif;
-  --pc-t:all .25s ease;
-  font-family:var(--pc-font);
-  background:var(--pc-bg);
-  color:var(--pc-text);
-  line-height:1.65;
-  overflow-x:hidden;
-  max-width:100vw;
-  -webkit-font-smoothing:antialiased;
+/* ═══ body.store-body.prem-classic ═══ */
+body.store-body.prem-classic {
+  --pc-bg: #ffffff;
+  --pc-bg-soft: #f5f5f3;
+  --pc-bg-dark: #101010;
+  --pc-ink: #111111;
+  --pc-text: #444444;
+  --pc-muted: #888888;
+  --pc-line: #e6e6e3;
+  --pc-accent: #ff4d00;
+  --pc-accent-dark: #d63f00;
+  --pc-success: #16a34a;
+  --pc-danger: #e11d48;
+  --pc-radius: 4px;
+  --pc-radius-sm: 2px;
+  --pc-shadow: 0 10px 40px rgba(0,0,0,.08);
+  --pc-shadow-sm: 0 4px 16px rgba(0,0,0,.06);
+  --pc-font: 'Inter','Segoe UI',Tahoma,sans-serif;
+  --pc-t: all .25s ease;
+  font-family: var(--pc-font); /* نوع الخط */
+  background: var(--pc-bg); /* الخلفية */
+  color: var(--pc-text); /* لون النص */
+  line-height: 1.65; /* ارتفاع السطر */
+  overflow-x: hidden; /* فائض أفقي */
+  max-width: 100vw; /* أقصى عرض */
+  -webkit-font-smoothing: antialiased;
 }
-body.store-body.prem-classic *{box-sizing:border-box;overflow-wrap:break-word;word-break:break-word}
-body.store-body.prem-classic img{max-width:100%;display:block}
-body.store-body.prem-classic a{text-decoration:none;color:inherit;transition:var(--pc-t)}
-body.store-body.prem-classic button{font-family:inherit}
-
+/* ═══ body.store-body.prem-classic * ═══ */
+body.store-body.prem-classic * {
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+/* ═══ body.store-body.prem-classic img ═══ */
+body.store-body.prem-classic img {
+  max-width: 100%; /* أقصى عرض */
+  display: block; /* طريقة العرض */
+}
+/* ═══ body.store-body.prem-classic a ═══ */
+body.store-body.prem-classic a {
+  text-decoration: none; /* زخرفة النص */
+  color: inherit; /* لون النص */
+  transition: var(--pc-t); /* الحركة الانتقالية */
+}
+/* ═══ body.store-body.prem-classic button ═══ */
+body.store-body.prem-classic button {
+  font-family: inherit; /* نوع الخط */
+}
 /* ---------- 1. ANNOUNCE BAR — black / orange distinct ---------- */
-.prem-classic .announce-bar,
-.prem-classic .announce{
-  background:var(--pc-ink) !important;
-  color:#fff !important;
-  text-align:center;
-  padding:9px 14px !important;
-  font-size:.72rem !important;
-  font-weight:700;
-  letter-spacing:1.2px;
-  text-transform:uppercase;
-  line-height:1.4;
-  border-bottom:1px solid #222;
-  display:flex;align-items:center;justify-content:center;gap:.5rem;
-  flex-wrap:wrap;
+/* ═══ .prem-classic .announce-bar, .prem-classic .announce ═══ */
+.prem-classic .announce-bar, .prem-classic .announce {
+  background: var(--pc-ink) !important; /* الخلفية */
+  color: #fff !important; /* لون النص */
+  text-align: center; /* محاذاة النص */
+  padding: 9px 14px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-size: .72rem !important; /* حجم الخط */
+  font-weight: 700; /* سماكة الخط */
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  line-height: 1.4; /* ارتفاع السطر */
+  border-bottom: 1px solid #222; /* حد سفلي */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  justify-content: center; /* محاذاة أفقية */
+  gap: .5rem; /* المسافة بين العناصر */
+  flex-wrap: wrap; /* التفاف العناصر */
 }
-.prem-classic .announce-bar em,
-.prem-classic .announce em{
-  font-style:normal;
-  color:var(--pc-accent) !important;
-  font-weight:800;
+/* ═══ .prem-classic .announce-bar em, .prem-classic .announce em ═══ */
+.prem-classic .announce-bar em, .prem-classic .announce em {
+  font-style: normal;
+  color: var(--pc-accent) !important; /* لون النص */
+  font-weight: 800; /* سماكة الخط */
 }
-.prem-classic .announce-bar span{color:inherit}
-.prem-classic .announce-bar a{color:var(--pc-accent);text-decoration:underline;text-underline-offset:3px}
-
+/* ═══ .prem-classic .announce-bar span ═══ */
+.prem-classic .announce-bar span {
+  color: inherit; /* لون النص */
+}
+/* ═══ .prem-classic .announce-bar a ═══ */
+.prem-classic .announce-bar a {
+  color: var(--pc-accent); /* لون النص */
+  text-decoration: underline; /* زخرفة النص */
+  text-underline-offset: 3px;
+}
 /* ---------- 2. HEADER — sticky white + ink/nav-row underline ---------- */
-.prem-classic .st-head{
-  position:sticky;
-  top:0;
-  z-index:40;
-  background:#fff !important;
-  border-bottom:1px solid var(--pc-line);
-  overflow:hidden;
-  padding:0 !important;
+/* ═══ .prem-classic .st-head ═══ */
+.prem-classic .st-head {
+  position: sticky; /* طريقة التموضع */
+  top: 0; /* البعد عن الأعلى */
+  z-index: 40; /* طبقة الترتيب (فوق/تحت) */
+  background: #fff !important; /* الخلفية */
+  border-bottom: 1px solid var(--pc-line); /* حد سفلي */
+  overflow: hidden; /* التعامل مع الفائض */
+  padding: 0 !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
 }
-.prem-classic .st-head::before{display:none}
-.prem-classic .st-head-inner{
-  max-width:1280px;
-  margin:0 auto;
-  padding:0 1.2rem;
-  display:flex;
-  align-items:center;
-  gap:1.2rem;
-  height:68px;
-  position:relative;
-  z-index:1;
-  flex-wrap:nowrap;
+/* ═══ .prem-classic .st-head::before ═══ */
+.prem-classic .st-head::before {
+  display: none; /* طريقة العرض */
 }
-.prem-classic .st-head h1{
-  font-size:1.55rem !important;
-  font-weight:900 !important;
-  letter-spacing:-1px !important;
-  color:var(--pc-ink) !important;
-  -webkit-text-fill-color:var(--pc-ink) !important;
-  background:none !important;
-  text-transform:uppercase !important;
-  line-height:1;
-  white-space:nowrap;
+/* ═══ .prem-classic .st-head-inner ═══ */
+.prem-classic .st-head-inner {
+  max-width: 1280px; /* أقصى عرض */
+  margin: 0 auto; /* هامش خارجي (مسافة حول العنصر) */
+  padding: 0 1.2rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: 1.2rem; /* المسافة بين العناصر */
+  height: 68px; /* الارتفاع */
+  position: relative; /* طريقة التموضع */
+  z-index: 1; /* طبقة الترتيب (فوق/تحت) */
+  flex-wrap: nowrap; /* التفاف العناصر */
 }
-.prem-classic .st-head h1 em{font-style:normal;color:var(--pc-accent) !important}
-.prem-classic .st-head h1 a{color:var(--pc-ink)}
-.prem-classic .st-head p{
-  color:var(--pc-muted) !important;
-  font-size:.72rem !important;
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:.06em;
-  line-height:1.5;
-  margin-top:.15rem !important;
-  max-width:520px;
+/* ═══ .prem-classic .st-head h1 ═══ */
+.prem-classic .st-head h1 {
+  font-size: 1.55rem !important; /* حجم الخط */
+  font-weight: 900 !important; /* سماكة الخط */
+  letter-spacing: -1px !important;
+  color: var(--pc-ink) !important; /* لون النص */
+  -webkit-text-fill-color: var(--pc-ink) !important;
+  background: none !important; /* الخلفية */
+  text-transform: uppercase !important;
+  line-height: 1; /* ارتفاع السطر */
+  white-space: nowrap; /* التفاف النص */
 }
-.prem-classic .st-logo{max-height:46px;max-width:170px;object-fit:contain;border-radius:var(--pc-radius);box-shadow:none}
-.prem-classic .st-head.small{padding:0 !important}
-.prem-classic .st-head.small .st-head-inner{height:58px}
-.prem-classic .st-back{
-  display:inline-flex;align-items:center;gap:.3rem;
-  font-size:.70rem;font-weight:800;
-  color:var(--pc-muted) !important;
-  background:#fff !important;
-  border:1.5px solid var(--pc-line) !important;
-  border-radius:var(--pc-radius) !important;
-  padding:.32rem .65rem !important;
-  text-transform:uppercase;letter-spacing:.04em;
-  transition:var(--pc-t);
-  max-width:max-content;white-space:nowrap;
+/* ═══ .prem-classic .st-head h1 em ═══ */
+.prem-classic .st-head h1 em {
+  font-style: normal;
+  color: var(--pc-accent) !important; /* لون النص */
 }
-.prem-classic .st-back:hover{color:var(--pc-accent) !important;border-color:var(--pc-accent) !important;transform:none;box-shadow:none}
-
+/* ═══ .prem-classic .st-head h1 a ═══ */
+.prem-classic .st-head h1 a {
+  color: var(--pc-ink); /* لون النص */
+}
+/* ═══ .prem-classic .st-head p ═══ */
+.prem-classic .st-head p {
+  color: var(--pc-muted) !important; /* لون النص */
+  font-size: .72rem !important; /* حجم الخط */
+  font-weight: 600; /* سماكة الخط */
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  line-height: 1.5; /* ارتفاع السطر */
+  margin-top: .15rem !important; /* هامش علوي */
+  max-width: 520px; /* أقصى عرض */
+}
+/* ═══ .prem-classic .st-logo ═══ */
+.prem-classic .st-logo {
+  max-height: 46px; /* أقصى ارتفاع */
+  max-width: 170px; /* أقصى عرض */
+  object-fit: contain; /* ملاءمة الصورة */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  box-shadow: none; /* الظل */
+}
+/* ═══ .prem-classic .st-head.small ═══ */
+.prem-classic .st-head.small {
+  padding: 0 !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+}
+/* ═══ .prem-classic .st-head.small .st-head-inner ═══ */
+.prem-classic .st-head.small .st-head-inner {
+  height: 58px; /* الارتفاع */
+}
+/* ═══ .prem-classic .st-back ═══ */
+.prem-classic .st-back {
+  display: inline-flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: .3rem; /* المسافة بين العناصر */
+  font-size: .70rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  color: var(--pc-muted) !important; /* لون النص */
+  background: #fff !important; /* الخلفية */
+  border: 1.5px solid var(--pc-line) !important; /* الحدود */
+  border-radius: var(--pc-radius) !important; /* تدوير الزوايا */
+  padding: .32rem .65rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  transition: var(--pc-t); /* الحركة الانتقالية */
+  max-width: max-content; /* أقصى عرض */
+  white-space: nowrap; /* التفاف النص */
+}
+/* ═══ .prem-classic .st-back:hover ═══ */
+.prem-classic .st-back:hover {
+  color: var(--pc-accent) !important; /* لون النص */
+  border-color: var(--pc-accent) !important;
+  transform: none; /* التحويل (تدوير/تكبير) */
+  box-shadow: none; /* الظل */
+}
 /* classic-hero override : darken tech hero to editorial dark #101010 + orange kicker */
-.prem-classic .st-head.classic-hero,
-.prem-classic .classic-hero.st-head{
-  background:var(--pc-bg-dark) !important;
-  color:#fff !important;
-  border-bottom:1px solid #1c1c1c;
+/* ═══ .prem-classic .st-head.classic-hero, .prem-classic .classic-hero.st-head ═══ */
+.prem-classic .st-head.classic-hero, .prem-classic .classic-hero.st-head {
+  background: var(--pc-bg-dark) !important; /* الخلفية */
+  color: #fff !important; /* لون النص */
+  border-bottom: 1px solid #1c1c1c; /* حد سفلي */
 }
-.prem-classic .classic-hero .st-head-inner{height:auto;min-height:78px;padding:.95rem 1.2rem;align-items:center}
-.prem-classic .classic-hero.st-head h1,
-.prem-classic .classic-hero h1{color:#fff !important;-webkit-text-fill-color:#fff !important}
-.prem-classic .classic-hero p{color:#9a9a9a !important}
-.prem-classic .classic-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  margin-top:.45rem;
-  background:var(--pc-accent) !important;
-  border:1px solid var(--pc-accent) !important;
-  color:#fff !important;
-  padding:.30rem .75rem !important;
-  border-radius:var(--pc-radius) !important;
-  font-size:.70rem !important;
-  font-weight:800 !important;
-  letter-spacing:.04em;
-  text-transform:uppercase;
-  box-shadow:none !important;
+/* ═══ .prem-classic .classic-hero .st-head-inner ═══ */
+.prem-classic .classic-hero .st-head-inner {
+  height: auto; /* الارتفاع */
+  min-height: 78px; /* أدنى ارتفاع */
+  padding: .95rem 1.2rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  align-items: center; /* محاذاة عمودية */
 }
-
+/* ═══ .prem-classic .classic-hero.st-head h1, .prem-classic .classic-hero h1 ═══ */
+.prem-classic .classic-hero.st-head h1, .prem-classic .classic-hero h1 {
+  color: #fff !important; /* لون النص */
+  -webkit-text-fill-color: #fff !important;
+}
+/* ═══ .prem-classic .classic-hero p ═══ */
+.prem-classic .classic-hero p {
+  color: #9a9a9a !important; /* لون النص */
+}
+/* ═══ .prem-classic .classic-badge ═══ */
+.prem-classic .classic-badge {
+  display: inline-flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: 6px; /* المسافة بين العناصر */
+  margin-top: .45rem; /* هامش علوي */
+  background: var(--pc-accent) !important; /* الخلفية */
+  border: 1px solid var(--pc-accent) !important; /* الحدود */
+  color: #fff !important; /* لون النص */
+  padding: .30rem .75rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: var(--pc-radius) !important; /* تدوير الزوايا */
+  font-size: .70rem !important; /* حجم الخط */
+  font-weight: 800 !important; /* سماكة الخط */
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  box-shadow: none !important; /* الظل */
+}
 /* ---------- 3. SEARCH — soft bg + ink button sharp 4px ---------- */
-.prem-classic .st-search{
-  max-width:1280px;
-  margin:.7rem auto 0;
-  padding:0 1.2rem;
+/* ═══ .prem-classic .st-search ═══ */
+.prem-classic .st-search {
+  max-width: 1280px; /* أقصى عرض */
+  margin: .7rem auto 0; /* هامش خارجي (مسافة حول العنصر) */
+  padding: 0 1.2rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
 }
-.prem-classic .st-search form{
-  display:flex;align-items:center;
-  gap:0;
-  background:var(--pc-bg-soft) !important;
-  border:1px solid transparent !important;
-  border-radius:var(--pc-radius) !important;
-  padding:4px 4px 4px 14px !important;
-  box-shadow:none !important;
-  transition:var(--pc-t);
+/* ═══ .prem-classic .st-search form ═══ */
+.prem-classic .st-search form {
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: 0; /* المسافة بين العناصر */
+  background: var(--pc-bg-soft) !important; /* الخلفية */
+  border: 1px solid transparent !important; /* الحدود */
+  border-radius: var(--pc-radius) !important; /* تدوير الزوايا */
+  padding: 4px 4px 4px 14px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  box-shadow: none !important; /* الظل */
+  transition: var(--pc-t); /* الحركة الانتقالية */
 }
-.prem-classic .st-search form:focus-within{
-  border-color:var(--pc-ink) !important;
-  background:#fff !important;
-  box-shadow:none !important;
+/* ═══ .prem-classic .st-search form:focus-within ═══ */
+.prem-classic .st-search form:focus-within {
+  border-color: var(--pc-ink) !important;
+  background: #fff !important; /* الخلفية */
+  box-shadow: none !important; /* الظل */
 }
-.prem-classic .st-search input{
-  flex:1;border:none;background:transparent;
-  padding:.5rem .35rem;
-  font-size:.82rem;font-family:inherit;
-  color:var(--pc-ink);min-width:0;outline:none;
+/* ═══ .prem-classic .st-search input ═══ */
+.prem-classic .st-search input {
+  flex: 1; /* مرونة العنصر */
+  border: none; /* الحدود */
+  background: transparent; /* الخلفية */
+  padding: .5rem .35rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-size: .82rem; /* حجم الخط */
+  font-family: inherit; /* نوع الخط */
+  color: var(--pc-ink); /* لون النص */
+  min-width: 0; /* أدنى عرض */
+  outline: none; /* الإطار الخارجي */
 }
-.prem-classic .st-search input::placeholder{color:#aaa}
-.prem-classic .st-search button{
-  background:var(--pc-ink) !important;
-  color:#fff !important;
-  border:none !important;
-  border-radius:var(--pc-radius) !important;
-  padding:9px 18px !important;
-  font-weight:800 !important;
-  font-size:.74rem !important;
-  cursor:pointer;transition:var(--pc-t);
-  font-family:inherit;white-space:nowrap;
-  text-transform:uppercase;letter-spacing:.06em;
-  box-shadow:none !important;
+/* ═══ .prem-classic .st-search input::placeholder ═══ */
+.prem-classic .st-search input::placeholder {
+  color: #aaa; /* لون النص */
 }
-.prem-classic .st-search button:hover{background:var(--pc-accent) !important;transform:none;box-shadow:none !important;filter:none}
-
+/* ═══ .prem-classic .st-search button ═══ */
+.prem-classic .st-search button {
+  background: var(--pc-ink) !important; /* الخلفية */
+  color: #fff !important; /* لون النص */
+  border: none !important; /* الحدود */
+  border-radius: var(--pc-radius) !important; /* تدوير الزوايا */
+  padding: 9px 18px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-weight: 800 !important; /* سماكة الخط */
+  font-size: .74rem !important; /* حجم الخط */
+  cursor: pointer; /* شكل المؤشر */
+  transition: var(--pc-t); /* الحركة الانتقالية */
+  font-family: inherit; /* نوع الخط */
+  white-space: nowrap; /* التفاف النص */
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  box-shadow: none !important; /* الظل */
+}
+/* ═══ .prem-classic .st-search button:hover ═══ */
+.prem-classic .st-search button:hover {
+  background: var(--pc-accent) !important; /* الخلفية */
+  transform: none; /* التحويل (تدوير/تكبير) */
+  box-shadow: none !important; /* الظل */
+  filter: none; /* فلاتر */
+}
 /* ---------- 4. CATEGORY NAV — editorial uppercase + orange underline ---------- */
-.prem-classic .st-nav{
-  max-width:1280px;
-  margin:0 auto;
-  display:flex;gap:1.4rem;
-  padding:0 1.2rem;
-  flex-wrap:wrap;
-  align-items:center;
-  min-height:44px;
-  border-top:1px solid var(--pc-line);
-  border-bottom:1px solid transparent;
-  overflow:visible;
+/* ═══ .prem-classic .st-nav ═══ */
+.prem-classic .st-nav {
+  max-width: 1280px; /* أقصى عرض */
+  margin: 0 auto; /* هامش خارجي (مسافة حول العنصر) */
+  display: flex; /* طريقة العرض */
+  gap: 1.4rem; /* المسافة بين العناصر */
+  padding: 0 1.2rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  flex-wrap: wrap; /* التفاف العناصر */
+  align-items: center; /* محاذاة عمودية */
+  min-height: 44px; /* أدنى ارتفاع */
+  border-top: 1px solid var(--pc-line); /* حد علوي */
+  border-bottom: 1px solid transparent; /* حد سفلي */
+  overflow: visible; /* التعامل مع الفائض */
 }
-.prem-classic .st-nav a{
-  position:relative;
-  padding:12px 0 11px;
-  background:transparent !important;
-  border:none !important;
-  border-radius:0 !important;
-  color:var(--pc-ink) !important;
-  font-size:.74rem !important;
-  font-weight:800 !important;
-  letter-spacing:1.2px;
-  text-transform:uppercase;
-  white-space:nowrap;
-  line-height:1;
-  transition:var(--pc-t);
-  box-shadow:none !important;
+/* ═══ .prem-classic .st-nav a ═══ */
+.prem-classic .st-nav a {
+  position: relative; /* طريقة التموضع */
+  padding: 12px 0 11px; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  background: transparent !important; /* الخلفية */
+  border: none !important; /* الحدود */
+  border-radius: 0 !important; /* تدوير الزوايا */
+  color: var(--pc-ink) !important; /* لون النص */
+  font-size: .74rem !important; /* حجم الخط */
+  font-weight: 800 !important; /* سماكة الخط */
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  white-space: nowrap; /* التفاف النص */
+  line-height: 1; /* ارتفاع السطر */
+  transition: var(--pc-t); /* الحركة الانتقالية */
+  box-shadow: none !important; /* الظل */
 }
-.prem-classic .st-nav a::after{
-  content:'';position:absolute;bottom:6px;left:0;
-  width:0;height:2px;background:var(--pc-accent);
-  transition:var(--pc-t);
+/* ═══ .prem-classic .st-nav a::after ═══ */
+.prem-classic .st-nav a::after {
+  content: ''; /* محتوى العنصر الوهمي */
+  position: absolute; /* طريقة التموضع */
+  bottom: 6px; /* البعد عن الأسفل */
+  left: 0; /* البعد عن اليسار */
+  width: 0; /* العرض */
+  height: 2px; /* الارتفاع */
+  background: var(--pc-accent); /* الخلفية */
+  transition: var(--pc-t); /* الحركة الانتقالية */
 }
-.prem-classic .st-nav a:hover{color:var(--pc-accent) !important;transform:none}
-.prem-classic .st-nav a:hover::after,
-.prem-classic .st-nav a.on::after{width:100%}
-.prem-classic .st-nav a.on{
-  background:transparent !important;
-  color:var(--pc-accent) !important;
-  box-shadow:none !important;
-  border:none !important;
+/* ═══ .prem-classic .st-nav a:hover ═══ */
+.prem-classic .st-nav a:hover {
+  color: var(--pc-accent) !important; /* لون النص */
+  transform: none; /* التحويل (تدوير/تكبير) */
 }
-.prem-classic .st-nav a.sale{color:var(--pc-accent) !important}
-
+/* ═══ .prem-classic .st-nav a:hover::after, .prem-classic .st-nav a.on::after ═══ */
+.prem-classic .st-nav a:hover::after, .prem-classic .st-nav a.on::after {
+  width: 100%; /* العرض */
+}
+/* ═══ .prem-classic .st-nav a.on ═══ */
+.prem-classic .st-nav a.on {
+  background: transparent !important; /* الخلفية */
+  color: var(--pc-accent) !important; /* لون النص */
+  box-shadow: none !important; /* الظل */
+  border: none !important; /* الحدود */
+}
+/* ═══ .prem-classic .st-nav a.sale ═══ */
+.prem-classic .st-nav a.sale {
+  color: var(--pc-accent) !important; /* لون النص */
+}
 /* Category 16/9 tiles — distinctive feature (if page injects .cat-tiles) */
-.prem-classic .cat-tiles{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
-  max-width:1280px;margin:0 auto;padding:0 1.2rem;
+/* ═══ .prem-classic .cat-tiles ═══ */
+.prem-classic .cat-tiles {
+  display: grid; /* طريقة العرض */
+  grid-template-columns: repeat(3,1fr); /* أعمدة الشبكة */
+  gap: 10px; /* المسافة بين العناصر */
+  max-width: 1280px; /* أقصى عرض */
+  margin: 0 auto; /* هامش خارجي (مسافة حول العنصر) */
+  padding: 0 1.2rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
 }
-.prem-classic .cat-tile{
-  position:relative;overflow:hidden;
-  border-radius:var(--pc-radius);
-  aspect-ratio:16/9;
-  background:var(--pc-bg-soft);
-  display:block;border:1px solid var(--pc-line);
+/* ═══ .prem-classic .cat-tile ═══ */
+.prem-classic .cat-tile {
+  position: relative; /* طريقة التموضع */
+  overflow: hidden; /* التعامل مع الفائض */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  aspect-ratio: 16/9; /* نسبة الأبعاد */
+  background: var(--pc-bg-soft); /* الخلفية */
+  display: block; /* طريقة العرض */
+  border: 1px solid var(--pc-line); /* الحدود */
 }
-.prem-classic .cat-tile img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
-.prem-classic .cat-tile:hover img{transform:scale(1.05)}
-.prem-classic .cat-tile .tile-label{
-  position:absolute;bottom:10px;left:10px;
-  background:#fff;border-radius:var(--pc-radius);
-  padding:7px 12px;
-  font-weight:800;font-size:.74rem;
-  text-transform:uppercase;letter-spacing:.04em;
-  color:var(--pc-ink);box-shadow:var(--pc-shadow-sm);
+/* ═══ .prem-classic .cat-tile img ═══ */
+.prem-classic .cat-tile img {
+  width: 100%; /* العرض */
+  height: 100%; /* الارتفاع */
+  object-fit: cover; /* ملاءمة الصورة */
+  transition: transform .5s ease; /* الحركة الانتقالية */
 }
-.prem-classic .cat-tile .tile-label span{color:var(--pc-accent)}
-
+/* ═══ .prem-classic .cat-tile:hover img ═══ */
+.prem-classic .cat-tile:hover img {
+  transform: scale(1.05); /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .prem-classic .cat-tile .tile-label ═══ */
+.prem-classic .cat-tile .tile-label {
+  position: absolute; /* طريقة التموضع */
+  bottom: 10px; /* البعد عن الأسفل */
+  left: 10px; /* البعد عن اليسار */
+  background: #fff; /* الخلفية */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  padding: 7px 12px; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-weight: 800; /* سماكة الخط */
+  font-size: .74rem; /* حجم الخط */
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--pc-ink); /* لون النص */
+  box-shadow: var(--pc-shadow-sm); /* الظل */
+}
+/* ═══ .prem-classic .cat-tile .tile-label span ═══ */
+.prem-classic .cat-tile .tile-label span {
+  color: var(--pc-accent); /* لون النص */
+}
 /* ---------- 5. GRID — compact 180px / gap 10px ---------- */
-.prem-classic .st-main{
-  max-width:1280px;
-  margin:0 auto;
-  padding:1rem 1.2rem 3.5rem;
+/* ═══ .prem-classic .st-main ═══ */
+.prem-classic .st-main {
+  max-width: 1280px; /* أقصى عرض */
+  margin: 0 auto; /* هامش خارجي (مسافة حول العنصر) */
+  padding: 1rem 1.2rem 3.5rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
 }
-.prem-classic .st-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(180px,1fr)) !important;
-  gap:10px !important;
+/* ═══ .prem-classic .st-grid ═══ */
+.prem-classic .st-grid {
+  display: grid; /* طريقة العرض */
+  grid-template-columns: repeat(auto-fill,minmax(180px,1fr)) !important; /* أعمدة الشبكة */
+  gap: 10px !important; /* المسافة بين العناصر */
 }
-.prem-classic .classic-grid.st-grid,
-.prem-classic .st-grid.classic-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr)) !important;gap:10px !important}
-
+/* ═══ .prem-classic .classic-grid.st-grid, .prem-classic .st-grid.classic-grid ═══ */
+.prem-classic .classic-grid.st-grid, .prem-classic .st-grid.classic-grid {
+  grid-template-columns: repeat(auto-fill,minmax(180px,1fr)) !important; /* أعمدة الشبكة */
+  gap: 10px !important; /* المسافة بين العناصر */
+}
 /* ---------- 6. CARD — sharp 4px editorial minimal + sliding add-overlay ---------- */
-.prem-classic .st-card{
-  background:#fff;
-  border-radius:var(--pc-radius) !important;
-  overflow:hidden;
-  display:flex;flex-direction:column;
-  transition:var(--pc-t);
-  border:1px solid var(--pc-line) !important;
-  position:relative;
-  box-shadow:none !important;
+/* ═══ .prem-classic .st-card ═══ */
+.prem-classic .st-card {
+  background: #fff; /* الخلفية */
+  border-radius: var(--pc-radius) !important; /* تدوير الزوايا */
+  overflow: hidden; /* التعامل مع الفائض */
+  display: flex; /* طريقة العرض */
+  flex-direction: column; /* اتجاه العناصر */
+  transition: var(--pc-t); /* الحركة الانتقالية */
+  border: 1px solid var(--pc-line) !important; /* الحدود */
+  position: relative; /* طريقة التموضع */
+  box-shadow: none !important; /* الظل */
 }
-.prem-classic .st-card:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 24px rgba(0,0,0,.07) !important;
-  border-color:var(--pc-ink) !important;
+/* ═══ .prem-classic .st-card:hover ═══ */
+.prem-classic .st-card:hover {
+  transform: translateY(-2px); /* التحويل (تدوير/تكبير) */
+  box-shadow: 0 8px 24px rgba(0,0,0,.07) !important; /* الظل */
+  border-color: var(--pc-ink) !important;
 }
-.prem-classic .st-img{
-  aspect-ratio:1/1;
-  background:var(--pc-bg-soft) !important;
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;position:relative;
+/* ═══ .prem-classic .st-img ═══ */
+.prem-classic .st-img {
+  aspect-ratio: 1/1; /* نسبة الأبعاد */
+  background: var(--pc-bg-soft) !important; /* الخلفية */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  justify-content: center; /* محاذاة أفقية */
+  overflow: hidden; /* التعامل مع الفائض */
+  position: relative; /* طريقة التموضع */
 }
-.prem-classic .st-img img{
-  width:100%;height:100%;object-fit:cover;
-  transition:transform .45s ease;
+/* ═══ .prem-classic .st-img img ═══ */
+.prem-classic .st-img img {
+  width: 100%; /* العرض */
+  height: 100%; /* الارتفاع */
+  object-fit: cover; /* ملاءمة الصورة */
+  transition: transform .45s ease; /* الحركة الانتقالية */
 }
-.prem-classic .st-card:hover .st-img img{transform:scale(1.04)}
-.prem-classic .st-img-empty{color:#999;font-size:.78rem;display:flex;flex-direction:column;align-items:center;gap:.25rem;text-transform:uppercase;letter-spacing:.04em;font-weight:700}
-.prem-classic .st-img-empty::before{content:'◻';font-size:1.5rem;opacity:.35}
-.prem-classic .st-img-empty.big{font-size:.9rem;padding:2.6rem}
-
+/* ═══ .prem-classic .st-card:hover .st-img img ═══ */
+.prem-classic .st-card:hover .st-img img {
+  transform: scale(1.04); /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .prem-classic .st-img-empty ═══ */
+.prem-classic .st-img-empty {
+  color: #999; /* لون النص */
+  font-size: .78rem; /* حجم الخط */
+  display: flex; /* طريقة العرض */
+  flex-direction: column; /* اتجاه العناصر */
+  align-items: center; /* محاذاة عمودية */
+  gap: .25rem; /* المسافة بين العناصر */
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-weight: 700; /* سماكة الخط */
+}
+/* ═══ .prem-classic .st-img-empty::before ═══ */
+.prem-classic .st-img-empty::before {
+  content: '◻'; /* محتوى العنصر الوهمي */
+  font-size: 1.5rem; /* حجم الخط */
+  opacity: .35; /* الشفافية */
+}
+/* ═══ .prem-classic .st-img-empty.big ═══ */
+.prem-classic .st-img-empty.big {
+  font-size: .9rem; /* حجم الخط */
+  padding: 2.6rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+}
 /* badges — sharp 2px uppercase (source .badge) */
-.prem-classic .mk-discount,
-.prem-classic .neo-off{
-  position:absolute;top:8px;left:8px;right:auto;
-  background:var(--pc-accent) !important;
-  color:#fff !important;
-  font-size:.60rem !important;font-weight:800 !important;
-  letter-spacing:1.2px;text-transform:uppercase;
-  padding:3px 7px !important;
-  border-radius:2px !important;
-  box-shadow:none !important;z-index:2;
+/* ═══ .prem-classic .mk-discount, .prem-classic .neo-off ═══ */
+.prem-classic .mk-discount, .prem-classic .neo-off {
+  position: absolute; /* طريقة التموضع */
+  top: 8px; /* البعد عن الأعلى */
+  left: 8px; /* البعد عن اليسار */
+  right: auto; /* البعد عن اليمين */
+  background: var(--pc-accent) !important; /* الخلفية */
+  color: #fff !important; /* لون النص */
+  font-size: .60rem !important; /* حجم الخط */
+  font-weight: 800 !important; /* سماكة الخط */
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 3px 7px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: 2px !important; /* تدوير الزوايا */
+  box-shadow: none !important; /* الظل */
+  z-index: 2; /* طبقة الترتيب (فوق/تحت) */
 }
-.prem-classic .st-soldout-tag{
-  position:absolute;top:8px;right:8px;left:auto;
-  background:var(--pc-ink) !important;
-  color:#fff !important;font-weight:800 !important;
-  padding:3px 7px !important;
-  border-radius:2px !important;
-  font-size:.60rem !important;letter-spacing:1px;text-transform:uppercase;
-  z-index:2;box-shadow:none !important;
+/* ═══ .prem-classic .st-soldout-tag ═══ */
+.prem-classic .st-soldout-tag {
+  position: absolute; /* طريقة التموضع */
+  top: 8px; /* البعد عن الأعلى */
+  right: 8px; /* البعد عن اليمين */
+  left: auto; /* البعد عن اليسار */
+  background: var(--pc-ink) !important; /* الخلفية */
+  color: #fff !important; /* لون النص */
+  font-weight: 800 !important; /* سماكة الخط */
+  padding: 3px 7px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: 2px !important; /* تدوير الزوايا */
+  font-size: .60rem !important; /* حجم الخط */
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  z-index: 2; /* طبقة الترتيب (فوق/تحت) */
+  box-shadow: none !important; /* الظل */
 }
-
 /* quick wishlist icon — minimal */
-.prem-classic .wishlist-btn{
-  position:absolute;top:8px;right:8px;z-index:2;
-  width:30px;height:30px;background:rgba(255,255,255,.92);
-  border-radius:50%;display:grid;place-items:center;
-  font-size:.78rem;color:var(--pc-ink);box-shadow:var(--pc-shadow-sm)
+/* ═══ .prem-classic .wishlist-btn ═══ */
+.prem-classic .wishlist-btn {
+  position: absolute; /* طريقة التموضع */
+  top: 8px; /* البعد عن الأعلى */
+  right: 8px; /* البعد عن اليمين */
+  z-index: 2; /* طبقة الترتيب (فوق/تحت) */
+  width: 30px; /* العرض */
+  height: 30px; /* الارتفاع */
+  background: rgba(255,255,255,.92); /* الخلفية */
+  border-radius: 50%; /* تدوير الزوايا */
+  display: grid; /* طريقة العرض */
+  place-items: center;
+  font-size: .78rem; /* حجم الخط */
+  color: var(--pc-ink); /* لون النص */
+  box-shadow: var(--pc-shadow-sm); /* الظل */
 }
-
 /* card body — compact editorial */
-.prem-classic .st-card-body{
-  padding:.55rem .65rem .75rem !important;
-  display:flex;flex-direction:column;
-  gap:.18rem !important;flex:1;
+/* ═══ .prem-classic .st-card-body ═══ */
+.prem-classic .st-card-body {
+  padding: .55rem .65rem .75rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  display: flex; /* طريقة العرض */
+  flex-direction: column; /* اتجاه العناصر */
+  gap: .18rem !important; /* المسافة بين العناصر */
+  flex: 1; /* مرونة العنصر */
 }
-.prem-classic .st-name{
-  font-weight:700 !important;
-  font-size:.78rem !important;
-  line-height:1.4 !important;
-  color:var(--pc-ink) !important;
-  min-height:2.15em;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
-  transition:color .2s;
-  text-transform:uppercase;letter-spacing:.015em;
+/* ═══ .prem-classic .st-name ═══ */
+.prem-classic .st-name {
+  font-weight: 700 !important; /* سماكة الخط */
+  font-size: .78rem !important; /* حجم الخط */
+  line-height: 1.4 !important; /* ارتفاع السطر */
+  color: var(--pc-ink) !important; /* لون النص */
+  min-height: 2.15em; /* أدنى ارتفاع */
+  display: -webkit-box; /* طريقة العرض */
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden; /* التعامل مع الفائض */
+  transition: color .2s; /* الحركة الانتقالية */
+  text-transform: uppercase;
+  letter-spacing: .015em;
 }
-.prem-classic .st-name:hover{color:var(--pc-accent) !important}
-.prem-classic .st-price{
-  display:flex;gap:.35rem;align-items:center;
-  margin-top:auto;padding-top:.15rem;flex-wrap:wrap;
+/* ═══ .prem-classic .st-name:hover ═══ */
+.prem-classic .st-name:hover {
+  color: var(--pc-accent) !important; /* لون النص */
 }
-.prem-classic .st-price b{color:var(--pc-ink) !important;font-size:.86rem !important;font-weight:900 !important;letter-spacing:-.02em}
-.prem-classic .st-price del{color:#aaa !important;font-size:.70rem !important;text-decoration:line-through}
-.prem-classic .st-price.big b{font-size:1.28rem !important}
-.prem-classic .st-price .off{
-  color:var(--pc-accent);font-size:.62rem;font-weight:800;
-  background:#ffe9de;padding:2px 6px;border-radius:2px;letter-spacing:.04em;text-transform:uppercase
+/* ═══ .prem-classic .st-price ═══ */
+.prem-classic .st-price {
+  display: flex; /* طريقة العرض */
+  gap: .35rem; /* المسافة بين العناصر */
+  align-items: center; /* محاذاة عمودية */
+  margin-top: auto; /* هامش علوي */
+  padding-top: .15rem; /* حشوة علوية */
+  flex-wrap: wrap; /* التفاف العناصر */
 }
-.prem-classic .st-brand-text{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:1.4px;color:var(--pc-muted)}
-
+/* ═══ .prem-classic .st-price b ═══ */
+.prem-classic .st-price b {
+  color: var(--pc-ink) !important; /* لون النص */
+  font-size: .86rem !important; /* حجم الخط */
+  font-weight: 900 !important; /* سماكة الخط */
+  letter-spacing: -.02em;
+}
+/* ═══ .prem-classic .st-price del ═══ */
+.prem-classic .st-price del {
+  color: #aaa !important; /* لون النص */
+  font-size: .70rem !important; /* حجم الخط */
+  text-decoration: line-through; /* زخرفة النص */
+}
+/* ═══ .prem-classic .st-price.big b ═══ */
+.prem-classic .st-price.big b {
+  font-size: 1.28rem !important; /* حجم الخط */
+}
+/* ═══ .prem-classic .st-price .off ═══ */
+.prem-classic .st-price .off {
+  color: var(--pc-accent); /* لون النص */
+  font-size: .62rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  background: #ffe9de; /* الخلفية */
+  padding: 2px 6px; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: 2px; /* تدوير الزوايا */
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+/* ═══ .prem-classic .st-brand-text ═══ */
+.prem-classic .st-brand-text {
+  font-size: .62rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: var(--pc-muted); /* لون النص */
+}
 /* sliding add-overlay — distinctive feature (button slides up on hover) */
-.prem-classic .st-card .st-btn{
-  border:none;background:var(--pc-ink) !important;
-  color:#fff !important;
-  padding:.52rem .8rem !important;
-  border-radius:var(--pc-radius) !important;
-  font-weight:800 !important;font-size:.74rem !important;
-  cursor:pointer;margin-top:.45rem !important;
-  transition:var(--pc-t);
-  font-family:inherit;display:flex;align-items:center;justify-content:center;gap:.3rem;
-  position:relative;overflow:hidden;
-  letter-spacing:.04em;text-transform:uppercase;
-  box-shadow:none !important;
+/* ═══ .prem-classic .st-card .st-btn ═══ */
+.prem-classic .st-card .st-btn {
+  border: none; /* الحدود */
+  background: var(--pc-ink) !important; /* الخلفية */
+  color: #fff !important; /* لون النص */
+  padding: .52rem .8rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: var(--pc-radius) !important; /* تدوير الزوايا */
+  font-weight: 800 !important; /* سماكة الخط */
+  font-size: .74rem !important; /* حجم الخط */
+  cursor: pointer; /* شكل المؤشر */
+  margin-top: .45rem !important; /* هامش علوي */
+  transition: var(--pc-t); /* الحركة الانتقالية */
+  font-family: inherit; /* نوع الخط */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  justify-content: center; /* محاذاة أفقية */
+  gap: .3rem; /* المسافة بين العناصر */
+  position: relative; /* طريقة التموضع */
+  overflow: hidden; /* التعامل مع الفائض */
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  box-shadow: none !important; /* الظل */
 }
-.prem-classic .st-card .st-btn:hover{background:var(--pc-accent) !important;transform:none !important;box-shadow:none !important;filter:none}
-.prem-classic .st-card .st-btn:active{transform:scale(.98) !important}
-.prem-classic .st-btn-disabled{background:var(--pc-line) !important;color:#999 !important;cursor:not-allowed;pointer-events:none;box-shadow:none !important}
-
+/* ═══ .prem-classic .st-card .st-btn:hover ═══ */
+.prem-classic .st-card .st-btn:hover {
+  background: var(--pc-accent) !important; /* الخلفية */
+  transform: none !important; /* التحويل (تدوير/تكبير) */
+  box-shadow: none !important; /* الظل */
+  filter: none; /* فلاتر */
+}
+/* ═══ .prem-classic .st-card .st-btn:active ═══ */
+.prem-classic .st-card .st-btn:active {
+  transform: scale(.98) !important; /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .prem-classic .st-btn-disabled ═══ */
+.prem-classic .st-btn-disabled {
+  background: var(--pc-line) !important; /* الخلفية */
+  color: #999 !important; /* لون النص */
+  cursor: not-allowed; /* شكل المؤشر */
+  pointer-events: none; /* استقبال النقر */
+  box-shadow: none !important; /* الظل */
+}
 /* true sliding overlay variant — if .add-overlay exists */
-.prem-classic .st-card .add-overlay{
-  position:absolute;inset-inline:0;bottom:0;z-index:3;
-  background:rgba(16,16,16,.88);
-  color:#fff;text-align:center;
-  padding:11px;font-size:.70rem;font-weight:800;letter-spacing:1.2px;
-  text-transform:uppercase;
-  transform:translateY(100%);transition:transform .28s ease;
-  border-radius:0;
+/* ═══ .prem-classic .st-card .add-overlay ═══ */
+.prem-classic .st-card .add-overlay {
+  position: absolute; /* طريقة التموضع */
+  inset-inline: 0;
+  bottom: 0; /* البعد عن الأسفل */
+  z-index: 3; /* طبقة الترتيب (فوق/تحت) */
+  background: rgba(16,16,16,.88); /* الخلفية */
+  color: #fff; /* لون النص */
+  text-align: center; /* محاذاة النص */
+  padding: 11px; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-size: .70rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  transform: translateY(100%); /* التحويل (تدوير/تكبير) */
+  transition: transform .28s ease; /* الحركة الانتقالية */
+  border-radius: 0; /* تدوير الزوايا */
 }
-.prem-classic .st-card:hover .add-overlay{transform:translateY(0)}
-.prem-classic .add-overlay:hover{background:var(--pc-accent) !important}
-
+/* ═══ .prem-classic .st-card:hover .add-overlay ═══ */
+.prem-classic .st-card:hover .add-overlay {
+  transform: translateY(0); /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .prem-classic .add-overlay:hover ═══ */
+.prem-classic .add-overlay:hover {
+  background: var(--pc-accent) !important; /* الخلفية */
+}
 /* quick-view circle subtle */
-.prem-classic .quick-view-btn{
-  position:absolute;bottom:8px;right:8px;z-index:2;
-  width:34px;height:34px;background:#fff;border-radius:50%;
-  display:grid;place-items:center;color:var(--pc-ink);
-  opacity:0;transform:translateY(6px);transition:var(--pc-t);box-shadow:var(--pc-shadow-sm)
+/* ═══ .prem-classic .quick-view-btn ═══ */
+.prem-classic .quick-view-btn {
+  position: absolute; /* طريقة التموضع */
+  bottom: 8px; /* البعد عن الأسفل */
+  right: 8px; /* البعد عن اليمين */
+  z-index: 2; /* طبقة الترتيب (فوق/تحت) */
+  width: 34px; /* العرض */
+  height: 34px; /* الارتفاع */
+  background: #fff; /* الخلفية */
+  border-radius: 50%; /* تدوير الزوايا */
+  display: grid; /* طريقة العرض */
+  place-items: center;
+  color: var(--pc-ink); /* لون النص */
+  opacity: 0; /* الشفافية */
+  transform: translateY(6px); /* التحويل (تدوير/تكبير) */
+  transition: var(--pc-t); /* الحركة الانتقالية */
+  box-shadow: var(--pc-shadow-sm); /* الظل */
 }
-.prem-classic .st-card:hover .quick-view-btn{opacity:1;transform:translateY(0)}
-
+/* ═══ .prem-classic .st-card:hover .quick-view-btn ═══ */
+.prem-classic .st-card:hover .quick-view-btn {
+  opacity: 1; /* الشفافية */
+  transform: translateY(0); /* التحويل (تدوير/تكبير) */
+}
 /* ---------- 7. DEAL DARK SECTION — editorial #101010 ---------- */
-.prem-classic .deal-section{
-  background:var(--pc-bg-dark) !important;
-  color:#fff !important;
-  border-top:1px solid #1c1c1c;
-  border-bottom:1px solid #1c1c1c;
-  padding:2.2rem 0 !important;
-  margin:1.2rem 0;
+/* ═══ .prem-classic .deal-section ═══ */
+.prem-classic .deal-section {
+  background: var(--pc-bg-dark) !important; /* الخلفية */
+  color: #fff !important; /* لون النص */
+  border-top: 1px solid #1c1c1c; /* حد علوي */
+  border-bottom: 1px solid #1c1c1c; /* حد سفلي */
+  padding: 2.2rem 0 !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  margin: 1.2rem 0; /* هامش خارجي (مسافة حول العنصر) */
 }
-.prem-classic .deal-section .deal-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center;
-  max-width:1280px;margin:0 auto;padding:0 1.2rem;
+/* ═══ .prem-classic .deal-section .deal-grid ═══ */
+.prem-classic .deal-section .deal-grid {
+  display: grid; /* طريقة العرض */
+  grid-template-columns: 1fr 1fr; /* أعمدة الشبكة */
+  gap: 2rem; /* المسافة بين العناصر */
+  align-items: center; /* محاذاة عمودية */
+  max-width: 1280px; /* أقصى عرض */
+  margin: 0 auto; /* هامش خارجي (مسافة حول العنصر) */
+  padding: 0 1.2rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
 }
-.prem-classic .deal-section h2{
-  font-size:clamp(1.4rem,2.8vw,2.1rem) !important;
-  font-weight:900 !important;text-transform:uppercase;letter-spacing:-1px;
-  color:#fff !important;line-height:1.05;margin-bottom:10px !important;
+/* ═══ .prem-classic .deal-section h2 ═══ */
+.prem-classic .deal-section h2 {
+  font-size: clamp(1.4rem,2.8vw,2.1rem) !important; /* حجم الخط */
+  font-weight: 900 !important; /* سماكة الخط */
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  color: #fff !important; /* لون النص */
+  line-height: 1.05; /* ارتفاع السطر */
+  margin-bottom: 10px !important; /* هامش سفلي */
 }
-.prem-classic .deal-section h2 em{font-style:normal;color:var(--pc-accent) !important}
-.prem-classic .deal-section p{color:#9a9a9a !important;font-size:.88rem;max-width:420px;margin-bottom:18px}
-.prem-classic .deal-section .countdown{display:flex;gap:8px;margin-bottom:18px}
-.prem-classic .deal-section .countdown .cd-box{
-  background:#1c1c1c;border:1px solid #2c2c2c;border-radius:var(--pc-radius);
-  min-width:62px;padding:10px 8px;text-align:center;
+/* ═══ .prem-classic .deal-section h2 em ═══ */
+.prem-classic .deal-section h2 em {
+  font-style: normal;
+  color: var(--pc-accent) !important; /* لون النص */
 }
-.prem-classic .deal-section .countdown .cd-box b{display:block;font-size:1.35rem;font-weight:900;color:#fff;letter-spacing:-.5px}
-.prem-classic .deal-section .countdown .cd-box span{font-size:.58rem;text-transform:uppercase;letter-spacing:1.6px;color:#777;font-weight:700}
-.prem-classic .deal-section .st-btn{background:var(--pc-accent) !important}
-.prem-classic .deal-section .st-btn:hover{background:#fff !important;color:var(--pc-ink) !important}
-.prem-classic .deal-section img{border-radius:var(--pc-radius) !important;box-shadow:var(--pc-shadow)}
-
+/* ═══ .prem-classic .deal-section p ═══ */
+.prem-classic .deal-section p {
+  color: #9a9a9a !important; /* لون النص */
+  font-size: .88rem; /* حجم الخط */
+  max-width: 420px; /* أقصى عرض */
+  margin-bottom: 18px; /* هامش سفلي */
+}
+/* ═══ .prem-classic .deal-section .countdown ═══ */
+.prem-classic .deal-section .countdown {
+  display: flex; /* طريقة العرض */
+  gap: 8px; /* المسافة بين العناصر */
+  margin-bottom: 18px; /* هامش سفلي */
+}
+/* ═══ .prem-classic .deal-section .countdown .cd-box ═══ */
+.prem-classic .deal-section .countdown .cd-box {
+  background: #1c1c1c; /* الخلفية */
+  border: 1px solid #2c2c2c; /* الحدود */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  min-width: 62px; /* أدنى عرض */
+  padding: 10px 8px; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  text-align: center; /* محاذاة النص */
+}
+/* ═══ .prem-classic .deal-section .countdown .cd-box b ═══ */
+.prem-classic .deal-section .countdown .cd-box b {
+  display: block; /* طريقة العرض */
+  font-size: 1.35rem; /* حجم الخط */
+  font-weight: 900; /* سماكة الخط */
+  color: #fff; /* لون النص */
+  letter-spacing: -.5px;
+}
+/* ═══ .prem-classic .deal-section .countdown .cd-box span ═══ */
+.prem-classic .deal-section .countdown .cd-box span {
+  font-size: .58rem; /* حجم الخط */
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+  color: #777; /* لون النص */
+  font-weight: 700; /* سماكة الخط */
+}
+/* ═══ .prem-classic .deal-section .st-btn ═══ */
+.prem-classic .deal-section .st-btn {
+  background: var(--pc-accent) !important; /* الخلفية */
+}
+/* ═══ .prem-classic .deal-section .st-btn:hover ═══ */
+.prem-classic .deal-section .st-btn:hover {
+  background: #fff !important; /* الخلفية */
+  color: var(--pc-ink) !important; /* لون النص */
+}
+/* ═══ .prem-classic .deal-section img ═══ */
+.prem-classic .deal-section img {
+  border-radius: var(--pc-radius) !important; /* تدوير الزوايا */
+  box-shadow: var(--pc-shadow); /* الظل */
+}
 /* ---------- 8. BENEFITS — dividers distinctive ---------- */
-.prem-classic .benefits{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  border-block:1px solid var(--pc-line);
-  background:#fff;
-  max-width:1280px;margin:0 auto;
+/* ═══ .prem-classic .benefits ═══ */
+.prem-classic .benefits {
+  display: grid; /* طريقة العرض */
+  grid-template-columns: repeat(4,1fr); /* أعمدة الشبكة */
+  border-block: 1px solid var(--pc-line);
+  background: #fff; /* الخلفية */
+  max-width: 1280px; /* أقصى عرض */
+  margin: 0 auto; /* هامش خارجي (مسافة حول العنصر) */
 }
-.prem-classic .benefit{
-  display:flex;align-items:center;gap:12px;
-  padding:20px 16px;
-  border-inline-end:1px solid var(--pc-line);
-  background:#fff;
+/* ═══ .prem-classic .benefit ═══ */
+.prem-classic .benefit {
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: 12px; /* المسافة بين العناصر */
+  padding: 20px 16px; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-inline-end: 1px solid var(--pc-line);
+  background: #fff; /* الخلفية */
 }
-.prem-classic .benefit:last-child{border-inline-end:none}
-.prem-classic .benefit .b-ico{
-  width:38px;height:38px;background:var(--pc-bg-soft);
-  border-radius:50%;display:grid;place-items:center;
-  font-size:1rem;flex-shrink:0;color:var(--pc-ink)
+/* ═══ .prem-classic .benefit:last-child ═══ */
+.prem-classic .benefit:last-child {
+  border-inline-end: none;
 }
-.prem-classic .benefit b{font-size:.76rem;color:var(--pc-ink);display:block;text-transform:uppercase;letter-spacing:.06em;font-weight:800}
-.prem-classic .benefit span{font-size:.72rem;color:var(--pc-muted)}
-
+/* ═══ .prem-classic .benefit .b-ico ═══ */
+.prem-classic .benefit .b-ico {
+  width: 38px; /* العرض */
+  height: 38px; /* الارتفاع */
+  background: var(--pc-bg-soft); /* الخلفية */
+  border-radius: 50%; /* تدوير الزوايا */
+  display: grid; /* طريقة العرض */
+  place-items: center;
+  font-size: 1rem; /* حجم الخط */
+  flex-shrink: 0; /* الانكماش */
+  color: var(--pc-ink); /* لون النص */
+}
+/* ═══ .prem-classic .benefit b ═══ */
+.prem-classic .benefit b {
+  font-size: .76rem; /* حجم الخط */
+  color: var(--pc-ink); /* لون النص */
+  display: block; /* طريقة العرض */
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 800; /* سماكة الخط */
+}
+/* ═══ .prem-classic .benefit span ═══ */
+.prem-classic .benefit span {
+  font-size: .72rem; /* حجم الخط */
+  color: var(--pc-muted); /* لون النص */
+}
 /* also map market feats to same divider feel */
-.prem-classic .mk-feats{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  border-block:1px solid var(--pc-line);
+/* ═══ .prem-classic .mk-feats ═══ */
+.prem-classic .mk-feats {
+  display: grid; /* طريقة العرض */
+  grid-template-columns: repeat(4,1fr); /* أعمدة الشبكة */
+  border-block: 1px solid var(--pc-line);
 }
-.prem-classic .mk-feats > div{border-inline-end:1px solid var(--pc-line)}
-.prem-classic .mk-feats > div:last-child{border-inline-end:none}
-
+/* ═══ .prem-classic .mk-feats > div ═══ */
+.prem-classic .mk-feats > div {
+  border-inline-end: 1px solid var(--pc-line);
+}
+/* ═══ .prem-classic .mk-feats > div:last-child ═══ */
+.prem-classic .mk-feats > div:last-child {
+  border-inline-end: none;
+}
 /* ---------- 9. PRODUCT PAGE — sharp editorial ---------- */
-.prem-classic .st-product{
-  display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;
-  animation:pcFade .4s ease;
+/* ═══ .prem-classic .st-product ═══ */
+.prem-classic .st-product {
+  display: grid; /* طريقة العرض */
+  grid-template-columns: 1fr 1fr; /* أعمدة الشبكة */
+  gap: 1.4rem; /* المسافة بين العناصر */
+  animation: pcFade .4s ease; /* الحركة */
 }
-@keyframes pcFade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.prem-classic .st-gallery{
-  background:#fff;border:1px solid var(--pc-line);
-  border-radius:var(--pc-radius);padding:.8rem;
-  box-shadow:none;align-self:start;
-}
-.prem-classic .st-main-img{
-  width:100%;aspect-ratio:1/1;object-fit:cover;
-  border-radius:var(--pc-radius);cursor:zoom-in;
-  transition:transform .25s;background:var(--pc-bg-soft)
-}
-.prem-classic .st-main-img:hover{transform:none}
-.prem-classic .st-thumbs{display:flex;gap:6px;margin-top:.65rem;flex-wrap:wrap}
-.prem-classic .st-thumbs img{
-  width:56px;height:56px;object-fit:cover;
-  border-radius:var(--pc-radius);cursor:pointer;
-  border:2px solid transparent;transition:var(--pc-t);opacity:.8;
-}
-.prem-classic .st-thumbs img:hover,
-.prem-classic .st-thumbs img.active{border-color:var(--pc-ink);opacity:1;transform:none}
-.prem-classic .st-product-info{
-  background:#fff;border:1px solid var(--pc-line);
-  border-radius:var(--pc-radius);padding:1.2rem;
-  display:flex;flex-direction:column;gap:.65rem;
-  align-self:start;box-shadow:none;position:sticky;top:80px;
-}
-.prem-classic .st-product-info h1{font-size:1.18rem;font-weight:900;line-height:1.35;color:var(--pc-ink);text-transform:uppercase;letter-spacing:-.02em}
-.prem-classic .st-desc{color:var(--pc-muted);line-height:1.85;font-size:.84rem;border-top:1px solid var(--pc-line);padding-top:.9rem;margin-top:.2rem}
-.prem-classic .st-price.big b{font-size:1.45rem}
-.prem-classic .st-specs{border:1px solid var(--pc-line);border-radius:var(--pc-radius);overflow:hidden}
-.prem-classic .st-specs td:first-child{background:var(--pc-bg-soft);font-weight:800;color:var(--pc-muted);width:38%;text-transform:uppercase;font-size:.72rem;letter-spacing:.04em}
-.prem-classic .st-specs td{padding:.55rem .7rem;font-size:.82rem}
-.prem-classic .st-badge-soldout{
-  background:var(--pc-line);color:var(--pc-ink);
-  font-weight:800;padding:.55rem 1rem;border-radius:var(--pc-radius);
-  text-align:center;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--pc-line)
-}
-.prem-classic .st-badge-lowstock{
-  background:#ffe9de;color:var(--pc-accent);
-  font-weight:800;padding:.55rem 1rem;border-radius:var(--pc-radius);
-  text-align:center;font-size:.78rem;border:1px solid #ffd5c2;text-transform:uppercase;letter-spacing:.04em
-}
-.prem-classic .st-opt{font-size:.78rem;font-weight:800;color:var(--pc-ink);display:flex;flex-direction:column;gap:.28rem;margin:.45rem 0;text-transform:uppercase;letter-spacing:.04em}
-.prem-classic .st-opt-sel{
-  padding:.55rem .7rem;border-radius:var(--pc-radius);
-  border:1px solid var(--pc-line);background:#fff;color:var(--pc-text);
-  font-family:inherit;transition:var(--pc-t);width:100%;font-size:.82rem;text-transform:none;letter-spacing:0
-}
-.prem-classic .st-opt-sel:focus{outline:none;border-color:var(--pc-ink);box-shadow:0 0 0 3px rgba(17,17,17,.06)}
-.prem-classic .st-addons{display:flex;flex-wrap:wrap;gap:.4rem;margin:.55rem 0}
-.prem-classic .st-addon{
-  display:flex;align-items:center;gap:.4rem;font-size:.76rem;
-  background:var(--pc-bg-soft);padding:.38rem .7rem;border-radius:var(--pc-radius);
-  cursor:pointer;color:var(--pc-ink);transition:var(--pc-t);border:1px solid var(--pc-line);
-  text-transform:none;letter-spacing:0;font-weight:600
-}
-.prem-classic .st-addon:hover{border-color:var(--pc-ink);background:#fff}
-.prem-classic .st-addon input{accent-color:var(--pc-ink);width:15px;height:15px}
-.prem-classic .qty-row{display:flex;align-items:center;gap:0}
-.prem-classic .qty-row button{
-  width:38px;height:38px;border-radius:var(--pc-radius);
-  border:1.5px solid var(--pc-ink);background:var(--pc-bg-soft);
-  font-size:1.05rem;color:var(--pc-ink);cursor:pointer;transition:var(--pc-t);
-  font-weight:800;display:flex;align-items:center;justify-content:center;
-}
-.prem-classic .qty-row button:hover{background:var(--pc-ink);color:#fff;transform:none}
-.prem-classic .qty-row input{
-  width:50px;height:38px;text-align:center;
-  border:1.5px solid var(--pc-ink);border-left:none;border-right:none;
-  border-radius:0;font-size:.95rem;font-weight:800;background:#fff;color:var(--pc-ink);font-family:inherit;
-}
-.prem-classic .qty-row.mini button{width:30px;height:30px;font-size:.9rem}
-.prem-classic .qty-row.mini input{width:40px;height:30px;font-size:.82rem}
-.prem-classic .st-stock{font-size:.74rem;color:var(--pc-success);font-weight:700;display:flex;align-items:center;gap:.3rem;text-transform:uppercase;letter-spacing:.04em}
-.prem-classic .st-stock::before{content:'✓';width:16px;height:16px;background:var(--pc-success);color:#fff;border-radius:50%;display:grid;place-items:center;font-size:.6rem}
-.prem-classic .st-rel-title{
-  margin:1.8rem 0 .9rem;font-size:1.02rem;font-weight:900;color:var(--pc-ink);
-  display:flex;align-items:center;gap:.5rem;text-transform:uppercase;letter-spacing:-.02em;
-}
-.prem-classic .st-rel-title::after{content:'';flex:1;height:1px;background:var(--pc-line)}
-.prem-classic .wa-order{background:#111 !important}
-.prem-classic .wa-order:hover{background:var(--pc-accent) !important}
-
-/* ---------- 10. CHECKOUT / DONE ---------- */
-.prem-classic .st-checkout{display:grid;grid-template-columns:1.1fr 1fr;gap:1.35rem;align-items:start}
-.prem-classic .st-checkout .card{
-  background:#fff;border:1px solid var(--pc-line);border-radius:var(--pc-radius);
-  padding:1.35rem;box-shadow:none;
-}
-.prem-classic .st-checkout h2{
-  margin-bottom:.9rem;font-size:.95rem;font-weight:900;color:var(--pc-ink);
-  padding-bottom:.65rem;border-bottom:2px solid var(--pc-ink);display:flex;align-items:center;gap:.45rem;
-  text-transform:uppercase;letter-spacing:.04em;
-}
-.prem-classic .st-checkout label{font-size:.76rem;font-weight:800;color:var(--pc-ink);text-transform:uppercase;letter-spacing:.03em}
-.prem-classic .st-checkout input,.prem-classic .st-checkout textarea{
-  padding:.65rem .8rem;border:1px solid var(--pc-line);border-radius:var(--pc-radius);
-  font-size:.84rem;font-family:inherit;background:#fff;color:var(--pc-text);transition:var(--pc-t);
-}
-.prem-classic .st-checkout input:focus,.prem-classic .st-checkout textarea:focus{outline:none;border-color:var(--pc-ink);box-shadow:0 0 0 3px rgba(17,17,17,.06);background:#fff}
-.prem-classic .st-done{padding:3.2rem 1.2rem}
-.prem-classic .st-done-icon{background:var(--pc-ink) !important;color:#fff;box-shadow:none;width:78px;height:78px;font-size:1.9rem}
-.prem-classic .st-done h1{
-  background:none !important;-webkit-text-fill-color:var(--pc-ink) !important;color:var(--pc-ink) !important;
-  font-weight:900;text-transform:uppercase;letter-spacing:-.02em;
-}
-.prem-classic .st-done-sum{border:1px solid var(--pc-line);border-radius:var(--pc-radius)}
-.prem-classic .st-done-sum .st-done-line.total b{color:var(--pc-accent) !important}
-
-/* ---------- 11. REVIEWS — minimal editorial ---------- */
-.prem-classic .st-reviews{margin-top:2rem}
-.prem-classic .st-rating-summary{
-  background:var(--pc-bg-soft);border:1px solid var(--pc-line);border-radius:var(--pc-radius);
-  padding:1rem 1.1rem;margin-bottom:1rem;display:flex;align-items:center;gap:1rem;
-}
-.prem-classic .st-rating-avg{color:var(--pc-ink);font-size:2.6rem;font-weight:900;line-height:1}
-.prem-classic .st-rating-bar{background:var(--pc-line);height:6px;border-radius:3px}
-.prem-classic .st-rating-bar-fill{background:var(--pc-ink);border-radius:3px}
-.prem-classic .star-btn.active,.prem-classic .star-btn:hover{color:var(--pc-accent) !important}
-.prem-classic .st-review-stars{color:#ff4d00;font-size:1rem;letter-spacing:1px}
-.prem-classic .st-review-card{border:1px solid var(--pc-line);border-radius:var(--pc-radius);background:#fff}
-.prem-classic .st-review-card:hover{box-shadow:var(--pc-shadow-sm);border-color:var(--pc-line)}
-.prem-classic .st-review-form{border:1px solid var(--pc-line);border-radius:var(--pc-radius);background:#fff;box-shadow:none}
-.prem-classic .st-review-form h3{color:var(--pc-ink);text-transform:uppercase;letter-spacing:.04em;font-size:.95rem;font-weight:800}
-
-/* ---------- 12. CART FAB + DRAWER — ink pill sharp 4px ---------- */
-.prem-classic .cart-fab{
-  background:var(--pc-ink) !important;
-  border-radius:var(--pc-radius) !important;
-  padding:.62rem 1.1rem !important;
-  font-size:.78rem !important;font-weight:800 !important;
-  letter-spacing:.04em;text-transform:uppercase;
-  box-shadow:var(--pc-shadow) !important;gap:.6rem !important;
-}
-.prem-classic .cart-fab:hover{transform:translateY(-1px) !important;box-shadow:0 12px 28px rgba(0,0,0,.18) !important;filter:none}
-.prem-classic .cart-count{
-  background:var(--pc-accent) !important;color:#fff !important;
-  min-width:18px !important;height:18px !important;font-size:.62rem !important;font-weight:800 !important;
-  border-radius:50% !important;padding:0 4px !important;
-}
-.prem-classic .drawer-overlay{background:rgba(0,0,0,.45) !important;backdrop-filter:blur(4px)}
-.prem-classic .cart-drawer{box-shadow:var(--pc-shadow) !important;border-left:1px solid var(--pc-line)}
-.prem-classic .drawer-head{
-  background:#fff !important;border-bottom:1px solid var(--pc-line) !important;
-  padding:1rem 1.1rem !important;
-}
-.prem-classic .drawer-head h3{font-size:.95rem;font-weight:900;color:var(--pc-ink) !important;text-transform:uppercase;letter-spacing:.04em}
-.prem-classic .co-item{border:1px solid var(--pc-line) !important;border-radius:var(--pc-radius) !important;background:#fff !important}
-.prem-classic .co-item:hover{box-shadow:var(--pc-shadow-sm) !important}
-.prem-classic #cartCheckout{
-  background:var(--pc-ink) !important;border-radius:var(--pc-radius) !important;
-  font-weight:800 !important;text-transform:uppercase;letter-spacing:.04em;font-size:.82rem !important;
-  box-shadow:none !important;
-}
-.prem-classic #cartCheckout:hover{background:var(--pc-accent) !important;filter:none;transform:none !important}
-.prem-classic .mc-toast{
-  background:var(--pc-ink) !important;color:#fff !important;
-  border-radius:var(--pc-radius) !important;font-weight:700 !important;
-  box-shadow:var(--pc-shadow) !important;font-size:.82rem !important;
-  letter-spacing:.02em;
-}
-.prem-classic .lightbox-overlay{background:rgba(16,16,16,.92) !important}
-
-/* ---------- 13. MISC — newsletter / brands / footer accents ---------- */
-.prem-classic .newsletter{text-align:center;max-width:560px;margin:0 auto}
-.prem-classic .newsletter h2{font-size:clamp(1.35rem,2.6vw,1.9rem);font-weight:900;text-transform:uppercase;letter-spacing:-.02em;color:var(--pc-ink)}
-.prem-classic .newsletter h2 span{color:var(--pc-accent) !important}
-.prem-classic .news-form{display:flex;gap:0;border-bottom:2px solid var(--pc-ink);max-width:440px;margin:0 auto}
-.prem-classic .news-form input{flex:1;border:none;outline:none;padding:10px 4px;font-size:.88rem;background:transparent}
-.prem-classic .news-form button{background:var(--pc-ink);color:#fff;padding:10px 20px;font-weight:800;font-size:.72rem;text-transform:uppercase;letter-spacing:1.2px;border-radius:0;transition:var(--pc-t)}
-.prem-classic .news-form button:hover{background:var(--pc-accent)}
-.prem-classic .brands-strip{display:grid;grid-template-columns:repeat(4,1fr);border-block:1px solid var(--pc-line)}
-.prem-classic .brand-cell{padding:22px 14px;text-align:center;border-inline-end:1px solid var(--pc-line);font-weight:900;font-size:.95rem;letter-spacing:3px;color:#bbb;text-transform:uppercase;transition:var(--pc-t)}
-.prem-classic .brand-cell:last-child{border-inline-end:none}
-.prem-classic .brand-cell:hover{color:var(--pc-ink);background:var(--pc-bg-soft)}
-.prem-classic .st-brand{color:#999;font-size:.70rem;text-transform:uppercase;letter-spacing:.06em}
-.prem-classic .st-brand a{color:var(--pc-ink) !important;font-weight:800}
-.prem-classic .st-brand a:hover{color:var(--pc-accent) !important}
-.prem-classic .store-float .sf-wa{background:var(--pc-ink) !important}
-.prem-classic .store-float .sf-wa:hover{background:var(--pc-accent) !important}
-.prem-classic .store-float .sf-share{background:#fff !important;color:var(--pc-ink) !important;border:1.5px solid var(--pc-line) !important;box-shadow:var(--pc-shadow-sm)}
-.prem-classic .co-coupon .st-btn{border-radius:var(--pc-radius) !important}
-.prem-classic .co-payment label:has(input:checked){border-color:var(--pc-ink) !important;background:var(--pc-bg-soft) !important}
-.prem-classic .alert-err{border-radius:var(--pc-radius);border:1px solid #fecaca}
-
-/* toast / cart table inline helpers */
-.prem-classic .toast{
-  position:fixed;bottom:22px;left:50%;transform:translate(-50%,70px);
-  z-index:300;background:var(--pc-ink);color:#fff;
-  padding:11px 18px;border-radius:var(--pc-radius);
-  font-size:.78rem;font-weight:700;box-shadow:var(--pc-shadow);
-  opacity:0;visibility:hidden;transition:var(--pc-t);display:flex;align-items:center;gap:8px;
-  text-transform:uppercase;letter-spacing:.04em;
-}
-.prem-classic .toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
-
-/* ---------- 14. RESPONSIVE — no overflow, compact ---------- */
-@media(max-width:1280px){
-  .prem-classic .st-head-inner{max-width:1280px}
-  .prem-classic .st-main{max-width:1280px}
-  .prem-classic .cat-tiles{max-width:1280px}
-}
-@media(max-width:1024px){
-  .prem-classic .st-head-inner{padding:0 1rem;height:62px}
-  .prem-classic .classic-hero .st-head-inner{padding:.85rem 1rem;min-height:70px}
-  .prem-classic .st-main{padding:.9rem 1rem 3rem}
-  .prem-classic .st-grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr)) !important;gap:10px !important}
-  .prem-classic .cat-tiles{grid-template-columns:repeat(2,1fr);gap:10px;padding:0 1rem}
-  .prem-classic .st-product{grid-template-columns:1fr 1fr;gap:1.2rem}
-  .prem-classic .st-checkout{grid-template-columns:1fr 1fr;gap:1.2rem}
-  .prem-classic .deal-section .deal-grid{gap:1.4rem}
-  .prem-classic .benefits{grid-template-columns:repeat(2,1fr)}
-  .prem-classic .st-nav{gap:1rem}
-}
-@media(max-width:768px){
-  .prem-classic .st-head-inner{padding:0 1rem;height:auto;min-height:60px;flex-wrap:wrap;gap:.6rem}
-  .prem-classic .st-head h1{font-size:1.25rem !important}
-  .prem-classic .st-search{padding:0 1rem;margin-top:.55rem}
-  .prem-classic .st-nav{
-    overflow-x:auto;flex-wrap:nowrap;justify-content:flex-start;
-    -webkit-overflow-scrolling:touch;scrollbar-width:none;
-    gap:1rem;padding:0 1rem;min-height:42px;
+@keyframes pcFade {
+  /* ═══ from ═══ */
+  from {
+    opacity: 0; /* الشفافية */
+    transform: translateY(10px); /* التحويل (تدوير/تكبير) */
   }
-  .prem-classic .st-nav::-webkit-scrollbar{display:none}
-  .prem-classic .st-nav a{padding:11px 0;font-size:.72rem !important}
-  .prem-classic .st-main{padding:.75rem 1rem 3rem}
-  .prem-classic .st-grid{grid-template-columns:repeat(2,1fr) !important;gap:8px !important}
-  .prem-classic .cat-tiles{grid-template-columns:repeat(2,1fr);gap:8px;padding:0 1rem}
-  .prem-classic .st-card-body{padding:.5rem .6rem .65rem !important}
-  .prem-classic .st-name{font-size:.74rem !important;min-height:2.05em}
-  .prem-classic .st-price b{font-size:.82rem !important}
-  .prem-classic .st-price del{font-size:.68rem !important}
-  .prem-classic .st-card .st-btn{font-size:.70rem !important;padding:.45rem .65rem !important}
-  .prem-classic .deal-section .deal-grid{grid-template-columns:1fr;gap:1.2rem}
-  .prem-classic .benefits{grid-template-columns:repeat(2,1fr)}
-  .prem-classic .benefit{padding:16px 12px}
-  .prem-classic .brands-strip{grid-template-columns:repeat(2,1fr)}
-  .prem-classic .cart-fab{bottom:14px;left:12px;right:12px;justify-content:center;border-radius:var(--pc-radius) !important;padding:.55rem 1rem !important}
-  .prem-classic .cart-drawer{width:100% !important}
-  .prem-classic .st-product{grid-template-columns:1fr;gap:1rem}
-  .prem-classic .st-product-info{position:static !important}
-  .prem-classic .st-checkout{grid-template-columns:1fr;gap:1rem}
-  .prem-classic .announce-bar{font-size:.68rem !important;padding:8px 10px !important}
+  /* ═══ to ═══ */
+  to {
+    opacity: 1; /* الشفافية */
+    transform: translateY(0); /* التحويل (تدوير/تكبير) */
+  }
 }
-@media(max-width:600px){
-  .prem-classic .st-head h1{font-size:1.15rem !important}
-  .prem-classic .st-head p{font-size:.70rem !important}
-  .prem-classic .classic-hero .st-head-inner{padding:.75rem 1rem;min-height:68px}
-  .prem-classic .st-grid{grid-template-columns:repeat(2,1fr) !important;gap:7px !important}
-  .prem-classic .cat-tiles{grid-template-columns:repeat(2,1fr);gap:7px}
-  .prem-classic .st-product-info{padding:1rem}
-  .prem-classic .st-product-info h1{font-size:1.05rem}
-  .prem-classic .st-price.big b{font-size:1.18rem !important}
-  .prem-classic .st-checkout .card{padding:1rem}
-  .prem-classic .st-rel-title{font-size:.95rem;margin:1.4rem 0 .7rem}
-  .prem-classic .benefits{grid-template-columns:1fr}
-  .prem-classic .benefit{border-inline-end:none;border-bottom:1px solid var(--pc-line)}
-  .prem-classic .benefit:last-child{border-bottom:none}
-  .prem-classic .brands-strip{grid-template-columns:repeat(2,1fr)}
-  .prem-classic .deal-section{padding:1.6rem 0 !important}
-  .prem-classic .deal-section .countdown .cd-box{min-width:56px;padding:8px 6px}
-  .prem-classic .deal-section .countdown .cd-box b{font-size:1.2rem}
+/* ═══ .prem-classic .st-gallery ═══ */
+.prem-classic .st-gallery {
+  background: #fff; /* الخلفية */
+  border: 1px solid var(--pc-line); /* الحدود */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  padding: .8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  box-shadow: none; /* الظل */
+  align-self: start;
 }
-@media(max-width:480px){
-  .prem-classic .st-head-inner{padding:.6rem .9rem}
-  .prem-classic .st-head h1{font-size:1.05rem !important}
-  .prem-classic .st-logo{max-height:42px;max-width:140px}
-  .prem-classic .st-search{padding:0 .9rem}
-  .prem-classic .st-search form{padding:3px 3px 3px 10px !important}
-  .prem-classic .st-search input{font-size:.78rem;padding:.38rem .2rem}
-  .prem-classic .st-search button{padding:7px 12px !important;font-size:.70rem !important}
-  .prem-classic .st-nav{padding:0 .9rem;gap:.9rem}
-  .prem-classic .st-nav a{font-size:.68rem !important}
-  .prem-classic .st-main{padding:.6rem .9rem 2.8rem}
-  .prem-classic .cat-tiles{grid-template-columns:1fr;gap:8px;padding:0 .9rem}
-  .prem-classic .st-grid{grid-template-columns:repeat(2,1fr) !important;gap:7px !important}
-  .prem-classic .mk-discount{font-size:.58rem !important;padding:2px 6px !important}
-  .prem-classic .st-soldout-tag{font-size:.58rem !important;padding:2px 6px !important}
-  .prem-classic .st-card-body{padding:.45rem .5rem .55rem !important}
-  .prem-classic .st-name{font-size:.72rem !important}
-  .prem-classic .st-price b{font-size:.80rem !important}
-  .prem-classic .st-card .st-btn{font-size:.68rem !important;padding:.42rem .6rem !important}
-  .prem-classic .drawer-head{padding:.8rem .9rem !important}
-  .prem-classic .st-thumbs img{width:48px;height:48px}
-  .prem-classic .qty-row button{width:36px;height:36px}
-  .prem-classic .qty-row input{width:46px;height:36px}
-  .prem-classic .deal-section h2{font-size:1.5rem !important}
-  .prem-classic .newsletter h2{font-size:1.35rem}
+/* ═══ .prem-classic .st-main-img ═══ */
+.prem-classic .st-main-img {
+  width: 100%; /* العرض */
+  aspect-ratio: 1/1; /* نسبة الأبعاد */
+  object-fit: cover; /* ملاءمة الصورة */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  cursor: zoom-in; /* شكل المؤشر */
+  transition: transform .25s; /* الحركة الانتقالية */
+  background: var(--pc-bg-soft); /* الخلفية */
 }
-@media(max-width:375px){
-  .prem-classic .st-head-inner{padding:.55rem .8rem}
-  .prem-classic .st-main{padding:.55rem .8rem 2.8rem}
-  .prem-classic .st-grid{grid-template-columns:repeat(2,1fr) !important;gap:6px !important}
-  .prem-classic .cat-tiles{grid-template-columns:1fr;gap:6px;padding:0 .8rem}
-  .prem-classic .st-nav{padding:0 .8rem}
-  .prem-classic .st-search{padding:0 .8rem}
-  .prem-classic .st-card-body{padding:.42rem .48rem .52rem !important}
-  .prem-classic .st-name{font-size:.70rem !important;min-height:2em}
-  .prem-classic .st-price b{font-size:.76rem !important}
-  .prem-classic .st-card .st-btn{padding:.4rem .55rem !important;font-size:.66rem !important}
-  .prem-classic .st-product-info{padding:.9rem}
-  .prem-classic .st-done{padding:1.6rem .8rem}
-  .prem-classic .announce-bar{font-size:.64rem !important}
-  .prem-classic .benefit{padding:14px 10px}
+/* ═══ .prem-classic .st-main-img:hover ═══ */
+.prem-classic .st-main-img:hover {
+  transform: none; /* التحويل (تدوير/تكبير) */
 }
-@media(max-width:360px){
-  .prem-classic .st-head-inner{padding:.5rem .7rem}
-  .prem-classic .st-main{padding:.5rem .7rem 2.6rem}
-  .prem-classic .st-grid{grid-template-columns:1fr !important;gap:8px !important}
-  .prem-classic .cat-tiles{grid-template-columns:1fr;gap:8px;padding:0 .7rem}
-  .prem-classic .st-addons{flex-direction:column;align-items:stretch}
-  .prem-classic .st-addon{justify-content:center}
-  .prem-classic .qty-row{justify-content:center}
-  .prem-classic .qty-row input{width:44px}
-  .prem-classic .co-coupon{flex-direction:column}
-  .prem-classic .co-coupon .st-btn{width:100% !important}
-  .prem-classic .st-rating-avg{font-size:2.2rem}
-  .prem-classic .cart-fab{left:10px;right:10px;bottom:10px}
-  .prem-classic .benefits{grid-template-columns:1fr}
+/* ═══ .prem-classic .st-thumbs ═══ */
+.prem-classic .st-thumbs {
+  display: flex; /* طريقة العرض */
+  gap: 6px; /* المسافة بين العناصر */
+  margin-top: .65rem; /* هامش علوي */
+  flex-wrap: wrap; /* التفاف العناصر */
 }
-
+/* ═══ .prem-classic .st-thumbs img ═══ */
+.prem-classic .st-thumbs img {
+  width: 56px; /* العرض */
+  height: 56px; /* الارتفاع */
+  object-fit: cover; /* ملاءمة الصورة */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  cursor: pointer; /* شكل المؤشر */
+  border: 2px solid transparent; /* الحدود */
+  transition: var(--pc-t); /* الحركة الانتقالية */
+  opacity: .8; /* الشفافية */
+}
+/* ═══ .prem-classic .st-thumbs img:hover, .prem-classic .st-thumbs img.active ═══ */
+.prem-classic .st-thumbs img:hover, .prem-classic .st-thumbs img.active {
+  border-color: var(--pc-ink);
+  opacity: 1; /* الشفافية */
+  transform: none; /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .prem-classic .st-product-info ═══ */
+.prem-classic .st-product-info {
+  background: #fff; /* الخلفية */
+  border: 1px solid var(--pc-line); /* الحدود */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  padding: 1.2rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  display: flex; /* طريقة العرض */
+  flex-direction: column; /* اتجاه العناصر */
+  gap: .65rem; /* المسافة بين العناصر */
+  align-self: start;
+  box-shadow: none; /* الظل */
+  position: sticky; /* طريقة التموضع */
+  top: 80px; /* البعد عن الأعلى */
+}
+/* ═══ .prem-classic .st-product-info h1 ═══ */
+.prem-classic .st-product-info h1 {
+  font-size: 1.18rem; /* حجم الخط */
+  font-weight: 900; /* سماكة الخط */
+  line-height: 1.35; /* ارتفاع السطر */
+  color: var(--pc-ink); /* لون النص */
+  text-transform: uppercase;
+  letter-spacing: -.02em;
+}
+/* ═══ .prem-classic .st-desc ═══ */
+.prem-classic .st-desc {
+  color: var(--pc-muted); /* لون النص */
+  line-height: 1.85; /* ارتفاع السطر */
+  font-size: .84rem; /* حجم الخط */
+  border-top: 1px solid var(--pc-line); /* حد علوي */
+  padding-top: .9rem; /* حشوة علوية */
+  margin-top: .2rem; /* هامش علوي */
+}
+/* ═══ .prem-classic .st-price.big b ═══ */
+.prem-classic .st-price.big b {
+  font-size: 1.45rem; /* حجم الخط */
+}
+/* ═══ .prem-classic .st-specs ═══ */
+.prem-classic .st-specs {
+  border: 1px solid var(--pc-line); /* الحدود */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  overflow: hidden; /* التعامل مع الفائض */
+}
+/* ═══ .prem-classic .st-specs td:first-child ═══ */
+.prem-classic .st-specs td:first-child {
+  background: var(--pc-bg-soft); /* الخلفية */
+  font-weight: 800; /* سماكة الخط */
+  color: var(--pc-muted); /* لون النص */
+  width: 38%; /* العرض */
+  text-transform: uppercase;
+  font-size: .72rem; /* حجم الخط */
+  letter-spacing: .04em;
+}
+/* ═══ .prem-classic .st-specs td ═══ */
+.prem-classic .st-specs td {
+  padding: .55rem .7rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-size: .82rem; /* حجم الخط */
+}
+/* ═══ .prem-classic .st-badge-soldout ═══ */
+.prem-classic .st-badge-soldout {
+  background: var(--pc-line); /* الخلفية */
+  color: var(--pc-ink); /* لون النص */
+  font-weight: 800; /* سماكة الخط */
+  padding: .55rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  text-align: center; /* محاذاة النص */
+  font-size: .78rem; /* حجم الخط */
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  border: 1px solid var(--pc-line); /* الحدود */
+}
+/* ═══ .prem-classic .st-badge-lowstock ═══ */
+.prem-classic .st-badge-lowstock {
+  background: #ffe9de; /* الخلفية */
+  color: var(--pc-accent); /* لون النص */
+  font-weight: 800; /* سماكة الخط */
+  padding: .55rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  text-align: center; /* محاذاة النص */
+  font-size: .78rem; /* حجم الخط */
+  border: 1px solid #ffd5c2; /* الحدود */
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+/* ═══ .prem-classic .st-opt ═══ */
+.prem-classic .st-opt {
+  font-size: .78rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  color: var(--pc-ink); /* لون النص */
+  display: flex; /* طريقة العرض */
+  flex-direction: column; /* اتجاه العناصر */
+  gap: .28rem; /* المسافة بين العناصر */
+  margin: .45rem 0; /* هامش خارجي (مسافة حول العنصر) */
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+/* ═══ .prem-classic .st-opt-sel ═══ */
+.prem-classic .st-opt-sel {
+  padding: .55rem .7rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  border: 1px solid var(--pc-line); /* الحدود */
+  background: #fff; /* الخلفية */
+  color: var(--pc-text); /* لون النص */
+  font-family: inherit; /* نوع الخط */
+  transition: var(--pc-t); /* الحركة الانتقالية */
+  width: 100%; /* العرض */
+  font-size: .82rem; /* حجم الخط */
+  text-transform: none;
+  letter-spacing: 0;
+}
+/* ═══ .prem-classic .st-opt-sel:focus ═══ */
+.prem-classic .st-opt-sel:focus {
+  outline: none; /* الإطار الخارجي */
+  border-color: var(--pc-ink);
+  box-shadow: 0 0 0 3px rgba(17,17,17,.06); /* الظل */
+}
+/* ═══ .prem-classic .st-addons ═══ */
+.prem-classic .st-addons {
+  display: flex; /* طريقة العرض */
+  flex-wrap: wrap; /* التفاف العناصر */
+  gap: .4rem; /* المسافة بين العناصر */
+  margin: .55rem 0; /* هامش خارجي (مسافة حول العنصر) */
+}
+/* ═══ .prem-classic .st-addon ═══ */
+.prem-classic .st-addon {
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: .4rem; /* المسافة بين العناصر */
+  font-size: .76rem; /* حجم الخط */
+  background: var(--pc-bg-soft); /* الخلفية */
+  padding: .38rem .7rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  cursor: pointer; /* شكل المؤشر */
+  color: var(--pc-ink); /* لون النص */
+  transition: var(--pc-t); /* الحركة الانتقالية */
+  border: 1px solid var(--pc-line); /* الحدود */
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 600; /* سماكة الخط */
+}
+/* ═══ .prem-classic .st-addon:hover ═══ */
+.prem-classic .st-addon:hover {
+  border-color: var(--pc-ink);
+  background: #fff; /* الخلفية */
+}
+/* ═══ .prem-classic .st-addon input ═══ */
+.prem-classic .st-addon input {
+  accent-color: var(--pc-ink);
+  width: 15px; /* العرض */
+  height: 15px; /* الارتفاع */
+}
+/* ═══ .prem-classic .qty-row ═══ */
+.prem-classic .qty-row {
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: 0; /* المسافة بين العناصر */
+}
+/* ═══ .prem-classic .qty-row button ═══ */
+.prem-classic .qty-row button {
+  width: 38px; /* العرض */
+  height: 38px; /* الارتفاع */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  border: 1.5px solid var(--pc-ink); /* الحدود */
+  background: var(--pc-bg-soft); /* الخلفية */
+  font-size: 1.05rem; /* حجم الخط */
+  color: var(--pc-ink); /* لون النص */
+  cursor: pointer; /* شكل المؤشر */
+  transition: var(--pc-t); /* الحركة الانتقالية */
+  font-weight: 800; /* سماكة الخط */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  justify-content: center; /* محاذاة أفقية */
+}
+/* ═══ .prem-classic .qty-row button:hover ═══ */
+.prem-classic .qty-row button:hover {
+  background: var(--pc-ink); /* الخلفية */
+  color: #fff; /* لون النص */
+  transform: none; /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .prem-classic .qty-row input ═══ */
+.prem-classic .qty-row input {
+  width: 50px; /* العرض */
+  height: 38px; /* الارتفاع */
+  text-align: center; /* محاذاة النص */
+  border: 1.5px solid var(--pc-ink); /* الحدود */
+  border-left: none;
+  border-right: none;
+  border-radius: 0; /* تدوير الزوايا */
+  font-size: .95rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  background: #fff; /* الخلفية */
+  color: var(--pc-ink); /* لون النص */
+  font-family: inherit; /* نوع الخط */
+}
+/* ═══ .prem-classic .qty-row.mini button ═══ */
+.prem-classic .qty-row.mini button {
+  width: 30px; /* العرض */
+  height: 30px; /* الارتفاع */
+  font-size: .9rem; /* حجم الخط */
+}
+/* ═══ .prem-classic .qty-row.mini input ═══ */
+.prem-classic .qty-row.mini input {
+  width: 40px; /* العرض */
+  height: 30px; /* الارتفاع */
+  font-size: .82rem; /* حجم الخط */
+}
+/* ═══ .prem-classic .st-stock ═══ */
+.prem-classic .st-stock {
+  font-size: .74rem; /* حجم الخط */
+  color: var(--pc-success); /* لون النص */
+  font-weight: 700; /* سماكة الخط */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: .3rem; /* المسافة بين العناصر */
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+/* ═══ .prem-classic .st-stock::before ═══ */
+.prem-classic .st-stock::before {
+  content: '✓'; /* محتوى العنصر الوهمي */
+  width: 16px; /* العرض */
+  height: 16px; /* الارتفاع */
+  background: var(--pc-success); /* الخلفية */
+  color: #fff; /* لون النص */
+  border-radius: 50%; /* تدوير الزوايا */
+  display: grid; /* طريقة العرض */
+  place-items: center;
+  font-size: .6rem; /* حجم الخط */
+}
+/* ═══ .prem-classic .st-rel-title ═══ */
+.prem-classic .st-rel-title {
+  margin: 1.8rem 0 .9rem; /* هامش خارجي (مسافة حول العنصر) */
+  font-size: 1.02rem; /* حجم الخط */
+  font-weight: 900; /* سماكة الخط */
+  color: var(--pc-ink); /* لون النص */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: .5rem; /* المسافة بين العناصر */
+  text-transform: uppercase;
+  letter-spacing: -.02em;
+}
+/* ═══ .prem-classic .st-rel-title::after ═══ */
+.prem-classic .st-rel-title::after {
+  content: ''; /* محتوى العنصر الوهمي */
+  flex: 1; /* مرونة العنصر */
+  height: 1px; /* الارتفاع */
+  background: var(--pc-line); /* الخلفية */
+}
+/* ═══ .prem-classic .wa-order ═══ */
+.prem-classic .wa-order {
+  background: #111 !important; /* الخلفية */
+}
+/* ═══ .prem-classic .wa-order:hover ═══ */
+.prem-classic .wa-order:hover {
+  background: var(--pc-accent) !important; /* الخلفية */
+}
+/* ---------- 10. CHECKOUT / DONE ---------- */
+/* ═══ .prem-classic .st-checkout ═══ */
+.prem-classic .st-checkout {
+  display: grid; /* طريقة العرض */
+  grid-template-columns: 1.1fr 1fr; /* أعمدة الشبكة */
+  gap: 1.35rem; /* المسافة بين العناصر */
+  align-items: start; /* محاذاة عمودية */
+}
+/* ═══ .prem-classic .st-checkout .card ═══ */
+.prem-classic .st-checkout .card {
+  background: #fff; /* الخلفية */
+  border: 1px solid var(--pc-line); /* الحدود */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  padding: 1.35rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  box-shadow: none; /* الظل */
+}
+/* ═══ .prem-classic .st-checkout h2 ═══ */
+.prem-classic .st-checkout h2 {
+  margin-bottom: .9rem; /* هامش سفلي */
+  font-size: .95rem; /* حجم الخط */
+  font-weight: 900; /* سماكة الخط */
+  color: var(--pc-ink); /* لون النص */
+  padding-bottom: .65rem; /* حشوة سفلية */
+  border-bottom: 2px solid var(--pc-ink); /* حد سفلي */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: .45rem; /* المسافة بين العناصر */
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+/* ═══ .prem-classic .st-checkout label ═══ */
+.prem-classic .st-checkout label {
+  font-size: .76rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+  color: var(--pc-ink); /* لون النص */
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+/* ═══ .prem-classic .st-checkout input,.prem-classic .st-checkout textarea ═══ */
+.prem-classic .st-checkout input,.prem-classic .st-checkout textarea {
+  padding: .65rem .8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border: 1px solid var(--pc-line); /* الحدود */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  font-size: .84rem; /* حجم الخط */
+  font-family: inherit; /* نوع الخط */
+  background: #fff; /* الخلفية */
+  color: var(--pc-text); /* لون النص */
+  transition: var(--pc-t); /* الحركة الانتقالية */
+}
+/* ═══ .prem-classic .st-checkout input:focus,.prem-classic .st-checkout textarea:focus ═══ */
+.prem-classic .st-checkout input:focus,.prem-classic .st-checkout textarea:focus {
+  outline: none; /* الإطار الخارجي */
+  border-color: var(--pc-ink);
+  box-shadow: 0 0 0 3px rgba(17,17,17,.06); /* الظل */
+  background: #fff; /* الخلفية */
+}
+/* ═══ .prem-classic .st-done ═══ */
+.prem-classic .st-done {
+  padding: 3.2rem 1.2rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+}
+/* ═══ .prem-classic .st-done-icon ═══ */
+.prem-classic .st-done-icon {
+  background: var(--pc-ink) !important; /* الخلفية */
+  color: #fff; /* لون النص */
+  box-shadow: none; /* الظل */
+  width: 78px; /* العرض */
+  height: 78px; /* الارتفاع */
+  font-size: 1.9rem; /* حجم الخط */
+}
+/* ═══ .prem-classic .st-done h1 ═══ */
+.prem-classic .st-done h1 {
+  background: none !important; /* الخلفية */
+  -webkit-text-fill-color: var(--pc-ink) !important;
+  color: var(--pc-ink) !important; /* لون النص */
+  font-weight: 900; /* سماكة الخط */
+  text-transform: uppercase;
+  letter-spacing: -.02em;
+}
+/* ═══ .prem-classic .st-done-sum ═══ */
+.prem-classic .st-done-sum {
+  border: 1px solid var(--pc-line); /* الحدود */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+}
+/* ═══ .prem-classic .st-done-sum .st-done-line.total b ═══ */
+.prem-classic .st-done-sum .st-done-line.total b {
+  color: var(--pc-accent) !important; /* لون النص */
+}
+/* ---------- 11. REVIEWS — minimal editorial ---------- */
+/* ═══ .prem-classic .st-reviews ═══ */
+.prem-classic .st-reviews {
+  margin-top: 2rem; /* هامش علوي */
+}
+/* ═══ .prem-classic .st-rating-summary ═══ */
+.prem-classic .st-rating-summary {
+  background: var(--pc-bg-soft); /* الخلفية */
+  border: 1px solid var(--pc-line); /* الحدود */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  padding: 1rem 1.1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  margin-bottom: 1rem; /* هامش سفلي */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: 1rem; /* المسافة بين العناصر */
+}
+/* ═══ .prem-classic .st-rating-avg ═══ */
+.prem-classic .st-rating-avg {
+  color: var(--pc-ink); /* لون النص */
+  font-size: 2.6rem; /* حجم الخط */
+  font-weight: 900; /* سماكة الخط */
+  line-height: 1; /* ارتفاع السطر */
+}
+/* ═══ .prem-classic .st-rating-bar ═══ */
+.prem-classic .st-rating-bar {
+  background: var(--pc-line); /* الخلفية */
+  height: 6px; /* الارتفاع */
+  border-radius: 3px; /* تدوير الزوايا */
+}
+/* ═══ .prem-classic .st-rating-bar-fill ═══ */
+.prem-classic .st-rating-bar-fill {
+  background: var(--pc-ink); /* الخلفية */
+  border-radius: 3px; /* تدوير الزوايا */
+}
+/* ═══ .prem-classic .star-btn.active,.prem-classic .star-btn:hover ═══ */
+.prem-classic .star-btn.active,.prem-classic .star-btn:hover {
+  color: var(--pc-accent) !important; /* لون النص */
+}
+/* ═══ .prem-classic .st-review-stars ═══ */
+.prem-classic .st-review-stars {
+  color: #ff4d00; /* لون النص */
+  font-size: 1rem; /* حجم الخط */
+  letter-spacing: 1px;
+}
+/* ═══ .prem-classic .st-review-card ═══ */
+.prem-classic .st-review-card {
+  border: 1px solid var(--pc-line); /* الحدود */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  background: #fff; /* الخلفية */
+}
+/* ═══ .prem-classic .st-review-card:hover ═══ */
+.prem-classic .st-review-card:hover {
+  box-shadow: var(--pc-shadow-sm); /* الظل */
+  border-color: var(--pc-line);
+}
+/* ═══ .prem-classic .st-review-form ═══ */
+.prem-classic .st-review-form {
+  border: 1px solid var(--pc-line); /* الحدود */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  background: #fff; /* الخلفية */
+  box-shadow: none; /* الظل */
+}
+/* ═══ .prem-classic .st-review-form h3 ═══ */
+.prem-classic .st-review-form h3 {
+  color: var(--pc-ink); /* لون النص */
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-size: .95rem; /* حجم الخط */
+  font-weight: 800; /* سماكة الخط */
+}
+/* ---------- 12. CART FAB + DRAWER — ink pill sharp 4px ---------- */
+/* ═══ .prem-classic .cart-fab ═══ */
+.prem-classic .cart-fab {
+  background: var(--pc-ink) !important; /* الخلفية */
+  border-radius: var(--pc-radius) !important; /* تدوير الزوايا */
+  padding: .62rem 1.1rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-size: .78rem !important; /* حجم الخط */
+  font-weight: 800 !important; /* سماكة الخط */
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  box-shadow: var(--pc-shadow) !important; /* الظل */
+  gap: .6rem !important; /* المسافة بين العناصر */
+}
+/* ═══ .prem-classic .cart-fab:hover ═══ */
+.prem-classic .cart-fab:hover {
+  transform: translateY(-1px) !important; /* التحويل (تدوير/تكبير) */
+  box-shadow: 0 12px 28px rgba(0,0,0,.18) !important; /* الظل */
+  filter: none; /* فلاتر */
+}
+/* ═══ .prem-classic .cart-count ═══ */
+.prem-classic .cart-count {
+  background: var(--pc-accent) !important; /* الخلفية */
+  color: #fff !important; /* لون النص */
+  min-width: 18px !important; /* أدنى عرض */
+  height: 18px !important; /* الارتفاع */
+  font-size: .62rem !important; /* حجم الخط */
+  font-weight: 800 !important; /* سماكة الخط */
+  border-radius: 50% !important; /* تدوير الزوايا */
+  padding: 0 4px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+}
+/* ═══ .prem-classic .drawer-overlay ═══ */
+.prem-classic .drawer-overlay {
+  background: rgba(0,0,0,.45) !important; /* الخلفية */
+  backdrop-filter: blur(4px); /* تأثير ضبابية الخلفية */
+}
+/* ═══ .prem-classic .cart-drawer ═══ */
+.prem-classic .cart-drawer {
+  box-shadow: var(--pc-shadow) !important; /* الظل */
+  border-left: 1px solid var(--pc-line);
+}
+/* ═══ .prem-classic .drawer-head ═══ */
+.prem-classic .drawer-head {
+  background: #fff !important; /* الخلفية */
+  border-bottom: 1px solid var(--pc-line) !important; /* حد سفلي */
+  padding: 1rem 1.1rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+}
+/* ═══ .prem-classic .drawer-head h3 ═══ */
+.prem-classic .drawer-head h3 {
+  font-size: .95rem; /* حجم الخط */
+  font-weight: 900; /* سماكة الخط */
+  color: var(--pc-ink) !important; /* لون النص */
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+/* ═══ .prem-classic .co-item ═══ */
+.prem-classic .co-item {
+  border: 1px solid var(--pc-line) !important; /* الحدود */
+  border-radius: var(--pc-radius) !important; /* تدوير الزوايا */
+  background: #fff !important; /* الخلفية */
+}
+/* ═══ .prem-classic .co-item:hover ═══ */
+.prem-classic .co-item:hover {
+  box-shadow: var(--pc-shadow-sm) !important; /* الظل */
+}
+/* ═══ .prem-classic #cartCheckout ═══ */
+.prem-classic #cartCheckout {
+  background: var(--pc-ink) !important; /* الخلفية */
+  border-radius: var(--pc-radius) !important; /* تدوير الزوايا */
+  font-weight: 800 !important; /* سماكة الخط */
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-size: .82rem !important; /* حجم الخط */
+  box-shadow: none !important; /* الظل */
+}
+/* ═══ .prem-classic #cartCheckout:hover ═══ */
+.prem-classic #cartCheckout:hover {
+  background: var(--pc-accent) !important; /* الخلفية */
+  filter: none; /* فلاتر */
+  transform: none !important; /* التحويل (تدوير/تكبير) */
+}
+/* ═══ .prem-classic .mc-toast ═══ */
+.prem-classic .mc-toast {
+  background: var(--pc-ink) !important; /* الخلفية */
+  color: #fff !important; /* لون النص */
+  border-radius: var(--pc-radius) !important; /* تدوير الزوايا */
+  font-weight: 700 !important; /* سماكة الخط */
+  box-shadow: var(--pc-shadow) !important; /* الظل */
+  font-size: .82rem !important; /* حجم الخط */
+  letter-spacing: .02em;
+}
+/* ═══ .prem-classic .lightbox-overlay ═══ */
+.prem-classic .lightbox-overlay {
+  background: rgba(16,16,16,.92) !important; /* الخلفية */
+}
+/* ---------- 13. MISC — newsletter / brands / footer accents ---------- */
+/* ═══ .prem-classic .newsletter ═══ */
+.prem-classic .newsletter {
+  text-align: center; /* محاذاة النص */
+  max-width: 560px; /* أقصى عرض */
+  margin: 0 auto; /* هامش خارجي (مسافة حول العنصر) */
+}
+/* ═══ .prem-classic .newsletter h2 ═══ */
+.prem-classic .newsletter h2 {
+  font-size: clamp(1.35rem,2.6vw,1.9rem); /* حجم الخط */
+  font-weight: 900; /* سماكة الخط */
+  text-transform: uppercase;
+  letter-spacing: -.02em;
+  color: var(--pc-ink); /* لون النص */
+}
+/* ═══ .prem-classic .newsletter h2 span ═══ */
+.prem-classic .newsletter h2 span {
+  color: var(--pc-accent) !important; /* لون النص */
+}
+/* ═══ .prem-classic .news-form ═══ */
+.prem-classic .news-form {
+  display: flex; /* طريقة العرض */
+  gap: 0; /* المسافة بين العناصر */
+  border-bottom: 2px solid var(--pc-ink); /* حد سفلي */
+  max-width: 440px; /* أقصى عرض */
+  margin: 0 auto; /* هامش خارجي (مسافة حول العنصر) */
+}
+/* ═══ .prem-classic .news-form input ═══ */
+.prem-classic .news-form input {
+  flex: 1; /* مرونة العنصر */
+  border: none; /* الحدود */
+  outline: none; /* الإطار الخارجي */
+  padding: 10px 4px; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-size: .88rem; /* حجم الخط */
+  background: transparent; /* الخلفية */
+}
+/* ═══ .prem-classic .news-form button ═══ */
+.prem-classic .news-form button {
+  background: var(--pc-ink); /* الخلفية */
+  color: #fff; /* لون النص */
+  padding: 10px 20px; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  font-weight: 800; /* سماكة الخط */
+  font-size: .72rem; /* حجم الخط */
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  border-radius: 0; /* تدوير الزوايا */
+  transition: var(--pc-t); /* الحركة الانتقالية */
+}
+/* ═══ .prem-classic .news-form button:hover ═══ */
+.prem-classic .news-form button:hover {
+  background: var(--pc-accent); /* الخلفية */
+}
+/* ═══ .prem-classic .brands-strip ═══ */
+.prem-classic .brands-strip {
+  display: grid; /* طريقة العرض */
+  grid-template-columns: repeat(4,1fr); /* أعمدة الشبكة */
+  border-block: 1px solid var(--pc-line);
+}
+/* ═══ .prem-classic .brand-cell ═══ */
+.prem-classic .brand-cell {
+  padding: 22px 14px; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  text-align: center; /* محاذاة النص */
+  border-inline-end: 1px solid var(--pc-line);
+  font-weight: 900; /* سماكة الخط */
+  font-size: .95rem; /* حجم الخط */
+  letter-spacing: 3px;
+  color: #bbb; /* لون النص */
+  text-transform: uppercase;
+  transition: var(--pc-t); /* الحركة الانتقالية */
+}
+/* ═══ .prem-classic .brand-cell:last-child ═══ */
+.prem-classic .brand-cell:last-child {
+  border-inline-end: none;
+}
+/* ═══ .prem-classic .brand-cell:hover ═══ */
+.prem-classic .brand-cell:hover {
+  color: var(--pc-ink); /* لون النص */
+  background: var(--pc-bg-soft); /* الخلفية */
+}
+/* ═══ .prem-classic .st-brand ═══ */
+.prem-classic .st-brand {
+  color: #999; /* لون النص */
+  font-size: .70rem; /* حجم الخط */
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+/* ═══ .prem-classic .st-brand a ═══ */
+.prem-classic .st-brand a {
+  color: var(--pc-ink) !important; /* لون النص */
+  font-weight: 800; /* سماكة الخط */
+}
+/* ═══ .prem-classic .st-brand a:hover ═══ */
+.prem-classic .st-brand a:hover {
+  color: var(--pc-accent) !important; /* لون النص */
+}
+/* ═══ .prem-classic .store-float .sf-wa ═══ */
+.prem-classic .store-float .sf-wa {
+  background: var(--pc-ink) !important; /* الخلفية */
+}
+/* ═══ .prem-classic .store-float .sf-wa:hover ═══ */
+.prem-classic .store-float .sf-wa:hover {
+  background: var(--pc-accent) !important; /* الخلفية */
+}
+/* ═══ .prem-classic .store-float .sf-share ═══ */
+.prem-classic .store-float .sf-share {
+  background: #fff !important; /* الخلفية */
+  color: var(--pc-ink) !important; /* لون النص */
+  border: 1.5px solid var(--pc-line) !important; /* الحدود */
+  box-shadow: var(--pc-shadow-sm); /* الظل */
+}
+/* ═══ .prem-classic .co-coupon .st-btn ═══ */
+.prem-classic .co-coupon .st-btn {
+  border-radius: var(--pc-radius) !important; /* تدوير الزوايا */
+}
+/* ═══ .prem-classic .co-payment label:has(input:checked) ═══ */
+.prem-classic .co-payment label:has(input:checked) {
+  border-color: var(--pc-ink) !important;
+  background: var(--pc-bg-soft) !important; /* الخلفية */
+}
+/* ═══ .prem-classic .alert-err ═══ */
+.prem-classic .alert-err {
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  border: 1px solid #fecaca; /* الحدود */
+}
+/* toast / cart table inline helpers */
+/* ═══ .prem-classic .toast ═══ */
+.prem-classic .toast {
+  position: fixed; /* طريقة التموضع */
+  bottom: 22px; /* البعد عن الأسفل */
+  left: 50%; /* البعد عن اليسار */
+  transform: translate(-50%,70px); /* التحويل (تدوير/تكبير) */
+  z-index: 300; /* طبقة الترتيب (فوق/تحت) */
+  background: var(--pc-ink); /* الخلفية */
+  color: #fff; /* لون النص */
+  padding: 11px 18px; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  border-radius: var(--pc-radius); /* تدوير الزوايا */
+  font-size: .78rem; /* حجم الخط */
+  font-weight: 700; /* سماكة الخط */
+  box-shadow: var(--pc-shadow); /* الظل */
+  opacity: 0; /* الشفافية */
+  visibility: hidden; /* الظهور */
+  transition: var(--pc-t); /* الحركة الانتقالية */
+  display: flex; /* طريقة العرض */
+  align-items: center; /* محاذاة عمودية */
+  gap: 8px; /* المسافة بين العناصر */
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+/* ═══ .prem-classic .toast.show ═══ */
+.prem-classic .toast.show {
+  opacity: 1; /* الشفافية */
+  visibility: visible; /* الظهور */
+  transform: translate(-50%,0); /* التحويل (تدوير/تكبير) */
+}
+/* ---------- 14. RESPONSIVE — no overflow, compact ---------- */
+@media(max-width:1280px) {
+  /* ═══ .prem-classic .st-head-inner ═══ */
+  .prem-classic .st-head-inner {
+    max-width: 1280px; /* أقصى عرض */
+  }
+  /* ═══ .prem-classic .st-main ═══ */
+  .prem-classic .st-main {
+    max-width: 1280px; /* أقصى عرض */
+  }
+  /* ═══ .prem-classic .cat-tiles ═══ */
+  .prem-classic .cat-tiles {
+    max-width: 1280px; /* أقصى عرض */
+  }
+}
+@media(max-width:1024px) {
+  /* ═══ .prem-classic .st-head-inner ═══ */
+  .prem-classic .st-head-inner {
+    padding: 0 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    height: 62px; /* الارتفاع */
+  }
+  /* ═══ .prem-classic .classic-hero .st-head-inner ═══ */
+  .prem-classic .classic-hero .st-head-inner {
+    padding: .85rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    min-height: 70px; /* أدنى ارتفاع */
+  }
+  /* ═══ .prem-classic .st-main ═══ */
+  .prem-classic .st-main {
+    padding: .9rem 1rem 3rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-grid ═══ */
+  .prem-classic .st-grid {
+    grid-template-columns: repeat(auto-fill,minmax(170px,1fr)) !important; /* أعمدة الشبكة */
+    gap: 10px !important; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-classic .cat-tiles ═══ */
+  .prem-classic .cat-tiles {
+    grid-template-columns: repeat(2,1fr); /* أعمدة الشبكة */
+    gap: 10px; /* المسافة بين العناصر */
+    padding: 0 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-product ═══ */
+  .prem-classic .st-product {
+    grid-template-columns: 1fr 1fr; /* أعمدة الشبكة */
+    gap: 1.2rem; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-classic .st-checkout ═══ */
+  .prem-classic .st-checkout {
+    grid-template-columns: 1fr 1fr; /* أعمدة الشبكة */
+    gap: 1.2rem; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-classic .deal-section .deal-grid ═══ */
+  .prem-classic .deal-section .deal-grid {
+    gap: 1.4rem; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-classic .benefits ═══ */
+  .prem-classic .benefits {
+    grid-template-columns: repeat(2,1fr); /* أعمدة الشبكة */
+  }
+  /* ═══ .prem-classic .st-nav ═══ */
+  .prem-classic .st-nav {
+    gap: 1rem; /* المسافة بين العناصر */
+  }
+}
+@media(max-width:768px) {
+  /* ═══ .prem-classic .st-head-inner ═══ */
+  .prem-classic .st-head-inner {
+    padding: 0 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    height: auto; /* الارتفاع */
+    min-height: 60px; /* أدنى ارتفاع */
+    flex-wrap: wrap; /* التفاف العناصر */
+    gap: .6rem; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-classic .st-head h1 ═══ */
+  .prem-classic .st-head h1 {
+    font-size: 1.25rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .st-search ═══ */
+  .prem-classic .st-search {
+    padding: 0 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    margin-top: .55rem; /* هامش علوي */
+  }
+  /* ═══ .prem-classic .st-nav ═══ */
+  .prem-classic .st-nav {
+    overflow-x: auto; /* فائض أفقي */
+    flex-wrap: nowrap; /* التفاف العناصر */
+    justify-content: flex-start; /* محاذاة أفقية */
+    -webkit-overflow-scrolling: touch; /* تمرير ناعم (آيفون) */
+    scrollbar-width: none; /* عرض شريط التمرير */
+    gap: 1rem; /* المسافة بين العناصر */
+    padding: 0 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    min-height: 42px; /* أدنى ارتفاع */
+  }
+  /* ═══ .prem-classic .st-nav::-webkit-scrollbar ═══ */
+  .prem-classic .st-nav::-webkit-scrollbar {
+    display: none; /* طريقة العرض */
+  }
+  /* ═══ .prem-classic .st-nav a ═══ */
+  .prem-classic .st-nav a {
+    padding: 11px 0; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    font-size: .72rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .st-main ═══ */
+  .prem-classic .st-main {
+    padding: .75rem 1rem 3rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-grid ═══ */
+  .prem-classic .st-grid {
+    grid-template-columns: repeat(2,1fr) !important; /* أعمدة الشبكة */
+    gap: 8px !important; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-classic .cat-tiles ═══ */
+  .prem-classic .cat-tiles {
+    grid-template-columns: repeat(2,1fr); /* أعمدة الشبكة */
+    gap: 8px; /* المسافة بين العناصر */
+    padding: 0 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-card-body ═══ */
+  .prem-classic .st-card-body {
+    padding: .5rem .6rem .65rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-name ═══ */
+  .prem-classic .st-name {
+    font-size: .74rem !important; /* حجم الخط */
+    min-height: 2.05em; /* أدنى ارتفاع */
+  }
+  /* ═══ .prem-classic .st-price b ═══ */
+  .prem-classic .st-price b {
+    font-size: .82rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .st-price del ═══ */
+  .prem-classic .st-price del {
+    font-size: .68rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .st-card .st-btn ═══ */
+  .prem-classic .st-card .st-btn {
+    font-size: .70rem !important; /* حجم الخط */
+    padding: .45rem .65rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .deal-section .deal-grid ═══ */
+  .prem-classic .deal-section .deal-grid {
+    grid-template-columns: 1fr; /* أعمدة الشبكة */
+    gap: 1.2rem; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-classic .benefits ═══ */
+  .prem-classic .benefits {
+    grid-template-columns: repeat(2,1fr); /* أعمدة الشبكة */
+  }
+  /* ═══ .prem-classic .benefit ═══ */
+  .prem-classic .benefit {
+    padding: 16px 12px; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .brands-strip ═══ */
+  .prem-classic .brands-strip {
+    grid-template-columns: repeat(2,1fr); /* أعمدة الشبكة */
+  }
+  /* ═══ .prem-classic .cart-fab ═══ */
+  .prem-classic .cart-fab {
+    bottom: 14px; /* البعد عن الأسفل */
+    left: 12px; /* البعد عن اليسار */
+    right: 12px; /* البعد عن اليمين */
+    justify-content: center; /* محاذاة أفقية */
+    border-radius: var(--pc-radius) !important; /* تدوير الزوايا */
+    padding: .55rem 1rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .cart-drawer ═══ */
+  .prem-classic .cart-drawer {
+    width: 100% !important; /* العرض */
+  }
+  /* ═══ .prem-classic .st-product ═══ */
+  .prem-classic .st-product {
+    grid-template-columns: 1fr; /* أعمدة الشبكة */
+    gap: 1rem; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-classic .st-product-info ═══ */
+  .prem-classic .st-product-info {
+    position: static !important; /* طريقة التموضع */
+  }
+  /* ═══ .prem-classic .st-checkout ═══ */
+  .prem-classic .st-checkout {
+    grid-template-columns: 1fr; /* أعمدة الشبكة */
+    gap: 1rem; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-classic .announce-bar ═══ */
+  .prem-classic .announce-bar {
+    font-size: .68rem !important; /* حجم الخط */
+    padding: 8px 10px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+}
+@media(max-width:600px) {
+  /* ═══ .prem-classic .st-head h1 ═══ */
+  .prem-classic .st-head h1 {
+    font-size: 1.15rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .st-head p ═══ */
+  .prem-classic .st-head p {
+    font-size: .70rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .classic-hero .st-head-inner ═══ */
+  .prem-classic .classic-hero .st-head-inner {
+    padding: .75rem 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    min-height: 68px; /* أدنى ارتفاع */
+  }
+  /* ═══ .prem-classic .st-grid ═══ */
+  .prem-classic .st-grid {
+    grid-template-columns: repeat(2,1fr) !important; /* أعمدة الشبكة */
+    gap: 7px !important; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-classic .cat-tiles ═══ */
+  .prem-classic .cat-tiles {
+    grid-template-columns: repeat(2,1fr); /* أعمدة الشبكة */
+    gap: 7px; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-classic .st-product-info ═══ */
+  .prem-classic .st-product-info {
+    padding: 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-product-info h1 ═══ */
+  .prem-classic .st-product-info h1 {
+    font-size: 1.05rem; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .st-price.big b ═══ */
+  .prem-classic .st-price.big b {
+    font-size: 1.18rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .st-checkout .card ═══ */
+  .prem-classic .st-checkout .card {
+    padding: 1rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-rel-title ═══ */
+  .prem-classic .st-rel-title {
+    font-size: .95rem; /* حجم الخط */
+    margin: 1.4rem 0 .7rem; /* هامش خارجي (مسافة حول العنصر) */
+  }
+  /* ═══ .prem-classic .benefits ═══ */
+  .prem-classic .benefits {
+    grid-template-columns: 1fr; /* أعمدة الشبكة */
+  }
+  /* ═══ .prem-classic .benefit ═══ */
+  .prem-classic .benefit {
+    border-inline-end: none;
+    border-bottom: 1px solid var(--pc-line); /* حد سفلي */
+  }
+  /* ═══ .prem-classic .benefit:last-child ═══ */
+  .prem-classic .benefit:last-child {
+    border-bottom: none; /* حد سفلي */
+  }
+  /* ═══ .prem-classic .brands-strip ═══ */
+  .prem-classic .brands-strip {
+    grid-template-columns: repeat(2,1fr); /* أعمدة الشبكة */
+  }
+  /* ═══ .prem-classic .deal-section ═══ */
+  .prem-classic .deal-section {
+    padding: 1.6rem 0 !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .deal-section .countdown .cd-box ═══ */
+  .prem-classic .deal-section .countdown .cd-box {
+    min-width: 56px; /* أدنى عرض */
+    padding: 8px 6px; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .deal-section .countdown .cd-box b ═══ */
+  .prem-classic .deal-section .countdown .cd-box b {
+    font-size: 1.2rem; /* حجم الخط */
+  }
+}
+@media(max-width:480px) {
+  /* ═══ .prem-classic .st-head-inner ═══ */
+  .prem-classic .st-head-inner {
+    padding: .6rem .9rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-head h1 ═══ */
+  .prem-classic .st-head h1 {
+    font-size: 1.05rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .st-logo ═══ */
+  .prem-classic .st-logo {
+    max-height: 42px; /* أقصى ارتفاع */
+    max-width: 140px; /* أقصى عرض */
+  }
+  /* ═══ .prem-classic .st-search ═══ */
+  .prem-classic .st-search {
+    padding: 0 .9rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-search form ═══ */
+  .prem-classic .st-search form {
+    padding: 3px 3px 3px 10px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-search input ═══ */
+  .prem-classic .st-search input {
+    font-size: .78rem; /* حجم الخط */
+    padding: .38rem .2rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-search button ═══ */
+  .prem-classic .st-search button {
+    padding: 7px 12px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    font-size: .70rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .st-nav ═══ */
+  .prem-classic .st-nav {
+    padding: 0 .9rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    gap: .9rem; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-classic .st-nav a ═══ */
+  .prem-classic .st-nav a {
+    font-size: .68rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .st-main ═══ */
+  .prem-classic .st-main {
+    padding: .6rem .9rem 2.8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .cat-tiles ═══ */
+  .prem-classic .cat-tiles {
+    grid-template-columns: 1fr; /* أعمدة الشبكة */
+    gap: 8px; /* المسافة بين العناصر */
+    padding: 0 .9rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-grid ═══ */
+  .prem-classic .st-grid {
+    grid-template-columns: repeat(2,1fr) !important; /* أعمدة الشبكة */
+    gap: 7px !important; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-classic .mk-discount ═══ */
+  .prem-classic .mk-discount {
+    font-size: .58rem !important; /* حجم الخط */
+    padding: 2px 6px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-soldout-tag ═══ */
+  .prem-classic .st-soldout-tag {
+    font-size: .58rem !important; /* حجم الخط */
+    padding: 2px 6px !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-card-body ═══ */
+  .prem-classic .st-card-body {
+    padding: .45rem .5rem .55rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-name ═══ */
+  .prem-classic .st-name {
+    font-size: .72rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .st-price b ═══ */
+  .prem-classic .st-price b {
+    font-size: .80rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .st-card .st-btn ═══ */
+  .prem-classic .st-card .st-btn {
+    font-size: .68rem !important; /* حجم الخط */
+    padding: .42rem .6rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .drawer-head ═══ */
+  .prem-classic .drawer-head {
+    padding: .8rem .9rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-thumbs img ═══ */
+  .prem-classic .st-thumbs img {
+    width: 48px; /* العرض */
+    height: 48px; /* الارتفاع */
+  }
+  /* ═══ .prem-classic .qty-row button ═══ */
+  .prem-classic .qty-row button {
+    width: 36px; /* العرض */
+    height: 36px; /* الارتفاع */
+  }
+  /* ═══ .prem-classic .qty-row input ═══ */
+  .prem-classic .qty-row input {
+    width: 46px; /* العرض */
+    height: 36px; /* الارتفاع */
+  }
+  /* ═══ .prem-classic .deal-section h2 ═══ */
+  .prem-classic .deal-section h2 {
+    font-size: 1.5rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .newsletter h2 ═══ */
+  .prem-classic .newsletter h2 {
+    font-size: 1.35rem; /* حجم الخط */
+  }
+}
+@media(max-width:375px) {
+  /* ═══ .prem-classic .st-head-inner ═══ */
+  .prem-classic .st-head-inner {
+    padding: .55rem .8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-main ═══ */
+  .prem-classic .st-main {
+    padding: .55rem .8rem 2.8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-grid ═══ */
+  .prem-classic .st-grid {
+    grid-template-columns: repeat(2,1fr) !important; /* أعمدة الشبكة */
+    gap: 6px !important; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-classic .cat-tiles ═══ */
+  .prem-classic .cat-tiles {
+    grid-template-columns: 1fr; /* أعمدة الشبكة */
+    gap: 6px; /* المسافة بين العناصر */
+    padding: 0 .8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-nav ═══ */
+  .prem-classic .st-nav {
+    padding: 0 .8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-search ═══ */
+  .prem-classic .st-search {
+    padding: 0 .8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-card-body ═══ */
+  .prem-classic .st-card-body {
+    padding: .42rem .48rem .52rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-name ═══ */
+  .prem-classic .st-name {
+    font-size: .70rem !important; /* حجم الخط */
+    min-height: 2em; /* أدنى ارتفاع */
+  }
+  /* ═══ .prem-classic .st-price b ═══ */
+  .prem-classic .st-price b {
+    font-size: .76rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .st-card .st-btn ═══ */
+  .prem-classic .st-card .st-btn {
+    padding: .4rem .55rem !important; /* الحشوة الداخلية (مسافة داخل العنصر) */
+    font-size: .66rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .st-product-info ═══ */
+  .prem-classic .st-product-info {
+    padding: .9rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-done ═══ */
+  .prem-classic .st-done {
+    padding: 1.6rem .8rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .announce-bar ═══ */
+  .prem-classic .announce-bar {
+    font-size: .64rem !important; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .benefit ═══ */
+  .prem-classic .benefit {
+    padding: 14px 10px; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+}
+@media(max-width:360px) {
+  /* ═══ .prem-classic .st-head-inner ═══ */
+  .prem-classic .st-head-inner {
+    padding: .5rem .7rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-main ═══ */
+  .prem-classic .st-main {
+    padding: .5rem .7rem 2.6rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-grid ═══ */
+  .prem-classic .st-grid {
+    grid-template-columns: 1fr !important; /* أعمدة الشبكة */
+    gap: 8px !important; /* المسافة بين العناصر */
+  }
+  /* ═══ .prem-classic .cat-tiles ═══ */
+  .prem-classic .cat-tiles {
+    grid-template-columns: 1fr; /* أعمدة الشبكة */
+    gap: 8px; /* المسافة بين العناصر */
+    padding: 0 .7rem; /* الحشوة الداخلية (مسافة داخل العنصر) */
+  }
+  /* ═══ .prem-classic .st-addons ═══ */
+  .prem-classic .st-addons {
+    flex-direction: column; /* اتجاه العناصر */
+    align-items: stretch; /* محاذاة عمودية */
+  }
+  /* ═══ .prem-classic .st-addon ═══ */
+  .prem-classic .st-addon {
+    justify-content: center; /* محاذاة أفقية */
+  }
+  /* ═══ .prem-classic .qty-row ═══ */
+  .prem-classic .qty-row {
+    justify-content: center; /* محاذاة أفقية */
+  }
+  /* ═══ .prem-classic .qty-row input ═══ */
+  .prem-classic .qty-row input {
+    width: 44px; /* العرض */
+  }
+  /* ═══ .prem-classic .co-coupon ═══ */
+  .prem-classic .co-coupon {
+    flex-direction: column; /* اتجاه العناصر */
+  }
+  /* ═══ .prem-classic .co-coupon .st-btn ═══ */
+  .prem-classic .co-coupon .st-btn {
+    width: 100% !important; /* العرض */
+  }
+  /* ═══ .prem-classic .st-rating-avg ═══ */
+  .prem-classic .st-rating-avg {
+    font-size: 2.2rem; /* حجم الخط */
+  }
+  /* ═══ .prem-classic .cart-fab ═══ */
+  .prem-classic .cart-fab {
+    left: 10px; /* البعد عن اليسار */
+    right: 10px; /* البعد عن اليمين */
+    bottom: 10px; /* البعد عن الأسفل */
+  }
+  /* ═══ .prem-classic .benefits ═══ */
+  .prem-classic .benefits {
+    grid-template-columns: 1fr; /* أعمدة الشبكة */
+  }
+}
 /* ---------- 15. RTL / LTR + no-overflow guarantee ---------- */
-[dir="rtl"] body.store-body.prem-classic{text-align:right}
-[dir="ltr"] body.store-body.prem-classic{text-align:left}
-.prem-classic .st-head,.prem-classic .st-search,.prem-classic .st-main,
-.prem-classic .st-product,.prem-classic .st-checkout{max-width:100%}
-body.store-body.prem-classic,
-.prem-classic .st-head,.prem-classic .st-main,.prem-classic .st-grid,
-.prem-classic .st-card,.prem-classic .st-product,.prem-classic .st-checkout{
-  max-width:100%;overflow-wrap:break-word;
+/* ═══ [dir="rtl"] body.store-body.prem-classic ═══ */
+[dir="rtl"] body.store-body.prem-classic {
+  text-align: right; /* محاذاة النص */
 }
-html,body.store-body.prem-classic{overflow-x:hidden;max-width:100vw}
+/* ═══ [dir="ltr"] body.store-body.prem-classic ═══ */
+[dir="ltr"] body.store-body.prem-classic {
+  text-align: left; /* محاذاة النص */
+}
+/* ═══ .prem-classic .st-head,.prem-classic .st-search,.prem-classic .st-main, .prem-classic .st-product,.prem-classic .st-checkout ═══ */
+.prem-classic .st-head,.prem-classic .st-search,.prem-classic .st-main, .prem-classic .st-product,.prem-classic .st-checkout {
+  max-width: 100%; /* أقصى عرض */
+}
+/* ═══ body.store-body.prem-classic, .prem-classic .st-head,.prem-classic .st-main,.prem-classic .st-grid, .prem-classic .st-card,.prem-classic .st-product,.prem-classic .st-checkout ═══ */
+body.store-body.prem-classic, .prem-classic .st-head,.prem-classic .st-main,.prem-classic .st-grid, .prem-classic .st-card,.prem-classic .st-product,.prem-classic .st-checkout {
+  max-width: 100%; /* أقصى عرض */
+  overflow-wrap: break-word;
+}
+/* ═══ html,body.store-body.prem-classic ═══ */
+html,body.store-body.prem-classic {
+  overflow-x: hidden; /* فائض أفقي */
+  max-width: 100vw; /* أقصى عرض */
+}

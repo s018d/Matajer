@@ -4,7 +4,11 @@ uploads/
 private-receipts/
 backups/
 versions/
+test-restore/
+logs/
 *.log
+log.md
+head_log.md
 .env
 .DS_Store
 Thumbs.db

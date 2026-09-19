@@ -336,6 +336,29 @@ router.get('/s/:slug/product/:id/reviews', (req, res) => {
   res.json({ ok: true, reviews, avg: stats.avg ? Number(stats.avg).toFixed(1) : 0, count: stats.count || 0 });
 });
 
+/* تتبع الطلب برقم الهاتف — للزبون بدون حساب */
+router.get('/s/:slug/track', (req, res) => {
+  const store = getStoreBySlug(req.params.slug);
+  if (!store) return res.status(404).render('store/notfound', {});
+  withBase(store, req);
+  res.render('store/track', { store, orders: null, phone: '', err: '', tpl: tplFor(store) });
+});
+router.post('/s/:slug/track', (req, res) => {
+  const store = getStoreBySlug(req.params.slug);
+  if (!store) return res.status(404).render('store/notfound', {});
+  withBase(store, req);
+  const lim = checkLimit('track:' + clientIp(req), 10, 60 * 1000);
+  if (!lim.ok) return res.render('store/track', { store, orders: null, phone: '', err: 'محاولات كثيرة — انتظر دقيقة', tpl: tplFor(store) });
+  const phone = String(req.body.phone || '').replace(/[^0-9+\s-]/g, '').slice(0, 20);
+  if (phone.replace(/\D/g, '').length < 7) return res.render('store/track', { store, orders: null, phone, err: 'اكتب رقم هاتف صحيح', tpl: tplFor(store) });
+  const digits = phone.replace(/\D/g, '');
+  const tail = digits.slice(-7);
+  const all = db.prepare('SELECT id, customer_phone, total, status, created_at FROM orders WHERE store_id=? ORDER BY id DESC LIMIT 200').all(store.id);
+  const orders = all.filter(o => String(o.customer_phone || '').replace(/\D/g, '').endsWith(tail)).slice(0, 10)
+    .map(o => ({ id: o.id, total: o.total, status: o.status, created_at: o.created_at }));
+  res.render('store/track', { store, orders, phone, err: orders.length ? '' : 'لا طلبات بهذا الرقم في هذا المتجر', tpl: tplFor(store) });
+});
+
 router.get('/s/:slug/done', (req, res) => {
   const store = getStoreBySlug(req.params.slug);
   if (!store) return res.status(404).render('store/notfound', {});

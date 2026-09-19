@@ -1,12 +1,31 @@
-/* ===== TOKENS v2 — Design System Matajer (أحمر دومي + ذهبي معدني) ===== */
-/* لا @import هنا — الخطوط عبر <link> في head.ejs مع preload as="font" */
+/* ===== TOKENS v3 — العراقة الحديثة — Mesopotamian Modern ===== */
+/* لا @import هنا — الخطوط عبر <link> في head.ejs مع preload as="font" type="font/woff2" crossorigin */
 
 :root{
-  /* ألوان */
-  --dome:#7A0C10; --dome-light:#A51C22; --dome-tint:#FBEEEF;
-  --gold:#C9A96E; --gold-light:#E8C99A; --gold-tint:#FBF6EC;
-  --navy:#0B1F3A; --navy2:#143A5E;
-  --ink:#1C1917; --mut:#78716C; --line:#E7E5E4; --bg:#FAFAF9; --card:#FFFFFF;
+  /* أحمر دومي — الأساسي */
+  --dome:#7A0C10; --dome-dark:#4A0608; --dome-light:#A51C22; --dome-tint:#FBEEEF;
+  /* إعادة توجيه البرتقالي القديم للدومي — بدون حذف */
+  --brand:#7A0C10; --brand2:#7A0C10;
+
+  /* ذهبي — للتفاصيل فقط 10% */
+  --gold:#C9A96E; --gold-light:#E8C99A; --gold-bright:#F4E4C1; --gold-tint:#FBF6EC;
+
+  /* كحلي */
+  --navy:#0B1F3A; --navy-2:#143A5E; --navy-3:#1E4976; --navy2:var(--navy-2);
+
+  /* كريمي — خلفية رئيسية دافئة (مو أبيض بارد) */
+  --cream:#FBF8F3; --cream-2:#F5EFE4; --white:#FFFFFF; --line:#EBE3D5;
+  /* إبقاء المتغيرات القديمة للتوافق — لا نحذف */
+  --bg:var(--cream); --card:var(--white); --ink:#1C1917; --mut:#78716C;
+
+  /* وظيفية */
+  --success:#1E7A4C; --warning:#B8860B; --danger:#A51C22; --info:#1E4976;
+
+  /* تدرجات معتمدة */
+  --grad-dome:linear-gradient(135deg, #7A0C10, #A51C22);
+  --grad-gold:linear-gradient(135deg, #C9A96E, #E8C99A, #C9A96E);
+  --grad-navy:linear-gradient(180deg, #0B1F3A, #143A5E);
+  --grad-hero:radial-gradient(ellipse at top right, #A51C22, #7A0C10 40%, #4A0608);
 
   /* خطوط */
   --font:'Noto Kufi Arabic',sans-serif;
@@ -21,12 +40,17 @@
   /* حواف */
   --r-sm:8px; --r:14px; --r-lg:20px; --r-xl:28px; --r-full:999px;
 
-  /* ظلال */
+  /* ظلال — متعددة الطبقات ناعمة + إبقاء القديمة */
   --sh-light:0 2px 8px rgba(11,31,58,.06);
   --sh:0 8px 24px rgba(11,31,58,.10);
   --sh-strong:0 20px 50px rgba(11,31,58,.15);
   --sh-red:0 12px 32px rgba(122,12,16,.25);
   --sh-gold:0 12px 32px rgba(201,169,110,.30);
+  --shadow-sm:0 1px 3px rgba(11,31,58,.04), 0 8px 24px rgba(11,31,58,.06);
+  --shadow-md:0 2px 6px rgba(11,31,58,.06), 0 20px 40px rgba(11,31,58,.10);
+  --shadow-lg:0 8px 16px rgba(11,31,58,.08), 0 30px 60px rgba(11,31,58,.14);
+  --shadow-dome:0 8px 24px rgba(122,12,16,.25);
+  --shadow-gold:0 12px 32px rgba(201,169,110,.30);
 
   /* انتقالات — transform + opacity فقط */
   --fast:150ms cubic-bezier(.4,0,.2,1);
@@ -37,11 +61,18 @@
 /* أساسيات */
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--font);font-size:var(--text);line-height:1.9;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;font-feature-settings:"tnum"}
+body{font-family:var(--font);font-size:var(--text);line-height:1.9;color:var(--ink);background:var(--cream);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
 a{color:inherit;text-decoration:none}
 
 /* للكلمة الذهبية — لا <em> */
 .hl{color:var(--gold);font-weight:900}
+
+/* قوس عراقي — التوقيع البصري */
+.arch{border-radius:50% 50% 14px 14px / 30% 30% 14px 14px}
+.arch-sm{border-radius:50% 50% 12px 12px / 40% 40% 12px 12px}
+
+/* فاصل ذهبي */
+.divider{height:1px;background:linear-gradient(90deg, transparent, var(--gold), transparent)}
 
 /* احترام تفضيل تقليل الحركة */
 @media(prefers-reduced-motion:reduce){

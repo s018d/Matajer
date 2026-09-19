@@ -22,11 +22,13 @@ const __safePwa = (typeof pwa !== 'undefined' && /^[a-z0-9-]+$/.test(String(pwa)
 <link rel="canonical" href="<%= typeof canonical !== 'undefined' ? canonical : '' %>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;600;700;800;900&family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/notokufiarabic/v27/CSRk4ydQnPyaDxEXLFF6LZVLKrodrOYFFlKp.woff2">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700;800;900&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/img/logo.svg">
 <%- __safePwa ? '<link rel="manifest" href="/s/' + __safePwa + '/manifest.json">' : '' %>
 <meta name="theme-color" content="<%= __safeColor %>">
+<link rel="stylesheet" href="/css/tokens.css">
 <link rel="stylesheet" href="<%= __safeCss %>">
 <%- typeof extraCss !== 'undefined' ? extraCss : '' %>
 <%- __safePwa ? '<script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){navigator.serviceWorker.register("/sw.js",{updateViaCache:"none"}).then(function(reg){if(reg.waiting||navigator.serviceWorker.controller){navigator.serviceWorker.addEventListener("controllerchange",function(){location.reload()})}}).catch(function(){})}</script>' : '' %>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    <pattern id="samarra-star" width="60" height="60" patternUnits="userSpaceOnUse">
+      <!-- نجمة سامراء الثمانية — 3% شفافية -->
+      <g opacity="0.04" stroke="#C9A96E" stroke-width="1" fill="none">
+        <path d="M30 12 L33 24 L45 24 L36 32 L39 44 L30 36 L21 44 L24 32 L15 24 L27 24 Z"/>
+        <path d="M30 18 L32 26 L40 26 L34 31 L36 39 L30 34 L24 39 L26 31 L20 26 L28 26 Z" opacity="0.6"/>
+      </g>
+    </pattern>
+  </defs>
+</svg>
